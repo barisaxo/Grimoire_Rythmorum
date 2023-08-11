@@ -94,14 +94,14 @@ namespace MusicTheory.Rhythms
             {
                 for (int c = 0; c < ms.Measures[m].Cells.Length; c++)
                 {
-                    notes.AddRange(ms.NotesFromCell(ms.Measures[m].Cells[c], m + 1));
+                    notes.AddRange(ms.NotesFromCell(ms.Measures[m].Cells[c], (MeasureNumber)m + 1));
                 }
             }
 
             ms.Notes = notes;
         }
 
-        public static List<Note> NotesFromCell(this MusicSheet ms, RhythmCell c, int measure)
+        public static List<Note> NotesFromCell(this MusicSheet ms, RhythmCell c, MeasureNumber measure)
         {
             List<Note> notes = new List<Note>();
 
@@ -114,11 +114,15 @@ namespace MusicTheory.Rhythms
                         QuantizedRhythmicValue = c.GetQuantizedRhythmicValue(RhythmicValue.Half),
                         Rest = c.Rest,
                         TiesTo = c.TiedTo,
+                        TiedFrom = c.TiedFrom,
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.D),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = SubBeatAssignment.D
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.D),
+                                SubBeatAssignment = SubBeatAssignment.D
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     break;
@@ -128,11 +132,15 @@ namespace MusicTheory.Rhythms
                         ParentCell = c,
                         QuantizedRhythmicValue = c.GetQuantizedRhythmicValue(RhythmicValue.Quarter),
                         Rest = c.Rest,
+                        TiedFrom = c.TiedFrom,
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.D),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = SubBeatAssignment.D
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.D),
+                                SubBeatAssignment = SubBeatAssignment.D
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     notes.Add(new Note()
@@ -142,9 +150,12 @@ namespace MusicTheory.Rhythms
                         TiesTo = c.TiedTo,
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.E),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.E)
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.E),
+                                SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.E)
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     break;
@@ -157,9 +168,12 @@ namespace MusicTheory.Rhythms
                         TiesTo = c.TiedTo,
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.D),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = SubBeatAssignment.D
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.D),
+                                SubBeatAssignment = SubBeatAssignment.D
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     break;
@@ -169,11 +183,15 @@ namespace MusicTheory.Rhythms
                         ParentCell = c,
                         QuantizedRhythmicValue = c.GetQuantizedRhythmicValue(RhythmicValue.Half),
                         Rest = c.Rest,
+                        TiedFrom = c.TiedFrom,
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.D),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = SubBeatAssignment.D
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.D),
+                                SubBeatAssignment = SubBeatAssignment.D
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     notes.Add(new Note()
@@ -183,9 +201,12 @@ namespace MusicTheory.Rhythms
                         TiesTo = c.TiedTo,
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.N),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.N)
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.N),
+                                SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.N)
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     break;
@@ -195,11 +216,15 @@ namespace MusicTheory.Rhythms
                         ParentCell = c,
                         QuantizedRhythmicValue = c.GetQuantizedRhythmicValue(RhythmicValue.Half),
                         Rest = c.Rest,
+                        TiedFrom = c.TiedFrom,
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.D),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = SubBeatAssignment.D
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.D),
+                                SubBeatAssignment = SubBeatAssignment.D
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     notes.Add(new Note()
@@ -208,9 +233,12 @@ namespace MusicTheory.Rhythms
                         QuantizedRhythmicValue = c.GetQuantizedRhythmicValue(RhythmicValue.Quarter),
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.N),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.N)
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.N),
+                                SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.N)
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     notes.Add(new Note()
@@ -220,9 +248,12 @@ namespace MusicTheory.Rhythms
                         TiesTo = c.TiedTo,
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.A),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.A)
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.A),
+                                SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.A)
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     break;
@@ -232,11 +263,15 @@ namespace MusicTheory.Rhythms
                         ParentCell = c,
                         QuantizedRhythmicValue = c.GetQuantizedRhythmicValue(RhythmicValue.Quarter),
                         Rest = c.Rest,
+                        TiedFrom = c.TiedFrom,
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.D),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.D)
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.D),
+                                SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.D)
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     notes.Add(new Note()
@@ -245,9 +280,12 @@ namespace MusicTheory.Rhythms
                         QuantizedRhythmicValue = c.GetQuantizedRhythmicValue(RhythmicValue.Quarter),
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.E),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.E)
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.E),
+                                SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.E)
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     notes.Add(new Note()
@@ -257,9 +295,12 @@ namespace MusicTheory.Rhythms
                         TiesTo = c.TiedTo,
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.N),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.N)
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.N),
+                                SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.N)
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     break;
@@ -269,11 +310,15 @@ namespace MusicTheory.Rhythms
                         ParentCell = c,
                         QuantizedRhythmicValue = c.GetQuantizedRhythmicValue(RhythmicValue.Quarter),
                         Rest = c.Rest,
+                        TiedFrom = c.TiedFrom,
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.D),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.D)
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.D),
+                                SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.D)
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     notes.Add(new Note()
@@ -282,9 +327,13 @@ namespace MusicTheory.Rhythms
                         QuantizedRhythmicValue = c.GetQuantizedRhythmicValue(RhythmicValue.Half),
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.E),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.E)
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.E),
+
+                                SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.E)
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     notes.Add(new Note()
@@ -294,9 +343,12 @@ namespace MusicTheory.Rhythms
                         TiesTo = c.TiedTo,
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.A),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.A)
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.A),
+                                SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.A)
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     break;
@@ -306,11 +358,15 @@ namespace MusicTheory.Rhythms
                         ParentCell = c,
                         QuantizedRhythmicValue = c.GetQuantizedRhythmicValue(RhythmicValue.Quarter),
                         Rest = c.Rest,
+                        TiedFrom = c.TiedFrom,
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.D),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.D)
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.D),
+                                SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.D)
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     notes.Add(new Note()
@@ -320,9 +376,12 @@ namespace MusicTheory.Rhythms
                         TiesTo = c.TiedTo,
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.E),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.E)
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.E),
+                                SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.E)
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     break;
@@ -332,11 +391,15 @@ namespace MusicTheory.Rhythms
                         ParentCell = c,
                         QuantizedRhythmicValue = c.GetQuantizedRhythmicValue(RhythmicValue.DotHalf),
                         Rest = c.Rest,
+                        TiedFrom = c.TiedFrom,
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.D),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = SubBeatAssignment.D
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.D),
+                                SubBeatAssignment = SubBeatAssignment.D
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     notes.Add(new Note()
@@ -346,9 +409,12 @@ namespace MusicTheory.Rhythms
                         TiesTo = c.TiedTo,
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.A),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.A)
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.A),
+                                SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.A)
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     break;
@@ -358,11 +424,15 @@ namespace MusicTheory.Rhythms
                         ParentCell = c,
                         QuantizedRhythmicValue = c.GetQuantizedRhythmicValue(RhythmicValue.Quarter),
                         Rest = c.Rest,
+                        TiedFrom = c.TiedFrom,
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.D),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = SubBeatAssignment.D
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.D),
+                                SubBeatAssignment = SubBeatAssignment.D
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     notes.Add(new Note()
@@ -371,9 +441,12 @@ namespace MusicTheory.Rhythms
                         QuantizedRhythmicValue = c.GetQuantizedRhythmicValue(RhythmicValue.Quarter),
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.E),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.E)
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.E),
+                                SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.E)
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     notes.Add(new Note()
@@ -382,9 +455,12 @@ namespace MusicTheory.Rhythms
                         QuantizedRhythmicValue = c.GetQuantizedRhythmicValue(RhythmicValue.Quarter),
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.N),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.N)
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.N),
+                                SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.N)
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     notes.Add(new Note()
@@ -394,9 +470,12 @@ namespace MusicTheory.Rhythms
                         TiesTo = c.TiedTo,
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.A),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.A)
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.A),
+                                SubBeatAssignment = c.GetQuantizedSubBeatAssignment(SubBeatAssignment.A)
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     break;
@@ -406,11 +485,15 @@ namespace MusicTheory.Rhythms
                         ParentCell = c,
                         QuantizedRhythmicValue = c.GetQuantizedRhythmicValue(ms.RhythmSpecs.HasTriplets ? RhythmicValue.TripQuarter : RhythmicValue.Quarter),
                         Rest = c.Rest,
+                        TiedFrom = c.TiedFrom,
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.D),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = SubBeatAssignment.D
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.D),
+                                SubBeatAssignment = SubBeatAssignment.D
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     notes.Add(new Note()
@@ -419,9 +502,13 @@ namespace MusicTheory.Rhythms
                         QuantizedRhythmicValue = c.GetQuantizedRhythmicValue(ms.RhythmSpecs.HasTriplets ? RhythmicValue.TripQuarter : RhythmicValue.Quarter),
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.T),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = c.GetQuantizedSubBeatAssignment(ms.RhythmSpecs.HasTriplets ? SubBeatAssignment.T : SubBeatAssignment.E)
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.T),
+
+                                SubBeatAssignment = c.GetQuantizedSubBeatAssignment(ms.RhythmSpecs.HasTriplets ? SubBeatAssignment.T : SubBeatAssignment.E)
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     notes.Add(new Note()
@@ -431,9 +518,12 @@ namespace MusicTheory.Rhythms
                         TiesTo = c.TiedTo,
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.L),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = c.GetQuantizedSubBeatAssignment(ms.RhythmSpecs.HasTriplets ? SubBeatAssignment.L : SubBeatAssignment.N)
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.L),
+                                SubBeatAssignment = c.GetQuantizedSubBeatAssignment(ms.RhythmSpecs.HasTriplets ? SubBeatAssignment.L : SubBeatAssignment.N)
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     break;
@@ -443,11 +533,15 @@ namespace MusicTheory.Rhythms
                         ParentCell = c,
                         QuantizedRhythmicValue = c.GetQuantizedRhythmicValue(ms.RhythmSpecs.HasTriplets ? RhythmicValue.TripQuarter : RhythmicValue.Quarter),
                         Rest = c.Rest,
+                        TiedFrom = c.TiedFrom,
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.D),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = SubBeatAssignment.D
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.D),
+                                SubBeatAssignment = SubBeatAssignment.D
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     notes.Add(new Note()
@@ -457,9 +551,12 @@ namespace MusicTheory.Rhythms
                         TiesTo = c.TiedTo,
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.T),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = c.GetQuantizedSubBeatAssignment(ms.RhythmSpecs.HasTriplets ? SubBeatAssignment.T : SubBeatAssignment.E)
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.T),
+                                SubBeatAssignment = c.GetQuantizedSubBeatAssignment(ms.RhythmSpecs.HasTriplets ? SubBeatAssignment.T : SubBeatAssignment.E)
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     break;
@@ -469,11 +566,15 @@ namespace MusicTheory.Rhythms
                         ParentCell = c,
                         QuantizedRhythmicValue = c.GetQuantizedRhythmicValue(ms.RhythmSpecs.HasTriplets ? RhythmicValue.TripHalf : RhythmicValue.Half),
                         Rest = c.Rest,
+                        TiedFrom = c.TiedFrom,
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.D),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = SubBeatAssignment.D
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.D),
+                                SubBeatAssignment = SubBeatAssignment.D
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     notes.Add(new Note()
@@ -483,9 +584,12 @@ namespace MusicTheory.Rhythms
                         TiesTo = c.TiedTo,
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.L),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = c.GetQuantizedSubBeatAssignment(ms.RhythmSpecs.HasTriplets ? SubBeatAssignment.L : SubBeatAssignment.N)
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.L),
+                                SubBeatAssignment = c.GetQuantizedSubBeatAssignment(ms.RhythmSpecs.HasTriplets ? SubBeatAssignment.L : SubBeatAssignment.N)
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     break;
@@ -493,14 +597,19 @@ namespace MusicTheory.Rhythms
                     notes.Add(new Note()
                     {
                         ParentCell = c,
-                        QuantizedRhythmicValue = c.GetQuantizedRhythmicValue(RhythmicValue.TripWhole),
+                        QuantizedRhythmicValue = c.GetQuantizedRhythmicValue(RhythmicValue.DotHalf),//TripWhole???
                         Rest = c.Rest,
                         TiesTo = c.TiedTo,
+                        TiedFrom = c.TiedFrom,
+
                         BeatLocation = new BeatLocation
                         {
-                            Count = c.GetQuantizedCount(SubBeatAssignment.D),
-                            MeasureNumber = (MeasureNumber)measure,
-                            SubBeatAssignment = SubBeatAssignment.D
+                            BeatAssignment = new()
+                            {
+                                Count = c.GetQuantizedCount(SubBeatAssignment.D),
+                                SubBeatAssignment = SubBeatAssignment.D
+                            },
+                            MeasureNumber = measure,
                         }
                     });
                     break;
@@ -513,34 +622,34 @@ namespace MusicTheory.Rhythms
         {
             return s switch
             {
-                SubBeatAssignment.E => cell.MetricLevel switch
+                _ when s == SubBeatAssignment.E => cell.MetricLevel switch
                 {
                     MetricLevel.Beat => cell.Count + 1,
                     _ => cell.Count
                 },
 
-                SubBeatAssignment.N => cell.MetricLevel switch
+                _ when s == SubBeatAssignment.N => cell.MetricLevel switch
                 {
                     MetricLevel.Beat => cell.Count + 2,
                     MetricLevel.D1 => cell.Count + 1,
                     _ => cell.Count
                 },
 
-                SubBeatAssignment.A => cell.MetricLevel switch
+                _ when s == SubBeatAssignment.A => cell.MetricLevel switch
                 {
                     MetricLevel.Beat => cell.Count + 3,
                     MetricLevel.D1 => cell.Count + 1,
                     _ => cell.Count
                 },
 
-                SubBeatAssignment.T => cell.MetricLevel switch
+                _ when s == SubBeatAssignment.T => cell.MetricLevel switch
                 {
                     MetricLevel.Beat => cell.Count + 1,
                     MetricLevel.BeatT => cell.Count + 1,
                     _ => cell.Count
                 },
 
-                SubBeatAssignment.L => cell.MetricLevel switch
+                _ when s == SubBeatAssignment.L => cell.MetricLevel switch
                 {
                     MetricLevel.Beat => cell.Count + 2,
                     MetricLevel.BeatT => cell.Count + 2,
@@ -560,12 +669,12 @@ namespace MusicTheory.Rhythms
                     Quantizement.Eighth => RhythmicValue.Half,
                     _ => RhythmicValue.Whole,
                 },
-                RhythmicValue.TripWhole => c.Quantizement switch
-                {
-                    Quantizement.Sixteenth => RhythmicValue.DotEighth,
-                    Quantizement.Eighth => RhythmicValue.DotQuarter,
-                    _ => RhythmicValue.DotHalf
-                },
+                //RhythmicValue.TripWhole => c.Quantizement switch
+                //{
+                //    Quantizement.Sixteenth => RhythmicValue.DotEighth,
+                //    Quantizement.Eighth => RhythmicValue.DotQuarter,
+                //    _ => RhythmicValue.DotHalf
+                //},
                 RhythmicValue.DotHalf => c.Quantizement switch
                 {
                     Quantizement.Sixteenth => RhythmicValue.DotEighth,
@@ -626,29 +735,29 @@ namespace MusicTheory.Rhythms
         {
             return s switch
             {
-                SubBeatAssignment.E => c.QuantizedBeatlevel() switch
+                _ when s == SubBeatAssignment.E => c.QuantizedBeatlevel() switch
                 {
                     Quantizement.Eighth => SubBeatAssignment.N,
                     Quantizement.Sixteenth => SubBeatAssignment.E,
                     _ => SubBeatAssignment.D,
                 },
-                SubBeatAssignment.N => c.QuantizedBeatlevel() switch
+                _ when s == SubBeatAssignment.N => c.QuantizedBeatlevel() switch
                 {
                     Quantizement.Sixteenth => SubBeatAssignment.N,
                     _ => SubBeatAssignment.D,
                 },
-                SubBeatAssignment.A => c.QuantizedBeatlevel() switch
+                _ when s == SubBeatAssignment.A => c.QuantizedBeatlevel() switch
                 {
                     Quantizement.Eighth => SubBeatAssignment.N,
                     Quantizement.Sixteenth => SubBeatAssignment.A,
                     _ => SubBeatAssignment.D,
                 },
-                SubBeatAssignment.T => c.QuantizedBeatlevel() switch
+                _ when s == SubBeatAssignment.T => c.QuantizedBeatlevel() switch
                 {
                     Quantizement.Quarter => SubBeatAssignment.L,
                     _ => SubBeatAssignment.T,//half and eighth
                 },
-                SubBeatAssignment.L => c.QuantizedBeatlevel() switch
+                _ when s == SubBeatAssignment.L => c.QuantizedBeatlevel() switch
                 {
                     Quantizement.Quarter => SubBeatAssignment.T,
                     _ => SubBeatAssignment.L,

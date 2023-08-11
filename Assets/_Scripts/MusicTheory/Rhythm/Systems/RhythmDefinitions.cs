@@ -37,8 +37,6 @@ namespace MusicTheory.Rhythms
     //    //||1 . . . T . . . L . . . 2 . . . T . . . L . . . 3 . . . T . . . L . . . 4 . . . T . . . L . . . |TRIP EIGHTH
     //    //||1 . . e . . + . . a . . 2 . . e . . + . . a . . 3 . . e . . + . . a . . 4 . . e . . + . . a . . |SIXTEENTH
 
-
-
     public enum Quantizement { Half, Quarter, QuarterTrips, Eighth, EighthTrips, Sixteenth }
 
     // Rhythm Cell Shapes:
@@ -52,12 +50,11 @@ namespace MusicTheory.Rhythms
     {
         Whole = 48, Half = 24, Quarter = 12, Eighth = 6, Sixteenth = 3,
         DotHalf = 36, DotQuarter = 18, DotEighth = 9,
-        TripHalf = 16, TripQuarter = 8, TripEighth = 4, TripWhole = 32//?? not sure on trip whole
+        TripHalf = 16, TripQuarter = 8, TripEighth = 4, //TripWhole = 32//?? not sure on trip whole
     }
     public enum RhythmOption { Ties, Rests, SomeTrips, TripsOnly }
     public enum SubDivisionTier { BeatOnly, BeatAndD1, D1Only, D1AndD2, D2Only, }
     public enum NoteFunction { Attack, Hold, Rest, Ignore }
-    public enum MeasureNumber { One = 1, Two = 2, Thr = 3, For = 4 }
 
     //unnecessary to define is the 'Multiple Levels' as in the combined beat level eg half & whole notes in 4/4
     //D1 is the fist division level, eg 8th notes in 4/4
@@ -72,24 +69,7 @@ namespace MusicTheory.Rhythms
     //Unnecessary to define is the 'Irregular' as it is a combination of simple & compound and is implied as such.
     public enum BeatDivisor { Simple, Compound }
 
-
-    public struct BeatLocation
-    {
-        public MeasureNumber MeasureNumber;
-        public Count Count;
-        public SubBeatAssignment SubBeatAssignment;
-    }
-    public enum Count { One = 1, Two = 2, Thr = 3, For = 4, Fiv = 5, Six = 6, Sev = 7, Eht = 8, Nin = 9, Ten = 10, Elv = 11, Tlv = 12 }
     public enum SubCount { One = 1, Two = 2, For = 4, Eht = 8 }
-    public enum SubBeatAssignment
-    {
-        D = 1, E = 4, T = 5, N = 7, L = 9, A = 10
-        //Down   e      tup    +      let    a
-
-        //pass    the  god  damn  but-ter
-        //|1  .  .  e  T  .  +  .  L  a  .  . 
-        //|1  2  3  4  5  6  7  8  9  10 11 12 
-    }
 
     public static class RhythmUtilities
     {
@@ -161,8 +141,16 @@ namespace MusicTheory.Rhythms
 }
 
 
+//public enum MeasureNumber { One = 1, Two = 2, Thr = 3, For = 4 }
 
 
+//public struct BeatLocation
+//{
+//    public MeasureNumber MeasureNumber;
+//    public Count Count;
+//    public SubBeatAssignment SubBeatAssignment;
+//}
+//public enum Count { One = 1, Two = 2, Thr = 3, For = 4, Fiv = 5, Six = 6, Sev = 7, Eht = 8, Nin = 9, Ten = 10, Elv = 11, Tlv = 12 }
 
 //public enum CellShape { w, dhq, hh, qdh, hqq, qqh, qhq, qqqq, thq, tqh, tqqq, tw, }
 //
@@ -179,3 +167,21 @@ namespace MusicTheory.Rhythms
 //Triplet eighth note    =  6 : 20 / BPM
 //Sixteenth note         =  4 : 15 / BPM
 //
+
+
+
+
+
+
+
+
+
+//public enum SubBeatAssignment
+//{
+//    D = 1, E = 4, T = 5, N = 7, L = 9, A = 10
+//    //Down   e      tup    +      let    a
+
+//    //pass    the  god  damn  but-ter
+//    //|1  .  .  e  T  .  +  .  L  a  .  . 
+//    //|1  2  3  4  5  6  7  8  9  10 11 12 
+//}

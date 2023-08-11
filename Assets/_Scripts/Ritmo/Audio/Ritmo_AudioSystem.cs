@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Audio;
 using MusicTheory.Rhythms;
+using System.Collections;
 
 namespace Ritmo
 {
@@ -36,12 +37,11 @@ namespace Ritmo
             //CountOffFeedback.Running = true;
             //CountOffFeedback.UpdateLoop();
 
-            CountOffUpdateLoop(0, bpm, countOff);
+            CountOffUpdateLoop(0, bpm, countOff).StartCoroutine();
 
-            void CountOffUpdateLoop(int countIndex, float bpm, List<MappedBeat> countOff)
+            IEnumerator CountOffUpdateLoop(int countIndex, float bpm, List<MappedBeat> countOff)
             {
-                //await Task.Yield();
-                if (!Application.isPlaying) return;
+                yield return null;
 
                 if (AudioSettings.dspTime >= NextEventTime)
                 {
@@ -83,12 +83,10 @@ namespace Ritmo
             BeatMapFeedBack bmf = new(bpm);
             StartCallBack?.Invoke();
             bmf.StartScrolling();
-            UpdateLoop(0, bpm, beatMap);
+            UpdateLoop(0, bpm, beatMap).StartCoroutine();
 
-            async void UpdateLoop(int beatIndex, float bpm, List<MappedBeat> beatMap)
+            IEnumerator UpdateLoop(int beatIndex, float bpm, List<MappedBeat> beatMap)
             {
-                if (!Application.isPlaying) return;
-
                 if (dspTime == AudioSettings.dspTime) { realTime += UnityEngine.Time.unscaledDeltaTime; }
                 else { realTime = dspTime = AudioSettings.dspTime; }
 
@@ -120,7 +118,7 @@ namespace Ritmo
                     AudioSources[0].Play();
                     click += 60D / bpm;
                 }
-                //await Task.Yield();
+                yield return null;
 
                 if (beatIndex < beatMap.Count)
                 {

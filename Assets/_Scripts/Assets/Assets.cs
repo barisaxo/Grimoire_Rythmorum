@@ -2,6 +2,7 @@ using UnityEngine;
 
 public static class Assets
 {
+
     private static Sprite _alsHead;
     private static Sprite _eyesFlat;
     public static AudioClip TypingClicks => Resources.Load<AudioClip>("Audio/SFX/Typing Clicks");
@@ -30,9 +31,8 @@ public static class Assets
     public static Sprite EyesUp => Resources.Load<Sprite>("Sprites/AL/EyesUp");
     public static Sprite EyesDown => Resources.Load<Sprite>("Sprites/AL/EyesDown");
 
-    public static Sprite EyesFlat => _eyesFlat = _eyesFlat != null
-        ? _eyesFlat
-        : Resources.Load<Sprite>("Sprites/AL/EyesFlat_" + Random.Range(1, 3));
+    public static Sprite EyesFlat => _eyesFlat = _eyesFlat != null ? _eyesFlat :
+        Resources.Load<Sprite>("Sprites/AL/EyesFlat_" + Random.Range(1, 3));
 
     public static Sprite MouthUp => Resources.Load<Sprite>("Sprites/AL/MouthUp");
     public static Sprite MouthDown => Resources.Load<Sprite>("Sprites/AL/MouthDown");

@@ -19,6 +19,14 @@ namespace Audio
         protected double dspTime;
         protected double realTime;
         public bool Running;
+        protected double NextEventTime { get; set; }
+
+        private void Destruct()
+        {
+            _audioSources = null;
+            AudioClipSettings = null;
+            Object.DestroyImmediate(Parent);
+        }
 
         public AudioSystem(int numOfAudioSources, string name)
         {
@@ -78,7 +86,6 @@ namespace Audio
             }
         }
 
-        protected double NextEventTime { get; set; }
         public virtual AudioClipSettings AudioClipSettings { get; set; }
 
         public virtual AudioSource[] AudioSources
@@ -147,20 +154,20 @@ namespace Audio
         public virtual void Stop()
         {
             FadeOutAndStop().StartCoroutine();
-        }
 
-        private IEnumerator FadeOutAndStop()
-        {
-            while (CurrentVolumeLevel > .2f)
+            IEnumerator FadeOutAndStop()
             {
-                yield return null;
-                CurrentVolumeLevel -= Time.deltaTime * 5f;
-            }
+                while (CurrentVolumeLevel > .2f)
+                {
+                    yield return null;
+                    CurrentVolumeLevel -= Time.deltaTime * 5f;
+                }
 
-            CurrentVolumeLevel = 0;
-            foreach (var a in AudioSources) a.Stop();
-            Running = false;
-            Destruct();
+                CurrentVolumeLevel = 0;
+                foreach (var a in AudioSources) a.Stop();
+                Running = false;
+                Destruct();
+            }
         }
 
         private IEnumerator SerialAudioClipsUpdateLoop()
@@ -188,12 +195,6 @@ namespace Audio
             }
         }
 
-        private void Destruct()
-        {
-            _audioSources = null;
-            AudioClipSettings = null;
-            Object.DestroyImmediate(Parent);
-        }
     }
 
 

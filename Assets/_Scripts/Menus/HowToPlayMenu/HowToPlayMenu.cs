@@ -4,9 +4,7 @@ namespace Menus.HowToPlayMenu
     {
         private BackButton _back;
 
-        public HowToPlayMenu() : base(nameof(HowToPlayMenu))
-        {
-        }
+        public HowToPlayMenu() : base(nameof(HowToPlayMenu)) { }
 
         public BackButton Back => _back ??= new BackButton(Parent);
 
@@ -23,13 +21,9 @@ namespace Menus.HowToPlayMenu
             public static readonly HowToPlayItem Battery = new(2, "About 'Battery'");
             public static readonly HowToPlayItem RhythmCell = new(3, "Rhythm cell tutorial");
 
-            public HowToPlayItem() : base(0, "")
-            {
-            }
+            public HowToPlayItem() : base(0, "") { }
 
-            private HowToPlayItem(int id, string name) : base(id, name)
-            {
-            }
+            private HowToPlayItem(int id, string name) : base(id, name) { }
         }
     }
 }

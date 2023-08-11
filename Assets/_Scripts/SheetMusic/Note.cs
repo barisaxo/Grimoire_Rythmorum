@@ -7,6 +7,7 @@ namespace MusicTheory.Rhythms
     {
         public bool Rest;
         public bool TiesTo;
+        public bool TiedFrom;
         public bool Trip;
 
         public RhythmCell ParentCell;

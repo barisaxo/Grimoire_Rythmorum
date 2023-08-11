@@ -4,9 +4,7 @@ using System.Threading.Tasks;
 
 public class BootStrap_State : State
 {
-    private BootStrap_State()
-    {
-    }
+    private BootStrap_State() { }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
     private static void Initialize()
@@ -18,7 +16,8 @@ public class BootStrap_State : State
     protected override void PrepareState(Action callback)
     {
         _ = Cam.Io;
-        Audio.BGMusic.Play(isSerial: false);
+        AudioSettings.Reset(AudioSettings.GetConfiguration());
+        //Audio.BGMusic.Play(isSerial: false);
         callback();
     }
 

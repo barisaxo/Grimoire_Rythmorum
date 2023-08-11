@@ -26,7 +26,7 @@ public class VolumeData
     /// Give this to the menu objects text to display the current volume level.
     /// </summary>
     /// <returns>an int 0 to 100</returns>
-    public string GetDisplayData(DataItem item) => VolumeLevels[item].level.ToString();
+    public string GetDisplayLevel(DataItem item) => VolumeLevels[item].level.ToString();
 
     public void IncreaseLevel(DataItem item) =>
         VolumeLevels[item].level = VolumeLevels[item].level + 5 > 100 ? 0 : VolumeLevels[item].level + 5;

@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using MusicTheory.Rhythms;
+using Ritmo;
 
 namespace SheetMusic
 {
@@ -15,7 +16,7 @@ namespace SheetMusic
         public RhythmSpecs RhythmSpecs;
         public Measure[] Measures;
         public List<Note> Notes;
-        //public List<MappedBeat> BeatMap;
+        public List<MappedBeat> BeatMap;
 
         private Transform _parent;
         public Transform Parent => _parent != null ? _parent : _parent = new GameObject(nameof(MusicSheet)).transform;

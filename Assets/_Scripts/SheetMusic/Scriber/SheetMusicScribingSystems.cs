@@ -15,6 +15,7 @@ namespace SheetMusic
             ms.AssignTies();
             return ms;
         }
+
         public static void SetUpTimeSig(this MusicSheet ms)
         {
             ms.TimeSig = new Card(nameof(TimeSignature), ms.Parent)
@@ -84,9 +85,12 @@ namespace SheetMusic
                         .SetTextString(beats[c] == SubBeatAssignment.D ? count.ToString() : beats[c].ToString())
                         .SetTMPPosition(ms.NotePosition(new BeatLocation()
                         {
-                            Count = (Count)count,
+                            BeatAssignment = new()
+                            {
+                                Count = (Count)count,
+                                SubBeatAssignment = beats[c]
+                            },
                             MeasureNumber = (MeasureNumber)i + 1,
-                            SubBeatAssignment = beats[c]
                         }) + (Vector3.up * Cam.Io.Camera.aspect))
                         .SetFontScale(.4f, .4f)
                         .SetTextAlignment(TMPro.TextAlignmentOptions.Center)
@@ -107,16 +111,16 @@ namespace SheetMusic
         {
             Vector3 pos = Vector3.zero;
             pos += MeasurePos(bl.MeasureNumber);
-            pos += CountPos(ms.RhythmSpecs.Time.Signature.Quantity, bl.Count, bl.SubBeatAssignment);
+            pos += CountPos(ms.RhythmSpecs.Time.Signature.Quantity, bl.BeatAssignment.Count, bl.BeatAssignment.SubBeatAssignment);
             return pos;
         }
 
         static Vector3 MeasurePos(MeasureNumber m) => m switch
         {
-            MeasureNumber.One => (Cam.Io.OrthoX() * .515f * Vector2.left) + (Vector2.up * 3),
-            MeasureNumber.Two => (Cam.Io.OrthoX() * .515f * Vector2.right) + (Vector2.up * 3),
-            MeasureNumber.Thr => (Cam.Io.OrthoX() * .515f * Vector2.left) + (Vector2.down * 1),
-            MeasureNumber.For => (Cam.Io.OrthoX() * .515f * Vector2.right) + (Vector2.down * 1),
+            _ when m == MeasureNumber.One => (Cam.Io.OrthoX() * .515f * Vector2.left) + (Vector2.up * 3),
+            _ when m == MeasureNumber.Two => (Cam.Io.OrthoX() * .515f * Vector2.right) + (Vector2.up * 3),
+            _ when m == MeasureNumber.Thr => (Cam.Io.OrthoX() * .515f * Vector2.left) + (Vector2.down * 1),
+            _ when m == MeasureNumber.For => (Cam.Io.OrthoX() * .515f * Vector2.right) + (Vector2.down * 1),
             _ => Vector2.zero
         };
 
@@ -143,8 +147,8 @@ namespace SheetMusic
                 for (int i = 0; i < ns.Count; i++)
                 {
                     ns[i].TF = new GameObject(ns[i].BeatLocation.MeasureNumber + " " +
-                            ns[i].BeatLocation.Count + " " +
-                            ns[i].BeatLocation.SubBeatAssignment + " " +
+                            ns[i].BeatLocation.BeatAssignment.Count + " " +
+                            ns[i].BeatLocation.BeatAssignment.SubBeatAssignment + " " +
                             ns[i].QuantizedRhythmicValue).transform;
                     ns[i].TF.SetParent(ms.Parent);
                     ns[i].TF.position = NotePosition(ms, ns[i].BeatLocation);
@@ -170,7 +174,7 @@ namespace SheetMusic
                             RhythmicValue.DotEighth => Assets.EighthRest,
                             RhythmicValue.TripEighth => Assets.EighthRest,
                             RhythmicValue.Whole => Assets.WholeRest,
-                            RhythmicValue.TripWhole => Assets.WholeRest,
+                            //RhythmicValue.TripWhole => Assets.WholeRest,
                             RhythmicValue.Sixteenth => Assets.SixteenthRest,
                             _ => Assets.QuarterRest,
                         };
@@ -183,7 +187,7 @@ namespace SheetMusic
                             RhythmicValue.DotHalf => Assets.WhiteNote,
                             RhythmicValue.TripHalf => Assets.WhiteNote,
                             RhythmicValue.Whole => Assets.WhiteNote,
-                            RhythmicValue.TripWhole => Assets.WhiteNote,
+                            //RhythmicValue.TripWhole => Assets.WhiteNote,
                             _ => Assets.BlackNote,
                         };
                     }
@@ -452,8 +456,8 @@ namespace SheetMusic
             {
                 if (ns[i].ParentCell == ms.Measures[2].Cells[0] &&
                     ms.Measures[2].Cells[0].TiedFrom &&
-                    ns[i].BeatLocation.SubBeatAssignment == SubBeatAssignment.D &&
-                    ns[i].BeatLocation.Count == Count.One)
+                    ns[i].BeatLocation.BeatAssignment.SubBeatAssignment == SubBeatAssignment.D &&
+                    ns[i].BeatLocation.BeatAssignment.Count == Count.One)
                 {
                     Transform tf = new GameObject("Tie").transform;
                     tf.SetParent(ns[i].TF);

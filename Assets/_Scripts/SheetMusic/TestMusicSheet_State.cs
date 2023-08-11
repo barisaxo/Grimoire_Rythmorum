@@ -11,7 +11,7 @@ public class TestMusicSheet_State : State
         {
             RhythmSpecs = new()
             {
-                Time = new SevenEight34(),
+                Time = new NineEight(),
                 NumberOfMeasures = 4,
                 SubDivisionTier = SubDivisionTier.BeatOnly,
                 HasTies = true,

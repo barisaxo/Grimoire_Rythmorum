@@ -5,7 +5,7 @@ public sealed class SkyboxRotate
 {
     private SkyboxRotate() { }
 
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void AutoInit()
     {
         Skybox = RenderSettings.skybox = Assets.Stars;

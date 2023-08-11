@@ -1,8 +1,4 @@
-﻿
-using SheetMusic;
-
-
-using SheetMusic;
+﻿using SheetMusic;
 
 namespace MusicTheory.Rhythms
 {

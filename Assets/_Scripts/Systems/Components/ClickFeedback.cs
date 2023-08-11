@@ -62,7 +62,6 @@ internal sealed class ClickFeedback
                     imageFeedback.Add((img, img.color));
                 }
 
-
                 AlterColor();
             }
         }
@@ -78,8 +77,20 @@ internal sealed class ClickFeedback
 
         if (Cam.Io.Camera.orthographic)
         {
+            RaycastHit2D hitUI = Physics2D.Raycast(mousePos, Vector2.zero);
             RaycastHit2D hit = Physics2D.Raycast(Cam.Io.Camera.ScreenToWorldPoint(mousePos), Vector2.zero);
-            if (hit.collider != null) ClickedGO = hit.collider.gameObject;
+            if (hitUI.collider != null && hitUI.collider.gameObject.TryGetComponent<Clickable>(out _))
+            {
+                ClickedGO = hitUI.collider.gameObject;
+            }
+            else if (hit.collider != null)
+            {
+                ClickedGO = hit.collider.gameObject;
+            }
+            else
+            {
+                ClickedGO = null;
+            }
         }
         else
         {

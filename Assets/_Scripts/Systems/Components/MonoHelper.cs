@@ -28,26 +28,48 @@ public class MonoHelper : MonoBehaviour
     }
     #endregion INSTANCE
 
-    [SerializeField] private List<string> actions = new();
+    [SerializeField] private List<string> updateSubscribers = new();
+    [SerializeField] private List<string> fixedUpdateSubscribers = new();
+    [SerializeField] private List<string> lateUpdateSubscribers = new();
+    [SerializeField] private List<string> activeCoroutines = new();
 
-    private static event Action ToUpdate;
     private void Update() => ToUpdate?.Invoke();
+    private static event Action ToUpdate;
     public static event Action OnUpdate
     {
-        add { ToUpdate += value; Io.actions.Add(value.Method.ToString()); }
-        remove { ToUpdate -= value; foreach (var a in Io.actions) { if (a == value.Method.ToString()) { Io.actions.Remove(a); return; } } }
+        add { ToUpdate += value; Io.updateSubscribers.Add(value.Method.Name); }
+        remove { ToUpdate -= value; Io.updateSubscribers.Remove(value.Method.Name); }
     }
 
-    public static event Action ToLateUpdate;
+    private void FixedUpdate() => ToFixedUpdate?.Invoke();
+    public static event Action ToFixedUpdate;
+    public static event Action OnFixedUpdate
+    {
+        add { ToFixedUpdate += value; Io.fixedUpdateSubscribers.Add(value.Method.Name); }
+        remove { ToFixedUpdate -= value; Io.fixedUpdateSubscribers.Remove(value.Method.Name); }
+    }
+
     private void LateUpdate() => ToLateUpdate?.Invoke();
+    public static event Action ToLateUpdate;
     public static event Action OnLateUpdate
     {
-        add { ToLateUpdate += value; Io.actions.Add(value.Method.ToString() + " Late"); }
-        remove { ToLateUpdate -= value; foreach (var a in Io.actions) { if (a == value.Method.ToString() + " Late") { Io.actions.Remove(a); return; } } }
+        add { ToLateUpdate += value; Io.lateUpdateSubscribers.Add(value.Method.Name); }
+        remove { ToLateUpdate -= value; Io.lateUpdateSubscribers.Remove(value.Method.Name); }
+    }
+
+    public void RunCoroutine(IEnumerator ie)
+    {
+        StartCoroutine(ManageCoroutine());
+        IEnumerator ManageCoroutine()
+        {
+            Io.activeCoroutines.Add(ie.ToString());
+            yield return ie;
+            Io.activeCoroutines.Remove(ie.ToString());
+        }
     }
 }
 
 public static class MonoSystems
 {
-    public static void StartCoroutine(this IEnumerator ie) => MonoHelper.Io.StartCoroutine(ie);
+    public static void StartCoroutine(this IEnumerator ie) => MonoHelper.Io.RunCoroutine(ie);
 }
