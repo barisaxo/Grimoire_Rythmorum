@@ -43,10 +43,10 @@ public class VolumeData
         public DataItem(int id, string name, string description) : base(id, name) => Description = description;
         public static DataItem BGMusic = new(0, "BG MUSIC", "Background music volume level");
         public static DataItem SoundFX = new(1, "SOUND FX", "Sound effects volume level");
-        public static DataItem Chords = new(2, "CHORDS", "Puzzle chords volume level");
-        public static DataItem Bass = new(3, "BASS", "Puzzle bass volume level");
-        public static DataItem Drums = new(4, "DRUMS", "Puzzle drums volume level");
-        public static DataItem Battery = new(5, "BATTERY", "Battery snare drum volume level");
-        public static DataItem Click = new(6, "CLICK", "Battery metronome volume level");
+        public static DataItem Click = new(2, "CLICK", "Batterie metronome volume level");
+        public static DataItem Batterie = new(3, "BATTERIE", "Batterie snare drum volume level");
+        public static DataItem Chords = new(4, "CHORDS", "Puzzle chords volume level");
+        public static DataItem Bass = new(5, "BASS", "Puzzle bass volume level");
+        public static DataItem Drums = new(6, "DRUMS", "Puzzle drums volume level");
     }
 }

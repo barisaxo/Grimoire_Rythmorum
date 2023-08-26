@@ -50,7 +50,7 @@ public class InputTest_State : State
     {
         Debug.Log(nameof(StartPressed));
         TestCard.SetSpriteColor(Color.white);
-        TestCard.SetGOSize(Vector2.one);
+        TestCard.SetSpriteSize(Vector2.one);
     }
 
     protected override void DirectionPressed(Dir dir)
@@ -58,10 +58,10 @@ public class InputTest_State : State
         Debug.Log(dir);
         switch (dir)
         {
-            case Dir.Up: TestCard.SetGOSize(Vector2.one * 2); break;
-            case Dir.Down: TestCard.SetGOSize(Vector2.one * .5f); break;
-            case Dir.Left: TestCard.SetGOSize(new Vector2(1, 2)); break;
-            case Dir.Right: TestCard.SetGOSize(new Vector2(2, 1)); break;
+            case Dir.Up: TestCard.SetSpriteSize(Vector2.one * 2); break;
+            case Dir.Down: TestCard.SetSpriteSize(Vector2.one * .5f); break;
+            case Dir.Left: TestCard.SetSpriteSize(new Vector2(1, 2)); break;
+            case Dir.Right: TestCard.SetSpriteSize(new Vector2(2, 1)); break;
                 //case Dir.Reset: TestCard.SetGOSize(Vector2.one); break;
         }
     }
@@ -73,7 +73,7 @@ public class InputTest_State : State
 
     protected override void RStickInput(Vector2 v2)
     {
-        TestCard.SetGOPosition(v2);
+        TestCard.SetSpritePosition(v2);
     }
 
 }

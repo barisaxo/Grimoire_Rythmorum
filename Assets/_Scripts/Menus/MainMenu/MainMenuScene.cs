@@ -4,6 +4,36 @@ namespace Menus.MainMenu
 {
     public class MainMenuScene
     {
+        #region INSTANCE
+
+        public MainMenuScene()
+        {
+            Debug.Log("I'm Alive!");
+            _ = LightHouse;
+            _ = CatBoat;
+            RockTheBoat.AddBoat(CatBoat.transform);
+            RockTheBoat.Rocking = true;
+            MonoHelper.OnUpdate += RotateLightHouse;
+        }
+
+        public void SelfDestruct()
+        {
+            RockTheBoat.Rocking = false;
+            MonoHelper.OnUpdate -= RotateLightHouse;
+            Object.Destroy(_parent.gameObject);
+            Resources.UnloadUnusedAssets();
+        }
+
+        private Transform _parent;
+
+        public Transform Parent =>
+            _parent != null ? _parent : _parent = new GameObject(nameof(MainMenuScene)).transform;
+
+        #endregion INSTANCE
+
+        public readonly RockTheBoat RockTheBoat = new();
+        private float LightRotY = -40;
+
         private GameObject _catBoat;
 
         private GameObject lightHouse;
@@ -59,25 +89,10 @@ namespace Menus.MainMenu
             }
         }
 
-        #region INSTANCE
-
-        public MainMenuScene()
+        private void RotateLightHouse()
         {
-            _ = LightHouse;
-            _ = CatBoat;
+            LightRotY += Time.deltaTime * 25;
+            LightHouse.transform.rotation = Quaternion.Euler(0, LightRotY, 0);
         }
-
-        public void SelfDestruct()
-        {
-            Object.Destroy(_parent.gameObject);
-            Resources.UnloadUnusedAssets();
-        }
-
-        private Transform _parent;
-
-        public Transform Parent =>
-            _parent != null ? _parent : _parent = new GameObject(nameof(MainMenuScene)).transform;
-
-        #endregion INSTANCE
     }
 }

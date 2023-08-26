@@ -70,10 +70,10 @@ public static class InputKey
         InputActions.Map.RStickAltY.canceled += _ => RStickAltYEvent?.Invoke(0);
 
         MonoHelper.OnUpdate += CheckForMouseClick;
-
+        StickEvent += DebugStick;
         InputActions.Map.Enable();
     }
-
+    static void DebugStick(GamePadButton gpi, Vector2 v3) { Debug.Log(gpi + " " + v3); }
     static void CheckForMouseClick()
     {
         if (Input.GetMouseButtonDown(0)) { MouseClickEvent?.Invoke(MouseAction.LDown, Input.mousePosition); }

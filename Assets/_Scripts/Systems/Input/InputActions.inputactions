@@ -151,7 +151,7 @@
                 },
                 {
                     "name": "LStick",
-                    "type": "Value",
+                    "type": "PassThrough",
                     "id": "6de630db-3f66-4059-a1a0-8184b6f3b451",
                     "expectedControlType": "Stick",
                     "processors": "",

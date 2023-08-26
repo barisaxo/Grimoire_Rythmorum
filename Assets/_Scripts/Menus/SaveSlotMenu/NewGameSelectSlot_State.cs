@@ -1,9 +1,14 @@
 using System;
 using Menus;
+using Menus.MainMenu;
 using UnityEngine;
 
 public class NewGameSelectSlot_State : State
 {
+    public NewGameSelectSlot_State(MainMenuScene mainMenuScene) { MainMenuScene = mainMenuScene; }
+
+    readonly MainMenuScene MainMenuScene;
+
     private SaveSlotMenu SaveSlotMenu;
 
     protected override void PrepareState(Action callback)
@@ -21,7 +26,7 @@ public class NewGameSelectSlot_State : State
     {
         if (go.transform.IsChildOf(SaveSlotMenu.Back.Button.GO.transform))
         {
-            SetStateDirectly(new MainMenu_State());
+            SetStateDirectly(new MainMenu_State(MainMenuScene));
             return;
         }
 
@@ -45,5 +50,16 @@ public class NewGameSelectSlot_State : State
     protected override void CancelPressed()
     {
         SetStateDirectly(new MainMenu_State());
+    }
+
+    protected override void LStickInput(Vector2 v2)
+    {
+        MainMenuScene.CatBoat.transform.Rotate(25 * Time.deltaTime * new Vector3(0, v2.x, 0), Space.World);
+        Cam.Io.SetObliqueness(v2);
+    }
+
+    protected override void RStickInput(Vector2 v2)
+    {
+        MainMenuScene.CatBoat.transform.localScale = Vector3.one * 3 + (Vector3)v2 * 2;
     }
 }

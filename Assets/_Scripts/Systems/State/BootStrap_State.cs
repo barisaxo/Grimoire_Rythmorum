@@ -1,7 +1,7 @@
 using System;
+using System.Collections;
 using UnityEngine;
-using System.Threading.Tasks;
-
+using MusicTheory.Rhythms;
 public class BootStrap_State : State
 {
     private BootStrap_State() { }
@@ -23,7 +23,21 @@ public class BootStrap_State : State
 
     protected override void EngageState()
     {
-        SetStateDirectly(new MainMenu_State());
+        //var RhythmSpecs = new RhythmSpecs()
+        //{
+        //    Time = new FourFour(),
+        //    NumberOfMeasures = 4,
+        //    SubDivisionTier = SubDivisionTier.D1Only,
+        //    HasTies = true,
+        //    HasRests = false,
+        //    HasTriplets = false,
+        //    Tempo = 90
+        //};
+
+        //SetStateDirectly(new Batterie_State(RhythmSpecs));
+
+        //SetStateDirectly(new MainMenu_State());
+        SetStateDirectly(new VolumeMenu_State(new MainMenu_State()));
 
         //SetStateDirectly(new TestMusicSheet_State());
     }

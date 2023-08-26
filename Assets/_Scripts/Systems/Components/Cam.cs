@@ -26,6 +26,9 @@ public class Cam
     }
     #endregion INSTANCE
 
+    public static float OrthoX => Io.Camera.orthographicSize * Io.Camera.aspect;
+    public static float OrthoY => Io.Camera.orthographicSize;
+
     private Camera _cam;
     public Camera Camera
     {
@@ -47,20 +50,17 @@ public class Cam
         }
     }
 
+    public void SetObliqueness(Vector2 v2) => SetObliqueness(v2.x, v2.y);
+    public void SetObliqueness(float horizObl, float vertObl)
+    {
+        Matrix4x4 mat = Io.Camera.projectionMatrix;
+        mat[0, 2] = horizObl;
+        mat[1, 2] = vertObl;
+        Io.Camera.projectionMatrix = mat;
+        //https://docs.unity3d.com/Manual/ObliqueFrustum.html
+    }
+
     private AudioListener _audioListener;
     public AudioListener AudioListener => _audioListener != null ? _audioListener :
         _audioListener = Camera.gameObject.AddComponent<AudioListener>();
-}
-
-public static class CameraSystems
-{
-    public static float OrthoX(this Cam cam)
-    {
-        return cam.Camera.orthographicSize * cam.Camera.aspect;
-    }
-    public static float OrthoY(this Cam cam)
-    {
-        return cam.Camera.orthographicSize;
-    }
-
 }

@@ -34,15 +34,3 @@
         public override readonly int GetHashCode() => System.HashCode.Combine(Quality, Quantity);
     }
 }
-
-//
-//Whole note             = 64 : 240 / BPM
-//Half note              = 32 : 120 / BPM
-//Dotted quarter note    = 24 : 90 / BPM
-//Quarter note           = 16 : 60 / BPM
-//Dotted eighth note     = 12 : 45 / BPM
-//Triplet quarter note   = 10 : ??
-//Eighth note            =  8 : 30 / BPM
-//Triplet eighth note    =  6 : 20 / BPM
-//Sixteenth note         =  4 : 15 / BPM
-//

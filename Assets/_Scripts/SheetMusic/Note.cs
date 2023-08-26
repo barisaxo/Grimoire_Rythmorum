@@ -14,8 +14,10 @@ namespace MusicTheory.Rhythms
         public BeatLocation BeatLocation;
         public RhythmicValue QuantizedRhythmicValue;
 
+        public Card Card;
         public Transform TF;
         public SpriteRenderer SR;
+        //public Card Card;
 
         //public Note(
         //    bool rest,

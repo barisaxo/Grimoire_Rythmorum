@@ -34,7 +34,7 @@ namespace Dialog
                 textCards[i] = new Card(nameof(ResponseCards) + i, Parent.transform)
                     .SetTextString(Responses[i].Text)
                     .AutoSizeTextContainer(true)
-                    .SetPositionAll(new Vector2(Cam.Io.OrthoX() - 2.5f, -Cam.Io.OrthoY() + 1 + (fifoI * 1.15f)))
+                    .SetPositionAll(new Vector2(Cam.OrthoX - 2.5f, -Cam.OrthoY + 1 + (fifoI * 1.15f)))
                     .SetTextAlignment(TextAlignmentOptions.Right)
                     .AutoSizeFont(true)
                     .SetTMPRectPivot(new Vector2(1, .5f))
@@ -43,12 +43,13 @@ namespace Dialog
                     .SetImageSize(Vector2.one * .6f)
                     .OffsetImagePosition(Vector2.right)
                     .ImageClickable()
+                    .SetCanvasSortingOrder(5)
                     .TMPClickable();
             }
 
             _responseCards = textCards;
 
-            Sprite GetSprite(int i) => i switch
+            static Sprite GetSprite(int i) => i switch
             {
                 0 => Assets.SouthButton,
                 1 => Assets.EastButton,

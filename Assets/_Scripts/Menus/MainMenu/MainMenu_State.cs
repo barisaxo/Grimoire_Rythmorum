@@ -5,26 +5,24 @@ using UnityEngine;
 
 public class MainMenu_State : State
 {
-    private const float RotSpeed = 25;
-    private readonly RockTheBoat RockTheBoat = new();
-    private float LightRotY = -40;
+    public MainMenuScene MainMenuScene { get; private set; }
     private MainMenu MainMenu;
     private bool SaveDataExists = true;
+
+    public MainMenu_State() { }
+    public MainMenu_State(MainMenuScene scene) { MainMenuScene = scene; }
 
     protected override void PrepareState(Action callback)
     {
         MainMenu = (MainMenu)new MainMenu().Initialize();
         MainMenu.MenuItems[0].Card.GO.SetActive(SaveDataExists);
         MainMenu.MenuItems[1].Card.GO.SetActive(SaveDataExists);
-        RockTheBoat.AddBoat(MainMenu.Scene.CatBoat.transform);
+        MainMenuScene ??= new();
         callback();
     }
 
     protected override void EngageState()
     {
-        MonoHelper.OnUpdate += RotateLightHouse;
-        RockTheBoat.Rocking = true;
-
         if (SaveDataExists || (MainMenu.Selection != MainMenu.MainMenuItem.Continue &&
                                MainMenu.Selection != MainMenu.MainMenuItem.LoadGame)) return;
         MainMenu.Selection = MainMenu.MenuItems[MainMenu.MainMenuItem.NewGame];
@@ -33,8 +31,6 @@ public class MainMenu_State : State
 
     protected override void DisengageState()
     {
-        RockTheBoat.Rocking = false;
-        MonoHelper.OnUpdate -= RotateLightHouse;
         MainMenu.SelfDestruct();
     }
 
@@ -47,7 +43,6 @@ public class MainMenu_State : State
                 MainMenu.Selection = MainMenu.MenuItems[i];
                 break;
             }
-
         ConfirmPressed();
     }
 
@@ -70,25 +65,25 @@ public class MainMenu_State : State
 
         if (MainMenu.Selection.Item == MainMenu.MainMenuItem.LoadGame)
         {
-            SetStateDirectly(new LoadGameSelectSlot_State());
+            SetStateDirectly(new LoadGameSelectSlot_State(MainMenuScene));
             return;
         }
 
         if (MainMenu.Selection.Item == MainMenu.MainMenuItem.NewGame)
         {
-            SetStateDirectly(new NewGameSelectSlot_State());
+            SetStateDirectly(new NewGameSelectSlot_State(MainMenuScene));
             return;
         }
 
         if (MainMenu.Selection.Item == MainMenu.MainMenuItem.Options)
         {
-            SetStateDirectly(new VolumeMenu_State(new MainMenu_State()));
+            SetStateDirectly(new VolumeMenu_State(new MainMenu_State(MainMenuScene), MainMenuScene));
             return;
         }
 
         if (MainMenu.Selection.Item == MainMenu.MainMenuItem.HowToPlay)
         {
-            SetStateDirectly(new HowToPlayMenu_State());
+            SetStateDirectly(new HowToPlayMenu_State(MainMenuScene));
             return;
         }
 
@@ -97,17 +92,19 @@ public class MainMenu_State : State
 
     protected override void LStickInput(Vector2 v2)
     {
-        MainMenu.Scene.CatBoat.transform.Rotate(RotSpeed * Time.deltaTime * new Vector3(0, v2.x, 0), Space.World);
+        MainMenuScene?.CatBoat.transform.Rotate(25 * Time.deltaTime * new Vector3(0, v2.x, 0), Space.World);
+        Cam.Io.SetObliqueness(v2);
     }
 
     protected override void RStickInput(Vector2 v2)
     {
-        MainMenu.Scene.CatBoat.transform.localScale = Vector3.one * 3 + (Vector3)v2 * 2;
+        if (MainMenuScene == null) return;
+        MainMenuScene.CatBoat.transform.localScale = Vector3.one * 3 + (Vector3)v2 * 2;
     }
 
     protected override void StartPressed()
     {
-        RockTheBoat.Rocking = !RockTheBoat.Rocking;
+        MainMenuScene.RockTheBoat.Rocking = !MainMenuScene.RockTheBoat.Rocking;
 
         SaveDataExists = !SaveDataExists;
         MainMenu.MenuItems[0].Card.GO.SetActive(SaveDataExists);
@@ -115,9 +112,5 @@ public class MainMenu_State : State
         MainMenu.UpdateTextColors();
     }
 
-    private void RotateLightHouse()
-    {
-        LightRotY += Time.deltaTime * 25;
-        MainMenu.Scene.LightHouse.transform.rotation = Quaternion.Euler(0, LightRotY, 0);
-    }
+
 }

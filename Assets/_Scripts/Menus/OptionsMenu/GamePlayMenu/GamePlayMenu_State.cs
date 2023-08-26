@@ -1,6 +1,7 @@
 using System;
 using Menus;
 using Menus.OptionsMenu;
+using Menus.MainMenu;
 using UnityEngine;
 
 public class GamePlayMenu_State : State
@@ -8,6 +9,13 @@ public class GamePlayMenu_State : State
     private readonly State ConsequentState;
     private GamePlayMenu GamePlayMenu;
     private OptionsMenu Options;
+    private MainMenuScene MainMenuScene;
+
+    public GamePlayMenu_State(State consequentState, MainMenuScene scene)
+    {
+        ConsequentState = consequentState;
+        MainMenuScene = scene;
+    }
 
     public GamePlayMenu_State(State consequentState)
     {
@@ -80,10 +88,10 @@ public class GamePlayMenu_State : State
     private void UpdateMenu()
     {
         if (Options.Selection == Options.MenuItems[OptionsMenu.OptionsItem.Volume])
-            SetStateDirectly(new VolumeMenu_State(ConsequentState));
+            SetStateDirectly(new VolumeMenu_State(ConsequentState, MainMenuScene));
 
         else if (Options.Selection == Options.MenuItems[OptionsMenu.OptionsItem.Controls])
-            SetStateDirectly(new ShowControls_State(ConsequentState));
+            SetStateDirectly(new ShowControls_State(ConsequentState, MainMenuScene));
     }
 
     protected override void ConfirmPressed()
@@ -105,5 +113,17 @@ public class GamePlayMenu_State : State
     protected override void StartPressed()
     {
         SetStateDirectly(ConsequentState);
+    }
+
+    protected override void LStickInput(Vector2 v2)
+    {
+        MainMenuScene?.CatBoat.transform.Rotate(25 * Time.deltaTime * new Vector3(0, v2.x, 0), Space.World);
+        Cam.Io.SetObliqueness(v2);
+    }
+
+    protected override void RStickInput(Vector2 v2)
+    {
+        if (MainMenuScene == null) return;
+        MainMenuScene.CatBoat.transform.localScale = Vector3.one * 3 + (Vector3)v2 * 2;
     }
 }

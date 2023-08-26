@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 
 namespace MusicTheory.Rhythms
 {
@@ -25,9 +24,3 @@ namespace MusicTheory.Rhythms
         public RhythmSpecs SetTrips(bool tf) { HasTriplets = tf; return this; }
     }
 }
-
-
-//public List<RhythmOption> RhythmOptions = new();
-//public TimeSignature TimeSignature = TimeSignature.FourFour;
-//public RhythmSpecs AddRhythmOption(RhythmOption option) { RhythmOptions.Add(option); return this; }
-//public RhythmSpecs SetTimeSignature(TimeSignature timeSignature) { TimeSignature = timeSignature; return this; }

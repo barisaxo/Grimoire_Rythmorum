@@ -2,27 +2,19 @@ namespace Menus.MainMenu
 {
     public class MainMenu : Menu<MainMenu.MainMenuItem, MainMenu>
     {
-        private MainMenuScene _scene;
-
-        public MainMenu() : base(nameof(MainMenu))
-        {
-        }
+        public MainMenu() : base(nameof(MainMenu)) { }
 
         public int I { get; set; }
-        
-        public MainMenuScene Scene => _scene ??= new MainMenuScene();
 
         public override MenuLayoutStyle Style => MenuLayoutStyle.AlignRight;
 
         public override Menu<MainMenuItem, MainMenu> Initialize()
         {
-            _ = Scene;
             return base.Initialize();
         }
 
         public override void SelfDestruct()
         {
-            Scene.SelfDestruct();
             base.SelfDestruct();
         }
 
@@ -36,13 +28,9 @@ namespace Menus.MainMenu
             public static readonly MainMenuItem PracticeRoom = new(5, "Practice Room");
             public static readonly MainMenuItem Quit = new(6, "Quit");
 
-            public MainMenuItem() : base(0, "")
-            {
-            }
+            public MainMenuItem() : base(0, "") { }
 
-            private MainMenuItem(int id, string name) : base(id, name)
-            {
-            }
+            private MainMenuItem(int id, string name) : base(id, name) { }
         }
     }
 }

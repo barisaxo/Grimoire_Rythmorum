@@ -10,6 +10,9 @@ public static class Assets
     public static AudioClip BGMus2 => Resources.Load<AudioClip>("Audio/BGMusic/machete");
     public static AudioClip BGMus3 => Resources.Load<AudioClip>("Audio/BGMusic/Roulette loop");
     public static AudioClip BGMus4 => Resources.Load<AudioClip>("Audio/BGMusic/Finger Stretch");
+    public static AudioClip RimShot => Resources.Load<AudioClip>("Audio/Ritmo/RimShot");
+    public static AudioClip SnareRoll => Resources.Load("Audio/Ritmo/SnareRoll60bpm16beats") as AudioClip;
+    public static AudioClip MissStick => Resources.Load("Audio/Ritmo/MissStick") as AudioClip;
 
     public static Material Video_Mat => Resources.Load<Material>("Materials/Video_Mat");
 

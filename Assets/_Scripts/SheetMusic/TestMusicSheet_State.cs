@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using SheetMusic;
 using MusicTheory.Rhythms;
+using MusicTheory;
 
 public class TestMusicSheet_State : State
 {

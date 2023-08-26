@@ -1,63 +1,35 @@
-using System.Collections;
 using System.Collections.Generic;
-using UnityEngine;
-using MusicTheory;
 using MusicTheory.Rhythms;
-using Ritmo;
+using Batterie;
 
 public static class BeatMapper
 {
-
-    public static void MapBeats(this RhythmSpecs specs, List<Note> notes)
+    public static MappedBeat[] MapBeats(this Note[] notes, float tempo)
     {
-        List<MapBeat> mappedBeats = new() { new MapBeat(0, NoteFunction.Ignore) };
+        double interval = (double)(60d / (double)(tempo * 12d));
 
-        for (int i = 0; i < notes.Count; i++)
-        {
-            //mappedBeats.Add(new MapBeat(notes[i].BeatLocation))
-        }
-
-
-
-
-        //Adding this zero value rest at the beginning seems to fix a problem of priming the first note.
         List<MappedBeat> beatMap = new()
         {
+            //Adding this zero value note at the beginning seems to fix a problem of priming the first note.
             new MappedBeat(0, NoteFunction.Ignore)
         };
 
-        for (int i = 0; i < notes.Count; i++)
+        for (int i = 0; i < notes.Length; i++)
         {
-            beatMap.Add(new MappedBeat((double)(60d / (double)(specs.Tempo * 12d)), notes.GetNoteFunction(i)));
+            beatMap.Add(new MappedBeat(interval * (int)notes[i].QuantizedRhythmicValue, notes.GetNoteFunction(i)));
 
-            if (notes.GetNoteFunction(i) == NoteFunction.Rest)
+            for (int n = 1; n < (int)notes[i].QuantizedRhythmicValue; n++)
             {
-                for (int n = 1; n < (int)notes[i].QuantizedRhythmicValue; n++)
-                {
-                    beatMap.Add(new MappedBeat((double)(60d / (double)(specs.Tempo * 12d)), NoteFunction.Rest));
-                }
-            }
-            //else if (notes.GetNoteFunction(i) == NoteFunction.Hold)
-            //{
-            //    for (int n = 1; n < (int)notes[i].QuantizedRhythmicValue; n++)
-            //    {
-            //        beatMap.Add(new MappedBeat((double)(60d / (double)(specs.Tempo * 12d)), NoteFunction.Hold));
-            //    }
-            //}
-            else
-            {
-                for (int n = 1; n < (int)notes[i].QuantizedRhythmicValue; n++)
-                {
-                    beatMap.Add(new MappedBeat((double)(60d / (double)(specs.Tempo * 12d)), NoteFunction.Hold));
-                }
+                beatMap.Add(new MappedBeat(0, NoteFunction.Ignore));
             }
         }
+        return beatMap.ToArray();
     }
 
-    private static NoteFunction GetNoteFunction(this List<Note> notes, int i)
+    private static NoteFunction GetNoteFunction(this Note[] notes, int i)
     {
         if (notes[i].Rest) return NoteFunction.Rest;
-        if (i != 0 && notes[i - 1].TiedFrom) return NoteFunction.Hold;
+        if (notes[i].TiedFrom) return NoteFunction.Hold;
         return NoteFunction.Attack;
     }
 }

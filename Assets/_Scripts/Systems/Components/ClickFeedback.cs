@@ -47,20 +47,24 @@ internal sealed class ClickFeedback
 
                 _clickedGO = value;
 
-                foreach (SpriteRenderer sr in _clickedGO.GetComponentsInChildren<SpriteRenderer>())
-                {
-                    spriteFeedback.Add((sr, sr.color));
-                }
+                if (_clickedGO.TryGetComponent(out SpriteRenderer sr)) spriteFeedback.Add((sr, sr.color));
+                if (_clickedGO.TryGetComponent(out TextMeshProUGUI tmp)) tmpFeedback.Add((tmp, tmp.color));
+                if (_clickedGO.TryGetComponent(out Image img)) imageFeedback.Add((img, img.color));
 
-                foreach (TextMeshProUGUI tmp in _clickedGO.GetComponentsInChildren<TextMeshProUGUI>())
-                {
-                    tmpFeedback.Add((tmp, tmp.color));
-                }
+                //foreach (SpriteRenderer sr in _clickedGO.GetComponentsInChildren<SpriteRenderer>())
+                //{
+                //    spriteFeedback.Add((sr, sr.color));
+                //}
 
-                foreach (Image img in _clickedGO.GetComponentsInChildren<Image>())
-                {
-                    imageFeedback.Add((img, img.color));
-                }
+                //foreach (TextMeshProUGUI tmp in _clickedGO.GetComponentsInChildren<TextMeshProUGUI>())
+                //{
+                //    tmpFeedback.Add((tmp, tmp.color));
+                //}
+
+                //foreach (Image img in _clickedGO.GetComponentsInChildren<Image>())
+                //{
+                //    imageFeedback.Add((img, img.color));
+                //}
 
                 AlterColor();
             }

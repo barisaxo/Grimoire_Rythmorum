@@ -18,7 +18,7 @@ namespace Menus.HowToPlayMenu
         {
             public static readonly HowToPlayItem Bard = new(0, "About 'The Bards Code'");
             public static readonly HowToPlayItem Muscopa = new(1, "About 'Muscopa'");
-            public static readonly HowToPlayItem Battery = new(2, "About 'Battery'");
+            public static readonly HowToPlayItem Batterie = new(2, "About 'Battery'");
             public static readonly HowToPlayItem RhythmCell = new(3, "Rhythm cell tutorial");
 
             public HowToPlayItem() : base(0, "") { }

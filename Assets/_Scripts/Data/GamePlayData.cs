@@ -3,7 +3,7 @@ using MusicTheory.Rhythms;
 
 public class GameplayData
 {
-    private BatteryDifficulty _battery_Difficulty;
+    private BatterieDifficulty _batterie_Difficulty;
 
     private CadenceDifficulty _cadence_Difficulty;
 
@@ -13,18 +13,18 @@ public class GameplayData
 
     public bool EasyModeWon = false;
 
-    public bool ExplainBattery = true;
+    public bool ExplainBatterie = true;
 
     public GameDifficulty GameDifficulty = 0;
     public bool MediumModeWon = false;
 
     public CellShape RecentCell;
 
-    public BatteryDifficulty Battery_Difficulty
+    public BatterieDifficulty Batterie_Difficulty
     {
-        get => _battery_Difficulty;
-        set => _battery_Difficulty = _battery_Difficulty + (int)value < 0 || (int)(_battery_Difficulty + (int)value) > 5
-            ? _battery_Difficulty : value;
+        get => _batterie_Difficulty;
+        set => _batterie_Difficulty = _batterie_Difficulty + (int)value < 0 || (int)(_batterie_Difficulty + (int)value) > 5
+            ? _batterie_Difficulty : value;
     }
 
     public CadenceDifficulty Cadence_Difficulty
@@ -179,7 +179,7 @@ public class GameplayData
 }
 
 // public enum TestPhase { None, Battery }
-public enum BatteryDifficulty
+public enum BatterieDifficulty
 {
     LVL1,
     LVL2,

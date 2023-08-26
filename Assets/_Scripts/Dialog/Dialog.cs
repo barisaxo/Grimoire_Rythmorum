@@ -9,6 +9,7 @@ namespace Dialog
         {
             Dialogue = dialogue;
             _ = DialogCard;
+            _ = DialogBG;
             _ = TextBackground;
 
             CurrentLine = Dialogue.FirstLine;
@@ -32,7 +33,7 @@ namespace Dialog
             .SetImageSize(Vector2.one * 9001)
             .SetImageSprite(Assets.White)
             .SetImageColor(new Color(0f, .0f, 0f, .666f))
-            .SetImageLayer(1);
+            .SetCanvasSortingOrder(1);
 
         private Card[] _npcIcon;
         public void NPCIcon(Line line) => NPCIcon(line.SpeakerIcon, line.SpeakerColor);
@@ -49,9 +50,10 @@ namespace Dialog
                     cs[i] = new Card(nameof(NPCIcon), Parent.transform)
                           .SetImageSprite(sprites[i])
                           .SetImageSize(Vector3.one * 2f)
-                          .SetImagePosition(new Vector3(-Cam.Io.OrthoX() + .75f, Cam.Io.OrthoY() - .75f))
+                          .SetImagePosition(new Vector3(-Cam.OrthoX + .75f, Cam.OrthoY - .75f))
                           .SetImageColor(col)
-                          .SetImageLayer(i + 11);
+                          .SetCanvasSortingOrder(i + 11)
+                          ;
                 }
                 return cs;
             }
@@ -61,14 +63,23 @@ namespace Dialog
         public Card DialogCard => _dialogCard ??= new Card(nameof(DialogCard), Parent.transform)
             .SetTextAlignment(TMPro.TextAlignmentOptions.TopLeft)
             .SetTMPSize(new Vector2(3.5f * Cam.Io.Camera.aspect * 2, 4f))
-            .SetImageSize(new Vector2(4f * Cam.Io.Camera.aspect * 2, 5f))
-            .SetPositionAll(new Vector3(0, 2.5f))
+            .SetTMPPosition(new Vector3(0, 2.5f))
             .SetFontScale(.65f, .65f)
             .AutoSizeFont(true)
             .AllowWordWrap(true)
+            .SetCanvasSortingOrder(3)
+            ;
+
+        private Card _dialogBG;
+        public Card DialogBG => _dialogBG ??= new Card(nameof(DialogBG), Parent.transform)
             .SetImageSprite(Assets.White)
             .SetImageColor(new Color(.15f, .15f, .15f, .65f))
-            .ImageClickable();
+            .SetCanvasSortingOrder(2)
+            .SetImagePosition(new Vector3(0, 2.5f))
+            .SetImageSize(new Vector2(4f * Cam.Io.Camera.aspect * 2, 5f))
+            ;
+
+
 
         private VideoPlayer _videoPlayer;
         public VideoPlayer VideoPlayer => _videoPlayer = _videoPlayer != null ? _videoPlayer : SetUpVideo();
