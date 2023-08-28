@@ -8,15 +8,15 @@ namespace Audio
             VolumeData = volumeData;
 
             AudioSources[0].volume = VolumeData.GetScaledLevel(VolumeData.DataItem.Click);
-            AudioSources[0].clip = Assets.RimShot;
+            AudioSources[0].clip = BatterieAssets.RimShot;
             AudioSources[0].clip.LoadAudioData();
 
             AudioSources[1].volume = VolumeData.GetScaledLevel(VolumeData.DataItem.Batterie);
-            AudioSources[1].clip = Assets.SnareRoll;
+            AudioSources[1].clip = BatterieAssets.SnareRoll;
             AudioSources[1].clip.LoadAudioData();
 
             AudioSources[2].volume = VolumeData.GetScaledLevel(VolumeData.DataItem.Batterie);
-            AudioSources[2].clip = Assets.MissStick;
+            AudioSources[2].clip = BatterieAssets.MissStick;
             AudioSources[2].clip.LoadAudioData();
         }
 

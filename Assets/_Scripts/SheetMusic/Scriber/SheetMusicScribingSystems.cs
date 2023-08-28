@@ -30,7 +30,7 @@ namespace SheetMusic
         private static void SetUpStaff(this MusicSheet ms)
         {
             Card Measure1Staff = ms.Card.CreateChild(nameof(Measure1Staff), ms.Card.Canvas.transform, ms.Card.Canvas)
-                 .SetImageSprite(Assets.StaffDoubleLeft)
+                 .SetImageSprite(SheetMusicAssets.StaffDoubleLeft)
                  .SetImageSize(new Vector3(Cam.OrthoX * .895f, Cam.OrthoX * .5f, 1))
                  .SetImagePosition(MeasurePos(MeasureNumber.One));
 
@@ -38,22 +38,22 @@ namespace SheetMusic
             {
                 case 2:
                     Card Measure2Staff = ms.Card.CreateChild(nameof(Measure2Staff), ms.Card.Canvas.transform, ms.Card.Canvas)
-                        .SetImageSprite(Assets.StaffDoubleRight)
+                        .SetImageSprite(SheetMusicAssets.StaffDoubleRight)
                         .SetImageSize(new Vector3(Cam.OrthoX * .895f, Cam.OrthoX * .5f, 1))
                         .SetImagePosition(MeasurePos(MeasureNumber.Two));
                     break;
 
                 case 4:
                     ms.Card.CreateChild(nameof(Measure2Staff), ms.Card.Canvas.transform, ms.Card.Canvas)
-                        .SetImageSprite(Assets.Staff)
+                        .SetImageSprite(SheetMusicAssets.Staff)
                         .SetImageSize(new Vector3(Cam.OrthoX * .895f, Cam.OrthoX * .5f, 1))
                         .SetImagePosition(MeasurePos(MeasureNumber.Two));
                     Card Measure3Staff = ms.Card.CreateChild(nameof(Measure3Staff), ms.Card.Canvas.transform, ms.Card.Canvas)
-                        .SetImageSprite(Assets.Staff)
+                        .SetImageSprite(SheetMusicAssets.Staff)
                         .SetImageSize(new Vector3(Cam.OrthoX * .895f, Cam.OrthoX * .5f, 1))
                         .SetImagePosition(MeasurePos(MeasureNumber.Thr));
                     Card Measure4Staff = ms.Card.CreateChild(nameof(Measure4Staff), ms.Card.Canvas.transform, ms.Card.Canvas)
-                        .SetImageSprite(Assets.StaffDoubleRight)
+                        .SetImageSprite(SheetMusicAssets.StaffDoubleRight)
                         .SetImageSize(new Vector3(Cam.OrthoX * .895f, Cam.OrthoX * .5f, 1))
                         .SetImagePosition(MeasurePos(MeasureNumber.For));
                     break;
@@ -158,28 +158,28 @@ namespace SheetMusic
                     {
                         notes[i].Card.SetImageSprite(notes[i].QuantizedRhythmicValue switch
                         {
-                            RhythmicValue.Half => Assets.HalfRest,
-                            RhythmicValue.TripHalf => Assets.HalfRest,
-                            RhythmicValue.DotHalf => Assets.HalfRest,
-                            RhythmicValue.Eighth => Assets.EighthRest,
-                            RhythmicValue.DotEighth => Assets.EighthRest,
-                            RhythmicValue.TripEighth => Assets.EighthRest,
-                            RhythmicValue.Whole => Assets.WholeRest,
-                            RhythmicValue.DotWhole => Assets.WholeRest,
-                            RhythmicValue.Sixteenth => Assets.SixteenthRest,
-                            _ => Assets.QuarterRest,
+                            RhythmicValue.Half => SheetMusicAssets.HalfRest,
+                            RhythmicValue.TripHalf => SheetMusicAssets.HalfRest,
+                            RhythmicValue.DotHalf => SheetMusicAssets.HalfRest,
+                            RhythmicValue.Eighth => SheetMusicAssets.EighthRest,
+                            RhythmicValue.DotEighth => SheetMusicAssets.EighthRest,
+                            RhythmicValue.TripEighth => SheetMusicAssets.EighthRest,
+                            RhythmicValue.Whole => SheetMusicAssets.WholeRest,
+                            RhythmicValue.DotWhole => SheetMusicAssets.WholeRest,
+                            RhythmicValue.Sixteenth => SheetMusicAssets.SixteenthRest,
+                            _ => SheetMusicAssets.QuarterRest,
                         });
                     }
                     else
                     {
                         notes[i].Card.SetImageSprite(notes[i].QuantizedRhythmicValue switch
                         {
-                            RhythmicValue.Half => Assets.WhiteNote,
-                            RhythmicValue.DotHalf => Assets.WhiteNote,
-                            RhythmicValue.TripHalf => Assets.WhiteNote,
-                            RhythmicValue.Whole => Assets.WhiteNote,
-                            RhythmicValue.DotWhole => Assets.WhiteNote,
-                            _ => Assets.BlackNote,
+                            RhythmicValue.Half => SheetMusicAssets.WhiteNote,
+                            RhythmicValue.DotHalf => SheetMusicAssets.WhiteNote,
+                            RhythmicValue.TripHalf => SheetMusicAssets.WhiteNote,
+                            RhythmicValue.Whole => SheetMusicAssets.WhiteNote,
+                            RhythmicValue.DotWhole => SheetMusicAssets.WhiteNote,
+                            _ => SheetMusicAssets.BlackNote,
                         });
                     }
 
@@ -191,7 +191,7 @@ namespace SheetMusic
                         Card dot = notes[i].Card.CreateChild(nameof(dot), notes[i].Card.Image.transform, notes[i].Card.Canvas)
                             .SetImageSizeUnscaled(notes[i].Card.Image.rectTransform.sizeDelta)
                             .SetImagePosition(Vector3.zero)
-                            .SetImageSprite(Assets.Dot);
+                            .SetImageSprite(SheetMusicAssets.Dot);
                     }
 
                     if ((notes[i].QuantizedRhythmicValue == RhythmicValue.Half ||
@@ -202,7 +202,7 @@ namespace SheetMusic
                         Card stem = notes[i].Card.CreateChild(nameof(stem), notes[i].Card.Image.transform, notes[i].Card.Canvas)
                             .SetImageSizeUnscaled(notes[i].Card.Image.rectTransform.sizeDelta)
                             .SetImagePosition(Vector3.zero)
-                            .SetImageSprite(Assets.Stem);
+                            .SetImageSprite(SheetMusicAssets.Stem);
                     }
                 }
 
@@ -295,40 +295,40 @@ namespace SheetMusic
                         Card flag = notes[i].Card.CreateChild(nameof(flag), notes[i].Card.Image.transform, notes[i].Card.Canvas)
                             .SetImagePosition(Vector3.zero)
                             .SetImageSizeUnscaled(notes[i].Card.Image.rectTransform.sizeDelta)
-                            .SetImageSprite(Assets.EighthFlag);
+                            .SetImageSprite(SheetMusicAssets.EighthFlag);
                         continue;
                     }
                     else if (sr && sf)
                     {
-                        notes[i].Card.Image.sprite = Assets.SixteenthBoth;
+                        notes[i].Card.Image.sprite = SheetMusicAssets.SixteenthBoth;
                     }
                     else if (sr && !sf && !ef)
                     {
-                        notes[i].Card.Image.sprite = Assets.SixteenthReverse;
+                        notes[i].Card.Image.sprite = SheetMusicAssets.SixteenthReverse;
                     }
                     else if (sr && !sf && ef)
                     {
-                        notes[i].Card.Image.sprite = Assets.SixteenthReverseEighthForward;
+                        notes[i].Card.Image.sprite = SheetMusicAssets.SixteenthReverseEighthForward;
                     }
                     else if (sf && !sr && !er)
                     {
-                        notes[i].Card.Image.sprite = Assets.SixteenthForward;
+                        notes[i].Card.Image.sprite = SheetMusicAssets.SixteenthForward;
                     }
                     else if (sf && !sr && er)
                     {
-                        notes[i].Card.Image.sprite = Assets.SixteenthForwardEighthReverse;
+                        notes[i].Card.Image.sprite = SheetMusicAssets.SixteenthForwardEighthReverse;
                     }
                     else if (ef && er)
                     {
-                        notes[i].Card.Image.sprite = Assets.EighthBoth;
+                        notes[i].Card.Image.sprite = SheetMusicAssets.EighthBoth;
                     }
                     else if (ef && !er)
                     {
-                        notes[i].Card.Image.sprite = Assets.EighthForward;
+                        notes[i].Card.Image.sprite = SheetMusicAssets.EighthForward;
                     }
                     else if (er && !ef)
                     {
-                        notes[i].Card.Image.sprite = Assets.EighthReverse;
+                        notes[i].Card.Image.sprite = SheetMusicAssets.EighthReverse;
                     }
 
                     if (srb) { AddReverse16thBeamBridge(); }
@@ -339,28 +339,28 @@ namespace SheetMusic
                     void AddForward16thBeamBridge()
                     {
                         Card beam16BridgeF = notes[i].Card.CreateChild(nameof(beam16BridgeF), notes[i].Card.Image.transform, notes[i].Card.Canvas)
-                            .SetImageSprite(Assets.SixteenthBeam)
+                            .SetImageSprite(SheetMusicAssets.SixteenthBeam)
                             .SetImageSizeUnscaled(new Vector3(notes[i].Card.Image.rectTransform.sizeDelta.x * (ScaledToFit(NotePosition(ms, notes[i].BeatLocation).x, NotePosition(ms, notes[i + 1].BeatLocation).x)), notes[i].Card.Image.rectTransform.sizeDelta.y, 1))
                             .SetImagePosition(Vector3.right * (ScaledToFit(NotePosition(ms, notes[i].BeatLocation).x, NotePosition(ms, notes[i + 1].BeatLocation).x) * .225f));
                     }
                     void AddReverse16thBeamBridge()
                     {
                         Card beam16BridgeR = notes[i].Card.CreateChild(nameof(beam16BridgeR), notes[i].Card.Image.transform, notes[i].Card.Canvas)
-                            .SetImageSprite(Assets.SixteenthBeamReverse)
+                            .SetImageSprite(SheetMusicAssets.SixteenthBeamReverse)
                             .SetImageSizeUnscaled(new Vector3(notes[i].Card.Image.rectTransform.sizeDelta.x * (ScaledToFit(NotePosition(ms, notes[i].BeatLocation).x, NotePosition(ms, notes[i - 1].BeatLocation).x)), notes[i].Card.Image.rectTransform.sizeDelta.y, 1))
                             .SetImagePosition(Vector3.left * (ScaledToFit(NotePosition(ms, notes[i].BeatLocation).x, NotePosition(ms, notes[i - 1].BeatLocation).x) * .1f));
                     }
                     void AddForward8thBeamBridge()
                     {
                         Card beam8BridgeF = notes[i].Card.CreateChild(nameof(beam8BridgeF), notes[i].Card.Image.transform, notes[i].Card.Canvas)
-                            .SetImageSprite(Assets.EighthBeam)
+                            .SetImageSprite(SheetMusicAssets.EighthBeam)
                             .SetImageSizeUnscaled(new Vector3(notes[i].Card.Image.rectTransform.sizeDelta.x * (ScaledToFit(NotePosition(ms, notes[i].BeatLocation).x, NotePosition(ms, notes[i + 1].BeatLocation).x)), notes[i].Card.Image.rectTransform.sizeDelta.y, 1))
                             .SetImagePosition(Vector3.right * (ScaledToFit(NotePosition(ms, notes[i].BeatLocation).x, NotePosition(ms, notes[i + 1].BeatLocation).x) * .225f));
                     }
                     void AddReverse8thBeamBridge()
                     {
                         Card beam8BridgeR = notes[i].Card.CreateChild(nameof(beam8BridgeR), notes[i].Card.Image.transform, notes[i].Card.Canvas)
-                            .SetImageSprite(Assets.EighthBeamReverse)
+                            .SetImageSprite(SheetMusicAssets.EighthBeamReverse)
                             .SetImageSizeUnscaled(new Vector3(notes[i].Card.Image.rectTransform.sizeDelta.x * (ScaledToFit(NotePosition(ms, notes[i].BeatLocation).x, NotePosition(ms, notes[i - 1].BeatLocation).x)), notes[i].Card.Image.rectTransform.sizeDelta.y, 1))
                             .SetImagePosition(Vector3.left * (ScaledToFit(NotePosition(ms, notes[i].BeatLocation).x, NotePosition(ms, notes[i - 1].BeatLocation).x) * 0.1f));
                     }
@@ -381,7 +381,7 @@ namespace SheetMusic
                 {
                     //reverse tie
                     Card tie = notes[i].Card.CreateChild(nameof(tie), notes[i].Card.Image.transform, notes[i].Card.Canvas)
-                        .SetImageSprite(Assets.Tie)
+                        .SetImageSprite(SheetMusicAssets.Tie)
                         .SetImageSize(8.95f * new Vector3(ScaledToFit(NotePosition(ms, notes[i].BeatLocation).x, NotePosition(ms, notes[i].BeatLocation).x + 10f) * .1f, .35f, 1))
                         //.SetImageSizeUnscaled(new Vector3(notes[i].Card.Image.rectTransform.sizeDelta.x * (ScaledToFit(NotePosition(ms, notes[i].BeatLocation).x, NotePosition(ms, notes[i + 1].BeatLocation).x)), notes[i].Card.Image.rectTransform.sizeDelta.y, 1))
                         .SetImagePosition(Vector3.zero)
@@ -394,7 +394,7 @@ namespace SheetMusic
                     //tf.localScale = new Vector3(ScaledToFit(notes[i].TF.position.x, notes[i].TF.position.x + 1.5f) * -.1f, .5f, 1);
                     //tf.position = notes[i].TF.position;// + new Vector3(tf.localScale.x * .5f, 0, 0);
                     //SpriteRenderer sr = tf.gameObject.AddComponent<SpriteRenderer>();
-                    //sr.sprite = Assets.Tie;
+                    //sr.sprite = SheetMusicAssets.Tie;
                 }
 
                 if (!notes[i].TiesTo) continue;
@@ -402,7 +402,7 @@ namespace SheetMusic
                 if (notes[i].ParentCell == ms.Measures[1].Cells[^1])
                 {
                     Card tie = notes[i].Card.CreateChild(nameof(tie), notes[i].Card.Image.transform, notes[i].Card.Canvas)
-                        .SetImageSprite(Assets.Tie)
+                        .SetImageSprite(SheetMusicAssets.Tie)
                         .SetImageSize(8.95f * new Vector3(ScaledToFit(NotePosition(ms, notes[i].BeatLocation).x, NotePosition(ms, notes[i].BeatLocation).x + 10f) * .1f, .35f, 1))
                         .SetImagePosition(Vector3.zero)
                         .OffsetImagePosition(new Vector3(.5f, 0, 0));
@@ -412,12 +412,12 @@ namespace SheetMusic
                     //tf.localScale = new Vector3(ScaledToFit(notes[i].TF.position.x, notes[i].TF.position.x + 10f) * .1f, .5f, 1);
                     //tf.position = notes[i].TF.position;// + new Vector3(tf.localScale.x * .5f, 0, 0);
                     //SpriteRenderer sr = tf.gameObject.AddComponent<SpriteRenderer>();
-                    //sr.sprite = Assets.Tie;
+                    //sr.sprite = SheetMusicAssets.Tie;
                 }
                 else
                 {
                     Card tie = notes[i].Card.CreateChild(nameof(tie), notes[i].Card.Image.transform, notes[i].Card.Canvas)
-                        .SetImageSprite(Assets.Tie)
+                        .SetImageSprite(SheetMusicAssets.Tie)
                         .SetImageSize(8.95f * new Vector3(ScaledToFit(NotePosition(ms, notes[i].BeatLocation).x, NotePosition(ms, notes[i + 1].BeatLocation).x) * .1f, .35f, 1))
                         .SetImagePosition(Vector3.zero)
                         .OffsetImagePosition(new Vector3(.5f, 0, 0));
@@ -427,7 +427,7 @@ namespace SheetMusic
                     //tf.localScale = new Vector3(ScaledToFit(notes[i].TF.position.x, notes[i + 1].TF.position.x) * .1f, .5f, 1);
                     //tf.position = notes[i].TF.position;// + new Vector3(tf.localScale.x * .5f, 0, 0);
                     //SpriteRenderer sr = tf.gameObject.AddComponent<SpriteRenderer>();
-                    //sr.sprite = Assets.Tie;
+                    //sr.sprite = SheetMusicAssets.Tie;
                 }
 
             }
