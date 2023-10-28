@@ -9,7 +9,9 @@ public class GamePlayMenu_State : State
     private readonly State ConsequentState;
     private GamePlayMenu GamePlayMenu;
     private OptionsMenu Options;
-    private MainMenuScene MainMenuScene;
+    private readonly MainMenuScene MainMenuScene;
+    private bool Tuning;
+    private TuningNote TuningNote;
 
     public GamePlayMenu_State(State consequentState, MainMenuScene scene)
     {
@@ -32,8 +34,16 @@ public class GamePlayMenu_State : State
     protected override void DisengageState()
     {
         //LoadSaveSystems.SaveCurrentGame();
+        TuningNote.Stop();
+        Tuning = false;
         Options.SelfDestruct();
         GamePlayMenu.SelfDestruct();
+    }
+
+    protected override void Clicked(MouseAction action, Vector3 mousePos)
+    {
+        base.Clicked(action, mousePos);
+        if (action == MouseAction.LUp) ToggleTuningNote();
     }
 
     protected override void ClickedOn(GameObject go)
@@ -63,6 +73,7 @@ public class GamePlayMenu_State : State
                 }
 
                 GamePlayMenu.Selection = GamePlayMenu.MenuItems[i];
+                //ToggleTuningNote();
                 GamePlayMenu.UpdateTextColors();
                 return;
             }
@@ -70,7 +81,9 @@ public class GamePlayMenu_State : State
 
     protected override void DirectionPressed(Dir dir)
     {
+        if (dir == Dir.Reset) return;
         GamePlayMenu.ScrollMenuItems(dir);
+        ToggleTuningNote();
     }
 
     protected override void L1Pressed()
@@ -87,6 +100,8 @@ public class GamePlayMenu_State : State
 
     private void UpdateMenu()
     {
+        TuningNote.Stop();
+        Tuning = false;
         if (Options.Selection == Options.MenuItems[OptionsMenu.OptionsItem.Volume])
             SetStateDirectly(new VolumeMenu_State(ConsequentState, MainMenuScene));
 
@@ -97,6 +112,25 @@ public class GamePlayMenu_State : State
     protected override void ConfirmPressed()
     {
         IncreaseItem(GamePlayMenu.Selection);
+    }
+
+    private void ToggleTuningNote()
+    {
+        if (GamePlayMenu.Selection == GameplayData.DataItem.Tuning && !Tuning)
+        {
+            TuningNote = new(Data.GamePlay.CurrentKey);
+            Tuning = true;
+        }
+        else if (GamePlayMenu.Selection == GameplayData.DataItem.Tuning && Tuning)
+        {
+            TuningNote.Stop();
+            Tuning = false;
+        }
+        else if (GamePlayMenu.Selection != GameplayData.DataItem.Tuning && Tuning)
+        {
+            TuningNote.Stop();
+            Tuning = false;
+        }
     }
 
     private void IncreaseItem(MenuItem<GameplayData.DataItem> item)

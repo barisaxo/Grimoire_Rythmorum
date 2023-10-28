@@ -119,7 +119,9 @@ public abstract class State
 
 
     #region INPUT
-
+    /// <summary>
+    /// Deal with the gameobject you clicked on here. Base is empty.
+    /// </summary>
     protected virtual void ClickedOn(GameObject go) { }
     protected virtual void DirectionPressed(Dir dir) { }
     protected virtual void WestPressed() { }
@@ -146,19 +148,19 @@ public abstract class State
     {
         if (action != MouseAction.LUp) return;
 
-        if (Cam.Io.Camera.orthographic)
-        {
-            var hit = Physics2D.Raycast(Cam.Io.Camera.ScreenToWorldPoint(mousePos), Vector2.zero);
-            if (hit.collider != null) ClickedOn(hit.collider.gameObject);
-        }
-        else
-        {
-            var hit = Physics2D.GetRayIntersection(Cam.Io.Camera.ScreenPointToRay(mousePos));
-            var hitUI = Physics2D.Raycast(mousePos, Vector2.zero);
+        //if (Cam.Io.Camera.orthographic)
+        //{
+        //    var hit = Physics2D.Raycast(Cam.Io.UICamera.ScreenToWorldPoint(mousePos), Vector2.zero);
+        //    if (hit.collider != null) ClickedOn(hit.collider.gameObject);
+        //}
+        //else
+        //{
+        var hitUI = Physics2D.GetRayIntersection(Cam.Io.UICamera.ScreenPointToRay(mousePos));
+        var hit = Physics2D.Raycast(mousePos, Vector2.zero);
 
-            if (hit.collider != null) ClickedOn(hit.collider.gameObject);
-            else if (hitUI.collider != null) ClickedOn(hitUI.collider.gameObject);
-        }
+        if (hit.collider != null) ClickedOn(hit.collider.gameObject);
+        else if (hitUI.collider != null) ClickedOn(hitUI.collider.gameObject);
+        //}
     }
 
     private void GPInput(GamePadButton gpb)
@@ -208,10 +210,10 @@ public abstract class State
         }
     }
 
-    private Vector2 LStick;
-    private Vector2 RStick;
-    private bool LStickZeroed;
-    private bool RStickZeroed;
+    public Vector2 LStick { get; private set; }
+    public Vector2 RStick { get; private set; }
+    public bool LStickZeroed { get; private set; }
+    public bool RStickZeroed { get; private set; }
 
     private void GPStickInput(GamePadButton gpi, Vector2 v2)
     {
@@ -238,15 +240,15 @@ public abstract class State
     }
 
     //nintendo switch R sticks are weird
-    private bool NewRStickAltThisFrame;
+    public bool NewRStickAltThisFrame { get; private set; }
 
-    private Vector2 RStickAlt => new(RStickAltX, RStickAltY);
+    public Vector2 RStickAlt => new(RStickAltX, RStickAltY);
     private float _rStickAltX;
 
-    private float RStickAltX
+    public float RStickAltX
     {
         get => _rStickAltX;
-        set
+        private set
         {
             NewRStickAltThisFrame = true;
             _rStickAltX = value;
@@ -254,11 +256,10 @@ public abstract class State
     }
 
     private float _rStickAltY;
-
-    private float RStickAltY
+    public float RStickAltY
     {
         get => _rStickAltY;
-        set
+        private set
         {
             NewRStickAltThisFrame = true;
             _rStickAltY = value;
@@ -273,7 +274,8 @@ public abstract class State
     {
         if (!NewRStickAltThisFrame) return;
         RStickInput(RStickAlt);
-        NewRStickAltThisFrame = false;
+        if (RStickAlt == Vector2.zero)
+            NewRStickAltThisFrame = false;
     }
 
     #endregion INPUT HANDLING

@@ -35,6 +35,7 @@ namespace MusicTheory.Rhythms
     //    //||1 . . . . . + . . . . . 2 . . . . . + . . . . . 3 . . . . . + . . . . . 4 . . . . . + . . . . . |EIGHTH
     //    //||1 . . . T . . . L . . . 2 . . . T . . . L . . . 3 . . . T . . . L . . . 4 . . . T . . . L . . . |TRIP EIGHTH
     //    //||1 . . e . . + . . a . . 2 . . e . . + . . a . . 3 . . e . . + . . a . . 4 . . e . . + . . a . . |SIXTEENTH
+    //    //||1 . T . L . + . T . L . 2 . T . L . + . T . L . 3 . T . L . + . T . L . 4 . T . L . + . T . L . |TRIP SIXTEENTH
 
     public enum Quantizement { Half, Quarter, QuarterTrips, Eighth, EighthTrips, Sixteenth }
 
@@ -93,3 +94,4 @@ namespace MusicTheory.Rhythms
     }
 
 }
+

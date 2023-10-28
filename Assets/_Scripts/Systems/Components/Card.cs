@@ -1,148 +1,164 @@
-//using UnityEngine;
-//using UnityEngine.UI;
-//using TMPro;
-//using System.Collections.Generic;
+﻿using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
-//public class Card
-//{
-//    /// <summary>
-//    /// The basis for any simple 2D sprite and/or text.
-//    /// </summary>
-//    public Card(string name, Transform parent)
-//    {
-//        GO = new GameObject(name);
-//        GO.transform.SetParent(parent, false);
-//    }
+public class Card
+{
+    public Card(string name, Transform parent)
+    {
+        Name = name;
+        GO = new GameObject(name);
+        GO.transform.SetParent(parent, false);
+    }
 
-//    /// <summary>
-//    /// The parent GameObject. SpriteRenderer will be attatched to this, Canvas & TMP will be children.
-//    /// </summary>
-//    public GameObject GO { get; private set; }
+    private Card() { }
 
-//    /// <summary>
-//    /// Do you want this card and/or Text to be clickable?
-//    /// </summary>
-//    public Clickable Clickable;
+    private Card(string name, Card parentCard, Transform parent)
+    {
+        Name = name;
+        ParentCard = parentCard;
+        Parent = parent;
+    }
 
-//    private SpriteRenderer _sr;
-//    /// <summary>
-//    /// Lives on GO (the parent GameObject).
-//    /// </summary>
-//    public SpriteRenderer SpriteRenderer => _sr != null ? _sr : _sr = GO.AddComponent<SpriteRenderer>();
+    private Card(string name, Card parentCard, Transform parent, Canvas _)
+    {
+        Name = name;
+        ParentCard = parentCard;
+        Parent = parent;
+        _canvas = parentCard.Canvas;
+        _canvasScaler = parentCard.CanvasScaler;
+    }
 
-//    private Canvas _tmpCanvas;
-//    public Canvas TMPCanvas
-//    {
-//        get
-//        {
-//            return _tmpCanvas != null ? _tmpCanvas : _tmpCanvas = SetUpCanvas();
-//            Canvas SetUpCanvas()
-//            {
-//                Canvas canvas = new GameObject(nameof(TMPCanvas)).AddComponent<Canvas>();
-//                canvas.transform.SetParent(GO.transform, false);
-//                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-//                canvas.sortingOrder = 10;
+    public void SelfDestruct()
+    {
+        if (Children != null) { foreach (Card child in Children) child.SelfDestruct(); }
+        if (GO != null) Object.Destroy(GO);
+    }
 
-//                if (_tmpCanvasScaler == null)
-//                {
-//                    _tmpCanvasScaler = SetUpCanvasScaler(canvas);
-//                }
+    public string Name { get; private set; }
+    public Card ParentCard { get; private set; } = null;
+    public Card[] Children { get; private set; } = null;
+    public GameObject GO { get; private set; } = null;
+    public Clickable Clickable { get; private set; } = null;
 
-//                return canvas;
-//            }
-//        }
-//    }
+    private Transform Parent;
 
-//    private CanvasScaler _tmpCanvasScaler;
-//    public CanvasScaler TMPCanvasScaler
-//    {
-//        get
-//        {
-//            if (_tmpCanvasScaler == null) { _tmpCanvasScaler = SetUpCanvasScaler(TMPCanvas); }
-//            return _tmpCanvasScaler;
-//        }
-//    }
-
-//    CanvasScaler SetUpCanvasScaler(Canvas canvas)
-//    {
-//        if (canvas.gameObject.TryGetComponent<CanvasScaler>(out CanvasScaler ca)) { return ca; }
-
-//        CanvasScaler cs = canvas.gameObject.AddComponent<CanvasScaler>();
-//        cs.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-//        cs.matchWidthOrHeight = 1;
-//        cs.referenceResolution = new Vector2(Cam.Io.Camera.pixelWidth, Cam.Io.Camera.pixelHeight);
-
-//        return cs;
-//    }
-
-//    private TextMeshProUGUI _tmp;
-//    public TextMeshProUGUI TMP
-//    {
-//        get
-//        {
-//            return _tmp != null ? _tmp : _tmp = SetUpTMP();
-
-//            TextMeshProUGUI SetUpTMP()
-//            {
-//                TextMeshProUGUI t = new GameObject(nameof(TMP)).AddComponent<TextMeshProUGUI>();
-//                t.transform.SetParent(TMPCanvas.transform, true);
-//                t.fontSizeMin = 8;
-//                t.fontSizeMax = 300;
-
-//                return t;
-//            }
-//        }
-//    }
-
-//    private Image _image;
-//    public Image Image
-//    {
-//        get
-//        {
-//            return _image = _image != null ? _image : SetUpImage();
-
-//            Image SetUpImage()
-//            {
-//                Image i = new GameObject(nameof(Image)).AddComponent<Image>();
-//                i.transform.SetParent(ImageCanvas.transform, true);
-//                i.sprite = null;
-//                return i;
-//            }
-//        }
-//    }
-
-//    private Canvas _canvas;
-//    public Canvas ImageCanvas
-//    {
-//        get
-//        {
-//            return _canvas != null ? _canvas : _canvas = SetUpCanvas();
-//            Canvas SetUpCanvas()
-//            {
-//                Canvas canvas = new GameObject(nameof(ImageCanvas)).AddComponent<Canvas>();
-//                canvas.transform.SetParent(GO.transform, false);
-//                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-//                canvas.sortingOrder = 5;
-//                if (_canvasScaler == null) _canvasScaler = SetUpCanvasScaler(canvas);
+    public string TextString { get => TMP.text; set => TMP.text = value; }
+    private SpriteRenderer _sr = null;
+    public SpriteRenderer SpriteRenderer => _sr != null ? _sr : _sr = GO.AddComponent<SpriteRenderer>();
 
 
-//                return canvas;
-//            }
-//        }
-//    }
+    private TextMeshProUGUI _tmp;
+    public TextMeshProUGUI TMP
+    {
+        get
+        {
+            return _tmp != null ? _tmp : _tmp = SetUpTMP();
 
-//    private CanvasScaler _canvasScaler;
-//    public CanvasScaler ImageCanvasScaler
-//    {
-//        get
-//        {
-//            if (_canvasScaler == null) { _canvasScaler = SetUpCanvasScaler(ImageCanvas); }
-//            return _canvasScaler;
-//        }
-//    }
+            TextMeshProUGUI SetUpTMP()
+            {
+                TextMeshProUGUI t = new GameObject(Name + nameof(TMP)).AddComponent<TextMeshProUGUI>();
+                t.gameObject.layer = 5;
+                t.transform.SetParent(Parent != null ? Parent : Canvas.transform, true);
+                t.fontSizeMin = 8;
+                t.fontSizeMax = 300;
+                t.rectTransform.localScale = Vector3.one;
+                return t;
+            }
+        }
+    }
 
+    private Image _image;
+    public Image Image
+    {
+        get
+        {
+            return _image = _image != null ? _image : SetUpImage();
+            Image SetUpImage()
+            {
+                Image i = new GameObject(Name + nameof(Image)).AddComponent<Image>();
+                i.gameObject.layer = 5;
+                i.transform.SetParent(Parent != null ? Parent : Canvas.transform, true);
+                i.rectTransform.localScale = Vector3.one;
+                i.sprite = null;
+                return i;
+            }
+        }
+    }
 
-//    public string TextString { get => TMP.text; set => TMP.text = value; }
-//}
+    private Canvas _canvas;
+    public Canvas Canvas
+    {
+        get
+        {
+            return _canvas != null ? _canvas : _canvas = SetUpCanvas();
+            Canvas SetUpCanvas()
+            {
+                Canvas canvas = new GameObject(Name + nameof(Canvas)).AddComponent<Canvas>();
+                canvas.gameObject.layer = 5;
+                canvas.transform.SetParent(GO.transform, false);
+                canvas.renderMode = RenderMode.ScreenSpaceCamera;
+                canvas.worldCamera = Cam.Io.UICamera;
+                canvas.sortingOrder = 0;
+                if (_canvasScaler == null) _canvasScaler = SetUpCanvasScaler(canvas);
+                return canvas;
+            }
+        }
+    }
+
+    private CanvasScaler _canvasScaler;
+    public CanvasScaler CanvasScaler
+    {
+        get
+        {
+            if (_canvasScaler == null) _canvasScaler = SetUpCanvasScaler(Canvas);
+            return _canvasScaler;
+        }
+    }
+
+    CanvasScaler SetUpCanvasScaler(Canvas canvas)
+    {
+        if (canvas.gameObject.TryGetComponent(out CanvasScaler ca)) return ca;
+        CanvasScaler cs = canvas.gameObject.AddComponent<CanvasScaler>();
+        cs.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+        cs.matchWidthOrHeight = 1;
+        cs.referenceResolution = new Vector2(Cam.Io.UICamera.pixelWidth, Cam.Io.UICamera.pixelHeight);
+        return cs;
+    }
+
+    public Card CreateChild(string name, Transform parent)
+    {
+        Children = Children == null ? new Card[1] { NewCard() } : AddNewCard();
+        return Children[^1];
+
+        Card NewCard() => new(name, this, parent);
+
+        Card[] AddNewCard()
+        {
+            Card[] temp = new Card[Children.Length + 1];
+            Children.CopyTo(temp, 0);
+            temp[^1] = NewCard();
+            return temp;
+        }
+    }
+
+    public Card CreateChild(string name, Transform parent, Canvas _)
+    {
+        Children = Children == null ? new Card[1] { NewCard() } : AddNewCard();
+        return Children[^1];
+
+        Card NewCard() => new(name, this, parent, Canvas);
+
+        Card[] AddNewCard()
+        {
+            Card[] temp = new Card[Children.Length + 1];
+            Children.CopyTo(temp, 0);
+            temp[^1] = NewCard();
+            return temp;
+        }
+    }
+
+    public Card SetClickable(Clickable clickable) { Clickable = clickable; return this; }
+}
 
 

@@ -34,7 +34,7 @@ namespace Dialog
                 textCards[i] = new Card(nameof(ResponseCards) + i, Parent.transform)
                     .SetTextString(Responses[i].Text)
                     .AutoSizeTextContainer(true)
-                    .SetPositionAll(new Vector2(Cam.OrthoX - 2.5f, -Cam.OrthoY + 1 + (fifoI * 1.15f)))
+                    .SetPositionAll(new Vector2(Cam.UIOrthoX - 2.5f, -Cam.UIOrthoY + 1 + (fifoI * 1.15f)))
                     .SetTextAlignment(TextAlignmentOptions.Right)
                     .AutoSizeFont(true)
                     .SetTMPRectPivot(new Vector2(1, .5f))

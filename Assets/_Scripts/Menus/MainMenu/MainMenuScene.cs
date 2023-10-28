@@ -27,7 +27,7 @@ namespace Menus.MainMenu
         private Transform _parent;
 
         public Transform Parent =>
-            _parent != null ? _parent : _parent = new GameObject(nameof(MainMenuScene)).transform;
+            _parent ? _parent : _parent = new GameObject(nameof(MainMenuScene)).transform;
 
         #endregion INSTANCE
 

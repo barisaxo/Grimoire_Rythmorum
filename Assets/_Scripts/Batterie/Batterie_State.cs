@@ -6,7 +6,7 @@ using System;
 
 
 //TODOTODOTODO rhythm puzzle: find the '1'
-//perform this rhythm to unlock *que music*: (Q)SSL 
+//perform this rhythm to unlock *que music*: (Q)SSL
 
 public class Batterie_State : State
 {

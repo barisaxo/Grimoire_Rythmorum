@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+//TODO this is the old music theory
 namespace MusicTheory
 {
     /// <summary>
@@ -56,7 +57,7 @@ namespace MusicTheory
             _ => "?"
         };
 
-        public static int Count(this ChordQuality cq) => Enum.GetNames(typeof(ChordQuality)).Length;
+        public static int Count(this ChordQuality _) => Enum.GetNames(typeof(ChordQuality)).Length;
         public static string String(this ChordQuality quality) => QualityString(quality);
         public static string QualityString(ChordQuality quality) => quality switch
         {
@@ -442,8 +443,9 @@ namespace MusicTheory
         //     _ => Color.grey,
         // };
 
-        public static int Count(this RegionalMode rm) => Enum.GetNames(typeof(RegionalMode)).Length;
-        public static RegionalMode RandomMode(this RegionalMode rm) => (RegionalMode)UnityEngine.Random.Range(0, RegionalMode.Locrian.Count());
+        public static int Count(this RegionalMode _) => Enum.GetNames(typeof(RegionalMode)).Length;
+        public static RegionalMode RandomMode(this RegionalMode _) => (RegionalMode)UnityEngine.Random.Range(0, RegionalMode.Locrian.Count());
+        public static RegionalMode RandomMode() => (RegionalMode)UnityEngine.Random.Range(0, RegionalMode.Locrian.Count());
 
         public static int Count(this Genre genre) => Enum.GetNames(typeof(Genre)).Length;
 
@@ -458,6 +460,14 @@ namespace MusicTheory
         //     RegionalMode.Locrian => Assets.Bm7b5,
         //     _ => Assets.CM7Q,
         // };
+
+
+
+
+        public static int Count(this KeyOf _) => Enum.GetNames(typeof(KeyOf)).Length;
+        public static KeyOf RandomKey(this KeyOf _) => (KeyOf)UnityEngine.Random.Range(0, KeyOf.A.Count());
+        public static KeyOf RandomKey() => (KeyOf)UnityEngine.Random.Range(0, KeyOf.A.Count());
+
     }
 
     public enum DiatonicRomanNumeral { I, II, III, IV, V, VI, VII, };
@@ -505,6 +515,7 @@ namespace MusicTheory
     }
 
     public enum KeyOf { C, Db, D, Eb, E, F, Gb, G, Ab, A, Bb, B }
+
 
     public enum Genre
     {/* Rock,Jazz, Reggae, Bossa, Blues */

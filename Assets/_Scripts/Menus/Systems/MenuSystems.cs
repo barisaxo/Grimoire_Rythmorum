@@ -111,17 +111,17 @@ namespace Menus
             Vector2 GetPosition(int i) => style switch
             {
                 MenuLayoutStyle.AlignRight =>
-                        new Vector2(Cam.OrthoX - 2.5f, 1.8f - (i * .8f)),
+                        new Vector2(Cam.UIOrthoX - 2.5f, 1.8f - (i * .8f)),
 
                 MenuLayoutStyle.AlignLeft =>
-                       new Vector2(-Cam.OrthoX + 2.5f, 1.8f - (i * .8f)),
+                       new Vector2(-Cam.UIOrthoX + 2.5f, 1.8f - (i * .8f)),
 
                 MenuLayoutStyle.TwoColumns =>
-                new Vector2(i < menu.DataItems.Count * .5f ? -Cam.OrthoX + 2.5f : 2,
+                new Vector2(i < menu.DataItems.Count * .5f ? -Cam.UIOrthoX + 2.5f : 2,
                 -1.8f - (i % Mathf.CeilToInt(menu.DataItems.Count * .5f) * .8f) + (menu.DataItems.Count * .5f)),
 
-                MenuLayoutStyle.Header => new Vector2(2 - Cam.OrthoX + (2 * (Cam.OrthoX - 2) / (menu.DataItems.Count - 1) * i),
-                Cam.OrthoY - 1),
+                MenuLayoutStyle.Header => new Vector2(2 - Cam.UIOrthoX + (2 * (Cam.UIOrthoX - 2) / (menu.DataItems.Count - 1) * i),
+                Cam.UIOrthoY - 1),
 
                 _ => Vector2.zero,
             };
@@ -134,9 +134,3 @@ namespace Menus
 
     public enum MenuLayoutStyle { AlignRight, TwoColumns, AlignLeft, Header }
 }
-
-//public static class ListHelper
-//{
-//    public static object Last<T>(this List<T> values) => values[^1];
-
-//}

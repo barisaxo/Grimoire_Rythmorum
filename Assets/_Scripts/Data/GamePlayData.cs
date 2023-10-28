@@ -64,19 +64,20 @@ public class GameplayData
 
     public class DataItem : DataEnum
     {
-        public static readonly DataItem Transpose = new(0, "KEY TRANSPOSITION",
+        public static readonly DataItem Latency = new(0, "LATENCY",
+            "Lag offset for rhythm input. The margin for an accurate hit is +- 15." +
+            "\nIf you are missing beats try adjusting this latency. Default setting is 0.04");
+
+        public static readonly DataItem Transpose = new(1, "KEY TRANSPOSITION",
             "C: Concert pitch: flute, piano, guitar, violin, etc..." +
             "\nEb: Alto & baritone saxophone" +
             "\nF: French horn" +
             "\nBb: Clarinet, trumpet, soprano & tenor saxophone" +
             "\nB: Guitar in Eb standard tuning");
 
-        public static DataItem Tuning = new(1, "TUNING NOTE A 440",
+        public static DataItem Tuning = new(2, "TUNING NOTE A 440",
             "If your 'A' note doesn't match this \nyou might be out of tune, or in the wrong key");
 
-        public static readonly DataItem Latency = new(2, "LATENCY",
-            "Lag offset for rhythm input. The margin for an accurate hit is +- 15." +
-            "\nIf you are missing beats try adjusting this latency. Default setting is 0.04");
 
         public DataItem() : base(0, "")
         {

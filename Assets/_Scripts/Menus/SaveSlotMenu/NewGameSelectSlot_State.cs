@@ -49,7 +49,7 @@ public class NewGameSelectSlot_State : State
 
     protected override void CancelPressed()
     {
-        SetStateDirectly(new MainMenu_State());
+        SetStateDirectly(new MainMenu_State(MainMenuScene));
     }
 
     protected override void LStickInput(Vector2 v2)

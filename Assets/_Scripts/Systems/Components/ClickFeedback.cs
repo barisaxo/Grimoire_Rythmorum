@@ -79,10 +79,10 @@ internal sealed class ClickFeedback
             return;
         }
 
-        if (Cam.Io.Camera.orthographic)
+        if (Cam.Io.UICamera.orthographic)
         {
             RaycastHit2D hitUI = Physics2D.Raycast(mousePos, Vector2.zero);
-            RaycastHit2D hit = Physics2D.Raycast(Cam.Io.Camera.ScreenToWorldPoint(mousePos), Vector2.zero);
+            RaycastHit2D hit = Physics2D.Raycast(Cam.Io.UICamera.ScreenToWorldPoint(mousePos), Vector2.zero);
             if (hitUI.collider != null && hitUI.collider.gameObject.TryGetComponent<Clickable>(out _))
             {
                 ClickedGO = hitUI.collider.gameObject;
@@ -99,7 +99,7 @@ internal sealed class ClickFeedback
         else
         {
             RaycastHit2D hitUI = Physics2D.Raycast(mousePos, Vector2.zero);
-            RaycastHit2D hitGO = Physics2D.GetRayIntersection(Cam.Io.Camera.ScreenPointToRay(mousePos));
+            RaycastHit2D hitGO = Physics2D.GetRayIntersection(Cam.Io.UICamera.ScreenPointToRay(mousePos));
 
             if (hitUI.collider != null && hitUI.collider.gameObject.TryGetComponent<Clickable>(out _))
             {

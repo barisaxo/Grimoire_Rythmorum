@@ -23,22 +23,29 @@ public class BootStrap_State : State
 
     protected override void EngageState()
     {
-        //var RhythmSpecs = new RhythmSpecs()
-        //{
-        //    Time = new FourFour(),
-        //    NumberOfMeasures = 4,
-        //    SubDivisionTier = SubDivisionTier.D1Only,
-        //    HasTies = true,
-        //    HasRests = false,
-        //    HasTriplets = false,
-        //    Tempo = 90
-        //};
+        var RhythmSpecs = new RhythmSpecs()
+        {
+            Time = new FourFour(),
+            NumberOfMeasures = 4,
+            SubDivisionTier = SubDivisionTier.D1Only,
+            HasTies = true,
+            HasRests = false,
+            HasTriplets = false,
+            Tempo = 90
+        };
+
+        //FadeToState(new SeaSceneTest_State());
+
+        //SetStateDirectly(new BatteryAndCadenceTestState(RhythmSpecs));
 
         //SetStateDirectly(new Batterie_State(RhythmSpecs));
 
         //SetStateDirectly(new MainMenu_State());
-        SetStateDirectly(new VolumeMenu_State(new MainMenu_State()));
+        //SetStateDirectly(new VolumeMenu_State(new MainMenu_State()));
 
         //SetStateDirectly(new TestMusicSheet_State());
+
+        //SetStateDirectly(new TheoryPuzzleState());
+        SetStateDirectly(new NewMuscopaState());
     }
 }

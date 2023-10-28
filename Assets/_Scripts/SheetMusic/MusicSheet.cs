@@ -17,7 +17,7 @@ namespace SheetMusic
         public MappedBeat[] BeatMap;
 
         private Transform _parent;
-        public Transform Parent => _parent != null ? _parent : _parent = new GameObject(nameof(MusicSheet)).transform;
+        public Transform Parent => !_parent ? _parent = new GameObject(nameof(MusicSheet)).transform : _parent;
 
         private Card _card;
         public Card Card => _card ??= new Card(nameof(Card), Parent)
@@ -32,7 +32,7 @@ namespace SheetMusic
         public Card BackGround => _bg ??= new Card(nameof(BackGround), Parent)
             .SetImageSprite(Assets.White)
             .SetImageColor(new Color(0, 0, 0, .65f))
-            .SetImageSize(new Vector3(Cam.OrthoX * 2, Cam.OrthoY * 2))
+            .SetImageSize(new Vector3(Cam.UIOrthoX * 2, Cam.UIOrthoY * 2))
             .SetCanvasSortingOrder(0)
             .SetImagePosition(new Vector3(0, 0, 3));
     }

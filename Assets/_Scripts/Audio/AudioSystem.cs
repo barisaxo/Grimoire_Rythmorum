@@ -38,8 +38,8 @@ namespace Audio
         {
             get
             {
-                if (_parent != null) _parent.SetActive(true);
-                return _parent != null ? _parent : _parent = new GameObject(_name);
+                if (_parent) _parent.SetActive(true);
+                return _parent ? _parent : _parent = new GameObject(_name);
             }
         }
 
@@ -115,7 +115,7 @@ namespace Audio
 
         public virtual void ResetCues()
         {
-            NextEventTime = AudioSettings.dspTime + .5D;
+            NextEventTime = AudioSettings.dspTime;
             _cuedAudioSource = 0;
             _cuedAudioClip = 0;
         }
@@ -123,7 +123,7 @@ namespace Audio
         public virtual void Play(bool isSerial)
         {
             _ = Parent;
-            CurrentVolumeLevel = 0f;
+            CurrentVolumeLevel = 1f;
             ResetCues();
             Running = true;
             if (isSerial)
@@ -133,22 +133,22 @@ namespace Audio
             }
 
             foreach (var a in AudioSources) a.Play();
-            PlayAndFadeIn().StartCoroutine();
+            //PlayAndFadeIn().StartCoroutine();
 
-            IEnumerator PlayAndFadeIn()
-            {
-                yield return null;
+            //IEnumerator PlayAndFadeIn()
+            //{
+            //    yield return null;
 
-                if (CurrentVolumeLevel < VolumeLevelSetting)
-                {
-                    CurrentVolumeLevel += Time.deltaTime * 1.75f;
-                    PlayAndFadeIn().StartCoroutine();
-                }
-                else
-                {
-                    CurrentVolumeLevel = VolumeLevelSetting;
-                }
-            }
+            //    if (CurrentVolumeLevel < VolumeLevelSetting)
+            //    {
+            //        CurrentVolumeLevel += Time.deltaTime * 1.75f;
+            //        PlayAndFadeIn().StartCoroutine();
+            //    }
+            //    else
+            //    {
+            //        CurrentVolumeLevel = VolumeLevelSetting;
+            //    }
+            //}
         }
 
         public virtual void Stop()
@@ -172,6 +172,18 @@ namespace Audio
 
         private IEnumerator SerialAudioClipsUpdateLoop()
         {
+            AudioSources[_cuedAudioSource].clip = AudioClipSettings?.AudioClips[_cuedAudioClip];
+            AudioSources[_cuedAudioSource].time = (float)AudioClipSettings?.StartTimes[_cuedStartTime] *
+                                                  (float)AudioClipSettings?.AudioClips[0].length;
+            AudioSources[_cuedAudioSource].Play();
+
+            NextEventTime += 60.00D / (double)AudioClipSettings?.BPM *
+                             (double)AudioClipSettings?.BeatsPerAudioClip;
+            AudioSources[_cuedAudioSource].SetScheduledEndTime(NextEventTime);
+
+            if (++_cuedAudioSource == AudioSources.Length) _cuedAudioSource = 0;
+            if (++_cuedAudioClip == AudioClipSettings?.AudioClips.Length) _cuedAudioClip = 0;
+            if (++_cuedStartTime == AudioClipSettings?.StartTimes.Length) _cuedStartTime = 0;
             while (Running)
             {
                 var time = AudioSettings.dspTime;

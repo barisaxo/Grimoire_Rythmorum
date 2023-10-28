@@ -10,8 +10,10 @@ public class VolumeData
 
         for (int i = 0; i < items.Count; i++)
             if (i == DataItem.BGMusic) volumeLevels[i] = (items[i], 35);
-            else if (i == DataItem.Drums) volumeLevels[i] = (items[i], 45);
-            else volumeLevels[i] = (items[i], 80);
+            else if (i == DataItem.Drums) volumeLevels[i] = (items[i], 75);
+            else if (i == DataItem.Chords) volumeLevels[i] = (items[i], 95);
+            else if (i == DataItem.Bass) volumeLevels[i] = (items[i], 95);
+            else volumeLevels[i] = (items[i], 23);
 
         return volumeLevels;
     }
