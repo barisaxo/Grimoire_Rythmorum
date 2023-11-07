@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 using Muscopa;
-using MusicTheory;
+using Musica;
 
 public class NewMuscopaState : State
 {
@@ -18,7 +18,7 @@ public class NewMuscopaState : State
         //MHUD = new();
         //MHUD.Parent.gameObject.SetActive(false);
         MuscopaAudio = new(Data.Volume);
-        MuscopaSettings = NewSettings(CadenceDifficulty.ALL, MusicTheory.MusicTheory.RandomMode(), RandomGenre());
+        MuscopaSettings = NewSettings(CadenceDifficulty.ALL, Musica.Musica.RandomMode(), RandomGenre());
 
         GetNewSettings(callback).StartCoroutine();
     }
@@ -26,7 +26,7 @@ public class NewMuscopaState : State
     public MuscopaSettings NewSettings(CadenceDifficulty difficulty, RegionalMode shipsRegion, Genre genre)
     {
         return new MuscopaSettings(
-            key: MusicTheory.MusicTheory.RandomKey(),
+            key: Musica.Musica.RandomKey(),
             genre: genre,
             scale: MusicalScale.Major,
             cadence: RegionalMode.Aeolian.RandomMode().RandomCadence(difficulty),

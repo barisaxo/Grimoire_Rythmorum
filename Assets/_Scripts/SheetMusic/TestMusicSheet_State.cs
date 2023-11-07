@@ -1,8 +1,8 @@
 using System;
 using UnityEngine;
 using SheetMusic;
-using MusicTheory.Rhythms;
-using MusicTheory;
+using Musica.Rhythms;
+using Musica;
 
 public class TestMusicSheet_State : State
 {

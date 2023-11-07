@@ -1,5 +1,5 @@
 using UnityEngine;
-using MusicTheory;
+using Musica;
 using Audio;
 
 public class TuningNote

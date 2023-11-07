@@ -8,7 +8,7 @@ public class SyncroTest_State : State
 
     protected override void PrepareState(Action callback)
     {
-        syncro = new(MusicTheory.Rhythms.Quantizement.Quarter, 60);
+        syncro = new(Musica.Rhythms.Quantizement.Quarter, 60);
         syncro.BeatEvent += BeatEvent;
         syncro.TickEvent += TimeEvent;
 

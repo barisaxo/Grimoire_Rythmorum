@@ -3,8 +3,8 @@ using System;
 using UnityEngine;
 using SheetMusic;
 using Batterie;
-using MusicTheory.Rhythms;
-using MusicTheory;
+using Musica.Rhythms;
+using Musica;
 using Muscopa;
 
 
@@ -27,7 +27,7 @@ public class BatteryAndCadenceTestState : State
 
     MuscopaSettings MuscopaSettings;
     MuscopaAudio MuscopaAudio;
-    bool cadencestarted = false;
+    bool cadenceStarted = false;
 
     public int Counter { get; private set; }
     bool CountingOff = true;
@@ -57,7 +57,7 @@ public class BatteryAndCadenceTestState : State
 
 
         MuscopaAudio = new(Data.Volume);
-        MuscopaSettings = NewSettings(CadenceDifficulty.ALL, MusicTheory.MusicTheory.RandomMode(), Genre.Stax);
+        MuscopaSettings = NewSettings(CadenceDifficulty.ALL, Musica.Musica.RandomMode(), Genre.Stax);
 
         GetNewSettings(callback).StartCoroutine();
     }
@@ -84,7 +84,7 @@ public class BatteryAndCadenceTestState : State
     public MuscopaSettings NewSettings(CadenceDifficulty difficulty, RegionalMode shipsRegion, Genre genre)
     {
         return new MuscopaSettings(
-            key: MusicTheory.MusicTheory.RandomKey(),
+            key: Musica.Musica.RandomKey(),
             genre: genre,
             scale: MusicalScale.Major,
             cadence: RegionalMode.Aeolian.RandomMode().RandomCadence(difficulty),
@@ -110,10 +110,10 @@ public class BatteryAndCadenceTestState : State
             return;
         }
 
-        if (!cadencestarted)
+        if (!cadenceStarted)
         {
             MuscopaAudio.PlayNewMuscopaPuzzleMusic();
-            cadencestarted = true;
+            cadenceStarted = true;
         }
 
         if (Playing)
@@ -128,6 +128,8 @@ public class BatteryAndCadenceTestState : State
             Synchro.Stop();
             MonoHelper.OnUpdate -= Analyzer.Tick;
             MuscopaAudio.StopTheCadence();
+
+            FadeToState(PuzzleSelector.WeightedRandomPuzzleState(Data.TheoryPuzzleData));
         }
     }
 

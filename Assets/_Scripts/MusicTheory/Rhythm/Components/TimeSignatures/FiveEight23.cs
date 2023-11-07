@@ -1,11 +1,11 @@
 using System.Collections.Generic;
 using SheetMusic;
 
-namespace MusicTheory.Rhythms
+namespace Musica.Rhythms
 {
     public class FiveEight23 : Time
     {
-        public FiveEight23() { Signature = TimeSignature.FiveEight23; }
+        public FiveEight23() { Signature = TimeSignatureEnum.FiveEight23; }
 
         protected override void GetRhythmCells(MusicSheet ms)
         {

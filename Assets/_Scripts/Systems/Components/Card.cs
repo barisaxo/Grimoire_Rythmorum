@@ -1,6 +1,9 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections.Generic;
+using System.Collections;
+using System;
 
 public class Card
 {
@@ -32,7 +35,7 @@ public class Card
     public void SelfDestruct()
     {
         if (Children != null) { foreach (Card child in Children) child.SelfDestruct(); }
-        if (GO != null) Object.Destroy(GO);
+        if (GO != null) UnityEngine.Object.Destroy(GO);
     }
 
     public string Name { get; private set; }
@@ -40,13 +43,11 @@ public class Card
     public Card[] Children { get; private set; } = null;
     public GameObject GO { get; private set; } = null;
     public Clickable Clickable { get; private set; } = null;
-
     private Transform Parent;
 
     public string TextString { get => TMP.text; set => TMP.text = value; }
     private SpriteRenderer _sr = null;
     public SpriteRenderer SpriteRenderer => _sr != null ? _sr : _sr = GO.AddComponent<SpriteRenderer>();
-
 
     private TextMeshProUGUI _tmp;
     public TextMeshProUGUI TMP
@@ -58,11 +59,9 @@ public class Card
             TextMeshProUGUI SetUpTMP()
             {
                 TextMeshProUGUI t = new GameObject(Name + nameof(TMP)).AddComponent<TextMeshProUGUI>();
-                t.gameObject.layer = 5;
                 t.transform.SetParent(Parent != null ? Parent : Canvas.transform, true);
                 t.fontSizeMin = 8;
                 t.fontSizeMax = 300;
-                t.rectTransform.localScale = Vector3.one;
                 return t;
             }
         }
@@ -77,9 +76,7 @@ public class Card
             Image SetUpImage()
             {
                 Image i = new GameObject(Name + nameof(Image)).AddComponent<Image>();
-                i.gameObject.layer = 5;
                 i.transform.SetParent(Parent != null ? Parent : Canvas.transform, true);
-                i.rectTransform.localScale = Vector3.one;
                 i.sprite = null;
                 return i;
             }
@@ -95,10 +92,8 @@ public class Card
             Canvas SetUpCanvas()
             {
                 Canvas canvas = new GameObject(Name + nameof(Canvas)).AddComponent<Canvas>();
-                canvas.gameObject.layer = 5;
                 canvas.transform.SetParent(GO.transform, false);
-                canvas.renderMode = RenderMode.ScreenSpaceCamera;
-                canvas.worldCamera = Cam.Io.UICamera;
+                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
                 canvas.sortingOrder = 0;
                 if (_canvasScaler == null) _canvasScaler = SetUpCanvasScaler(canvas);
                 return canvas;
@@ -122,7 +117,7 @@ public class Card
         CanvasScaler cs = canvas.gameObject.AddComponent<CanvasScaler>();
         cs.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         cs.matchWidthOrHeight = 1;
-        cs.referenceResolution = new Vector2(Cam.Io.UICamera.pixelWidth, Cam.Io.UICamera.pixelHeight);
+        cs.referenceResolution = new Vector2(Cam.Io.Camera.pixelWidth, Cam.Io.Camera.pixelHeight);
         return cs;
     }
 
@@ -132,6 +127,7 @@ public class Card
         return Children[^1];
 
         Card NewCard() => new(name, this, parent);
+
 
         Card[] AddNewCard()
         {
@@ -159,6 +155,32 @@ public class Card
     }
 
     public Card SetClickable(Clickable clickable) { Clickable = clickable; return this; }
+
+
+    private List<Action> _builderSteps = null;
+    public List<Action> BuilderSteps
+    {
+        get
+        {
+            if (_builderSteps == null)
+            {
+                _builderSteps = new();
+
+                WaitAStep().StartCoroutine();
+
+                IEnumerator WaitAStep()
+                {
+                    yield return null;
+
+                    foreach (Action ac in _builderSteps) ac?.Invoke();
+
+                    _builderSteps = null;
+                }
+            }
+            return _builderSteps;
+        }
+
+    }
 }
 
 

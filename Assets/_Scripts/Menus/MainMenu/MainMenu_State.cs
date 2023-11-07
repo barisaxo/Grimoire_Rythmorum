@@ -37,7 +37,7 @@ public class MainMenu_State : State
     protected override void ClickedOn(GameObject go)
     {
         //MainMenu.CurrItem = null;
-        for (var i = 0; i < MainMenu.MenuItems.Count; i++)
+        for (var i = 0; i < MainMenu.MenuItems.Length; i++)
             if (go.transform.IsChildOf(MainMenu.MenuItems[i].Card.GO.transform))
             {
                 MainMenu.Selection = MainMenu.MenuItems[i];

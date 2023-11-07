@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MusicTheory;
+using Musica;
 
 public static class MuscopaAssets
 {

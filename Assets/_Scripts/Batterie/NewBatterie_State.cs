@@ -1,6 +1,6 @@
 using System;
 using SheetMusic;
-using MusicTheory.Rhythms;
+using Musica.Rhythms;
 using Batterie;
 
 public class NewBatterie_State : State

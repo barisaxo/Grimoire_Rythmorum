@@ -1,4 +1,4 @@
-﻿namespace MusicTheory.Rhythms
+﻿namespace Musica.Rhythms
 {
     public class BeatAssignment : Enumeration
     {
@@ -83,7 +83,7 @@
 
         public static implicit operator BeatAssignment(int i)
         {
-            foreach (BeatAssignment c in GetAll<BeatAssignment>()) if (i == c.Id) return c;
+            foreach (BeatAssignment c in All<BeatAssignment>()) if (i == c.Id) return c;
             UnityEngine.Debug.Log("Beat Assignment Not Found! " + i);
             return OneD;
         }

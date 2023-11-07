@@ -1,13 +1,15 @@
 using System;
 using System.Collections;
-using UnityEngine;
 using Audio;
+using UnityEngine;
 
 public abstract class State
 {
     #region REFERENCES
-    protected static DataManager Data = new DataManager();
-    protected static AudioManager Audio = new AudioManager(Data.Volume);
+
+    protected DataManager Data => DataManager.Io;
+    protected AudioManager Audio => AudioManager.Io;
+
     #endregion REFERENCES
 
 
@@ -21,10 +23,10 @@ public abstract class State
     {
         InputKey.ButtonEvent -= GPInput;
         InputKey.StickEvent -= GPStickInput;
-        InputKey.RStickAltXEvent -= RAltXInput;
-        InputKey.RStickAltYEvent -= RAltYInput;
+        //InputKey.RStickAltXEvent -= RAltXInput;
+        //InputKey.RStickAltYEvent -= RAltYInput;
         InputKey.MouseClickEvent -= Clicked;
-        MonoHelper.OnUpdate -= RStickAltReadLoop;
+        //MonoHelper.OnUpdate -= RStickAltReadLoop;
         MonoHelper.OnUpdate -= UpdateStickInput;
     }
 
@@ -34,9 +36,9 @@ public abstract class State
     protected virtual void DisengageState() { }
 
     /// <summary>
-    ///     Called by SetStateDirectly() and FadeOutToBlack(). DONT SET NEW STATES HERE.
+    ///     Called by SetStateDirectly() and FadeOutToBlack(). Don't set new states here.
     /// </summary>
-    protected virtual void PrepareState(Action callback) => callback();
+    protected virtual void PrepareState(Action callback) { callback?.Invoke(); }
 
     /// <summary>
     ///     Called by SetSceneDirectly() and FadeInToScene().
@@ -45,12 +47,15 @@ public abstract class State
     {
         InputKey.ButtonEvent += GPInput;
         InputKey.StickEvent += GPStickInput;
-        InputKey.RStickAltXEvent += RAltXInput;
-        InputKey.RStickAltYEvent += RAltYInput;
         InputKey.MouseClickEvent += Clicked;
-        MonoHelper.OnUpdate += RStickAltReadLoop;
         MonoHelper.OnUpdate += UpdateStickInput;
     }
+
+    /// <summary>
+    /// Called by FadeToState after Prepare, then waits two steps before Engage.
+    /// Useful for TMP actions that need to wait a step but you still want to disable.
+    /// </summary>
+    protected virtual void PreEngageState(Action callback) { callback?.Invoke(); }
 
     /// <summary>
     ///     Called by SetStateDirectly() and FadeInToScene(). OK to set new states here.
@@ -94,9 +99,14 @@ public abstract class State
             }
 
             fader.Screen.color = Color.black;
+            newState.PrepareState(WaitTwoSteps().StartCoroutine);
+        }
 
+        IEnumerator WaitTwoSteps()
+        {
             yield return null;
-            newState.PrepareState(FadeInToScene().StartCoroutine);
+            yield return null;
+            newState.PreEngageState(FadeInToScene().StartCoroutine);
         }
 
         IEnumerator FadeInToScene()
@@ -119,10 +129,7 @@ public abstract class State
 
 
     #region INPUT
-    /// <summary>
-    /// Deal with the gameobject you clicked on here. Base is empty.
-    /// </summary>
-    protected virtual void ClickedOn(GameObject go) { }
+
     protected virtual void DirectionPressed(Dir dir) { }
     protected virtual void WestPressed() { }
     protected virtual void ConfirmPressed() { }
@@ -138,29 +145,34 @@ public abstract class State
     protected virtual void L3Pressed() { }
     protected virtual void LStickInput(Vector2 v2) { }
     protected virtual void RStickInput(Vector2 v2) { }
-
-    #endregion INPUT
-
-
-    #region INPUT HANDLING
-
+    protected virtual void ClickedOn(GameObject go) { }
     protected virtual void Clicked(MouseAction action, Vector3 mousePos)
     {
-        if (action != MouseAction.LUp) return;
+        if (action != MouseAction.LUp) return;// Click.Down;
 
-        //if (Cam.Io.Camera.orthographic)
-        //{
-        //    var hit = Physics2D.Raycast(Cam.Io.UICamera.ScreenToWorldPoint(mousePos), Vector2.zero);
-        //    if (hit.collider != null) ClickedOn(hit.collider.gameObject);
-        //}
-        //else
-        //{
-        var hitUI = Physics2D.GetRayIntersection(Cam.Io.UICamera.ScreenPointToRay(mousePos));
-        var hit = Physics2D.Raycast(mousePos, Vector2.zero);
+        if (Cam.Io.UICamera.orthographic)
+        {
+            RaycastHit2D hitUI = Physics2D.Raycast(mousePos, Vector2.zero);
+            if (hitUI.collider != null) { ClickedOn(hitUI.collider.gameObject); return; }// Click.Hit; }
 
-        if (hit.collider != null) ClickedOn(hit.collider.gameObject);
-        else if (hitUI.collider != null) ClickedOn(hitUI.collider.gameObject);
-        //}
+            var hit = Physics2D.Raycast(Cam.Io.UICamera.ScreenToWorldPoint(mousePos), Vector2.zero);
+            if (hit.collider != null)
+            {
+                ClickedOn(hit.collider.gameObject);
+                return;// Click.Hit;
+            }
+
+            return;// Click.Up;
+        }
+
+        else
+        {
+            var hit = Physics2D.GetRayIntersection(Cam.Io.Camera.ScreenPointToRay(mousePos));
+            var hitUI = Physics2D.Raycast(mousePos, Vector2.zero);
+            if (hit.collider != null) { ClickedOn(hit.collider.gameObject); return; }// Click.Hit; }
+            else if (hitUI.collider != null) { ClickedOn(hitUI.collider.gameObject); return; }// Click.Hit; }
+            return;// Click.Up;
+        }
     }
 
     private void GPInput(GamePadButton gpb)
@@ -210,10 +222,8 @@ public abstract class State
         }
     }
 
-    public Vector2 LStick { get; private set; }
-    public Vector2 RStick { get; private set; }
-    public bool LStickZeroed { get; private set; }
-    public bool RStickZeroed { get; private set; }
+    protected Vector2 LStick;
+    protected Vector2 RStick;
 
     private void GPStickInput(GamePadButton gpi, Vector2 v2)
     {
@@ -226,57 +236,14 @@ public abstract class State
 
     private void UpdateStickInput()
     {
-        if (!(LStickZeroed = LStickZeroed && LStick == Vector2.zero))
-        {
-            LStickInput(LStick);
-            LStickZeroed = LStick == Vector2.zero;
-        }
-
-        if (!(RStickZeroed = RStickZeroed && RStick == Vector2.zero))
-        {
-            RStickInput(RStick);
-            RStickZeroed = RStick == Vector2.zero;
-        }
+        if (LStick != Vector2.zero) LStickInput(LStick);
+        if (RStick != Vector2.zero) RStickInput(RStick);
     }
 
-    //nintendo switch R sticks are weird
-    public bool NewRStickAltThisFrame { get; private set; }
 
-    public Vector2 RStickAlt => new(RStickAltX, RStickAltY);
-    private float _rStickAltX;
+    #endregion INPUT
 
-    public float RStickAltX
-    {
-        get => _rStickAltX;
-        private set
-        {
-            NewRStickAltThisFrame = true;
-            _rStickAltX = value;
-        }
-    }
-
-    private float _rStickAltY;
-    public float RStickAltY
-    {
-        get => _rStickAltY;
-        private set
-        {
-            NewRStickAltThisFrame = true;
-            _rStickAltY = value;
-        }
-    }
-
-    private void RAltXInput(float f) => RStickAltX = f;
-
-    private void RAltYInput(float f) => RStickAltY = f;
-
-    private void RStickAltReadLoop()
-    {
-        if (!NewRStickAltThisFrame) return;
-        RStickInput(RStickAlt);
-        if (RStickAlt == Vector2.zero)
-            NewRStickAltThisFrame = false;
-    }
-
-    #endregion INPUT HANDLING
 }
+
+public enum Click { Down, Up, Hit }
+

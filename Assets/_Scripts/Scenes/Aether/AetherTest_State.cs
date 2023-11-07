@@ -24,7 +24,7 @@ public class AetherTest_State : State
         PanCamera().StartCoroutine();
         IEnumerator PanCamera()
         {
-            while (RStickAltY == 0 && RStick.y == 0)
+            while (RStick.y == 0)
             {
                 rStick.y = -.333f;
                 yield return null;

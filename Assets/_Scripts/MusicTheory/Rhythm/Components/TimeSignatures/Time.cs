@@ -1,10 +1,10 @@
 ﻿using SheetMusic;
 
-namespace MusicTheory.Rhythms
+namespace Musica.Rhythms
 {
     public abstract class Time
     {
-        public TimeSignature Signature;
+        public TimeSignatureEnum Signature;
 
         public void GenerateRhythmCells(MusicSheet ms) { GetRhythmCells(ms); ms.GetRestsAndTies(); }
         protected virtual void GetRhythmCells(MusicSheet ms) { }

@@ -4,6 +4,7 @@ using UnityEngine;
 
 public static class CardSystems
 {
+
     /// <summary>
     ///     Higher Number is displayed on top. Default number is 1.
     /// </summary>
@@ -68,6 +69,12 @@ public static class CardSystems
         return Card;
     }
 
+    public static Card SetTMPRectPivot(this Card Card, float x, float y)
+    {
+        Card.TMP.rectTransform.pivot = new Vector2(x, y);
+        return Card;
+    }
+
     public static Card SetTMPRectPivot(this Card Card, Vector2 piv)
     {
         Card.TMP.rectTransform.pivot = piv;
@@ -112,9 +119,10 @@ public static class CardSystems
     /// </summary>
     public static Card SetTMPPosition(this Card Card, Vector3 v)
     {
-        Vector2 spos = Cam.Io.UICamera.WorldToScreenPoint(v);
-        var ssize = new Vector2(Cam.Io.UICamera.pixelWidth, Cam.Io.UICamera.pixelHeight);
-        Card.TMP.rectTransform.localPosition = new Vector2(spos.x - ssize.x * .5f, spos.y - ssize.y * .5f);
+        Vector2 sPos = Cam.Io.UICamera.WorldToScreenPoint(v);
+        Vector2 sSize = new(Cam.Io.UICamera.pixelWidth, Cam.Io.UICamera.pixelHeight);
+
+        Card.TMP.rectTransform.localPosition = new Vector2(sPos.x - sSize.x * .5f, sPos.y - sSize.y * .5f);
         return Card;
     }
 
@@ -123,24 +131,6 @@ public static class CardSystems
         Card.TMP.rectTransform.localPosition += (Vector3)(Card.TMP.rectTransform.sizeDelta * v2);
         return Card;
     }
-
-    public static Card OutlineWidth(this Card card, float f)
-    {
-        card.TMP.outlineWidth = f;
-        return card;
-    }
-
-    public static Card OutlineColor(this Card card, Color c)
-    {
-        card.TMP.outlineColor = c;
-        return card;
-    }
-
-    //public static Card OutlineEnabled(this Card card, bool tf)
-    //{
-    //    card.TMP.ou
-    //    return card;
-    //}
 
     public static Card TMPClickable(this Card Card)
     {
@@ -175,17 +165,23 @@ public static class CardSystems
 
     public static Card SetImagePosition(this Card Card, Vector3 pos)
     {
-        Vector2 spos = Cam.Io.UICamera.WorldToScreenPoint(pos);
-        var ssize = new Vector2(Cam.Io.UICamera.pixelWidth, Cam.Io.UICamera.pixelHeight);
+        Vector2 sPos = Cam.Io.UICamera.WorldToScreenPoint(pos);
+        Vector2 sSize = new(Cam.Io.UICamera.pixelWidth, Cam.Io.UICamera.pixelHeight);
 
-        Card.Image.rectTransform.localPosition = new Vector2(spos.x - ssize.x * .5f, spos.y - ssize.y * .5f);
+        Card.Image.rectTransform.localPosition = new Vector2(sPos.x - sSize.x * .5f, sPos.y - sSize.y * .5f);
         return Card;
     }
 
     public static Card ScaleImageSizeToTMP(this Card Card, float scale)
     {
-        Card.Image.rectTransform.sizeDelta = Card.TMP.rectTransform.sizeDelta * scale;
+        WaitAStep().StartCoroutine();
         return Card;
+
+        IEnumerator WaitAStep()
+        {
+            yield return null;
+            Card.Image.rectTransform.sizeDelta = Card.TMP.rectTransform.sizeDelta * scale;
+        }
     }
 
     public static Card SetImageSizeUnscaled(this Card Card, Vector3 size)
@@ -202,6 +198,12 @@ public static class CardSystems
         Card.Image.rectTransform.sizeDelta =
             .5f * Card.CanvasScaler.referenceResolution.y * v2 / Cam.Io.UICamera.orthographicSize;
         return Card;
+    }
+
+    public static Card SetImageRectPivot(this Card card, float x, float y)
+    {
+        card.Image.rectTransform.pivot = new Vector2(x, y);
+        return card;
     }
 
     public static Card SetImageSprite(this Card Card, Sprite s)
@@ -312,6 +314,51 @@ public static class CardSystems
         return Card.SetPositionAll(new Vector3(x, y));
     }
 
+    public static Card SetImageToDefaultLayer(this Card card)
+    {
+        card.Image.gameObject.layer = 0;
+        return card;
+    }
+
+    public static Card SetTMPToDefaultLayer(this Card card)
+    {
+        card.TMP.gameObject.layer = 0;
+        return card;
+    }
+    public static Card SetSpriteToDefaultLayer(this Card card)
+    {
+        card.SpriteRenderer.gameObject.layer = 0;
+        return card;
+    }
+    public static Card SetImageToUILayer(this Card card)
+    {
+        card.Image.gameObject.layer = 5;
+        return card;
+    }
+
+    public static Card SetTMPToUILayer(this Card card)
+    {
+        card.TMP.gameObject.layer = 5;
+        return card;
+    }
+    public static Card SetSpriteToUILayer(this Card card)
+    {
+        card.SpriteRenderer.gameObject.layer = 5;
+        return card;
+    }
+
+
+    public static Card SetOutlineWidth(this Card card, float f)
+    {
+        card.TMP.outlineWidth = f;
+        return card;
+    }
+
+    public static Card SetOutlineColor(this Card card, Color c)
+    {
+        card.TMP.outlineColor = c;
+        return card;
+    }
 
 
 }

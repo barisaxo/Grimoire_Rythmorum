@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace MusicTheory
+namespace Musica
 {
     public static class Cadence
     {

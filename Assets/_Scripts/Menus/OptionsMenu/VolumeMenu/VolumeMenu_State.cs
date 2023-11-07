@@ -44,7 +44,7 @@ public class VolumeMenu_State : State
             return;
         }
 
-        for (var i = 0; i < Options.MenuItems.Count; i++)
+        for (var i = 0; i < Options.MenuItems.Length; i++)
             if (go.transform.IsChildOf(Options.MenuItems[i].Card.GO.transform))
             {
                 if (i == Options.Selection) return;
@@ -53,7 +53,7 @@ public class VolumeMenu_State : State
                 return;
             }
 
-        for (var i = 0; i < VolumeMenu.MenuItems.Count; i++)
+        for (var i = 0; i < VolumeMenu.MenuItems.Length; i++)
             if (go.transform.IsChildOf(VolumeMenu.MenuItems[i].Card.GO.transform))
             {
                 if (VolumeMenu.Selection.Item == i)

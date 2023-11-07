@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using MusicTheory.Rhythms;
+using Musica.Rhythms;
 
 namespace Batterie
 {

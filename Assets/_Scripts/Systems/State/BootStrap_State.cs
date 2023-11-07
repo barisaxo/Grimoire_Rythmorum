@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using MusicTheory.Rhythms;
+using Musica.Rhythms;
 public class BootStrap_State : State
 {
     private BootStrap_State() { }
@@ -23,20 +23,27 @@ public class BootStrap_State : State
 
     protected override void EngageState()
     {
-        var RhythmSpecs = new RhythmSpecs()
+
+
+        if (UnityEngine.Random.value > .5f) FadeToState(PuzzleSelector.WeightedRandomPuzzleState(Data.TheoryPuzzleData));
+        else
         {
-            Time = new FourFour(),
-            NumberOfMeasures = 4,
-            SubDivisionTier = SubDivisionTier.D1Only,
-            HasTies = true,
-            HasRests = false,
-            HasTriplets = false,
-            Tempo = 90
-        };
+            var RhythmSpecs = new RhythmSpecs()
+            {
+                Time = new FourFour(),
+                NumberOfMeasures = 4,
+                SubDivisionTier = SubDivisionTier.D1Only,
+                HasTies = UnityEngine.Random.value > .5f,
+                HasRests = UnityEngine.Random.value > .5f,
+                HasTriplets = false,
+                Tempo = 90
+            };
+            FadeToState(new BatteryAndCadenceTestState(RhythmSpecs));
+        }
 
         //FadeToState(new SeaSceneTest_State());
-
-        //SetStateDirectly(new BatteryAndCadenceTestState(RhythmSpecs));
+        // FadeToState(new Puzzle_State(new InvertedSeventhChordPuzzle(), PuzzleType.Aural));
+        // SetStateDirectly(new BatteryAndCadenceTestState(RhythmSpecs));
 
         //SetStateDirectly(new Batterie_State(RhythmSpecs));
 
@@ -46,6 +53,6 @@ public class BootStrap_State : State
         //SetStateDirectly(new TestMusicSheet_State());
 
         //SetStateDirectly(new TheoryPuzzleState());
-        SetStateDirectly(new NewMuscopaState());
+        //SetStateDirectly(new NewMuscopaState());
     }
 }

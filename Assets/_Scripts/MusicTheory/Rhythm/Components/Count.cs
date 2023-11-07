@@ -1,4 +1,4 @@
-﻿namespace MusicTheory.Rhythms
+﻿namespace Musica.Rhythms
 {
     public class Count : Enumeration
     {
@@ -19,7 +19,7 @@
 
         public static implicit operator Count(int i)
         {
-            foreach (Count c in GetAll<Count>()) if (i == c.Id) return c;
+            foreach (Count c in All<Count>()) if (i == c.Id) return c;
             return One;
         }
     }

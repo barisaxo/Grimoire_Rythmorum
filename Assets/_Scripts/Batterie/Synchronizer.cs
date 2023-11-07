@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using MusicTheory.Rhythms;
+using Musica.Rhythms;
 
 namespace Batterie
 {
@@ -51,8 +51,14 @@ namespace Batterie
 
         private IEnumerator UpdateLoop()
         {
-            ResetQueues();
             startTime = realTime = dspTime = AudioSettings.dspTime;
+            yield return null;
+
+            ResetQueues();
+
+            if (dspTime == AudioSettings.dspTime) realTime += UnityEngine.Time.unscaledDeltaTime;
+            else realTime = dspTime = AudioSettings.dspTime;
+
             KeepingTime = true;
 
             while (KeepingTime)
@@ -72,14 +78,9 @@ namespace Batterie
 
                 yield return null;
 
-                if (dspTime == AudioSettings.dspTime)
-                {//Sometimes AudioSettings.dspTime doesn't update properly. Might need more looking into.
-                    realTime += UnityEngine.Time.unscaledDeltaTime;
-                }
-                else
-                {
-                    realTime = dspTime = AudioSettings.dspTime;
-                }
+                //Sometimes AudioSettings.dspTime doesn't update properly. Might need more looking into.
+                if (dspTime == AudioSettings.dspTime) realTime += UnityEngine.Time.unscaledDeltaTime;
+                else realTime = dspTime = AudioSettings.dspTime;
             }
         }
     }

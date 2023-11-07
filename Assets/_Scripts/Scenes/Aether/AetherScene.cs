@@ -71,7 +71,7 @@ public class AetherScene
         l.color = new Color(.95f, .85f, .35f);
         l.intensity = 3;
         l.shadows = LightShadows.Soft;
-        l.lightmapBakeType = LightmapBakeType.Baked;
+        // l.lightmapBakeType = LightmapBakeType.Baked;
         l.range = 20;
         return l;
     }
@@ -86,7 +86,7 @@ public class AetherScene
         l.color = new Color(.5f, .95f, .75f);
         l.intensity = 3;
         l.shadows = LightShadows.Soft;
-        l.lightmapBakeType = LightmapBakeType.Baked;
+        // l.lightmapBakeType = LightmapBakeType.Baked;
         l.range = 20;
         return l;
     }
@@ -101,7 +101,7 @@ public class AetherScene
         l.color = new Color(.65f, .65f, .95f);
         l.intensity = 3;
         l.shadows = LightShadows.Soft;
-        l.lightmapBakeType = LightmapBakeType.Baked;
+        // l.lightmapBakeType = LightmapBakeType.Baked;
         l.range = 20;
         return l;
     }
@@ -116,7 +116,7 @@ public class AetherScene
         l.color = new Color(.95f, .5f, .75f);
         l.intensity = 3;
         l.shadows = LightShadows.Soft;
-        l.lightmapBakeType = LightmapBakeType.Baked;
+        // l.lightmapBakeType = LightmapBakeType.Baked;
         l.range = 20;
         return l;
     }

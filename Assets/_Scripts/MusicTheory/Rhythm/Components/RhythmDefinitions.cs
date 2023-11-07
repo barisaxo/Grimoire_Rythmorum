@@ -1,5 +1,5 @@
 
-namespace MusicTheory.Rhythms
+namespace Musica.Rhythms
 {
     //Whole note = 240 / BPM
     //Half note = 120 / BPM
@@ -37,7 +37,9 @@ namespace MusicTheory.Rhythms
     //    //||1 . . e . . + . . a . . 2 . . e . . + . . a . . 3 . . e . . + . . a . . 4 . . e . . + . . a . . |SIXTEENTH
     //    //||1 . T . L . + . T . L . 2 . T . L . + . T . L . 3 . T . L . + . T . L . 4 . T . L . + . T . L . |TRIP SIXTEENTH
 
+
     public enum Quantizement { Half, Quarter, QuarterTrips, Eighth, EighthTrips, Sixteenth }
+
 
     // Rhythm Cell Shapes:
     // Duple has 2 shapes: L & LL(or SS relatively)
@@ -45,6 +47,7 @@ namespace MusicTheory.Rhythms
     // Quadruple has 8 shapes: L, LL, SL, LSS, SSL, SLS, SSSS.
     // The first two quadruple cells are not unqiue as they overlap with the duple cells.
     public enum CellShape { L, LL, LS, SL, LSS, SSL, SLS, SSSS, TLS, TSL, TSSS, TL, DLL, DL }
+
 
     public enum RhythmicValue
     {
@@ -56,21 +59,33 @@ namespace MusicTheory.Rhythms
     public enum SubDivisionTier { BeatOnly, BeatAndD1, D1Only, D1AndD2, D2Only, }
     public enum NoteFunction { Attack, Hold, Rest, Ignore }
 
-    //unnecessary to define is the 'Multiple Levels' as in the combined beat level eg half & whole notes in 4/4
-    //D1 is the fist division level, eg 8th notes in 4/4
-    //D1T is triplets at the first division, eg trip 8ths in 4/4
-    //D2 is the second division level, eg 16th notes in 4/4.
-    //There will be no need to go beyond D2 in this game.
+
+    /// <summary>
+    /// unnecessary to define is the 'Multiple Levels' as in the combined beat level eg half & whole notes in 4/4 D1 is the fist division level, eg 8th notes in 4/4/D1T is triplets at the first division, eg trip 8ths in 4/4D2 is the second division level, eg 16th notes in 4/4.There will be no need to go beyond D2 in this game.
+    /// </summary>
     public enum MetricLevel { Beat, BeatT, D1, D1T, D2, }
 
 
-    //The elements of Metric Structure
+
+    /// <summary>
+    /// The elements of Metric Structure
+    /// </summary>
     public enum PulseStress { Duple, Triple, Quadruple }
 
-    //Unnecessary to define is the 'Irregular' as it is a combination of simple & compound and is implied as such.
+
+    /// <summary>
+    /// Unnecessary to define is the 'Irregular' as it is a combination of simple & compound and is implied as such.
+    /// </summary>
     public enum BeatDivisor { Simple, Compound }
 
+
+
+    /// <summary>
+    ///The bottom number of a time signature.
+    ///Could potentially continue on in powers of 2, but not going beyond 8th notes in this project. 
+    /// </summary>
     public enum SubCount { One = 1, Two = 2, For = 4, Eht = 8 }
+
 
     public static class RhythmUtilities
     {
@@ -95,3 +110,9 @@ namespace MusicTheory.Rhythms
 
 }
 
+
+
+/*
+ * unnecessary to define is the 'Multiple Levels' as in the combined beat level eg half & whole notes in 4/4 D1 is the fist division level, eg 8th notes in 4/4/D1T is triplets at the first division, eg trip 8ths in 4/4D2 is the second division level, eg 16th notes in 4/4.There will be no need to go beyond D2 in this game.
+
+*/

@@ -1,4 +1,4 @@
-﻿namespace MusicTheory.Rhythms
+﻿namespace Musica.Rhythms
 {
     public struct BeatLocation
     {

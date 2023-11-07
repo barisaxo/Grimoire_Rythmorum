@@ -4,11 +4,11 @@ using UnityEngine;
 
 using SheetMusic;
 
-namespace MusicTheory.Rhythms
+namespace Musica.Rhythms
 {
     public class TwoFour : Time
     {
-        public TwoFour() { Signature = TimeSignature.TwoFour; }
+        public TwoFour() { Signature = TimeSignatureEnum.TwoFour; }
 
         protected override void GetRhythmCells(MusicSheet ms)
         {

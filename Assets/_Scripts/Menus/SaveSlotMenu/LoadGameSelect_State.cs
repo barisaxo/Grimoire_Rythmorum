@@ -29,7 +29,7 @@ public class LoadGameSelectSlot_State : State
             return;
         }
 
-        for (var i = 0; i < SaveSlotMenu.MenuItems.Count; i++)
+        for (var i = 0; i < SaveSlotMenu.MenuItems.Length; i++)
         {
             if (!go.transform.IsChildOf(SaveSlotMenu.MenuItems[i].Card.GO.transform)) continue;
             SaveSlotMenu.Selection = SaveSlotMenu.MenuItems[i];

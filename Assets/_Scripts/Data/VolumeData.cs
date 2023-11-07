@@ -5,14 +5,15 @@ public class VolumeData
     private (DataItem volumeItem, int level)[] VolumeLevels => _volumeLevels ??= SetUpVolumeLevels();
     private (DataItem volumeItem, int level)[] SetUpVolumeLevels()
     {
-        var items = Enumeration.List<DataItem>();
-        var volumeLevels = new (DataItem volumeItem, int level)[items.Count];
+        var items = Enumeration.All<DataItem>();
+        var volumeLevels = new (DataItem volumeItem, int level)[items.Length];
 
-        for (int i = 0; i < items.Count; i++)
+        for (int i = 0; i < items.Length; i++)
             if (i == DataItem.BGMusic) volumeLevels[i] = (items[i], 35);
             else if (i == DataItem.Drums) volumeLevels[i] = (items[i], 75);
             else if (i == DataItem.Chords) volumeLevels[i] = (items[i], 95);
             else if (i == DataItem.Bass) volumeLevels[i] = (items[i], 95);
+            else if (i == DataItem.SoundFX) volumeLevels[i] = (items[i], 95);
             else volumeLevels[i] = (items[i], 23);
 
         return volumeLevels;

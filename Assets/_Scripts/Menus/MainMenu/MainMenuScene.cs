@@ -53,7 +53,7 @@ namespace Menus.MainMenu
                     for (var i = 0; i < 2; i++)
                     {
                         var light = new GameObject(nameof(Light) + i).AddComponent<Light>();
-                        light.lightmapBakeType = LightmapBakeType.Baked;
+                        // light.lightmapBakeType = LightmapBakeType.Baked;
                         light.transform.SetParent(lh.transform);
                         light.transform.SetPositionAndRotation(
                             lh.transform.position,

@@ -1,5 +1,5 @@
 
-namespace MusicTheory.Rhythms
+namespace Musica.Rhythms
 {
     public class RhythmCell
     {

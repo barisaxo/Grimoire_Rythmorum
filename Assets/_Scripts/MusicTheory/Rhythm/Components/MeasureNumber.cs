@@ -1,4 +1,4 @@
-﻿namespace MusicTheory.Rhythms
+﻿namespace Musica.Rhythms
 {
     public class MeasureNumber : Enumeration
     {
@@ -14,7 +14,7 @@
 
         public static implicit operator MeasureNumber(int i)
         {
-            foreach (MeasureNumber mn in GetAll<MeasureNumber>()) if (i == mn.Id) return mn;
+            foreach (MeasureNumber mn in All<MeasureNumber>()) if (i == mn.Id) return mn;
             return One;
         }
     }

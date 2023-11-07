@@ -24,8 +24,8 @@ public class Player
     public Card Bark => _bark ??= new Card(nameof(Bark), GO.transform)
         .SetFontScale(1.8f, 1.8f)
         .SetTextString("...")
-        .OutlineColor(Color.black)
-        .OutlineWidth(.15f)
+        .SetOutlineColor(Color.black)
+        .SetOutlineWidth(.15f)
         .AutoSizeFont(true)
         .AllowWordWrap(false)
         .SetTMPPosition(1, 1);

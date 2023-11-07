@@ -54,12 +54,12 @@ public class Cam
         }
     }
 
-    private Camera _uicam;
+    private Camera _uiCam;
     public Camera UICamera
     {
         get
         {
-            return _uicam != null ? _uicam : _uicam = SetUpCam();
+            return _uiCam != null ? _uiCam : _uiCam = SetUpCam();
             static Camera SetUpCam()
             {
                 Camera c = GameObject.Find("UICamera") != null ? GameObject.Find("UICamera").GetComponent<Camera>() :
@@ -89,7 +89,6 @@ public class Cam
     }
 
 }
-
 
 
 

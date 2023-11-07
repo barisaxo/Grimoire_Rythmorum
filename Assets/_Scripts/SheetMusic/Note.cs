@@ -1,7 +1,7 @@
 
 using UnityEngine;
 
-namespace MusicTheory.Rhythms
+namespace Musica.Rhythms
 {
     public class Note
     {

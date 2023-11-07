@@ -42,7 +42,7 @@ public class ShowControls_State : State
             return;
         }
 
-        for (var i = 0; i < Options.MenuItems.Count; i++)
+        for (var i = 0; i < Options.MenuItems.Length; i++)
             if (go.transform.IsChildOf(Options.MenuItems[i].Card.GO.transform))
             {
                 if (Options.MenuItems[i] == Options.Selection) return;

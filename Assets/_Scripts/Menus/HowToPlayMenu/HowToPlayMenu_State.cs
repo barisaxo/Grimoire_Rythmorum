@@ -31,7 +31,7 @@ public class HowToPlayMenu_State : State
             return;
         }
 
-        for (var i = 0; i < HowToPlay.MenuItems.Count; i++)
+        for (var i = 0; i < HowToPlay.MenuItems.Length; i++)
         {
             if (!go.transform.IsChildOf(HowToPlay.MenuItems[i].Card.GO.transform)) continue;
             HowToPlay.Selection = HowToPlay.MenuItems[i];

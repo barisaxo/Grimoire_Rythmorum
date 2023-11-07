@@ -1,5 +1,5 @@
-using MusicTheory;
-using MusicTheory.Rhythms;
+using Musica;
+using Musica.Rhythms;
 
 public class GameplayData
 {
