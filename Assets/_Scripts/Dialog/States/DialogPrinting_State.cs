@@ -21,7 +21,7 @@ public class DialogPrinting_State : State
     {
         if (Dialog.CurrentLine.VideoClip != null)
         {
-            var width = Cam.Io.Camera.orthographicSize * Cam.Io.Camera.aspect * 1.65f;
+            var width = Cam.Io.UICamera.orthographicSize * Cam.Io.UICamera.aspect * 1.65f;
             Dialog.VideoPlayer.transform.localScale = new Vector3(width,
                 width / ((float)Dialog.CurrentLine.VideoClip.width / Dialog.CurrentLine.VideoClip.height), 1);
             Dialog.VideoPlayer.gameObject.SetActive(true);

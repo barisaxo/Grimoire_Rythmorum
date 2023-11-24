@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using Musica.Rhythms;
+using MusicTheory.Rhythms;
 
 namespace Batterie
 {
@@ -11,13 +11,12 @@ namespace Batterie
         public BatterieInputAnalyzer(Action<string> feedBack, Action<Hit> hit, float latencyOffset, MappedBeat[] beatmap)
         {
             FeedBack += feedBack;
-            LatencyOffset = latencyOffset * .02f;
+            // LatencyOffset = latencyOffset * .02f;
             Hit = hit;
             BeatMap = beatmap.ToList(); ;
 
-            //hack
-            LatencyOffset = 5 * .02f;
             FeedBack += FeedbackDebug;
+
         }
 
         private readonly Action<string> FeedBack;

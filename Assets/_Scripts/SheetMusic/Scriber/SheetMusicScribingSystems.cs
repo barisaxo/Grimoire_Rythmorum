@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Musica.Rhythms;
+using MusicTheory.Rhythms;
 using UnityEngine;
 
 namespace SheetMusic

@@ -3,9 +3,12 @@ using UnityEngine;
 
 public class RockTheBoat
 {
-    private readonly List<(Transform transform, float amp, float period)> Boats = new();
-    private bool _rocking;
+    private Dictionary<Transform, (float amp, float period, float yPos)> keyValuePairs = new();
 
+    private readonly List<Transform> Boats = new();
+    private readonly List<(float amp, float period, float yPos)> BoatRots = new();
+
+    private bool _rocking;
     /// <summary>
     /// Setting this (un)subscribes SetSwayPos from MonoHelper.OnUpdate.
     /// </summary>
@@ -23,12 +26,29 @@ public class RockTheBoat
     /// <summary>
     /// This does NOT subscribe SetSwayPos to MonoHelper.OnUpdate.
     /// </summary>
-    public void AddBoat(Transform t)
+    public void AddBoat(Transform t, float amp, float period, float rotY)
     {
-        Boats.Add((
-            transform: t,
-            amp: Random.Range(7f, 9f),
-            period: Random.value + .5f));
+        if (Boats.Contains(t)) return;
+
+        var rot = (amp, period, rotY);
+
+        BoatRots.Add(rot);
+        Boats.Add(t);
+
+        keyValuePairs.TryAdd(t, rot);
+    }
+
+    /// <summary>
+    /// This does NOT subscribe SetSwayPos to MonoHelper.OnUpdate.
+    /// </summary>
+    public void RemoveBoat(Transform t)
+    {
+        if (keyValuePairs.ContainsKey(t))
+        {
+            Boats.Remove(t);
+            BoatRots.Remove(keyValuePairs.GetValueOrDefault(t));
+            keyValuePairs.Remove(t);
+        }
     }
 
     /// <summary>
@@ -43,12 +63,15 @@ public class RockTheBoat
 
     private void SetSwayPos()
     {
-        foreach (var (transform, amp, period) in Boats)
-            transform.rotation =
-                Quaternion.Euler(new Vector3(
-                    transform.localEulerAngles.x,
-                    transform.localEulerAngles.y,
-                    Mathf.Sin(Time.time * period) * amp));
+        foreach (var boat in keyValuePairs)
+        {
+            boat.Key.transform.Rotate(Vector3.forward * Mathf.Sin(Time.time * boat.Value.period) * boat.Value.amp);
+            // boat.Key.transform.rotation =
+            //  Quaternion.Euler(new Vector3(0,
+            //      boat.Value.yPos,
+            //      Mathf.Sin(Time.time * boat.Value.period) * boat.Value.amp));
+        }
     }
 }
+
 

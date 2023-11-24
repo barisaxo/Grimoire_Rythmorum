@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using SheetMusic;
 
-namespace Musica.Rhythms
+namespace MusicTheory.Rhythms
 {
     public static class RhythmGenerator
     {

@@ -1,4 +1,4 @@
-using Musica;
+using MusicTheory;
 using UnityEngine;
 using System.Collections;
 

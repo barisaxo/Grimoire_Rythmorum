@@ -1,4 +1,4 @@
-﻿namespace Musica.Rhythms
+﻿namespace MusicTheory.Rhythms
 {
     public struct Meter
     {

@@ -4,7 +4,7 @@ using UnityEngine;
 
 using SheetMusic;
 
-namespace Musica.Rhythms
+namespace MusicTheory.Rhythms
 {
     public class SevenFour43 : Time
     {

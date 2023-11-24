@@ -99,6 +99,7 @@ public abstract class State
             }
 
             fader.Screen.color = Color.black;
+            DisengageState();
             newState.PrepareState(WaitTwoSteps().StartCoroutine);
         }
 
@@ -111,8 +112,6 @@ public abstract class State
 
         IEnumerator FadeInToScene()
         {
-            DisengageState();
-
             while (fader.Screen.color.a > .01f)
             {
                 yield return null;
@@ -175,7 +174,7 @@ public abstract class State
         }
     }
 
-    private void GPInput(GamePadButton gpb)
+    protected virtual void GPInput(GamePadButton gpb)
     {
         switch (gpb)
         {
@@ -236,8 +235,8 @@ public abstract class State
 
     private void UpdateStickInput()
     {
-        if (LStick != Vector2.zero) LStickInput(LStick);
-        if (RStick != Vector2.zero) RStickInput(RStick);
+        LStickInput(LStick);
+        RStickInput(RStick);
     }
 
 

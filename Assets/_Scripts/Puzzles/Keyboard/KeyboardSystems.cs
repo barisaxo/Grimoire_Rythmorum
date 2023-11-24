@@ -190,7 +190,7 @@ public static class KeyboardSystems
                 keyboard.KBAudio.Play(keyboard.AudioParser.GetAudioClipFromKey(keys[i]));
             }
             keyboard.SetKeyColors(interactionType);
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(1);
             keyboard.CurrentKeys = null;
             keyboard.SetKeyColors(interactionType);
             yield return null;
@@ -225,7 +225,7 @@ public static class KeyboardSystems
             }
             keyboard.CurrentKeys = null;
             keyboard.SetKeyColors(interactionType);
-            yield return new WaitForSeconds(2);
+            yield return new WaitForSeconds(1);
             callback?.Invoke();
         }
     }
@@ -240,8 +240,8 @@ public static class KeyboardSystems
             for (int i = 0; i < keys.Length; i++)
             {
                 keyboard.CurrentKeys = new KeyboardKey[] { keyboard.FindKey(keys[i]) };
-                keyboard.KBAudio.Play(keyboard.AudioParser.GetAudioClipFromKey(keys[i]));
                 keyboard.SetKeyColors(interactionType);
+                keyboard.KBAudio.Play(keyboard.AudioParser.GetAudioClipFromKey(keys[i]));
                 float timer = 0;
                 while (timer < .35f)
                 {

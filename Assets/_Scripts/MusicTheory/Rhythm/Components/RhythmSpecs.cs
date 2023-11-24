@@ -1,5 +1,5 @@
 
-namespace Musica.Rhythms
+namespace MusicTheory.Rhythms
 {
     public class RhythmSpecs
     {

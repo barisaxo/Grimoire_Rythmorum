@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using Musica.Rhythms;
+using MusicTheory.Rhythms;
 
 public class Puzzle_State : State
 {
@@ -19,6 +17,9 @@ public class Puzzle_State : State
     private int Solved;
     private int Errors;
 
+    private KeyboardKey CaretKey;
+    private readonly CaretBlink CaretBlink = new CaretBlink().Start();
+
     public Puzzle_State(IPuzzle puzzle, PuzzleType puzzleType)
     {
         Puzzle = puzzle;
@@ -29,6 +30,9 @@ public class Puzzle_State : State
     {
         Keyboard = Puzzle.NumOfNotes == 1 ? new(Puzzle.NumOfNotes) :
             new(Puzzle.NumOfNotes, Puzzle.Notes[0]);
+
+        CaretKey = Keyboard.SelectedKeys[0] ?? Keyboard.Keys[12];
+        CaretBlink.SetCaret(CaretKey.SR);
 
         //Data.TheoryPuzzleData.ResetHints();
         _ = Question;
@@ -89,27 +93,29 @@ public class Puzzle_State : State
     {
         if (ReadyForNextPuzzle && action == MouseAction.LUp)
         {
-            if (UnityEngine.Random.value > .5f) FadeToState(PuzzleSelector.WeightedRandomPuzzleState(Data.TheoryPuzzleData));
-            else
-            {
-                var RhythmSpecs = new RhythmSpecs()
-                {
-                    Time = new FourFour(),
-                    NumberOfMeasures = 4,
-                    SubDivisionTier = SubDivisionTier.D1Only,
-                    HasTies = UnityEngine.Random.value > .5f,
-                    HasRests = UnityEngine.Random.value > .5f,
-                    HasTriplets = false,
-                    Tempo = 90
-                };
-                FadeToState(new BatteryAndCadenceTestState(RhythmSpecs));
-            }
+            FadeToState(new Puzzle_State(new ScalePuzzle(), PuzzleType.Aural)); return;
+
+            // if (UnityEngine.Random.value > .5f) FadeToState(PuzzleSelector.WeightedRandomPuzzleState(Data.TheoryPuzzleData));
+            // else
+            // {
+            //     var RhythmSpecs = new RhythmSpecs()
+            //     {
+            //         Time = new FourFour(),
+            //         NumberOfMeasures = 4,
+            //         SubDivisionTier = SubDivisionTier.D1Only,
+            //         HasTies = UnityEngine.Random.value > .5f,
+            //         HasRests = UnityEngine.Random.value > .5f,
+            //         HasTriplets = false,
+            //         Tempo = 90
+            //     };
+            //     // FadeToState(new BatteryAndCadenceTestState(RhythmSpecs));
+            // }
 
             // FadeToState(new Puzzle_State(new InvertedSeventhChordPuzzle(), PuzzleType.Theory));
 
             //FadeToState(new Puzzle_State<MusicTheory.SeventhChords.SeventhChord>(new InvertedSeventhChordPuzzle(), RandPuzzleType()));
             //PuzzleType RandPuzzleType() => UnityEngine.Random.value > .5f ? PuzzleType.Theory : PuzzleType.Aural;
-            return;// Click.Up;
+            // return;
         }
 
         base.Clicked(action, mousePos);
@@ -131,18 +137,19 @@ public class Puzzle_State : State
 
     private void SkipClicked()
     {
-        Skipped++;
-        var RhythmSpecs = new RhythmSpecs()
-        {
-            Time = new FourFour(),
-            NumberOfMeasures = 4,
-            SubDivisionTier = SubDivisionTier.D1Only,
-            HasTies = true,
-            HasRests = true,
-            HasTriplets = false,
-            Tempo = 90
-        };
-        FadeToState(new BatteryAndCadenceTestState(RhythmSpecs));
+        FadeToState(new Puzzle_State(new ModePuzzle(), PuzzleType.Aural)); return;
+        // Skipped++;
+        // var RhythmSpecs = new RhythmSpecs()
+        // {
+        //     Time = new FourFour(),
+        //     NumberOfMeasures = 4,
+        //     SubDivisionTier = SubDivisionTier.D1Only,
+        //     HasTies = true,
+        //     HasRests = true,
+        //     HasTriplets = false,
+        //     Tempo = 90
+        // };
+        // FadeToState(new BatteryAndCadenceTestState(RhythmSpecs));
 
     }
 
@@ -163,6 +170,7 @@ public class Puzzle_State : State
             SubmitAnswer.GO.SetActive(false);
             Desc.GO.SetActive(false);
             Skip.GO.SetActive(false);
+            CaretBlink.SelfDestruct();
             HintClicked();
         }
         else
@@ -201,7 +209,12 @@ public class Puzzle_State : State
     private void KeyboardClicked(GameObject go)
     {
         KeyboardKey key = Keyboard.IdentifyKey(go);
+
+        CaretBlink.ClearCaret();
+
         Keyboard.InteractWithKey(key, KeyboardInteractionType.User);
+
+        CaretBlink.SetCaret(key.SR);
 
         bool containsKey = true;
         foreach (KeyboardNoteName note in Puzzle.Notes) if (note == key.KeyboardNoteName) { containsKey = true; break; }
@@ -238,6 +251,84 @@ public class Puzzle_State : State
 
         foreach (bool b in answered) if (!b) return false;
         return true;
+    }
+
+    protected override void DirectionPressed(Dir dir)
+    {
+        switch (dir)
+        {
+            case Dir.Left:
+                for (int i = 1; i < Keyboard.Keys.Count; i++)
+                {
+                    if (CaretKey == Keyboard.Keys[i])
+                    {
+                        CaretKey = Keyboard.Keys[i - 1];
+                        CaretBlink.SetCaret(CaretKey.SR);
+                        return;
+                    }
+                }
+                break;
+
+            case Dir.Right:
+                for (int i = 0; i < Keyboard.Keys.Count - 1; i++)
+                {
+                    if (CaretKey == Keyboard.Keys[i])
+                    {
+                        CaretKey = Keyboard.Keys[i + 1];
+                        CaretBlink.SetCaret(CaretKey.SR);
+                        return;
+                    }
+                }
+                break;
+        }
+    }
+
+    protected override void GPInput(GamePadButton gpb)
+    {
+        if (ReadyForNextPuzzle)
+        {
+            FadeToState(PuzzleSelector.WeightedRandomPuzzleState(Data.TheoryPuzzleData));
+            // if (UnityEngine.Random.value > .5f) FadeToState(PuzzleSelector.WeightedRandomPuzzleState(Data.TheoryPuzzleData));
+            // else
+            // {
+            //     var RhythmSpecs = new RhythmSpecs()
+            //     {
+            //         Time = new FourFour(),
+            //         NumberOfMeasures = 4,
+            //         SubDivisionTier = SubDivisionTier.D1Only,
+            //         HasTies = UnityEngine.Random.value > .5f,
+            //         HasRests = UnityEngine.Random.value > .5f,
+            //         HasTriplets = false,
+            //         Tempo = 90
+            //     };
+            //     FadeToState(new BatteryAndCadenceTestState(RhythmSpecs));
+            // }
+            // return;
+        }
+        base.GPInput(gpb);
+    }
+
+    protected override void ConfirmPressed()
+    {
+        Debug.Log("Clicked on: " + CaretKey.Go.name);
+        ClickedOn(CaretKey.Go);
+    }
+
+    protected override void StartPressed()
+    {
+        if (SubmitAnswer.GO.activeInHierarchy) ClickedOn(SubmitAnswer.GO);
+    }
+    protected override void SelectPressed()
+    {
+        ClickedOn(Hint.GO);
+    }
+    protected override void InteractPressed()
+    {
+        if (Listen.GO.activeInHierarchy) ClickedOn(Listen.GO);
+    }
+    protected override void WestPressed()
+    {
+        ClickedOn(Question.GO);
     }
 
     private Card _answer;

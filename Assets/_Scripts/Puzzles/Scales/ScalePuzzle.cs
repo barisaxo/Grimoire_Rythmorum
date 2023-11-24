@@ -62,7 +62,7 @@ public class ScalePuzzle : IPuzzle
 
     private Scale WeightedRandomScale()
     {
-        return Random.Range(0, 50) switch
+        return Random.Range(0, 53) switch
         {
             < 10 => new Major(),
             < 19 => new JazzMinor(),
@@ -71,6 +71,7 @@ public class ScalePuzzle : IPuzzle
             < 41 => new MusicTheory.Scales.Diminished(),
             < 45 => new Diminished6th(),
             < 48 => new MusicTheory.Scales.WholeTone(),
+            < 51 => new Blues(),
             _ => new MusicTheory.Scales.Chromatic(),
         };
     }

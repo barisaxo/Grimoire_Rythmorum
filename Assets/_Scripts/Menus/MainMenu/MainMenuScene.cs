@@ -8,10 +8,9 @@ namespace Menus.MainMenu
 
         public MainMenuScene()
         {
-            Debug.Log("I'm Alive!");
             _ = LightHouse;
             _ = CatBoat;
-            RockTheBoat.AddBoat(CatBoat.transform);
+            RockTheBoat.AddBoat(CatBoat.transform, 8, 1, 0);
             RockTheBoat.Rocking = true;
             MonoHelper.OnUpdate += RotateLightHouse;
         }

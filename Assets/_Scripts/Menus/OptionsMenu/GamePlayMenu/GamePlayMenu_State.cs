@@ -28,13 +28,14 @@ public class GamePlayMenu_State : State
     {
         Options = (OptionsMenu)new OptionsMenu().Initialize(OptionsMenu.OptionsItem.GamePlay);
         GamePlayMenu = (GamePlayMenu)new GamePlayMenu().Initialize(Data.GamePlay);
+        TuningNote = new(Data.GamePlay.CurrentKey);
         callback();
     }
 
     protected override void DisengageState()
     {
         //LoadSaveSystems.SaveCurrentGame();
-        TuningNote.Stop();
+        TuningNote.SelfDestruct();
         Tuning = false;
         Options.SelfDestruct();
         GamePlayMenu.SelfDestruct();
@@ -73,10 +74,11 @@ public class GamePlayMenu_State : State
                 }
 
                 GamePlayMenu.Selection = GamePlayMenu.MenuItems[i];
-                //ToggleTuningNote();
                 GamePlayMenu.UpdateTextColors();
                 return;
             }
+
+        ToggleTuningNote();
     }
 
     protected override void DirectionPressed(Dir dir)
@@ -116,9 +118,10 @@ public class GamePlayMenu_State : State
 
     private void ToggleTuningNote()
     {
-        if (GamePlayMenu.Selection == GameplayData.DataItem.Tuning && !Tuning)
+        if (GamePlayMenu.Selection == GameplayData.DataItem.Tuning && !Tuning && Options.Selection == OptionsMenu.OptionsItem.GamePlay)
         {
             TuningNote = new(Data.GamePlay.CurrentKey);
+            TuningNote.Play();
             Tuning = true;
         }
         else if (GamePlayMenu.Selection == GameplayData.DataItem.Tuning && Tuning)

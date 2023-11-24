@@ -2,6 +2,7 @@
 using MusicTheory.ScaleDegrees;
 using MusicTheory.Steps;
 using MusicTheory.Modes;
+// using MusicTheory.Intervals;
 
 namespace MusicTheory.Scales
 {
@@ -110,6 +111,15 @@ namespace MusicTheory.Scales
             degrees: new ScaleDegree[] { new _1(), new _2(), new _3(), new P5(), new _6() })
         { }
     }
+    public class Blues : Scale
+    {
+        public Blues() : base(
+           @enum: ScaleEnum.Blues,
+           modes: new Mode[] { new Modes.Blues(), new MajorBlues() },
+           steps: new Step[] { new Augmented(), new Whole(), new Half(), new Half(), new Augmented(), new Whole() },
+           degrees: new ScaleDegree[] { new _1(), new b3(), new P4(), new b5(), new P5(), new b7(), })
+        { }
+    }
 
     #endregion SCALES
 
@@ -128,6 +138,7 @@ namespace MusicTheory.Scales
         public static ScaleEnum Diminished6th = new(5, "º6", nameof(Diminished6th));
         public static ScaleEnum Chromatic = new(6, "∞", nameof(Chromatic));
         public static ScaleEnum Pentatonic = new(7, "ε", nameof(Pentatonic));
+        public static ScaleEnum Blues = new(8, "Bl", nameof(Blues));
 
         public static implicit operator Scale(ScaleEnum s) => s switch
         {

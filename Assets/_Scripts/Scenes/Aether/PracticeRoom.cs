@@ -10,7 +10,7 @@ public class PracticeRoom
         _ = Tiles;
     }
 
-    public void SelfDesctruct()
+    public void SelfDestruct()
     {
         if (Parent)
             GameObject.Destroy(Parent.gameObject);

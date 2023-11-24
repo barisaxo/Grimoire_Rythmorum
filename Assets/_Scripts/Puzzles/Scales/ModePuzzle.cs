@@ -8,7 +8,7 @@ using MusicTheory.Modes;
 
 public class ModePuzzle : IPuzzle
 {
-    readonly int _numOfNotes;
+    private int _numOfNotes;
     public int NumOfNotes => _numOfNotes;
 
     public PlaybackMode QuestionPlaybackMode => PlaybackMode.Horizontal;
@@ -22,22 +22,33 @@ public class ModePuzzle : IPuzzle
     public IMusicalElement Gamut { get; private set; }
     public Scale Scale => Gamut is Scale scale ? scale : throw new System.ArgumentNullException();
 
-    private readonly KeyboardNoteName[] _notes;
+    private KeyboardNoteName[] _notes;
     public KeyboardNoteName[] Notes => _notes;
 
     public string Desc => "Build the <b><i>mode";
 
-    private readonly string _question;
+    private string _question;
     public string Question => _question;
 
     public string Clue => GetSteps(Mode);
     readonly Mode Mode;
 
+    public ModePuzzle(Scale gamut, Mode mode)
+    {
+        Gamut = gamut;
+        Mode = mode;
+        Initialize();
+    }
+
     public ModePuzzle()
     {
         Gamut = WeightedRandomScale();
         Mode = Scale.Modes[Random.Range(0, Scale.Modes.Length)];
+        Initialize();
+    }
 
+    void Initialize()
+    {
         _numOfNotes = Scale.ScaleDegrees.Length + 1;
         _notes = new KeyboardNoteName[NumOfNotes];
 
@@ -83,12 +94,13 @@ public class ModePuzzle : IPuzzle
 
     private Scale WeightedRandomScale()
     {
-        return Random.Range(0, 42) switch
+        return Random.Range(0, 47) switch
         {
             < 10 => new Major(),
             < 19 => new JazzMinor(),
             < 29 => new HarmonicMinor(),
             < 37 => new Pentatonic(),
+            < 42 => new MusicTheory.Scales.Blues(),
             _ => new MusicTheory.Scales.Diminished(),
         };
     }

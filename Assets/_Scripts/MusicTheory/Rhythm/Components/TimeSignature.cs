@@ -1,7 +1,7 @@
 ﻿using System;
 using MusicTheory.ScaleDegrees;
 
-namespace Musica.Rhythms
+namespace MusicTheory.Rhythms
 {
     public class TimeSignatureEnum : Enumeration
     {

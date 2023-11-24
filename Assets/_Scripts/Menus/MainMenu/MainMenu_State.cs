@@ -32,6 +32,7 @@ public class MainMenu_State : State
     protected override void DisengageState()
     {
         MainMenu.SelfDestruct();
+        MainMenuScene.SelfDestruct();
     }
 
     protected override void ClickedOn(GameObject go)
@@ -61,8 +62,11 @@ public class MainMenu_State : State
     {
         MainMenu.UpdateTextColors();
 
-        if (MainMenu.Selection.Item == MainMenu.MainMenuItem.Continue) return;
-
+        if (MainMenu.Selection.Item == MainMenu.MainMenuItem.Continue)
+        {
+            FadeToState(new AetherTest_State());
+            return;
+        }
         if (MainMenu.Selection.Item == MainMenu.MainMenuItem.LoadGame)
         {
             SetStateDirectly(new LoadGameSelectSlot_State(MainMenuScene));

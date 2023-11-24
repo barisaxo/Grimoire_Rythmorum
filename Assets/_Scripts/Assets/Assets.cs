@@ -6,6 +6,7 @@ public static class Assets
 
     #region SFX
     public static AudioClip TypingClicks => Resources.Load<AudioClip>("Audio/SFX/Typing Clicks");
+    public static AudioClip AlertHalfDim => Resources.Load<AudioClip>("Audio/SFX/AlertHalfDim");
     #endregion SFX
 
 
@@ -19,19 +20,15 @@ public static class Assets
     #endregion AUDIO
 
 
-
-
-
     #region MISC
 
     public static Material Video_Mat => Resources.Load<Material>("Materials/Video_Mat");
     public static Sprite White => Resources.Load<Sprite>("Sprites/Misc/White");
     public static Material Stars => Resources.Load<Material>("Skyboxes/Stars");
 
+    public static Sprite CircleKeyboard => Resources.Load<Sprite>("Sprites/Misc/Circle_Keyboard");
+
     #endregion MISC
-
-
-
 
 
     #region GAMEPAD 
@@ -45,8 +42,7 @@ public static class Assets
     #endregion GAMEPAD 
 
 
-
-
+    #region  CHARACTERS
 
     #region AL
 
@@ -62,31 +58,35 @@ public static class Assets
     public static Sprite EyesFlat => _eyesFlat = _eyesFlat != null ? _eyesFlat :
         Resources.Load<Sprite>("Sprites/AL/EyesFlat_" + Random.Range(1, 3));
 
-    public static Sprite MouthUp => Resources.Load<Sprite>("Sprites/AL/MouthUp");
-    public static Sprite MouthDown => Resources.Load<Sprite>("Sprites/AL/MouthDown");
-    public static Sprite MouthFlat => Resources.Load<Sprite>("Sprites/AL/MouthFlat");
+    public static Sprite MouthUp => Resources.Load<Sprite>("Sprites/Characters/AL/MouthUp");
+    public static Sprite MouthDown => Resources.Load<Sprite>("Sprites/Characters/AL/MouthDown");
+    public static Sprite MouthFlat => Resources.Load<Sprite>("Sprites/Characters/AL/MouthFlat");
 
     #endregion AL
 
+    #region PINO
 
+    public static Sprite Pino => Resources.Load<Sprite>("Sprites/Characters/Pino/Pino");
 
+    #endregion PINO
+
+    #endregion  CHARACTERS
 
 
     #region SEA
 
     #region SHIPS
-    public static GameObject Schooner => Resources.Load<GameObject>("Prefabs/BigBoat");
-    public static GameObject CatBoat => Resources.Load<GameObject>("Prefabs/Catboat");
+    public static GameObject _schooner => Resources.Load<GameObject>("Prefabs/BigBoat2");
+    public static GameObject Schooner => GameObject.Instantiate(_schooner);
+    public static GameObject CatBoat => Resources.Load<GameObject>("Prefabs/Catboat2");
     #endregion SHIPS
 
 
-    public static GameObject Rocks => Resources.Load<GameObject>("Models/Rocks");
+    private static GameObject _rocks => Resources.Load<GameObject>("Prefabs/RocksParent");
+    public static GameObject Rocks => GameObject.Instantiate(_rocks);
     public static GameObject Island => Resources.Load<GameObject>("Models/Island");
 
     #endregion SEA
-
-
-
 
 
     #region MATERIALS

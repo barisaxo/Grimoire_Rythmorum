@@ -1,5 +1,5 @@
-using Musica;
-using Musica.Rhythms;
+using MusicTheory;
+using MusicTheory.Rhythms;
 
 public class GameplayData
 {
@@ -19,6 +19,7 @@ public class GameplayData
     public bool MediumModeWon = false;
 
     public CellShape RecentCell;
+
 
     public BatterieDifficulty Batterie_Difficulty
     {
@@ -66,7 +67,7 @@ public class GameplayData
     {
         public static readonly DataItem Latency = new(0, "LATENCY",
             "Lag offset for rhythm input. The margin for an accurate hit is +- 15." +
-            "\nIf you are missing beats try adjusting this latency. Default setting is 0.04");
+            "\nIf you are missing beats try adjusting this latency. Default setting is 5");
 
         public static readonly DataItem Transpose = new(1, "KEY TRANSPOSITION",
             "C: Concert pitch: flute, piano, guitar, violin, etc..." +
@@ -96,12 +97,12 @@ public class GameplayData
     //public CellShape RecentCell = 0;
 
 
-    // private RegionalMode _currentLevel = RegionalMode.Dorian;
-    // public RegionalMode CurrentLevel
-    // {
-    //     get => _currentLevel;
-    //     set { _currentLevel = value; }
-    // }
+    private RegionalMode _currentLevel = RegionalMode.Dorian;
+    public RegionalMode CurrentLevel
+    {
+        get => _currentLevel;
+        set { _currentLevel = value; }
+    }
 
     // private static List<KeyOf> _availableKeys;
     // public static List<KeyOf> AvailableKeys => _availableKeys ??= new List<KeyOf>

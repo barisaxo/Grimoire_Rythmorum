@@ -24,8 +24,8 @@ public class DataManager
     }
     #endregion INSTANCE
 
-    //private CharacterData _characterData;
-    //public CharacterData CharacterData => _characterData ??= new();
+    private CharacterData _characterData;
+    public CharacterData CharacterData => _characterData ??= new();
 
     //private PlayerData _playerData;
     //public PlayerData PlayerData => _playerData ??= new();
@@ -42,7 +42,7 @@ public class DataManager
 
     //public void ResetCharacterAndPlayerData() { _characterData = new CharacterData(); _playerData = new PlayerData(); }
 
-
+    public SeaScene SeaScene;
 
 
     const string fileName = "save.me";

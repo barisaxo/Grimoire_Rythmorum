@@ -12,28 +12,39 @@ public sealed class Swells
     public void EnableSwells() => MonoHelper.OnUpdate += Swell;
     public void DisableSwells() => MonoHelper.OnUpdate -= Swell;
 
+    private float _offset = 0;
+    public float Offset
+    {
+        get => _offset;
+        set => _offset = value >= 700f ? value - 700 : value <= -700f ? value + 700 : value;
+    }
     void Swell()
     {
-        int i = 0;
+        int ii = Sea.SeaGridSize;
+        float set = (Time.time * SwellFrequency) + (Sea.SeaGridSize * .5f);
+        float yPos;
 
-        for (int x = 0; x < Sea.SeaGridSize; x++)
+        foreach (SeaGridTile tile in Sea.Board)
         {
-            for (int z = 0; z < Sea.SeaGridSize; z++)
+            // triangle wave i think
+            yPos = Mathf.Sin(set + Offset + ((tile.GO.transform.position.x + tile.GO.transform.position.z) % (ii))) * SwellAmplitude;
+
+            tile.GO.transform.position =
+                new Vector3(tile.GO.transform.position.x, yPos, tile.GO.transform.position.z);
+
+            float v = 2.5f * yPos;
+            tile.Mesh.material.color = new Color(
+                     Sea.SeaColor.r + v,
+                     Sea.SeaColor.g + v,
+                     Sea.SeaColor.b + v,
+                     .25f + v);
+
+            if (tile.GO.transform.position.x < 5.7 && tile.GO.transform.position.x > 5.3 && tile.GO.transform.position.z < 5.7 && tile.GO.transform.position.z > 5.3)
             {
-                float yPos = Mathf.Sin((Time.time * SwellFrequency) + ((x + z) % (i + 1))) * SwellAmplitude; // triangle wave i think
-
-                Sea.SeaGrid[i].GO.transform.position =
-                    new Vector3(Sea.SeaGrid[i].Loc.x, yPos, Sea.SeaGrid[i].Loc.z);
-
-                float v = 2.5f * yPos;
-                Sea.SeaGrid[i].Mesh.material.color = new Color(
-                         Sea.SeaColor.r + v,
-                         Sea.SeaColor.g + v,
-                         Sea.SeaColor.b + v,
-                         .25f + v);
-
-                i++;
+                yPos = Mathf.Sin(set + Offset + ((Sea.Ship.GO.transform.position.x + Sea.Ship.GO.transform.position.z) % (ii))) * SwellAmplitude;
+                Sea.Ship.GO.transform.position = new Vector3(Sea.Ship.GO.transform.position.x, yPos + .13f, Sea.Ship.GO.transform.position.z);
             }
+            ii++;
         }
     }
 }

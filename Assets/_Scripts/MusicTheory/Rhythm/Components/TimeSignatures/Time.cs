@@ -1,6 +1,6 @@
 ﻿using SheetMusic;
 
-namespace Musica.Rhythms
+namespace MusicTheory.Rhythms
 {
     public abstract class Time
     {

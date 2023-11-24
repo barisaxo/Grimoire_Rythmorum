@@ -1,7 +1,7 @@
 using UnityEngine;
 using SheetMusic;
 using Batterie;
-using Musica.Rhythms;
+using MusicTheory.Rhythms;
 using System;
 
 

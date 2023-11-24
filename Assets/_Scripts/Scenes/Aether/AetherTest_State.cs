@@ -34,6 +34,8 @@ public class AetherTest_State : State
 
     protected override void DisengageState()
     {
+        Cam.Io.Camera.transform.SetParent(null);
+        MonoHelper.ToFixedUpdate -= HandleInput;
         AetherScene.SelfDestruct();
     }
 
@@ -70,9 +72,14 @@ public class AetherTest_State : State
             Debug.Log(x.name);
     }
 
+    protected override void ConfirmPressed()
+    {
+        if (NearShip) { FadeToState(new SeaSceneTest_State()); return; }
+    }
+
+
+
     bool NearShip => Dist(AetherScene.Player.GO, AetherScene.Ship) < 2.5f;
-
-
     float Dist(GameObject a, GameObject b) => Vector2.Distance(
       new Vector2(a.transform.position.x, a.transform.position.z),
       new Vector2(b.transform.position.x, b.transform.position.z));

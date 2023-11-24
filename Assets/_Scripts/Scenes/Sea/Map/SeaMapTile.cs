@@ -2,23 +2,26 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SeaMapTile
+public class SeaMapTile : ITile
 {
     public SeaMapTileType Type;
-    public Vector3 Loc;
-    public float ShipRotY;
-    public float SwayAmp;
-    public float SwayPeriod;
+    public Vector3Int Loc;
+    public bool HasGramo;
+    public float RotY = Random.Range(0, 360);
+    public Vector2Int Coord => new(Loc.x, Loc.z);
+    public bool IsOpen => Type == SeaMapTileType.OpenSea;
 
-    public SeaMapTile(Vector3 pos)
+    public GameObject GO;
+
+    public SeaMapTile(Vector3Int pos)
     {
         Loc = pos;
-        ShipRotY = Random.Range(-179f, 179f);
-        SwayAmp = Random.Range(6f, 9f);
-        SwayPeriod = Random.Range(.25f, .75f);
     }
 
-
+    public void ClearGOs()
+    {
+        GO = null;
+    }
 }
 
-public enum SeaMapTileType { OpenSea, Cave, Trader, CardGame, Rocks }
+public enum SeaMapTileType { OpenSea, Cave, Rocks }

@@ -3,18 +3,18 @@ using System;
 using UnityEngine;
 using SheetMusic;
 using Batterie;
-using Musica.Rhythms;
-using Musica;
+using MusicTheory.Rhythms;
+using MusicTheory;
 using Muscopa;
-
 
 public class BatteryAndCadenceTestState : State
 {
-    public BatteryAndCadenceTestState(RhythmSpecs specs)
+    public BatteryAndCadenceTestState(RhythmSpecs specs, BatteriePack pack)
     {
         Specs = specs;
+        Pack = pack;
     }
-
+    BatteriePack Pack;
     RhythmSpecs Specs;
     MusicSheet MusicSheet;
     Synchronizer Synchro;
@@ -23,7 +23,6 @@ public class BatteryAndCadenceTestState : State
     MappedBeat[] CountOffBeatmap;
     BatterieInputAnalyzer Analyzer;
     BatterieFeedback BatterieFeedback;
-
 
     MuscopaSettings MuscopaSettings;
     MuscopaAudio MuscopaAudio;
@@ -55,9 +54,8 @@ public class BatteryAndCadenceTestState : State
         Counter = 1;
         MonoHelper.OnUpdate += SpaceBar;
 
-
         MuscopaAudio = new(Data.Volume);
-        MuscopaSettings = NewSettings(CadenceDifficulty.ALL, Musica.Musica.RandomMode(), Genre.Stax);
+        MuscopaSettings = NewSettings(CadenceDifficulty.ALL, MusicTheory.Musica.RandomMode(), Genre.Stax);
 
         GetNewSettings(callback).StartCoroutine();
     }
@@ -79,12 +77,10 @@ public class BatteryAndCadenceTestState : State
         MusicSheet.SelfDestruct();
     }
 
-
-
     public MuscopaSettings NewSettings(CadenceDifficulty difficulty, RegionalMode shipsRegion, Genre genre)
     {
         return new MuscopaSettings(
-            key: Musica.Musica.RandomKey(),
+            key: MusicTheory.Musica.RandomKey(),
             genre: genre,
             scale: MusicalScale.Major,
             cadence: RegionalMode.Aeolian.RandomMode().RandomCadence(difficulty),
@@ -93,7 +89,6 @@ public class BatteryAndCadenceTestState : State
         );
     }
 
-
     void Tick()
     {
         if (CountingOff)
@@ -101,11 +96,11 @@ public class BatteryAndCadenceTestState : State
             CountOffTimeEvent();
             if (++Counter == CountOffBeatmap.Length - 1)
             {
-                CountingOff = false; Playing = true; Counter = 0;
                 MonoHelper.OnUpdate += Analyzer.Tick;
-                Synchro.BeatEvent += Click;
                 Analyzer.Start();
-                Audio.Batterie.Miss();
+                Synchro.BeatEvent += Click;
+                CountingOff = false; Playing = true; Counter = 0;
+                // Audio.Batterie.Miss();
             }
             return;
         }
@@ -129,7 +124,8 @@ public class BatteryAndCadenceTestState : State
             MonoHelper.OnUpdate -= Analyzer.Tick;
             MuscopaAudio.StopTheCadence();
 
-            FadeToState(PuzzleSelector.WeightedRandomPuzzleState(Data.TheoryPuzzleData));
+            // FadeToState(PuzzleSelector.WeightedRandomPuzzleState(Data.TheoryPuzzleData));
+            SetStateDirectly(new DialogStart_State(new BatterieIntermission_Dialogue(Pack)));
         }
     }
 
@@ -195,9 +191,43 @@ public class BatteryAndCadenceTestState : State
             Analyzer.InputUpAction();
         }
 
-        if (Input.GetKeyDown(KeyCode.Tab))
+        // if (Input.GetKeyDown(KeyCode.Tab))
+        // {
+        //     SetStateDirectly(new Batterie_State(Specs));
+        // }
+    }
+
+    protected override void GPInput(GamePadButton gpb)
+    {
+        switch (gpb)
         {
-            SetStateDirectly(new Batterie_State(Specs));
+            case GamePadButton.Up_Release:
+            case GamePadButton.Down_Release:
+            case GamePadButton.Left_Release:
+            case GamePadButton.Right_Release:
+            case GamePadButton.North_Release:
+            case GamePadButton.South_Release:
+            case GamePadButton.West_Release:
+            case GamePadButton.East_Release:
+            case GamePadButton.L1_Release:
+            case GamePadButton.R1_Release:
+            case GamePadButton.L2_Release:
+            case GamePadButton.R2_Release:
+                Analyzer.InputUpAction(); break;
+
+            case GamePadButton.Up_Press:
+            case GamePadButton.Down_Press:
+            case GamePadButton.Left_Press:
+            case GamePadButton.Right_Press:
+            case GamePadButton.North_Press:
+            case GamePadButton.South_Press:
+            case GamePadButton.West_Press:
+            case GamePadButton.East_Press:
+            case GamePadButton.L1_Press:
+            case GamePadButton.R1_Press:
+            case GamePadButton.L2_Press:
+            case GamePadButton.R2_Press:
+                Analyzer.InputDownAction(); break;
         }
     }
 
@@ -218,8 +248,6 @@ public class BatteryAndCadenceTestState : State
                 break;
         }
     }
-
-
 
     IEnumerator GetNewSettings(Action callback)
     {

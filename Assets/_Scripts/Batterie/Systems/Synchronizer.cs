@@ -1,7 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using Musica.Rhythms;
+using MusicTheory.Rhythms;
 
 namespace Batterie
 {

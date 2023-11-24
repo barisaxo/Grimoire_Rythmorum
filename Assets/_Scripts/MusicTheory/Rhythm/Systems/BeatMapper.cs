@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Musica.Rhythms;
+using MusicTheory.Rhythms;
 using Batterie;
 
 public static class BeatMapper

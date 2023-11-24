@@ -1,5 +1,5 @@
 using UnityEngine;
-using Musica.Rhythms;
+using MusicTheory.Rhythms;
 using Batterie;
 
 namespace SheetMusic

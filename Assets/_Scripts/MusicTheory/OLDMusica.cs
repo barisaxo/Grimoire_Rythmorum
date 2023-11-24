@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 
 //TODO this is the old music theory
-namespace Musica
+namespace MusicTheory
 {
     /// <summary>
     /// Music terms and conversions thereof.

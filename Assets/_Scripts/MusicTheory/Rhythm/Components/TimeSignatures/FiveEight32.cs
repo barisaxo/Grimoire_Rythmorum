@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using SheetMusic;
 
-namespace Musica.Rhythms
+namespace MusicTheory.Rhythms
 {
     public class FiveEight32 : Time
     {

@@ -1,4 +1,4 @@
-﻿namespace Musica.Rhythms
+﻿namespace MusicTheory.Rhythms
 {
     public class MeasureNumber : Enumeration
     {

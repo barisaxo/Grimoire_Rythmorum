@@ -50,6 +50,10 @@ namespace MusicTheory.Modes
     public class Diminished6thI : Mode { public Diminished6thI() : base(ScaleEnum.Diminished6th, ModeDegreeEnum.Prime, nameof(Diminished6thI)) { } }
     public class Diminished6thII : Mode { public Diminished6thII() : base(ScaleEnum.Diminished6th, ModeDegreeEnum.Second, nameof(Diminished6thII)) { } }
 
+    public class Blues : Mode { public Blues() : base(ScaleEnum.Blues, ModeDegreeEnum.Prime, nameof(Blues)) { } }
+    public class MajorBlues : Mode { public MajorBlues() : base(ScaleEnum.Blues, ModeDegreeEnum.Second, nameof(MajorBlues)) { } }
+
+
     public class WholeTone : Mode { public WholeTone() : base(ScaleEnum.WholeTone, ModeDegreeEnum.Prime, nameof(WholeTone)) { } }
 
     public class Chromatic : Mode { public Chromatic() : base(ScaleEnum.Chromatic, ModeDegreeEnum.Prime, nameof(Chromatic)) { } }

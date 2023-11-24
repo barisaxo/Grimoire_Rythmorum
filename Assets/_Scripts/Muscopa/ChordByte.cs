@@ -1,4 +1,4 @@
-using Musica;
+using MusicTheory;
 using UnityEngine;
 
 public struct ChordByte

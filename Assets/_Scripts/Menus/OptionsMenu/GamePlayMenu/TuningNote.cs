@@ -1,5 +1,5 @@
 using UnityEngine;
-using Musica;
+using MusicTheory;
 using Audio;
 
 public class TuningNote
@@ -10,11 +10,10 @@ public class TuningNote
 
         AS.clip = WaveGenerator.CreateSineWave(NoteToHertz(note.Transposed(KeyOf.Eb)), 5);
         AS.loop = true;
-        AS.Play();
     }
 
     private AudioSource _as;
-    private AudioSource AS => _as != null ? _as : _as = SetUpAS();
+    private AudioSource AS => _as ??= SetUpAS();
     private AudioSource SetUpAS()
     {
         GameObject go = new(nameof(AudioSource));
@@ -22,9 +21,19 @@ public class TuningNote
         return a;
     }
 
+    public void Play()
+    {
+        AS.Play();
+    }
+
     public void Stop()
     {
+        if (_as == null) return;
         AS.Stop();
+    }
+    public void SelfDestruct()
+    {
+        Stop();
         GameObject.Destroy(_as.gameObject);
     }
 
