@@ -19,7 +19,7 @@ public sealed class SoundFXAudioSystem : AudioSystem
     {
         AudioSources[1].clip = ac;
         AudioSources[1].Play();
-        AudioSources[1].loop = true;
+        AudioSources[1].loop = false;
     }
 
     public void StopClip()

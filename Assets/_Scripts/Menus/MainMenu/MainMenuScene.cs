@@ -10,7 +10,7 @@ namespace Menus.MainMenu
         {
             _ = LightHouse;
             _ = CatBoat;
-            RockTheBoat.AddBoat(CatBoat.transform, 8, 1, 0);
+            RockTheBoat.AddBoat(CatBoat.transform, .08f, 1, 180);
             RockTheBoat.Rocking = true;
             MonoHelper.OnUpdate += RotateLightHouse;
         }
@@ -80,8 +80,10 @@ namespace Menus.MainMenu
 
                 GameObject SetUpCatBoat()
                 {
-                    var go = Object.Instantiate(Assets.CatBoat, Parent.transform);
-                    go.transform.position = new Vector3(-2, -1.5f, 0);
+                    var go = Assets.CatBoat;
+                    go.transform.SetParent(Parent);
+                    go.transform.SetLocalPositionAndRotation(new Vector3(-2, -1.5f, 0), Quaternion.Euler(0, 180, 0));
+                    // go.transform.position = new Vector3(-2, -1.5f, 0);
                     go.transform.localScale = Vector3.one * 3;
                     return go;
                 }

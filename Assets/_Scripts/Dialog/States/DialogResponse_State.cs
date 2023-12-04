@@ -68,7 +68,11 @@ public class DialogResponse_State : State
             SetStateDirectly(new EndDialog_State(
                 Dialog,
                 r.NextState,
-                r.FadeOut));
+                r.FadeOut,
+                r.PanCamera,
+                r.CameraPan,
+                r.CameraStrafe,
+                r.Speed));
 
             return;
         }

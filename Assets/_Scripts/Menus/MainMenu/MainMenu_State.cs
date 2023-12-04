@@ -14,10 +14,12 @@ public class MainMenu_State : State
 
     protected override void PrepareState(Action callback)
     {
+        Cam.Io.Camera.transform.SetPositionAndRotation(Vector3.back * 10, Quaternion.identity);
         MainMenu = (MainMenu)new MainMenu().Initialize();
         MainMenu.MenuItems[0].Card.GO.SetActive(SaveDataExists);
         MainMenu.MenuItems[1].Card.GO.SetActive(SaveDataExists);
         MainMenuScene ??= new();
+        Audio.BGMusic.PlayClip(Assets.BGMus1);
         callback();
     }
 
@@ -31,6 +33,7 @@ public class MainMenu_State : State
 
     protected override void DisengageState()
     {
+        Audio.BGMusic.Pause();
         MainMenu.SelfDestruct();
         MainMenuScene.SelfDestruct();
     }
@@ -49,7 +52,7 @@ public class MainMenu_State : State
 
     protected override void DirectionPressed(Dir dir)
     {
-        if (dir == Dir.Reset) return;
+        if (dir != Dir.Up && dir != Dir.Down) return;
         MainMenu.ScrollMenuItems(dir);
 
         if (SaveDataExists || (MainMenu.Selection.Item != MainMenu.MainMenuItem.Continue &&
@@ -64,7 +67,7 @@ public class MainMenu_State : State
 
         if (MainMenu.Selection.Item == MainMenu.MainMenuItem.Continue)
         {
-            FadeToState(new AetherTest_State());
+            FadeToState(new NewAetherScene_State());
             return;
         }
         if (MainMenu.Selection.Item == MainMenu.MainMenuItem.LoadGame)
@@ -91,7 +94,16 @@ public class MainMenu_State : State
             return;
         }
 
-        if (MainMenu.Selection.Item == MainMenu.MainMenuItem.Quit) return;
+        if (MainMenu.Selection.Item == MainMenu.MainMenuItem.Quit)
+        {
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying = false;
+#endif
+
+#if !UNITY_EDITOR
+            Application.Quit();
+#endif
+        }
     }
 
     protected override void LStickInput(Vector2 v2)

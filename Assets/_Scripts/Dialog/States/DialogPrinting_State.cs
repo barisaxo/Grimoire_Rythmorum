@@ -7,7 +7,6 @@ using UnityEngine.Video;
 public class DialogPrinting_State : State
 {
     private readonly Dialog.Dialog Dialog;
-
     private readonly State SubsequentState;
     private bool waitingForInput;
 
@@ -72,7 +71,14 @@ public class DialogPrinting_State : State
 
         if (Dialog.HasNextState())
         {
-            SetStateDirectly(new EndDialog_State(Dialog, Dialog.CurrentLine.NextState, Dialog.CurrentLine.FadeOut));
+            SetStateDirectly(new EndDialog_State(
+                Dialog,
+                Dialog.CurrentLine.NextState,
+                Dialog.CurrentLine.FadeOut,
+                Dialog.CurrentLine.PanCamera,
+                Dialog.CurrentLine.CameraPan,
+                Dialog.CurrentLine.CameraStrafe,
+                Dialog.CurrentLine.Speed));
             return;
         }
 

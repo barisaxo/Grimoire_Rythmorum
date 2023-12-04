@@ -29,7 +29,7 @@ public class PlayerShip
         Parent = new GameObject(nameof(PlayerShip));
         Parent.transform.rotation = Quaternion.Euler(new Vector3(0, RotY, 0));
 
-        GameObject go = Object.Instantiate(Assets.CatBoat);
+        GameObject go = Assets.CatBoat;
         go.name = nameof(Assets.CatBoat);
         go.transform.SetParent(Parent.transform);
         go.transform.position = Parent.transform.position;

@@ -83,7 +83,9 @@ public class GamePlayMenu_State : State
 
     protected override void DirectionPressed(Dir dir)
     {
-        if (dir == Dir.Reset) return;
+        if (dir == Dir.Right) { IncreaseItem(GamePlayMenu.Selection); return; }
+        if (dir == Dir.Left) { DecreaseItem(GamePlayMenu.Selection); return; }
+        if (dir != Dir.Up && dir != Dir.Down) return;
         GamePlayMenu.ScrollMenuItems(dir);
         ToggleTuningNote();
     }
@@ -100,6 +102,17 @@ public class GamePlayMenu_State : State
         UpdateMenu();
     }
 
+    protected override void L2Pressed()
+    {
+        Options.ScrollMenuItems(Dir.Left);
+        UpdateMenu();
+    }
+
+    protected override void R2Pressed()
+    {
+        Options.ScrollMenuItems(Dir.Right);
+        UpdateMenu();
+    }
     private void UpdateMenu()
     {
         TuningNote.Stop();
@@ -139,6 +152,12 @@ public class GamePlayMenu_State : State
     private void IncreaseItem(MenuItem<GameplayData.DataItem> item)
     {
         Data.GamePlay.IncreaseItem(item.Item);
+        item.Card.SetTextString(item.Item.DisplayData(Data.GamePlay));
+    }
+
+    private void DecreaseItem(MenuItem<GameplayData.DataItem> item)
+    {
+        Data.GamePlay.DecreaseItem(item.Item);
         item.Card.SetTextString(item.Item.DisplayData(Data.GamePlay));
     }
 

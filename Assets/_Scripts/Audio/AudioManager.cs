@@ -8,6 +8,8 @@ namespace Audio
         public BGMusic_AudioSystem BGMusic => _bgMusic ??= new BGMusic_AudioSystem(VolumeData);
         private Batterie_AudioSystem _batterie;
         public Batterie_AudioSystem Batterie => _batterie ??= new(VolumeData);
+        private AmbienceAudioSystem _ambience;
+        public AmbienceAudioSystem Ambience => _ambience ??= new(VolumeData);
 
 
         private KeyboardAudioSystem _kba;

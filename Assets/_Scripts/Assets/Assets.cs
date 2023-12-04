@@ -64,6 +64,7 @@ public static class Assets
 
     #endregion AL
 
+
     #region PINO
 
     public static Sprite Pino => Resources.Load<Sprite>("Sprites/Characters/Pino/Pino");
@@ -78,13 +79,34 @@ public static class Assets
     #region SHIPS
     public static GameObject _schooner => Resources.Load<GameObject>("Prefabs/BigBoat2");
     public static GameObject Schooner => GameObject.Instantiate(_schooner);
-    public static GameObject CatBoat => Resources.Load<GameObject>("Prefabs/Catboat2");
+
+    public static GameObject _catBoat => Resources.Load<GameObject>("Prefabs/Catboat2");
+    public static GameObject CatBoat => GameObject.Instantiate(_catBoat);
+
+    public static GameObject _cannonFire => Resources.Load<GameObject>("Prefabs/CannonFire");
+    public static ParticleSystem CannonFire => GameObject.Instantiate(_cannonFire).GetComponent<ParticleSystem>();
     #endregion SHIPS
+
+    #region FLAGS
+    public static Sprite IonianFlag => Resources.Load<Sprite>("Sprites/Flags/IonianFlag");
+    public static Sprite DorianFlag => Resources.Load<Sprite>("Sprites/Flags/DorianFlag");
+    public static Sprite PhrygianFlag => Resources.Load<Sprite>("Sprites/Flags/PhrygianFlag");
+    public static Sprite LydianFlag => Resources.Load<Sprite>("Sprites/Flags/LydianFlag");
+    public static Sprite MixoLydianFlagFlag => Resources.Load<Sprite>("Sprites/Flags/MixoLydianFlag");
+    public static Sprite AeolianFlag => Resources.Load<Sprite>("Sprites/Flags/AeolianFlag");
+    public static Sprite LocrianFlag => Resources.Load<Sprite>("Sprites/Flags/LocrianFlag");
+
+    public static Sprite ChromaticFlag => Resources.Load<Sprite>("Sprites/Flags/ChromaticFlag");
+
+    public static Sprite PirateFlag => Resources.Load<Sprite>("Sprites/Flags/PirateFlag_1");
+    #endregion FLAGS
 
 
     private static GameObject _rocks => Resources.Load<GameObject>("Prefabs/RocksParent");
     public static GameObject Rocks => GameObject.Instantiate(_rocks);
     public static GameObject Island => Resources.Load<GameObject>("Models/Island");
+
+    public static AudioClip SailAmbience => Resources.Load<AudioClip>("Audio/SFX/SailAmbience");
 
     #endregion SEA
 
@@ -94,4 +116,44 @@ public static class Assets
     public static Material Overlay_Mat => Resources.Load<Material>("Materials/Overlay_Mat");
 
     #endregion MATERIALS
+
+    public static AudioClip GetScaleChordClip(MusicTheory.RegionalMode mode) => mode switch
+    {
+        MusicTheory.RegionalMode.Aeolian => Resources.Load<AudioClip>("Audio/ScaleChords/Aeolian_Scale_Chord_2"),
+        MusicTheory.RegionalMode.Dorian => Resources.Load<AudioClip>("Audio/ScaleChords/Dorian_Scale_Chord_2"),
+        MusicTheory.RegionalMode.Lydian => Resources.Load<AudioClip>("Audio/ScaleChords/Lydian_Scale_Chord_2"),
+        MusicTheory.RegionalMode.Phrygian => Resources.Load<AudioClip>("Audio/ScaleChords/Phrygian_Scale_Chord_2"),
+        MusicTheory.RegionalMode.MixoLydian => Resources.Load<AudioClip>("Audio/ScaleChords/Mixolydian_Scale_Chord_2"),
+        MusicTheory.RegionalMode.Locrian => Resources.Load<AudioClip>("Audio/ScaleChords/Locrian_Scale_Chord_2"),
+        _ => Resources.Load<AudioClip>("Audio/ScaleChords/Ionian_Scale_Chord_2"),
+    };
+
+    public static Color RandomColor => Random.Range(0, 12) switch
+    {
+        1 => R,
+        2 => Rg,
+        3 => Y,
+        4 => Gr,
+        5 => G,
+        6 => Gb,
+        7 => C,
+        8 => Bg,
+        9 => B,
+        10 => Br,
+        11 => M,
+        _ => Rb,
+    };
+
+    public static Color R = new Color(.666f, .1666f, .1666f);
+    public static Color Rg = new Color(.666f, .333f, .1666f);
+    public static Color Y = new Color(.666f, .666f, .1666f);
+    public static Color Gr = new Color(.333f, .666f, .1666f);
+    public static Color G = new Color(.1666f, .1666f, .666f);
+    public static Color Gb = new Color(.1666f, .666f, .333f);
+    public static Color C = new Color(.1666f, .666f, .666f);
+    public static Color Bg = new Color(.1666f, .333f, .666f);
+    public static Color B = new Color(.1666f, .1666f, .666f);
+    public static Color Br = new Color(.333f, .1666f, .666f);
+    public static Color M = new Color(.666f, .1666f, .666f);
+    public static Color Rb = new Color(.666f, .1666f, .333f);
 }

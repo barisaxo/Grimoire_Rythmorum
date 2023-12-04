@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class NPCShip
 {
-
     public Vector3 PosDelta;
     public Vector3 Pos;
 
@@ -18,13 +17,33 @@ public class NPCShip
     public NPCShipType ShipType;
     public Vector3Int StartNode;
     private int _patrolIndex = 0;
-    public int PatrolIndex { get => _patrolIndex; set => _patrolIndex = value % PatrolPath.Length; }
+    public int PatrolIndex
+    {
+        get => _patrolIndex;
+        set => _patrolIndex = value.SignedMod(PatrolPath.Length);
+    }
+    public float ThreatRange = Random.Range(1.1f, 4f);
     public Vector3Int[] PatrolPath;
     public bool PathDirection = true;
     public float MoveSpeed;
     public float MoveDelta = 0;
     public float StuckTimer = Random.Range(1.1f, 5f);
     public float StuckDelta;
+    public MusicTheory.RegionalMode RegionalMode = (MusicTheory.RegionalMode)Random.Range(0, 7);
+    public string Name => "[" + RegionalMode.ToString() + " trade ship]\n";
+    public Color FlagColor = Assets.RandomColor;
+    public Sprite Flag => RegionalMode switch
+    {
+        MusicTheory.RegionalMode.Aeolian => Assets.AeolianFlag,
+        MusicTheory.RegionalMode.Dorian => Assets.DorianFlag,
+        MusicTheory.RegionalMode.Ionian => Assets.IonianFlag,
+        MusicTheory.RegionalMode.Lydian => Assets.LydianFlag,
+        MusicTheory.RegionalMode.Phrygian => Assets.PhrygianFlag,
+        MusicTheory.RegionalMode.MixoLydian => Assets.MixoLydianFlagFlag,
+        MusicTheory.RegionalMode.Locrian => Assets.LocrianFlag,
+        _ => Assets.PirateFlag
+    };
+    public AudioClip RegionalSound => Assets.GetScaleChordClip(RegionalMode);
 
     public GameObject GO;
 

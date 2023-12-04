@@ -53,6 +53,16 @@ public sealed class BGMusic_AudioSystem : AudioSystem
         // }
     }
 
+    public void PlayClip(AudioClip clip)
+    {
+        foreach (var a in AudioSources)
+        {
+            a.clip = clip;
+            a.loop = true;
+            a.Play();
+        }
+    }
+
     public void Resume()
     {
         CurrentVolumeLevel = CurrentVolumeLevel;

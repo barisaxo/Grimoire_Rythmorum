@@ -50,7 +50,7 @@ namespace Dialog
                     cs[i] = new Card(nameof(NPCIcon), Parent.transform)
                           .SetImageSprite(sprites[i])
                           .SetImageSize(Vector3.one * 2f)
-                          .SetImagePosition(new Vector3(-Cam.UIOrthoX + .75f, Cam.UIOrthoY - .75f))
+                          .SetImagePosition(new Vector3(-Cam.UIOrthoX + 1f, Cam.UIOrthoY - 1f))
                           .SetImageColor(col)
                           .SetCanvasSortingOrder(i + 11)
                           ;
@@ -63,7 +63,7 @@ namespace Dialog
         public Card DialogCard => _dialogCard ??= new Card(nameof(DialogCard), Parent.transform)
             .SetTextAlignment(TMPro.TextAlignmentOptions.TopLeft)
             .SetTMPSize(new Vector2(3.5f * Cam.Io.Camera.aspect * 2, 4f))
-            .SetTMPPosition(new Vector3(0, 2.5f))
+            .SetTMPPosition(new Vector3(1, 2.5f))
             .SetFontScale(.65f, .65f)
             .AutoSizeFont(true)
             .AllowWordWrap(true)
@@ -75,7 +75,7 @@ namespace Dialog
             .SetImageSprite(Assets.White)
             .SetImageColor(new Color(.15f, .15f, .15f, .65f))
             .SetCanvasSortingOrder(2)
-            .SetImagePosition(new Vector3(0, 2.5f))
+            .SetImagePosition(new Vector3(1, 2.5f))
             .SetImageSize(new Vector2(4f * Cam.Io.Camera.aspect * 2, 5f))
             ;
 

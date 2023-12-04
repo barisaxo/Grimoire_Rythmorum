@@ -62,6 +62,11 @@ public class GameplayData
         if (item == DataItem.Transpose) CurrentKey++;
         else if (item == DataItem.Latency) Latency++;
     }
+    public void DecreaseItem(DataItem item)
+    {
+        if (item == DataItem.Transpose) CurrentKey--;
+        else if (item == DataItem.Latency) Latency--;
+    }
 
     public class DataItem : DataEnum
     {

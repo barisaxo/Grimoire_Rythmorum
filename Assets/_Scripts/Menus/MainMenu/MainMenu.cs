@@ -4,7 +4,7 @@ namespace Menus.MainMenu
     {
         public MainMenu() : base(nameof(MainMenu)) { }
 
-        public int I { get; set; }
+        // public int I { get; set; }
 
         public override MenuLayoutStyle Style => MenuLayoutStyle.AlignRight;
 

@@ -21,6 +21,7 @@ namespace Dialog
         protected readonly string Pino = "    [Quartermaster Pino]:\n";
 
         public Dialogue SetSpeakerIcon(Sprite[] sprites) { SpeakerIcon = sprites; return this; }
+        public Dialogue SetSpeakerIcon(Sprite sprite) { SpeakerIcon = new Sprite[] { sprite }; return this; }
         public Dialogue SetSpeakerColor(Color color) { SpeakerColor = color; return this; }
         public Dialogue SetSpeakerName(string name) { SpeakerName = name; return this; }
         public Dialogue SetSpeakerText(string speakerText) { SpeakerText = speakerText; return this; }

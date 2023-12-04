@@ -2,50 +2,92 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-// using System;
 
 public class SeaScene
 {
+    #region  INSTANCE
+
+    private SeaScene()
+    {
+        SeaColor = MyCyan;
+
+        BoardSize = 11;
+        MapSize = 77;
+
+        Board = SetUpBoard();
+        Map = SetUpMap();
+
+        _ = DayCounterText;
+
+        Ship = new(this);
+        Ship.Parent.transform.SetParent(TheSea.transform);
+        Ship.Parent.transform.position = Board[(int)(Board.Count * .5f)].Loc + (Vector3.up * .3f);
+        Ship.Pos = new Vector3(1, 0, 1) * (int)(MapSize * .5f);
+        Ship.GO.transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
+
+        SetUpSeaCam();
+
+        Swells = new(this);
+        Swells.EnableSwells();
+
+        RockTheBoat.AddBoat(Ship.GO.transform, .08f, 1, 180);
+        RockTheBoat.Rocking = true;
+
+        AddShips();
+    }
+
+    public static SeaScene Io => Instance.Io;
+
+    private class Instance
+    {
+        static Instance() { }
+        static SeaScene _io;
+        internal static SeaScene Io => _io ??= new SeaScene();
+        internal static void Destruct() => _io = null;
+    }
+
     public void SelfDestruct()
     {
         Swells.DisableSwells();
         RockTheBoat.SelfDestruct();
         Object.Destroy(TheSea);
         Resources.UnloadUnusedAssets();
+        Instance.Destruct();
     }
+
+    #endregion  INSTANCE
 
     #region FIELDS
 
     public bool ShowShipCoords = false;
     public bool ShowIslandCoords = false;
-
-    public GameObject TheSea = new(nameof(TheSea));
-
-    public PlayerShip Ship;
-
-    public List<NPCShip> NPCShips = new();
-
     public bool Sailing;
     public bool haveMoved = false;
 
-    public Swells Swells;
-
-    public RockTheBoat RockTheBoat = new();
-    public CameraFollow CameraFollow;
-
+    public GameObject TheSea = new(nameof(TheSea));
     public List<GameObject> UnusedRocks = new();
     public List<GameObject> UnusedShips = new();
+    public List<GameObject> UsedRocks = new();
+    public List<GameObject> UsedShips = new();
 
-    public List<SeaGridTile> Board;
-    public SeaMapTile[] Map;
+    public Swells Swells;
+
+    public PlayerShip Ship;
+    public RockTheBoat RockTheBoat = new();
 
     public NPCShip NearNPCShip;
+    public List<NPCShip> NPCShips = new();
 
-    private bool IsOccupied(Vector3Int value)
-    {
-        foreach (var ship in NPCShips) if (ship.Coords == value) return true;
-        return false;
-    }
+    public int BoardSize { get; private set; } = 11;
+    public int SeaGridSize => BoardSize * 3;
+    public int MapSize { get; private set; }
+    // public Vector2 IslandLoc;
+
+    public Vector3Int restoreMapLoc;
+    public List<SeaGridTile> Board;
+    public SeaMapTile[] Map;
+    public Vector3Int BoardCenter => new(BoardOffset, 0, BoardOffset);
+    public int BoardOffset => Mathf.FloorToInt(BoardSize * .5f);
 
     private bool IsOpen(Vector3Int value)
     {
@@ -53,19 +95,14 @@ public class SeaScene
         return true;
     }
 
+    private bool IsOccupied(Vector3Int value)
+    {
+        foreach (var ship in NPCShips) if (ship.Coords == value) return true;
+        return false;
+    }
+
     bool IsInRange(Vector3Int v) => v.x > -1 && v.x < MapSize && v.z > -1 && v.z < MapSize;
     int PureMapIndex(int x, int z) => new Vector2(x, z).Vec2ToInt(MapSize);
-
-    public Vector3Int BoardCenter => new(BoardOffset, 0, BoardOffset);
-
-    public int BoardOffset => Mathf.FloorToInt(BoardSize * .5f);
-    public Vector3Int restoreMapLoc;
-
-    public int BoardSize { get; private set; } = 11;
-    public int SeaGridSize => BoardSize * 3;
-    public int MapSize { get; private set; }
-
-    // public Vector2 IslandLoc;
 
     public Color SeaColor;
     public Color MyGrey => new Color(.45f, .45f, .45f, .35f);
@@ -85,41 +122,37 @@ public class SeaScene
     public readonly string _islandString = "ISLAND ";
     public readonly string _commaSpaceString = ", ";
 
+    private Card _dayCounterText;
+    public Card DayCounterText => _dayCounterText ??= new Card(nameof(DayCounterText), TheSea.transform)
+        .SetTMPPosition(new Vector2(Cam.UIOrthoX - 1, Cam.UIOrthoY - 1))
+        .SetTMPSize(new Vector2(1, 1))
+        .SetTextAlignment(TextAlignmentOptions.Right)
+        .SetFontScale(.55f, .55f)
+        .AutoSizeFont(true);
+
+    private Card _sextantText;
+    public Card SextantText => _sextantText ??= new Card(nameof(SextantText), TheSea.transform)
+        .SetTMPPosition(new Vector2(0, Cam.UIOrthoY - 1))
+        .SetTMPSize(new Vector2(3, 1))
+        .SetTextAlignment(TextAlignmentOptions.Center)
+        .SetFontScale(.55f, .55f)
+        .AutoSizeFont(true);
+
+    private Card _islandCoordText;
+    public Card IslandCoordText => _islandCoordText ??= new Card(nameof(IslandCoordText), TheSea.transform)
+        .SetTMPPosition(new Vector2(-Cam.UIOrthoX + 1, Cam.UIOrthoY - 1))
+        .SetTMPSize(new Vector2(3, 1))
+        .SetTextAlignment(TextAlignmentOptions.Left)
+        .SetFontScale(.55f, .55f)
+        .AutoSizeFont(true);
+
     #endregion
 
     #region INITIALIZATION
 
-    public SeaScene()
-    {
-        SeaColor = MyCyan;
-
-        BoardSize = 11;
-        MapSize = 77;
-
-        Board = SetUpBoard();
-        Map = SetUpMap();
-
-        _ = DayCounterText;
-
-        Ship = new(this);
-        Ship.Parent.transform.SetParent(TheSea.transform);
-        Ship.Parent.transform.position = Board[(int)(Board.Count * .5f)].Loc + (Vector3.up * .3f);
-        Ship.Pos = new Vector3(1, 0, 1) * (int)(MapSize * .5f);
-
-        SetUpSeaCam();
-
-        Swells = new(this);
-        Swells.EnableSwells();
-
-        RockTheBoat.AddBoat(Ship.GO.transform, .08f, 1, 0);
-        RockTheBoat.Rocking = true;
-        AddShips();
-    }
-
     private void AddShips()
     {
         int numShips = Random.Range((int)(MapSize * .3f), (int)(MapSize * .6f));
-
         for (int i = 0; i < numShips; i++)
         {
             Vector3Int randA = Rand(i + BoardSize);
@@ -133,32 +166,30 @@ public class SeaScene
                  Map[randB.Vec3ToInt(MapSize)],
                  Map,
                  MapSize);
-            for (int n = 0; n < ab.Length; n++)
-                path.Add(new Vector3Int(ab[n].Coord.x, 0, ab[n].Coord.y));
+            for (int n = 0; n < ab.Length; n++) path.Add(new Vector3Int(ab[n].Coord.x, 0, ab[n].Coord.y));
 
             var bc = Map[randB.Vec3ToInt(MapSize)].NewSailingPath(
                  Map[randC.Vec3ToInt(MapSize)],
                  Map,
                  MapSize);
-            for (int n = 0; n < bc.Length; n++)
-                path.Add(new Vector3Int(bc[n].Coord.x, 0, bc[n].Coord.y));
+            for (int n = 0; n < bc.Length; n++) path.Add(new Vector3Int(bc[n].Coord.x, 0, bc[n].Coord.y));
 
             var cd = Map[randC.Vec3ToInt(MapSize)].NewSailingPath(
                   Map[randD.Vec3ToInt(MapSize)],
                   Map,
                   MapSize);
-            for (int n = 0; n < cd.Length; n++)
-                path.Add(new Vector3Int(cd[n].Coord.x, 0, cd[n].Coord.y));
+            for (int n = 0; n < cd.Length; n++) path.Add(new Vector3Int(cd[n].Coord.x, 0, cd[n].Coord.y));
 
             var da = Map[randD.Vec3ToInt(MapSize)].NewSailingPath(
                  Map[randA.Vec3ToInt(MapSize)],
                  Map,
                  MapSize);
-            for (int n = 0; n < da.Length; n++)
-                path.Add(new Vector3Int(da[n].Coord.x, 0, da[n].Coord.y));
+            for (int n = 0; n < da.Length; n++) path.Add(new Vector3Int(da[n].Coord.x, 0, da[n].Coord.y));
 
-            NPCShip ship = new(randA, path.ToArray());
-            foreach (var p in path) { Debug.Log(p); }
+            NPCShip ship = new(randA, path.ToArray())
+            {
+                ShipType = NPCShips.Count < numShips / 6 ? NPCShipType.Pirate : NPCShipType.Trade
+            };
             NPCShips.Add(ship);
         }
 
@@ -166,9 +197,7 @@ public class SeaScene
         {
             int r = RandInt();
             while (!Map[r].IsOpen || LocTaken(Map[r].Loc))
-            {
                 r = (r + Random.Range(BoardSize + i * BoardSize, MapSize + i * MapSize)) % (Map.Length - 1);
-            }
 
             return Map[r].Loc;
         }
@@ -191,19 +220,11 @@ public class SeaScene
     List<SeaGridTile> SetUpBoard()
     {
         List<SeaGridTile> boardTiles = new();
+
         for (int x = 0; x < SeaGridSize; x++)
-        {
             for (int z = 0; z < SeaGridSize; z++)
-            {
                 boardTiles.Add(new SeaGridTile(new Vector3Int(x, 0, z), this));
-                // if (!IsWall())
-                // bool IsWall() =>
-                //        (x - SeaGridSize) * (z - SeaGridSize) < SeaGridSize ||
-                //        (x - SeaGridSize) * -z < SeaGridSize ||
-                //        (-x * (z - SeaGridSize)) < SeaGridSize ||
-                //        (x * z) < SeaGridSize;
-            }
-        }
+
         return boardTiles;
     }
 
@@ -274,66 +295,20 @@ public class SeaScene
 
     void SetUpSeaCam()
     {
-        // Cam.Io.Camera.transform.SetParent(null);
-        // Cam.Io.Camera.transform.SetPositionAndRotation(
-        //        new Vector3(2, 1, 3.75f),
-        //        Quaternion.Euler(new Vector3(17, 90, 0)));
-
-
-        // Cam.Io.Camera.transform.SetParent(Ship.Parent.transform);
-        Cam.Io.Camera.transform.rotation = Ship.Parent.transform.rotation;
-        Cam.Io.Camera.transform.position = Ship.Parent.transform.parent.position;
+        Cam.Io.Camera.transform.SetPositionAndRotation(Ship.Parent.transform.parent.position, Ship.Parent.transform.rotation);
         Cam.Io.Camera.transform.Translate(Vector3.up - (Cam.Io.Camera.transform.forward * 2));
         Cam.Io.Camera.transform.LookAt(Ship.GO.transform, Vector3.up);
-        // Cam.Io.Camera.transform.Translate(new Vector3(0, .5f, -2), Ship.GO.transform);
         Cam.Io.Camera.transform.Rotate(new Vector3(-10, 0, 0));
 
-
-        CameraFollow = new(Ship.Parent.transform)
-        {
-            LockYPos = true,
-            LockXRot = true,
-            LockWRot = true,
-            LockZRot = true,
-        };
-
-        var l = new GameObject(nameof(Light)).AddComponent<Light>();
+        Light l = new GameObject(nameof(Light)).AddComponent<Light>();
+        l.transform.SetParent(TheSea.transform);
         l.type = LightType.Directional;
         l.color = new Color(.9f, .8f, .65f);
         l.shadows = LightShadows.None;
         l.transform.SetPositionAndRotation(Cam.Io.Camera.transform.position, Cam.Io.Camera.transform.rotation);
         l.transform.Rotate(new Vector3(45, 0, 0));
         l.intensity = 1.95f;
-
-        // float CamPosZ() => 1.5f;
-        // float CamPosY() => 17 / Cam.Io.Camera.aspect;
-        // float CamRotX() => 75;
-        // Vector3 CenterPos() => SeaGrid[(int)(SeaGrid.Count * .5f)].Loc;
     }
-
-    private Card _dayCounterText;
-    public Card DayCounterText => _dayCounterText ??= new Card(nameof(DayCounterText), TheSea.transform)
-        .SetTMPPosition(new Vector2(Cam.UIOrthoX - 1, Cam.UIOrthoY - 1))
-        .SetTMPSize(new Vector2(1, 1))
-        .SetTextAlignment(TextAlignmentOptions.Right)
-        .SetFontScale(.55f, .55f)
-        .AutoSizeFont(true);
-
-    private Card _sextantText;
-    public Card SextantText => _sextantText ??= new Card(nameof(SextantText), TheSea.transform)
-        .SetTMPPosition(new Vector2(0, Cam.UIOrthoY - 1))
-        .SetTMPSize(new Vector2(3, 1))
-        .SetTextAlignment(TextAlignmentOptions.Center)
-        .SetFontScale(.55f, .55f)
-        .AutoSizeFont(true);
-
-    private Card _islandCoordText;
-    public Card IslandCoordText => _islandCoordText ??= new Card(nameof(IslandCoordText), TheSea.transform)
-        .SetTMPPosition(new Vector2(-Cam.UIOrthoX + 1, Cam.UIOrthoY - 1))
-        .SetTMPSize(new Vector2(3, 1))
-        .SetTextAlignment(TextAlignmentOptions.Left)
-        .SetFontScale(.55f, .55f)
-        .AutoSizeFont(true);
 
     #endregion
 }

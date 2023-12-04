@@ -42,9 +42,6 @@ public class DataManager
 
     //public void ResetCharacterAndPlayerData() { _characterData = new CharacterData(); _playerData = new PlayerData(); }
 
-    public SeaScene SeaScene;
-
-
     const string fileName = "save.me";
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]

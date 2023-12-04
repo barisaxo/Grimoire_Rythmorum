@@ -35,7 +35,7 @@ public class TheoryPuzzleData
 
         if (!containsStat)
         {
-            Stats = Stats.Add(puzzleStat);
+            Helpers.Combine(ref Stats, puzzleStat);
         }
 
         //foreach (PuzzleStat stat in Stats)

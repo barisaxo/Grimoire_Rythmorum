@@ -23,13 +23,8 @@ namespace Menus.OptionsMenu
             public static readonly OptionsItem GamePlay = new(1, "GAME PLAY");
             public static OptionsItem Controls = new(2, "CONTROLS");
 
-            public OptionsItem() : base(0, "")
-            {
-            }
-
-            private OptionsItem(int id, string name) : base(id, name)
-            {
-            }
+            public OptionsItem() : base(0, "") { }
+            private OptionsItem(int id, string name) : base(id, name) { }
         }
     }
 }

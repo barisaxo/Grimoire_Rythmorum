@@ -37,6 +37,15 @@ public class CameraFollow
         MonoHelper.OnUpdate -= Follow;
     }
 
+    public void Pause()
+    {
+        MonoHelper.OnUpdate -= Follow;
+    }
+
+    public void Resume()
+    {
+        MonoHelper.OnUpdate += Follow;
+    }
 
     void Follow()
     {

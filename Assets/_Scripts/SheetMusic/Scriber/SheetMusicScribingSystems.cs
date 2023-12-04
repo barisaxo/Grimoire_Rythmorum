@@ -218,7 +218,7 @@ namespace SheetMusic
                          notes[i].QuantizedRhythmicValue != RhythmicValue.Sixteenth) ||
                          notes[i].Rest) continue;
 
-                    bool toflag = true;
+                    bool toFlag = true;
                     bool ef = false, er = false, sf = false, sr = false;
                     bool sfb = false, srb = false, efb = false, erb = false;
 
@@ -230,7 +230,7 @@ namespace SheetMusic
                     {
                         ef = true;
                         efb = true;
-                        toflag = false;
+                        toFlag = false;
                     }
 
                     if (i > 0 && !notes[i - 1].Rest && notes[i - 1].ParentCell == notes[i].ParentCell &&
@@ -241,7 +241,7 @@ namespace SheetMusic
                     {
                         er = true;
                         erb = true;
-                        toflag = false;
+                        toFlag = false;
                     }
 
                     if (notes[i].QuantizedRhythmicValue == RhythmicValue.Sixteenth && !notes[i].Rest)
@@ -251,38 +251,38 @@ namespace SheetMusic
                             case CellShape.LS:
                                 if (!notes[i - 1].Rest)
                                 {
-                                    toflag = false;
+                                    toFlag = false;
                                     sr = erb = true;
                                 }
                                 break;
 
                             case CellShape.SL:
-                                toflag = false;
+                                toFlag = false;
                                 sf = efb = true;
                                 break;
 
                             case CellShape.SLS:
-                                toflag = false;
+                                toFlag = false;
                                 sf = efb = i < notes.Length - 1 && notes[i + 1].ParentCell == notes[i].ParentCell;
                                 sr = erb = i > 0 && notes[i - 1].ParentCell == notes[i].ParentCell && !notes[i - 1].Rest;
                                 break;
 
                             case CellShape.SSL:
-                                toflag = false;
+                                toFlag = false;
                                 sf = sfb = i < notes.Length - 1 && notes[i + 1].ParentCell == notes[i].ParentCell && notes[i + 1].QuantizedRhythmicValue == RhythmicValue.Sixteenth;
                                 sr = srb = erb = i > 0 && notes[i - 1].ParentCell == notes[i].ParentCell && notes[i - 1].QuantizedRhythmicValue == RhythmicValue.Sixteenth;// && !ns[i - 1].Rest;
                                 efb = true;
                                 break;
 
                             case CellShape.LSS:
-                                toflag = false;
+                                toFlag = false;
                                 sf = sfb = efb = i < notes.Length - 1 && notes[i + 1].ParentCell == notes[i].ParentCell && notes[i + 1].QuantizedRhythmicValue == RhythmicValue.Sixteenth;
                                 sr = srb = i > 0 && !notes[i - 1].Rest && notes[i - 1].ParentCell == notes[i].ParentCell && notes[i - 1].QuantizedRhythmicValue == RhythmicValue.Sixteenth; //&& !ns[i - 1].Rest;
                                 erb = !notes[i - 1].Rest;
                                 break;
 
                             case CellShape.SSSS:
-                                toflag = false;
+                                toFlag = false;
                                 sf = sfb = efb = i < notes.Length - 1 && notes[i + 1].ParentCell == notes[i].ParentCell && notes[i + 1].QuantizedRhythmicValue == RhythmicValue.Sixteenth;
                                 sr = srb = erb = i > 0 && !notes[i - 1].Rest && notes[i - 1].ParentCell == notes[i].ParentCell && notes[i - 1].QuantizedRhythmicValue == RhythmicValue.Sixteenth;
                                 break;
@@ -290,7 +290,7 @@ namespace SheetMusic
 
                     }
 
-                    if (toflag)
+                    if (toFlag)
                     {
                         Card flag = notes[i].Card.CreateChild(nameof(flag), notes[i].Card.Image.transform, notes[i].Card.Canvas)
                             .SetImagePosition(Vector3.zero)
@@ -349,8 +349,6 @@ namespace SheetMusic
                             .SetImageSprite(SheetMusicAssets.SixteenthBeamReverse)
                             .SetImageSizeUnscaled(new Vector3(notes[i].Card.Image.rectTransform.sizeDelta.x * 1.55f * (ScaledToFit(NotePosition(ms, notes[i].BeatLocation).x, NotePosition(ms, notes[i - 1].BeatLocation).x)), notes[i].Card.Image.rectTransform.sizeDelta.y, 1))
                             .SetImagePosition(Vector3.left * (ScaledToFit(NotePosition(ms, notes[i].BeatLocation).x, NotePosition(ms, notes[i - 1].BeatLocation).x) * .1f));
-                        //.SetImagePosition(Vector3.zero)
-                        //;
                     }
                     void AddForward8thBeamBridge()
                     {
@@ -365,7 +363,6 @@ namespace SheetMusic
                             .SetImageSprite(SheetMusicAssets.EighthBeamReverse)
                             .SetImageSizeUnscaled(new Vector3(notes[i].Card.Image.rectTransform.sizeDelta.x * 1.75f * (ScaledToFit(NotePosition(ms, notes[i].BeatLocation).x, NotePosition(ms, notes[i - 1].BeatLocation).x)), notes[i].Card.Image.rectTransform.sizeDelta.y, 1))
                             .SetImagePosition(Vector3.left * (ScaledToFit(NotePosition(ms, notes[i].BeatLocation).x, NotePosition(ms, notes[i - 1].BeatLocation).x) * 0.05f));
-                        //.SetImagePosition(Vector3.zero);
                         ;
                     }
 

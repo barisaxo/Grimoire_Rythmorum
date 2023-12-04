@@ -37,7 +37,7 @@ public struct ChordByte
         StartPos = (((float)chordQuality / (float)chordQuality.Count() / 12f) + ((float)RootNote / 12f));// * AudioClip.length;
 
         // AudioClip = Assets.GetAudioClip(genre, axe, (int)tempo);//new AudioParser(Genre, Tempo, Axe).AC;
-        Debug.Log(chordQuality);
+        // Debug.Log(chordQuality);
     }
 
 

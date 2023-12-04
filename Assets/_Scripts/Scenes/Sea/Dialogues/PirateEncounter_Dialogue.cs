@@ -3,12 +3,11 @@ using UnityEngine;
 
 public class PirateEncounter_Dialogue : Dialogue
 {
-    public PirateEncounter_Dialogue(Sprite ship)
+    public PirateEncounter_Dialogue()
     {
-        ShipSprite = ship;
+
     }
 
-    readonly Sprite ShipSprite;
 
     public override Dialogue Initiate()
     {
@@ -31,9 +30,9 @@ public class PirateEncounter_Dialogue : Dialogue
 
     Line Line4 => new Line("(press space or tap to perform the rhythms)", Line5);
 
-    Line Line5 => new Line("Sending drum cadence now... Counting off...", new NewBatterie_State(new BatteriePack()))
-         .SetSpeakerIcon(Assets.Pino)
-         .SetSpeakerName(Pino)
-         .FadeToNextState();
+    Line Line5 => new Line("Sending drum cadence now... Counting off...", new BatterieAndCadence_State(new BatteriePack()))
+        .SetSpeakerIcon(Assets.Pino)
+        .SetSpeakerName(Pino)
+        .FadeToNextState();
 
 }
