@@ -7,8 +7,8 @@ public class EndPuzzle_Dialogue : Dialogue
     public readonly int _gold, _mats, _rations, _damage;
     public readonly bool _won;
 
-    string Recap => _won ? "Great job! Muscopa champ in the making!\n" :
-                           "No worries mate! You'll do better next time.\nCheck the menu for tutorials if you need help.\n";
+    string Recap => _won ? "Great job Cap'n! You'll be the best Bard yet!\n" :
+                           "No worries Cap! You'll do better next time.\nCheck the menu for tutorials if you need help.\n";
     string Won => _won ? "We won " : "We lost ";
     string Gold => _gold + " gold, ";
     string Mats => _mats + " materials, and ";
@@ -18,13 +18,13 @@ public class EndPuzzle_Dialogue : Dialogue
     string SextantDef => "Great find Cap'n! This sextant reveals our current position.\n" +
         "We need both the map and the sextant to find the Cromatica.";
 
-    public EndPuzzle_Dialogue()
+    public EndPuzzle_Dialogue(bool won)
     {
-        _won = true;
+        _won = won;
         SpeakerIcon = new UnityEngine.Sprite[] { SeaScene.Io.NearNPCShip.Flag };
         SpeakerName = SeaScene.Io.NearNPCShip.Name;
         SpeakerColor = SeaScene.Io.NearNPCShip.FlagColor;
-        FirstLine = RecapLineWithSextant;
+        FirstLine = _won ? RecapLineWithSextant : RecapLineWithOutSextant;
     }
 
 
@@ -52,18 +52,18 @@ public class EndPuzzle_Dialogue : Dialogue
         .SetSpeakerColor(SpeakerColor)
         .SetSpeakerName(SpeakerName);
 
-    Line RecapLineWithOutSextant => new Line(Recap, ResultsWithOutSextant)
-        .SetSpeakerIcon(SpeakerIcon)
-        .SetSpeakerColor(SpeakerColor)
-        .SetSpeakerName(SpeakerName);
+    Line RecapLineWithOutSextant => new Line(Recap, FunFactLine)
+        .SetSpeakerIcon(Assets.Pino)
+        .SetSpeakerName(Pino);
 
     Line ResultsWithSextant => new Line(Sextant, SextantLine)
         .SetSpeakerIcon(Assets.Pino)
         .SetSpeakerName(Pino);
 
     Line ResultsWithOutSextant => new Line(Won + Gold + Mats + Rations, FunFactLine)
-        .SetSpeakerIcon(Assets.Pino)
-        .SetSpeakerName(Pino);
+        .SetSpeakerIcon(SpeakerIcon)
+        .SetSpeakerColor(SpeakerColor)
+        .SetSpeakerName(SpeakerName);
 
     Line FunFactLine => new Line(FunFact.GetFunFact(), new NPCSailAway_State(new SeaScene_State()))
         .SetSpeakerIcon(SpeakerIcon)

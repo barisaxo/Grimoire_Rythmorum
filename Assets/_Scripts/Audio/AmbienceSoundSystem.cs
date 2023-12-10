@@ -4,23 +4,23 @@ using System.Collections;
 
 public sealed class AmbienceAudioSystem : AudioSystem
 {
-    public AmbienceAudioSystem(VolumeData volumeData) : base(2, nameof(SoundFXAudioSystem))
+    public AmbienceAudioSystem(VolumeData volumeData) : base(1, nameof(SoundFXAudioSystem))
     {
         AudioSources[0].volume = volumeData.GetScaledLevel(VolumeData.DataItem.SoundFX);
-        AudioSources[1].volume = volumeData.GetScaledLevel(VolumeData.DataItem.SoundFX);
     }
 
     public void PlayOneShot(AudioClip ac)
     {
+        AudioSources[0].loop = false;
         AudioSources[0].clip = ac;
         AudioSources[0].Play();
     }
 
     public void PlayClip(AudioClip ac)
     {
-        AudioSources[1].clip = ac;
-        AudioSources[1].Play();
-        AudioSources[1].loop = true;
+        AudioSources[0].loop = true;
+        AudioSources[0].clip = ac;
+        AudioSources[0].Play();
     }
 
     public void StopClip()

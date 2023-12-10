@@ -156,7 +156,7 @@ public class AetherScene
         // bc.size = new Vector3(.4f, 1, 1.5f);
         go.transform.localScale = Vector3.one * 2f;
         RockTheBoat = new();
-        RockTheBoat.AddBoat(go.transform, .08f, 1, 90);
+        RockTheBoat.AddBoat(go.transform, (.08f, 1, 0));
         RockTheBoat.Rocking = true;
         return go;
     }

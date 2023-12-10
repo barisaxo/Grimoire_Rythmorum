@@ -24,6 +24,8 @@ public class MoveNPCOffScreen_State : State
         }
 
         SeaScene.Io.UnusedShips.Add(NPC.GO);
+        SeaScene.Io.UsedShips.Remove(NPC.GO);
+        SeaScene.Io.RockTheBoat.RemoveBoat(NPC.GO.transform);
         NPC.GO.SetActive(false);
         NPC.GO = null;
         NPC.PatrolIndex = i;

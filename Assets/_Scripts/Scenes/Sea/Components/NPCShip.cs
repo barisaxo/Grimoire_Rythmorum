@@ -12,8 +12,7 @@ public class NPCShip
     public float RotY;
     public float YTurn;
     public float NewRotY;
-    public float SwayAmp;
-    public float SwayPeriod;
+    public (float amp, float period, float offset) Sway;
     public NPCShipType ShipType;
     public Vector3Int StartNode;
     private int _patrolIndex = 0;
@@ -30,9 +29,9 @@ public class NPCShip
     public float StuckTimer = Random.Range(1.1f, 5f);
     public float StuckDelta;
     public MusicTheory.RegionalMode RegionalMode = (MusicTheory.RegionalMode)Random.Range(0, 7);
-    public string Name => "[" + RegionalMode.ToString() + " trade ship]\n";
+    public string Name => "[" + RegionalMode.ToString() + " trade ship]:\n";
     public Color FlagColor = Assets.RandomColor;
-    public Sprite Flag => RegionalMode switch
+    public Sprite Flag => ShipType == NPCShipType.Trade ? RegionalMode switch
     {
         MusicTheory.RegionalMode.Aeolian => Assets.AeolianFlag,
         MusicTheory.RegionalMode.Dorian => Assets.DorianFlag,
@@ -40,24 +39,25 @@ public class NPCShip
         MusicTheory.RegionalMode.Lydian => Assets.LydianFlag,
         MusicTheory.RegionalMode.Phrygian => Assets.PhrygianFlag,
         MusicTheory.RegionalMode.MixoLydian => Assets.MixoLydianFlagFlag,
-        MusicTheory.RegionalMode.Locrian => Assets.LocrianFlag,
-        _ => Assets.PirateFlag
-    };
+        _ => Assets.LocrianFlag,
+    } : Assets.PirateFlag;
     public AudioClip RegionalSound => Assets.GetScaleChordClip(RegionalMode);
 
     public GameObject GO;
 
     public NPCShip(Vector3Int start, Vector3Int[] path)
     {
+        start.y = 0;
         PosDelta = start;
         Pos = start;
         StartNode = start;
-
+        Debug.Log(Pos);
         PatrolPath = path;
 
         RotY = 90 * Random.Range(0, 4);
-        SwayAmp = Random.Range(5f, 10f);
-        SwayPeriod = Random.Range(.5f, 2f);
+        Sway.amp = Random.Range(.01f, .1f);
+        Sway.period = Random.Range(.5f, 2f);
+        Sway.offset = Random.Range(-10f, 10f);
         MoveSpeed = Random.Range(.2f, .5f);
     }
 }

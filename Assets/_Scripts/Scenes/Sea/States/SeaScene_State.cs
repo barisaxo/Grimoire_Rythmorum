@@ -1,20 +1,23 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class SeaScene_State : State
 {
+    SeaScene SeaScene => SeaScene.Io;
+
+    Vector3 ShipVelocity = Vector3.zero;
+    public CameraFollow CameraFollow;
+
+    bool up, down, left, right;
+    float TimeSinceLastL;
+
     protected override void PrepareState(Action callback)
     {
         _ = SeaScene;
-
-        MonoHelper.OnUpdate += CheckInput;
-        MonoHelper.OnUpdate += FPS;
-        MonoHelper.OnUpdate += CheckNMETriggers;
-        MonoHelper.OnFixedUpdate += Movement;
-
+        // return;
+        SeaScene.SeaHUD.HUD.GO.SetActive(true);
+        SeaScene.SeaHUD.Show();
         CameraFollow = new(SeaScene.Ship.Parent.transform)
         {
             LockYPos = true,
@@ -31,7 +34,13 @@ public class SeaScene_State : State
             Audio.BGMusic.Resume();
         else Audio.BGMusic.PlayClip(Assets.BGMus4);
 
-        Audio.Ambience.PlayClip(Assets.SailAmbience);
+        if (Audio.Ambience.AudioSources[0].clip == Assets.SailAmbience)
+            Audio.Ambience.Resume();
+        else
+        {
+            Audio.Ambience.AudioSources[0].time = UnityEngine.Random.Range(0, Assets.SailAmbience.length);
+            Audio.Ambience.PlayClip(Assets.SailAmbience);
+        }
 
         PanCamera().StartCoroutine();
         IEnumerator PanCamera()
@@ -44,15 +53,21 @@ public class SeaScene_State : State
             }
         }
 
+        SeaScene.Io.SeaHUD.HUD.GO.SetActive(true);
         base.PrepareState(callback);
     }
+
     protected override void EngageState()
     {
-
+        MonoHelper.OnUpdate += CheckInput;
+        MonoHelper.OnUpdate += ShipCoords;
+        MonoHelper.OnUpdate += CheckNMETriggers;
+        MonoHelper.OnFixedUpdate += Movement;
     }
 
     protected override void DisengageState()
     {
+        SeaScene.SeaHUD.Hide();
         RStick.y = .01f;
 
         Cam.StoredCamRot = Cam.Io.Camera.transform.rotation.eulerAngles;
@@ -60,28 +75,10 @@ public class SeaScene_State : State
         CameraFollow.SelfDestruct();
 
         MonoHelper.OnUpdate -= CheckInput;
-        MonoHelper.OnUpdate -= FPS;
+        MonoHelper.OnUpdate -= ShipCoords;
         MonoHelper.OnUpdate -= CheckNMETriggers;
         MonoHelper.OnFixedUpdate -= Movement;
-
-        // SeaScene.RockTheBoat.Rocking = false;
-        // SeaScene.Swells.DisableSwells();
-
-        // Audio.Ambience.Stop();
-        // Audio.BGMusic.Pause();
-
-        // SeaScene.Io.Ship.GO.transform.rotation = Quaternion.Euler(
-        //     new Vector3(
-        //         SeaScene.Io.Ship.GO.transform.rotation.eulerAngles.x,
-        //         SeaScene.Io.Ship.GO.transform.rotation.eulerAngles.y,
-        //         0));
     }
-
-    SeaScene SeaScene => SeaScene.Io;
-    Vector3 ShipVelocity = Vector3.zero;
-    public CameraFollow CameraFollow;
-
-    bool up, down, left, right;
 
     protected override void DirectionPressed(Dir dir)
     {
@@ -125,10 +122,15 @@ public class SeaScene_State : State
         else ShipVelocity.x *= .9f;
 
         ShipVelocity = SeaScene.UpdateMap(ShipVelocity);
+
+        if (TimeSinceLastL < 1.5f) { SeaScene.SeaHUD.Hide(); }//Debug.Log("Hide");
+        else { SeaScene.SeaHUD.Show(); }//Debug.Log("Show");
+
+        TimeSinceLastL += Time.deltaTime;
     }
 
 
-    protected override void InteractPressed()
+    protected override void EastPressed()
     {
         if (SeaScene.NearNPCShip == null) return;
         Audio.SFX.PlayOneShot(SeaScene.Io.NearNPCShip.RegionalSound);
@@ -137,7 +139,15 @@ public class SeaScene_State : State
 
     protected override void StartPressed()
     {
-        SetStateDirectly(new SeaToMenuTransition_State());
+        Debug.Log("Start");
+        SetStateDirectly(new CameraPan_State(
+             new SeaToMenuTransition_State(),
+                 pan: new Vector3(
+                     -50,
+                     Cam.Io.Camera.transform.rotation.eulerAngles.y,
+                     Cam.Io.Camera.transform.rotation.eulerAngles.z),
+                 strafe: Cam.Io.Camera.transform.position,
+                 speed: 3));
     }
 
     protected override void SelectPressed()
@@ -149,6 +159,7 @@ public class SeaScene_State : State
     {
         ShipVelocity.z = Mathf.Clamp(ShipVelocity.z + (Time.deltaTime * v2.y * .8f), -.3f, .8f);
         ShipVelocity.x = Mathf.Clamp(ShipVelocity.x - Time.deltaTime * -v2.x * 3, -1f, 1f);
+        if (v2 != Vector2.zero) { TimeSinceLastL = 0; }
     }
 
     protected override void RStickInput(Vector2 v2)
@@ -157,24 +168,21 @@ public class SeaScene_State : State
         CameraFollow.MoveCamera(v2.y);
     }
 
-
-    int frames = 0;
-    float elapsed = 0;
-    const float interval = 1;
-    float timer = 0;
-
-    void FPS()
+    protected override void WestPressed()
     {
-        frames++;
-        elapsed += Time.deltaTime;
-        timer += Time.deltaTime;
-        if (timer >= interval)
-        {
-            timer -= interval;
-            SeaScene.DayCounterText.TextString = ((int)(frames / elapsed)).ToString();
-            frames = 0;
-            elapsed = 0;
-        }
+        SetStateDirectly(
+            new CameraPan_State(
+                new SeaInspection_State(),
+                new Vector3(45, 180, 0),
+                new Vector3(5.5f, 5, 13),
+                3.5f
+            ));
+    }
+
+
+    void ShipCoords()
+    {
+        SeaScene.DayCounterText.TextString = SeaScene.Ship.Coord.x.ToString() + " : " + SeaScene.Ship.Coord.z.ToString();
     }
 
     void CheckNMETriggers()
@@ -183,9 +191,7 @@ public class SeaScene_State : State
             if (npc.ShipType == NPCShipType.Pirate && Vector3.Distance(npc.Coords, SeaScene.Io.Ship.Coord) < npc.ThreatRange)
             {
                 SeaScene.Io.NearNPCShip = npc;
-                SetStateDirectly(new NMESailApproach_State(
-                    new SeaToDialogueTransition_State(
-                        new PirateEncounter_Dialogue())));
+                SetStateDirectly(new NMESailApproach_State());
                 return;
             }
     }

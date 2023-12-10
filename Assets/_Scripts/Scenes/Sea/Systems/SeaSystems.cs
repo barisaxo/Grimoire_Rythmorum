@@ -16,17 +16,17 @@ public static class SeaSystems
     public static event Action SailingFinished;
     public static void EndSailing() => SailingFinished?.Invoke();
 
-
     public static Vector3 UpdateMap(this SeaScene sea, Vector3 dir)
     {
-        var newV3 = UpdateShipPos(sea, dir);
-        UpdateMapObjects(sea);
         sea.UpdateNPCShips();
+        UpdateMapObjects(sea);
+        var newV3 = UpdateShipPos(sea, dir);
         return newV3;
     }
 
     private static Vector3 UpdateShipPos(this SeaScene sea, Vector3 dir)
     {
+        sea.Ship.Bark.GO.SetActive(false);
         if (dir.x != 0) sea.Ship.Parent.transform.Rotate(new Vector3(0, dir.x * Time.fixedDeltaTime * sea.Ship.RotateSpeed, 0));
 
         if (dir.z != 0)
@@ -41,40 +41,42 @@ public static class SeaSystems
                     (sea.Ship.Pos.z + posDelta.z).IsPOM(1f, npc.Pos.z))
                 {
                     posDelta.z *= .9f;
-                    sea.DayCounterText.TextString = "...";
+                    // sea.DayCounterText.TextString = "...";
+                    sea.Ship.Bark.GO.SetActive(true);
                     sea.NearNPCShip = npc;
                     noNearNPCs = false;
 
                     CapsuleCollider npcCol = npc.GO.GetComponent<CapsuleCollider>();
 
-                    Vector3 a = npcCol.ClosestPoint(sea.Ship.GO.transform.position);
-                    Vector3 b = sea.Ship.CapsuleCollider.ClosestPoint(npc.GO.transform.position);
-                    Vector3 a2 = npcCol.ClosestPoint(b);
-                    Vector3 b2 = sea.Ship.CapsuleCollider.ClosestPoint(a);
-                    Vector3 a3 = npcCol.ClosestPoint(b2);
-                    Vector3 b3 = sea.Ship.CapsuleCollider.ClosestPoint(a2);
+                    Vector3 b = npcCol.ClosestPoint(sea.Ship.GO.transform.position);
+                    Vector3 a = sea.Ship.CapsuleCollider.ClosestPoint(npc.GO.transform.position);
+                    Vector3 b2 = npcCol.ClosestPoint(b);
+                    Vector3 a2 = sea.Ship.CapsuleCollider.ClosestPoint(a);
+                    Vector3 b3 = npcCol.ClosestPoint(b2);
+                    Vector3 a3 = sea.Ship.CapsuleCollider.ClosestPoint(a2);
 
                     if (Vector3.Distance(a3, b3) < .2f)
                     {
-                        sea.DayCounterText.TextString = "!!!";
-                        var normal = b3.NormalDirection(a3);
-                        posDelta.x *= normal.x;
-                        posDelta.z *= normal.z;
-                        Debug.Log(b3.NormalDirection(a3));
+                        // sea.DayCounterText.TextString = "!!!";
+                        if (b3.x - a3.x > b3.z - a3.z)
+                            posDelta.z *= Mathf.Clamp(sea.NearNPCShip.GO.transform.position.z - sea.Ship.GO.transform.position.z, 0.1f, 1);
+                        else posDelta.x *= Mathf.Clamp(sea.NearNPCShip.GO.transform.position.x - sea.Ship.GO.transform.position.x, 0.1f, 1);
                     }
                 }
             }
             if (noNearNPCs) sea.NearNPCShip = null;
 
             if (sea.IsInBounds(posDelta.x, posDelta.z) &&
-                sea.Map[sea.MapIndex(posDelta.x, posDelta.z)].Type == SeaMapTileType.OpenSea)
+               (sea.Map[sea.MapIndex(posDelta.x, posDelta.z)].Type == SeaMapTileType.OpenSea ||
+                sea.Map[sea.MapIndex(posDelta.x, posDelta.z)].Type == SeaMapTileType.Center))
             {
                 sea.Ship.Pos += posDelta;
                 sea.Swells.Offset += (posDelta.z + posDelta.x) * .45f;
             }
 
             else if (sea.IsInBounds(0, posDelta.z) &&
-                     sea.Map[sea.MapIndex(0, posDelta.z)].Type == SeaMapTileType.OpenSea)
+                    (sea.Map[sea.MapIndex(0, posDelta.z)].Type == SeaMapTileType.OpenSea ||
+                     sea.Map[sea.MapIndex(posDelta.x, posDelta.z)].Type == SeaMapTileType.Center))
             {
                 dir.z = Mathf.Clamp(dir.z, -.2f, .2f);
                 sea.Ship.Pos += new Vector3(0, 0, posDelta.z);
@@ -82,7 +84,8 @@ public static class SeaSystems
             }
 
             else if (sea.IsInBounds(posDelta.x, 0) &&
-                     sea.Map[sea.MapIndex(posDelta.x, 0)].Type == SeaMapTileType.OpenSea)
+                    (sea.Map[sea.MapIndex(posDelta.x, 0)].Type == SeaMapTileType.OpenSea ||
+                     sea.Map[sea.MapIndex(posDelta.x, posDelta.z)].Type == SeaMapTileType.Center))
             {
                 dir.z = Mathf.Clamp(dir.z, -.2f, .2f);
                 sea.Ship.Pos += new Vector3(posDelta.x, 0, 0);
@@ -110,7 +113,6 @@ public static class SeaSystems
         {
             if (!sea.IsInBounds(x, z)) return;
             var coord = sea.OffsetMapCoords(x, z);
-
             if (x == -1 || z == -1 || x == sea.BoardSize || z == sea.BoardSize)
             {
                 if (sea.Map[sea.OffsetMapIndex(x, z)].GO != null)
@@ -128,6 +130,7 @@ public static class SeaSystems
                         if (ship.GO != null)
                         {
                             sea.UsedShips.Remove(ship.GO);
+                            sea.RockTheBoat.RemoveBoat(ship.GO.transform);
                             sea.UnusedShips.Add(ship.GO);
                             ship.GO.SetActive(false);
                             ship.GO = null;
@@ -163,7 +166,10 @@ public static class SeaSystems
 
             if (sea.Map[sea.OffsetMapIndex(x, z)].GO != null)
                 sea.Map[sea.OffsetMapIndex(x, z)].GO.transform.SetPositionAndRotation(
-                    sea.Map[sea.OffsetMapIndex(x, z)].Loc - sea.Ship.Pos + sea.BoardCenter + new Vector3(.75f, -.5f, .75f),
+                    new Vector3(
+                        sea.Map[sea.OffsetMapIndex(x, z)].Loc.x - sea.Ship.Pos.x + sea.BoardCenter.x + .75f,
+                        -.5f,
+                        sea.Map[sea.OffsetMapIndex(x, z)].Loc.z - sea.Ship.Pos.z + sea.BoardCenter.z + .75f),
                     Quaternion.Euler(new Vector3(0, sea.Map[sea.OffsetMapIndex(x, z)].RotY, 0)));
 
             foreach (NPCShip npc in sea.NPCShips)
@@ -175,7 +181,8 @@ public static class SeaSystems
                         if (sea.UnusedShips.Count > 0)
                         {
                             npc.GO = sea.UnusedShips[0];
-                            sea.UsedShips.Add(sea.UnusedShips[0]);
+                            sea.UsedShips.Add(npc.GO);
+                            sea.RockTheBoat.AddBoat(npc.GO.transform, npc.Sway);
                             sea.UnusedShips.RemoveAt(0);
                             npc.GO.SetActive(true);
                         }
@@ -183,6 +190,7 @@ public static class SeaSystems
                         {
                             npc.GO = Assets.Schooner;
                             npc.GO.transform.SetParent(SeaScene.Io.TheSea.transform);
+                            sea.RockTheBoat.AddBoat(npc.GO.transform, npc.Sway);
                             sea.UsedShips.Add(npc.GO);
                         }
                     }
@@ -202,7 +210,7 @@ public static class SeaSystems
     {
         for (int i = 0; i < Sea.NPCShips.Count; i++)
         {
-            int pd = Sea.NPCShips[i].PathDirection ? 1 : -1;
+            int pathDirection = Sea.NPCShips[i].PathDirection ? 1 : -1;
 
             Vector3Int dir = Sea.NPCShips[i].PatrolPath[Sea.NPCShips[i].PatrolIndex] - Sea.NPCShips[i].Coords;
             Vector3 posDelta = Time.deltaTime * Sea.NPCShips[i].MoveSpeed * (Vector3)dir;
@@ -262,13 +270,13 @@ public static class SeaSystems
 
             if (Sea.NPCShips[i].Coords == Sea.NPCShips[i].PatrolPath[Sea.NPCShips[i].PatrolIndex])
             {
-                Sea.NPCShips[i].PatrolIndex += pd;
+                Sea.NPCShips[i].PatrolIndex += pathDirection;
             }
         }
     }
 
     public static Vector3Int OffsetMapCoords(this SeaScene sea, int x, int z) =>
-        new Vector3Int(x + sea.Ship.Coord.x - sea.BoardOffset, 0, z + sea.Ship.Coord.z - sea.BoardOffset);
+        new(x + sea.Ship.Coord.x - sea.BoardOffset, 0, z + sea.Ship.Coord.z - sea.BoardOffset);
 
     public static int OffsetMapIndex(this SeaScene sea, int x, int z) =>
         new Vector2(x + sea.Ship.Pos.x - sea.BoardOffset, z + sea.Ship.Pos.z - sea.BoardOffset)

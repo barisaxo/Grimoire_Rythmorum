@@ -17,8 +17,8 @@ namespace Dialog
 
         public string SpeakerName = "\n";
         public string SpeakerText = string.Empty;
-        protected readonly string AL = "    [AL]:\n";
-        protected readonly string Pino = "    [Quartermaster Pino]:\n";
+        protected readonly string AL = "[AL]:\n";
+        protected readonly string Pino = "[Quartermaster Pino]:\n";
 
         public Dialogue SetSpeakerIcon(Sprite[] sprites) { SpeakerIcon = sprites; return this; }
         public Dialogue SetSpeakerIcon(Sprite sprite) { SpeakerIcon = new Sprite[] { sprite }; return this; }

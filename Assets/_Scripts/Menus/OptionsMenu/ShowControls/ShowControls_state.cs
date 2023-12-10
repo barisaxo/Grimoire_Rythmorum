@@ -72,7 +72,7 @@ public class ShowControls_State : State
             SetStateDirectly(new GamePlayMenu_State(RestoreState, MainMenuScene));
     }
 
-    protected override void CancelPressed()
+    protected override void SouthPressed()
     {
         SetStateDirectly(RestoreState);
     }

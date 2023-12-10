@@ -47,7 +47,7 @@ public class MainMenu_State : State
                 MainMenu.Selection = MainMenu.MenuItems[i];
                 break;
             }
-        ConfirmPressed();
+        EastPressed();
     }
 
     protected override void DirectionPressed(Dir dir)
@@ -61,7 +61,7 @@ public class MainMenu_State : State
         MainMenu.UpdateTextColors();
     }
 
-    protected override void ConfirmPressed()
+    protected override void EastPressed()
     {
         MainMenu.UpdateTextColors();
 

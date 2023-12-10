@@ -38,6 +38,37 @@ public class PlayerShip
         return go;
     }
 
+    private Card _bark;
+    public Card Bark => _bark ??= new Card(nameof(Bark), GO.transform)
+        .SetPositionAll(1, -1)
+        .SetFontScale(.5f, .5f)
+        .AutoSizeTextContainer(true)
+        .SetTextString("Hail")
+        .SetOutlineColor(Color.black)
+        .SetTextAlignment(TMPro.TextAlignmentOptions.Right)
+        .SetTMPRectPivot(new Vector2(1, .5f))
+        .SetOutlineWidth(.15f)
+        .AutoSizeFont(true)
+        .AllowWordWrap(false)
+        .SetImageSprite(Assets.EastButton)
+        .SetImageSize(.5f, .5f)
+        .OffsetImageFromTMP(Vector2.right * .5f)
+        ;
 
 
 }
+
+/*
+
+        .SetPositionAll(Cam.UIOrthoX - 1.5f, Cam.UIOrthoY - 3.15f)
+        .SetFontScale(.5f, .5f)
+        .AutoSizeTextContainer(true)
+        .SetImageSprite(Assets.NorthButton)
+        .SetImageSize(.5f, .5f)
+        .SetTextString("Inventory")
+        .SetTextAlignment(TextAlignmentOptions.Right)
+        .SetTMPRectPivot(new Vector2(1, .5f))
+        .SetOutlineWidth(.15f)
+        .OffsetImagePosition(Vector2.right)
+
+*/

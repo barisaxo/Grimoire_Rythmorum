@@ -108,17 +108,17 @@ public class DialogPrinting_State : State
         waitingForInput = true;
     }
 
-    protected override void ConfirmPressed()
+    protected override void EastPressed()
     {
         Clicked(MouseAction.LUp, Vector3.negativeInfinity);
     }
 
-    protected override void InteractPressed()
+    protected override void NorthPressed()
     {
         Clicked(MouseAction.LUp, Vector3.negativeInfinity);
     }
 
-    protected override void CancelPressed()
+    protected override void SouthPressed()
     {
         Clicked(MouseAction.LUp, Vector3.negativeInfinity);
     }

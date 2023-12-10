@@ -13,6 +13,7 @@ public class SeaToDialogueTransition_State : State
 
     protected override void EngageState()
     {
+        SeaScene.Io.SeaHUD.HUD.GO.SetActive(false);
         Audio.BGMusic.Pause();
         Audio.Ambience.Pause();
 

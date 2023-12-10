@@ -6,7 +6,7 @@ public class CameraPan_State : State
 {
     Vector3 Pan;
     Vector3 Strafe;
-    float Speed;
+    readonly float Speed;
     readonly State SubsequentState;
 
 
@@ -26,6 +26,7 @@ public class CameraPan_State : State
 
     IEnumerator InitiatePan()
     {
+        Debug.Log(nameof(InitiatePan));
         DisableInput();
         DisengageState();
         yield return null;

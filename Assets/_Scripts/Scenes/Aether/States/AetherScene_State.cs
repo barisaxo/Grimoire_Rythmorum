@@ -64,7 +64,7 @@ public class AetherScene_State : State
             Debug.Log(x.name);
     }
 
-    protected override void ConfirmPressed()
+    protected override void EastPressed()
     {
         if (NearShip) { SetStateDirectly(new AetherToSeaTransition_State()); return; }
     }

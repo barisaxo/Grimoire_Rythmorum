@@ -10,7 +10,7 @@ namespace Menus.MainMenu
         {
             _ = LightHouse;
             _ = CatBoat;
-            RockTheBoat.AddBoat(CatBoat.transform, .08f, 1, 180);
+            RockTheBoat.AddBoat(CatBoat.transform, (.08f, 1, 0));
             RockTheBoat.Rocking = true;
             MonoHelper.OnUpdate += RotateLightHouse;
         }
@@ -47,7 +47,7 @@ namespace Menus.MainMenu
                 {
                     GameObject lh = new(nameof(LightHouse));
                     lh.transform.SetParent(Parent.transform);
-                    lh.transform.position = new Vector3(0, 10, -8);
+                    lh.transform.position = new Vector3(0, -1.5f, -8);
 
                     for (var i = 0; i < 2; i++)
                     {
@@ -56,10 +56,10 @@ namespace Menus.MainMenu
                         light.transform.SetParent(lh.transform);
                         light.transform.SetPositionAndRotation(
                             lh.transform.position,
-                            Quaternion.Euler(new Vector3(50, i * 180, 0)));
+                            Quaternion.Euler(new Vector3(0, i * 180, 0)));
                         light.type = LightType.Spot;
                         light.range = 40;
-                        light.spotAngle = 45;
+                        light.spotAngle = 65;
                         light.intensity = 5;
                         light.shadows = LightShadows.Soft;
                         light.color = new Color(Random.Range(.85f, .95f),

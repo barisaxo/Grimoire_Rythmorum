@@ -149,11 +149,24 @@ public static class CardSystems
 
 
 
+    public static Card OffsetImageFromTMP(this Card Card, Vector2 v)
+    {
+        WaitAStep().StartCoroutine();
+        return Card;
 
+        IEnumerator WaitAStep()
+        {
+            yield return null;
+            Card.Image.rectTransform.localPosition +=
+            (Vector3)((Card.TMP.rectTransform.sizeDelta * .5f * v) +
+                      (Card.Image.rectTransform.sizeDelta * .5f * v));
+        }
+    }
 
     public static Card OffsetImagePosition(this Card Card, Vector2 v)
     {
-        Card.Image.rectTransform.localPosition += (Vector3)(Card.Image.rectTransform.sizeDelta * v);
+        Card.Image.rectTransform.localPosition +=
+        (Vector3)(Card.Image.rectTransform.sizeDelta * v);
         return Card;
     }
 
@@ -163,7 +176,9 @@ public static class CardSystems
         return Card;
     }
 
-    public static Card SetImagePosition(this Card Card, Vector3 pos)
+    public static Card SetImagePosition(this Card Card, float x, float y)
+        => Card.SetImagePosition(new Vector2(x, y));
+    public static Card SetImagePosition(this Card Card, Vector2 pos)
     {
         Vector2 sPos = Cam.Io.UICamera.WorldToScreenPoint(pos);
         Vector2 sSize = new(Cam.Io.UICamera.pixelWidth, Cam.Io.UICamera.pixelHeight);
@@ -189,10 +204,16 @@ public static class CardSystems
         Card.Image.rectTransform.sizeDelta = size; return Card;
     }
 
+    /// <summary>
+    /// Scaled to resolution: .5f * Card.CanvasScaler.referenceResolution.y * v2 / Cam.Io.UICamera.orthographicSize
+    /// </summary>
     public static Card SetImageSize(this Card Card, float x, float y)
     {
         return Card.SetImageSize(new Vector2(x, y));
     }
+    /// <summary>
+    /// Scaled to resolution: .5f * Card.CanvasScaler.referenceResolution.y * v2 / Cam.Io.UICamera.orthographicSize
+    /// </summary>
     public static Card SetImageSize(this Card Card, Vector2 v2)
     {
         Card.Image.rectTransform.sizeDelta =
@@ -260,6 +281,7 @@ public static class CardSystems
     public static Card SetSpritePosition(this Card Card, float x, float y, float z) => SetSpritePosition(Card, new Vector3(x, y, z));
     public static Card SetSpritePosition(this Card Card, Vector3 v)
     {
+        if (Card.GO == null) return Card;
         Card.GO.transform.position = v;
         return Card;
     }

@@ -32,10 +32,7 @@ public class BatterieAndCadence_State : State
     bool CountingOff = true;
     bool Playing = false;
 
-    GameObject NME;
-    ParticleSystem NMEFire;
-    GameObject Ship;
-    ParticleSystem ShipFire;
+    int score, cap;
 
     protected override void PrepareState(Action callback)
     {
@@ -75,28 +72,32 @@ public class BatterieAndCadence_State : State
         MuscopaAudio = new(Data.Volume);
         MuscopaSettings = NewSettings(CadenceDifficulty.ALL, MusicTheory.Musica.RandomMode(), Genre.Stax);
 
-        Cam.Io.Camera.transform.position = new UnityEngine.Vector3(Cam.Io.Camera.transform.position.x, 15, Cam.Io.Camera.transform.position.z);
-        Cam.Io.Camera.transform.rotation = Quaternion.identity;
+        Cam.Io.Camera.transform.SetPositionAndRotation(
+            new UnityEngine.Vector3(Cam.Io.Camera.transform.position.x, 15, Cam.Io.Camera.transform.position.z),
+            Quaternion.identity);
 
-        Ship = Assets.CatBoat;
-        NME = Assets.Schooner;
+        if (Pack.Ship == null)
+        {
+            Pack.Ship = Assets.CatBoat;
+            Pack.NME = Assets.Schooner;
 
-        Ship.transform.SetParent(Cam.Io.Camera.transform);
-        NME.transform.SetParent(Cam.Io.Camera.transform);
+            Pack.Ship.transform.SetParent(Cam.Io.Camera.transform);
+            Pack.NME.transform.SetParent(Cam.Io.Camera.transform);
 
-        Ship.transform.position = Cam.Io.Camera.transform.position + ((Cam.Io.Camera.transform.forward * 4) - (Cam.Io.Camera.transform.right * 2) - (Cam.Io.Camera.transform.up * 2));
-        NME.transform.position = Cam.Io.Camera.transform.position + ((Cam.Io.Camera.transform.forward * 4) + (Cam.Io.Camera.transform.right * 2) - (Cam.Io.Camera.transform.up * 2));
+            Pack.Ship.transform.position = Cam.Io.Camera.transform.position + ((Cam.Io.Camera.transform.forward * 4) - (Cam.Io.Camera.transform.right * 2) - (Cam.Io.Camera.transform.up * 2));
+            Pack.NME.transform.position = Cam.Io.Camera.transform.position + ((Cam.Io.Camera.transform.forward * 4) + (Cam.Io.Camera.transform.right * 2) - (Cam.Io.Camera.transform.up * 2));
 
-        Ship.transform.LookAt(Cam.Io.Camera.transform);
-        NME.transform.LookAt(Cam.Io.Camera.transform);
+            Pack.Ship.transform.LookAt(Cam.Io.Camera.transform);
+            Pack.NME.transform.LookAt(Cam.Io.Camera.transform);
 
-        NMEFire = Assets.CannonFire;
-        NMEFire.transform.position = NME.transform.position + (Vector3.left * .25f);
-        NMEFire.transform.LookAt(Ship.transform);
+            Pack.NMEFire = Assets.CannonFire;
+            Pack.NMEFire.transform.position = Pack.NME.transform.position + (Vector3.left * .25f);
+            Pack.NMEFire.transform.LookAt(Pack.Ship.transform);
 
-        ShipFire = Assets.CannonFire;
-        ShipFire.transform.position = Ship.transform.position + (Vector3.right * .25f);
-        ShipFire.transform.LookAt(NME.transform);
+            Pack.ShipFire = Assets.CannonFire;
+            Pack.ShipFire.transform.position = Pack.Ship.transform.position + (Vector3.right * .25f);
+            Pack.ShipFire.transform.LookAt(Pack.NME.transform);
+        }
 
         GetNewSettings(callback).StartCoroutine();
     }
@@ -108,14 +109,10 @@ public class BatterieAndCadence_State : State
 
     protected override void DisengageState()
     {
+        Debug.Log((float)((float)score / (float)cap));
         Synchro.TickEvent -= Tick;
         Synchro.BeatEvent -= Click;
         MonoHelper.OnUpdate -= SpaceBar;
-
-        GameObject.Destroy(NME);
-        GameObject.Destroy(Ship);
-        GameObject.Destroy(NMEFire);
-        GameObject.Destroy(ShipFire);
 
         BatterieFeedback.Running = false;
         Audio.Batterie.Stop();
@@ -171,6 +168,7 @@ public class BatterieAndCadence_State : State
             MuscopaAudio.StopTheCadence();
 
             // FadeToState(PuzzleSelector.WeightedRandomPuzzleState(Data.TheoryPuzzleData));
+            Pack.NMEHealth.cur -= (int)(10 * (float)((float)score / (float)cap));
             SetStateDirectly(new DialogStart_State(new BatterieIntermission_Dialogue(Pack)));
         }
     }
@@ -205,7 +203,7 @@ public class BatterieAndCadence_State : State
             case NoteFunction.Hold:
                 break;
         }
-        if (UnityEngine.Random.value < .04f) NMEFire.Play();
+        if (UnityEngine.Random.value < .04f) Pack.NMEFire.Play();
     }
 
     void Click()
@@ -281,18 +279,22 @@ public class BatterieAndCadence_State : State
 
     private void HandleHit(Batterie.Hit hit)
     {
+        cap++;
         switch (hit)
         {
             case Hit.Hit:
+                score++;
                 Audio.Batterie.Hit();
-                ShipFire.Play();
+                Pack.ShipFire.Play();
                 break;
             case Hit.Miss:
+                score--;
                 Audio.Batterie.Miss();
                 break;
             case Hit.BadHit:
+                score++;
                 Audio.Batterie.MissStick();
-                NMEFire.Play();
+                Pack.NMEFire.Play();
                 break;
             case Hit.Break:
                 break;

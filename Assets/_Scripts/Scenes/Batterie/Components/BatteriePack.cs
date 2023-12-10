@@ -1,6 +1,12 @@
+using UnityEngine;
 public class BatteriePack
 {
     // public Bard2D.BattleHUD.BattleHUD BHUD;
+    public BatteriePack()
+    {
+        var health = Random.Range(16, 24);
+        NMEHealth = (health, health);
+    }
     public SeaScene SeaScene;
     public (int cur, int max) NMEHealth;
     public int VolleysFired;
@@ -15,6 +21,11 @@ public class BatteriePack
     public int MissedHolds;
     public int TotalErrors => ErroneousAttacks + MissedRests + MissedHits + MissedHolds;
     public bool Spammed => ErroneousAttacks > GoodHits + GoodHolds + GoodRests + MissedRests + MissedHits + MissedHolds;
+
+    public GameObject NME;
+    public ParticleSystem NMEFire;
+    public GameObject Ship;
+    public ParticleSystem ShipFire;
 
     public BatterieResultType ResultType;
     public BatteriePack SetResultType(BatterieResultType type) { ResultType = type; return this; }

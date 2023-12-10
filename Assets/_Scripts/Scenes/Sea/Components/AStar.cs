@@ -16,7 +16,7 @@ public static class AStar
         Node startNode = new Node(startTile, startTile, targetTile);
         Node target = new Node(targetTile, startTile, targetTile);
 
-        if (targetTile.IsOpen) path.Add(targetTile);
+        if (targetTile.IsAStarOpen) path.Add(targetTile);
         AddAdjacentOpenTiles(startTile, target);
 
         if (NoOpenNodes()) return new List<ITile>().ToArray();
@@ -33,7 +33,7 @@ public static class AStar
             currentNode = CheapestOpenNode();
         }
 
-        if (!path.Contains(target.T) && target.T.IsOpen) path.Add(target.T);
+        if (!path.Contains(target.T) && target.T.IsAStarOpen) path.Add(target.T);
 
         target = prevNode;
 
@@ -51,7 +51,7 @@ public static class AStar
                 currentNode = CheapestOpenNode();
             }
 
-            if (!path.Contains(target.T) && target.T.IsOpen) path.Add(target.T);
+            if (!path.Contains(target.T) && target.T.IsAStarOpen) path.Add(target.T);
             target = prevNode;
         }
 
@@ -69,7 +69,7 @@ public static class AStar
             {
                 if (!IsInBounds(tile.Coord + v2)) return;
                 ITile t = tiles[(tile.Coord + v2).Vec2ToInt(boardSize)];
-                if (!t.IsOpen) return;
+                if (!t.IsAStarOpen) return;
                 if (AlreadyInNodes(t)) return;
                 nodes.Add(new Node(t, startTile, target.T));
             }
@@ -114,7 +114,7 @@ public static class AStar
 
         bool NewPath(ITile targetTile, ITile startTile, ITile[] tiles, int boardSize)
         {
-            if (startTile == targetTile || !targetTile.IsOpen) return true;
+            if (startTile == targetTile || !targetTile.IsAStarOpen) return true;
             List<Node> nodes = new List<Node>();
             Node targetNode = new Node(targetTile, startTile, targetTile);
             AddAdjacentOpenTiles(startTile, targetNode);
@@ -145,8 +145,9 @@ public static class AStar
                 void CheckTile(Vector2Int v2)
                 {
                     if (!IsInBounds(tile.Coord + v2)) return;
+                    if (tiles[(tile.Coord + v2).Vec2ToInt(boardSize)] == null) return;
                     ITile newNodeTile = tiles[(tile.Coord + v2).Vec2ToInt(boardSize)];
-                    if (!newNodeTile.IsOpen || AlreadyInNodes(newNodeTile)) return;
+                    if (!newNodeTile.IsAStarOpen || AlreadyInNodes(newNodeTile)) return;
                     nodes.Add(new Node(newNodeTile, startTile, target.T));
                 }
 
@@ -211,5 +212,5 @@ public interface ITile
 {
     public Vector2Int Coord { get; }
 
-    public bool IsOpen { get; }
+    public bool IsAStarOpen { get; }
 }

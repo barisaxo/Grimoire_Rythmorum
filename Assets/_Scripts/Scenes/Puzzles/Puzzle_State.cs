@@ -18,7 +18,7 @@ public class Puzzle_State : State
     private int Errors;
 
     private KeyboardKey CaretKey;
-    private readonly CaretBlink CaretBlink = new CaretBlink().Start();
+    private CaretBlink CaretBlink;
 
     public Puzzle_State(IPuzzle puzzle, PuzzleType puzzleType)
     {
@@ -32,15 +32,15 @@ public class Puzzle_State : State
             new(Puzzle.NumOfNotes, Puzzle.Notes[0]);
 
         CaretKey = Keyboard.SelectedKeys[0] ?? Keyboard.Keys[12];
+        CaretBlink = new CaretBlink().Start();
         CaretBlink.SetCaret(CaretKey.SR);
-
         //Data.TheoryPuzzleData.ResetHints();
         _ = Question;
         _ = Desc;
         _ = Hint;
         _ = Listen;
         _ = SubmitAnswer;
-        _ = Skip;
+        _ = GiveUp;
         base.PrepareState(callback);
     }
 
@@ -48,7 +48,7 @@ public class Puzzle_State : State
     {
         Listen.GO.SetActive(false);
         SubmitAnswer.GO.SetActive(false);
-        Skip.GO.SetActive(false);
+        GiveUp.GO.SetActive(false);
         Hint.GO.SetActive(false);
         base.PreEngageState(callback);
     }
@@ -62,7 +62,7 @@ public class Puzzle_State : State
 
     void EnableButtons()
     {
-        Skip.GO.SetActive(true);
+        GiveUp.GO.SetActive(true);
         Hint.GO.SetActive(true);
     }
 
@@ -85,7 +85,7 @@ public class Puzzle_State : State
         Desc.SelfDestruct();
         Hint.SelfDestruct();
         Listen?.SelfDestruct();
-        Skip.SelfDestruct();
+        GiveUp.SelfDestruct();
         Data.SaveTheoryPuzzleData();
     }
 
@@ -93,7 +93,15 @@ public class Puzzle_State : State
     {
         if (ReadyForEndPuzzle && action == MouseAction.LUp)
         {
-            FadeToState(new Puzzle_State(new ScalePuzzle(), PuzzleType.Aural)); return;
+            SetStateDirectly(
+            new CameraPan_State(
+                new DialogStart_State(
+                    new EndPuzzle_Dialogue(won: true)),
+                Cam.StoredCamRot,
+                Cam.StoredCamPos,
+                3));
+            // FadeToState(new Puzzle_State(new ScalePuzzle(), PuzzleType.Aural)); 
+            return;
 
             // if (UnityEngine.Random.value > .5f) FadeToState(PuzzleSelector.WeightedRandomPuzzleState(Data.TheoryPuzzleData));
             // else
@@ -128,7 +136,7 @@ public class Puzzle_State : State
         else if (go.transform.IsChildOf(Question.GO.transform) && Puzzle.AllowPlayQuestion) QuestionClicked();
         else if (go.transform.IsChildOf(SubmitAnswer.GO.transform)) { SubmitClicked(); return; }
         else if (go.transform.IsChildOf(Listen.GO.transform)) ListenClicked();
-        else if (go.transform.IsChildOf(Skip.GO.transform)) SkipClicked();
+        else if (go.transform.IsChildOf(GiveUp.GO.transform)) SkipClicked();
 
         SubmitAnswer.GO.SetActive(AllNotesSelected());
         Listen.GO.SetActive(AllNotesSelected());
@@ -137,6 +145,13 @@ public class Puzzle_State : State
 
     private void SkipClicked()
     {
+        SetStateDirectly(
+            new CameraPan_State(
+                new DialogStart_State(
+                    new EndPuzzle_Dialogue(won: false)),
+                pan: Cam.StoredCamRot,
+                strafe: Cam.StoredCamPos,
+                speed: 3));
         // FadeToState(new Puzzle_State(new ModePuzzle(), PuzzleType.Aural)); return;
         // Skipped++;
         // var RhythmSpecs = new RhythmSpecs()
@@ -149,7 +164,7 @@ public class Puzzle_State : State
         //     HasTriplets = false,
         //     Tempo = 90
         // };
-        SetStateDirectly(new SeaScene_State());
+        // SetStateDirectly(new SeaScene_State());
 
     }
 
@@ -161,7 +176,7 @@ public class Puzzle_State : State
 
     private void SubmitClicked()
     {
-        if (AllNotesCorrect())
+        if (AllNotesSelected() && AllNotesCorrect())
         {
             DisableInput();
             Solved++;
@@ -170,7 +185,7 @@ public class Puzzle_State : State
             Listen.GO.SetActive(false);
             SubmitAnswer.GO.SetActive(false);
             Desc.GO.SetActive(false);
-            Skip.GO.SetActive(false);
+            GiveUp.GO.SetActive(false);
             CaretBlink.SelfDestruct();
             HintClicked();
         }
@@ -204,7 +219,13 @@ public class Puzzle_State : State
 
     private void HintClicked()
     {
-        Hint.SetTextString(Puzzle.Clue).SetImageColor(Color.clear);
+        Hint.SetTextString(Puzzle.Clue)
+            .SetImageColor(Color.clear);
+    }
+    private void HintReleased()
+    {
+        Hint.SetTextString("<i>show hint")
+            .SetImageColor(Color.white);
     }
 
     private void KeyboardClicked(GameObject go)
@@ -289,19 +310,13 @@ public class Puzzle_State : State
     {
         if (ReadyForEndPuzzle)
         {
-            SetStateDirectly(
-                new CameraPan_State(
-                    new DialogStart_State(
-                        new EndPuzzle_Dialogue()),
-                    Cam.StoredCamRot,
-                    Cam.StoredCamPos,
-                    3));
+            Finish();
             return;
         }
         base.GPInput(gpb);
     }
 
-    protected override void ConfirmPressed()
+    protected override void EastPressed()
     {
         Debug.Log("Clicked on: " + CaretKey.Go.name);
         ClickedOn(CaretKey.Go);
@@ -313,50 +328,81 @@ public class Puzzle_State : State
     }
     protected override void SelectPressed()
     {
-        ClickedOn(Hint.GO);
+        SkipClicked();
     }
-    protected override void InteractPressed()
+    protected override void NorthPressed()
     {
         if (Listen.GO.activeInHierarchy) ClickedOn(Listen.GO);
     }
+
     protected override void WestPressed()
     {
         ClickedOn(Question.GO);
     }
 
+    protected override void SouthPressed()
+    {
+        HintClicked();
+    }
+    protected override void SouthReleased()
+    {
+        HintReleased();
+    }
+
+    void Finish()
+    {
+        SetStateDirectly(
+            new CameraPan_State(
+                new DialogStart_State(
+                    new EndPuzzle_Dialogue(won: true)),
+                Cam.StoredCamRot,
+                Cam.StoredCamPos,
+                3));
+    }
+
     private Card _answer;
     public Card SubmitAnswer => _answer ??= new Card(nameof(SubmitAnswer), null)
         .SetTextString(nameof(SubmitAnswer).SentenceCase())
-        .SetTMPPosition(new Vector2(Cam.UIOrthoX - 1, -Cam.UIOrthoY + 2))
+        // .SetTMPPosition(new Vector2(Cam.UIOrthoX - 1, -Cam.UIOrthoY + 2))
+        .SetPositionAll(new Vector2(Cam.UIOrthoX - 1, -Cam.UIOrthoY + 2))
         .SetFontScale(.6f, .6f)
         .AutoSizeFont(true)
-        .SetTextAlignment(TMPro.TextAlignmentOptions.Center)
+        .SetTextAlignment(TMPro.TextAlignmentOptions.Right)
         .AutoSizeTextContainer(true)
-        .ScaleImageSizeToTMP(1.2f)
-        .SetImagePosition(new Vector2(Cam.UIOrthoX - 1, -Cam.UIOrthoY + 2))
-        .SetImageColor(new Color(.7f, .7f, .7f, .4f))
+        // .ScaleImageSizeToTMP(1.2f)
+        // .SetImagePosition(new Vector2(Cam.UIOrthoX - 1, -Cam.UIOrthoY + 2))
+        // .SetImageColor(new Color(.7f, .7f, .7f, .4f))
         .ImageClickable()
         .AllowWordWrap(false)
         .SetTMPRectPivot(1, .5f)
-        .SetImageToUILayer()
-        .SetImageRectPivot(1 - (1f - (1f / 1.2f)) * .5f, .5f);
+        // .SetImageToUILayer()
+        // .SetImageRectPivot(1 - (1f - (1f / 1.2f)) * .5f, .5f)
+        .SetImageRectPivot(1, .5f)
+        .SetImageSprite(Assets.StartButton)
+        .SetImageSize(Vector2.one * .6f)
+        .OffsetImageFromTMP(Vector2.right * .5f)
+        ;
 
     private Card _skip;
-    public Card Skip => _skip ??= new Card(nameof(Skip), null)
-        .SetTextString(nameof(Skip))
-        .SetTMPPosition(new Vector2(Cam.UIOrthoX - 1, -Cam.UIOrthoY + 1))
+    public Card GiveUp => _skip ??= new Card(nameof(GiveUp), null)
+        .SetTextString(nameof(GiveUp).SentenceCase())
+        // .SetTMPPosition(new Vector2(Cam.UIOrthoX - 1, -Cam.UIOrthoY + 1))
+        .SetPositionAll(new Vector2(Cam.UIOrthoX - 1, -Cam.UIOrthoY + 1))
         .SetFontScale(.4f, .4f)
         .AutoSizeFont(true)
-        .SetTextAlignment(TMPro.TextAlignmentOptions.Center)
+        .SetTextAlignment(TMPro.TextAlignmentOptions.Right)
         .AutoSizeTextContainer(true)
         .SetTMPRectPivot(1, .5f)
-        .SetImagePosition(new Vector2(Cam.UIOrthoX - 1, -Cam.UIOrthoY + 1))
-        .SetImageColor(new Color(.7f, .7f, .7f, .4f))
+        // .SetImagePosition(new Vector2(Cam.UIOrthoX - 1, -Cam.UIOrthoY + 1))
+        // .SetImageColor(new Color(.7f, .7f, .7f, .4f))
         .ImageClickable()
         .AllowWordWrap(false)
-        .ScaleImageSizeToTMP(1.2f)
-        .SetImageRectPivot(1 - (1f - (1f / 1.2f)) * .5f, .5f)
-        .SetImageToUILayer();
+        // .ScaleImageSizeToTMP(1.2f)
+        // .SetImageRectPivot(1 - (1f - (1f / 1.2f)) * .5f, .5f)
+        // .SetImageToUILayer()
+        .SetImageSprite(Assets.SelectButton)
+        .SetImageSize(Vector2.one * .6f)
+        .OffsetImageFromTMP(Vector2.right * .5f);
 
     private Card _desc;
     public Card Desc => _desc ??= new Card(nameof(Desc), null)
@@ -364,65 +410,75 @@ public class Puzzle_State : State
         .SetTMPPosition(new Vector2(-Cam.UIOrthoX + 1, Cam.UIOrthoY - 1))
         .SetFontScale(.5f, .5f)
         .AutoSizeFont(true)
-        .SetTextAlignment(TMPro.TextAlignmentOptions.Left)
+        .SetTextAlignment(TMPro.TextAlignmentOptions.Center)
         .AutoSizeTextContainer(true)
-        .SetTextColor(Color.grey)
         .AllowWordWrap(false)
         .SetTMPRectPivot(0, .5f);
 
     private Card _hint;
     public Card Hint => _hint ??= new Card(nameof(Hint), null)
-        .SetTextString("<i>hint")
-        .SetTMPPosition(new Vector2(0, -Cam.UIOrthoY + 2f))
+        .SetTextString("<i>show hint")
+        // .SetTMPPosition(new Vector2(0, -Cam.UIOrthoY + 2f))
+        .SetPositionAll(new Vector2(0, -Cam.UIOrthoY + 2f))
         .SetFontScale(.5f, .5f)
         .AutoSizeFont(true)
         .SetTextAlignment(TMPro.TextAlignmentOptions.Center)
         .AutoSizeTextContainer(true)
-        .ScaleImageSizeToTMP(1.2f)
-        .SetImagePosition(new Vector2(0, -Cam.UIOrthoY + 2f))
-        .SetImageColor(new Color(.7f, .7f, .7f, .4f))
+        // .ScaleImageSizeToTMP(1.2f)
+        // .SetImagePosition(new Vector2(0, -Cam.UIOrthoY + 2f))
         .ImageClickable()
-        .AllowWordWrap(false);
+        .AllowWordWrap(false)
+        .SetImageSprite(Assets.SouthButton)
+        .SetImageSize(Vector2.one * .6f)
+        .OffsetImageFromTMP(Vector2.right);
 
     private Card _question;
     public Card Question => _question ??= new Card(nameof(Question), null)
         .SetTextString(PuzzleType == PuzzleType.Aural ? "Listen to question" : Puzzle.Question)
-        .SetTMPPosition(new Vector2(0, Cam.UIOrthoY - 1.75f))
+        // .SetTMPPosition(new Vector2(0, Cam.UIOrthoY - 1.75f))
+        .SetPositionAll(new Vector2(0, Cam.UIOrthoY - 1.75f))
         .SetFontScale(.65f, .65f)
         .SetTextAlignment(TMPro.TextAlignmentOptions.Center)
         .AutoSizeFont(true)
         .AutoSizeTextContainer(true)
-        .ScaleImageSizeToTMP(1.2f)
-        .SetImagePosition(new Vector2(0, Cam.UIOrthoY - 1.75f))
-        .SetImageColor(new Color(.7f, .7f, .7f, .4f))
+        // .ScaleImageSizeToTMP(1.2f)
+        // .SetImagePosition(new Vector2(0, Cam.UIOrthoY - 1.75f))
+        // .SetImageColor(new Color(.7f, .7f, .7f, .4f))
         .ImageClickable()
         .AllowWordWrap(false)
-        .SetImageToUILayer();
+        // .SetImageToUILayer()
+        .SetImageSprite(Assets.WestButton)
+        .SetImageSize(Vector2.one * .6f)
+        .OffsetImageFromTMP(Vector2.right);
 
     private Card _listen;
     public Card Listen => _listen ??= new Card(nameof(Listen), null)
         .SetTextString("Listen to answer")
-        .SetTMPPosition(new Vector2(-Cam.UIOrthoX + 1, -Cam.UIOrthoY + 1))
+        // .SetTMPPosition(new Vector2(-Cam.UIOrthoX + 1, -Cam.UIOrthoY + 1))
+        .SetPositionAll(new Vector2(-Cam.UIOrthoX + 1, -Cam.UIOrthoY + 1))
         .SetFontScale(.6f, .6f)
-        .SetTextAlignment(TMPro.TextAlignmentOptions.Center)
+        .SetTextAlignment(TMPro.TextAlignmentOptions.Left)
         .AutoSizeFont(true)
         .AutoSizeTextContainer(true)
-        .ScaleImageSizeToTMP(1.2f)
-        .SetImagePosition(new Vector2(-Cam.UIOrthoX + 1, -Cam.UIOrthoY + 1))
-        .SetImageColor(new Color(.7f, .7f, .7f, .4f))
+        // .ScaleImageSizeToTMP(1.2f)
+        // .SetImagePosition(new Vector2(-Cam.UIOrthoX + 1, -Cam.UIOrthoY + 1))
+        // .SetImageColor(new Color(.7f, .7f, .7f, .4f))
         .ImageClickable()
         .AllowWordWrap(false)
         .SetTMPRectPivot(0, .5f)
-        .SetImageToUILayer()
-        .SetImageRectPivot((1f - (1f / 1.2f)) * .5f, .5f);
+        // .SetImageToUILayer()
+        // .SetImageRectPivot((1f - (1f / 1.2f)) * .5f, .5f)
+        .SetImageSprite(Assets.NorthButton)
+        .SetImageSize(Vector2.one * .6f)
+        .OffsetImageFromTMP(Vector2.right * 2);
 }
 
 
 
 
 /*
- *hack this clickable works..
- *   private Card _listen;
+ * hack this clickable works..
+    private Card _listen;
     public Card Listen => _listen ??= new Card(nameof(Listen), null)
         .SetTextString("Listen to answer")
         .SetTMPPosition(new Vector2(-Cam.UIOrthoX + 1, -Cam.UIOrthoY + 1))
@@ -436,8 +492,7 @@ public class Puzzle_State : State
         .ImageClickable()
         .AllowWordWrap(false)
         .SetImageToUILayer();
- * 
- * 
+ 
  * hack this clickable does not work
     private Card _listen;
     public Card Listen => _listen ??= new Card(nameof(Listen), null)

@@ -50,9 +50,10 @@ namespace Dialog
                     cs[i] = new Card(nameof(NPCIcon), Parent.transform)
                           .SetImageSprite(sprites[i])
                           .SetImageSize(Vector3.one * 2f)
-                          .SetImagePosition(new Vector3(-Cam.UIOrthoX + 1f, Cam.UIOrthoY - 1f))
+                          .SetImagePosition(new Vector3(-Cam.UIOrthoX + .65f, Cam.UIOrthoY - 1f))
                           .SetImageColor(col)
                           .SetCanvasSortingOrder(i + 11)
+                          .SetImageRectPivot(0, .5f)
                           ;
                 }
                 return cs;
@@ -62,8 +63,8 @@ namespace Dialog
         private Card _dialogCard;
         public Card DialogCard => _dialogCard ??= new Card(nameof(DialogCard), Parent.transform)
             .SetTextAlignment(TMPro.TextAlignmentOptions.TopLeft)
-            .SetTMPSize(new Vector2(3.5f * Cam.Io.Camera.aspect * 2, 4f))
-            .SetTMPPosition(new Vector3(1, 2.5f))
+            .SetTMPSize(new Vector2(Cam.UIOrthoX * 1.5f, Cam.UIOrthoY * .7f))
+            .SetTMPPosition(new Vector3(1.15f, Cam.UIOrthoY - (Cam.UIOrthoY * .45f)))
             .SetFontScale(.65f, .65f)
             .AutoSizeFont(true)
             .AllowWordWrap(true)
@@ -75,8 +76,8 @@ namespace Dialog
             .SetImageSprite(Assets.White)
             .SetImageColor(new Color(.15f, .15f, .15f, .65f))
             .SetCanvasSortingOrder(2)
-            .SetImagePosition(new Vector3(1, 2.5f))
-            .SetImageSize(new Vector2(4f * Cam.Io.Camera.aspect * 2, 5f))
+            .SetImagePosition(new Vector3(1, Cam.UIOrthoY - (Cam.UIOrthoY * .45f)))
+            .SetImageSize(new Vector2(Cam.UIOrthoX * 1.6f, Cam.UIOrthoY * .8f))
             ;
 
 

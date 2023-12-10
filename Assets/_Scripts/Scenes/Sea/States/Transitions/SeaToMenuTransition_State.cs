@@ -1,23 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+
+using System;
 
 public class SeaToMenuTransition_State : State
 {
+    protected override void PrepareState(Action callback)
+    {
+        SeaScene.Io.SeaHUD.HUD.GO.SetActive(false);
+        base.PrepareState(callback);
+    }
+
     protected override void EngageState()
+    {
+        UnityEngine.Debug.Log(nameof(SeaToMenuTransition_State));
+        SetStateDirectly(
+            new VolumeMenu_State(
+                new MenuToSeaTransition_State()));
+    }
+
+    protected override void DisengageState()
     {
         SeaScene.Io.RockTheBoat.Rocking = false;
         SeaScene.Io.Swells.DisableSwells();
-        SetStateDirectly(
-            new CameraPan_State(
-                new VolumeMenu_State(
-                    new CameraPan_State(
-                        new SeaScene_State(),
-                        Cam.StoredCamRot,
-                        Cam.StoredCamPos,
-                        3)),
-                new Vector3(-50, Cam.Io.Camera.transform.rotation.eulerAngles.y, Cam.Io.Camera.transform.rotation.eulerAngles.z),
-                Cam.Io.Camera.transform.position,
-                3));
     }
 }

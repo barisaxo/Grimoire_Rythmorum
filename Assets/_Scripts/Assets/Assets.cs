@@ -37,6 +37,9 @@ public static class Assets
     public static Sprite NorthButton => Resources.Load<Sprite>("Sprites/GamePad_Button/North");
     public static Sprite SouthButton => Resources.Load<Sprite>("Sprites/GamePad_Button/South");
     public static Sprite WestButton => Resources.Load<Sprite>("Sprites/GamePad_Button/West");
+    public static Sprite StartButton => Resources.Load<Sprite>("Sprites/GamePad_Button/Start");
+    public static Sprite SelectButton => Resources.Load<Sprite>("Sprites/GamePad_Button/Select");
+    public static Sprite R3Button => Resources.Load<Sprite>("Sprites/GamePad_Button/R3");
     public static Sprite GamePad => Resources.Load<Sprite>("Sprites/GamePad_Button/White_Gamepad");
 
     #endregion GAMEPAD 

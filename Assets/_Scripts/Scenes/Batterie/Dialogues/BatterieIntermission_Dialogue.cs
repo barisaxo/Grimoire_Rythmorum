@@ -11,7 +11,11 @@ public class BatterieIntermission_Dialogue : Dialogue
 
     public override Dialogue Initiate()
     {
-        if (Pack.NMEHealth.cur < (float)(Pack.NMEHealth.max * .3f) &&
+        if (Pack.NMEHealth.cur < 1)
+        {
+            FirstLine = Victory;
+        }
+        else if (Pack.NMEHealth.cur < (float)(Pack.NMEHealth.max * .3f) &&
             Random.value > .65f)
         {
             FirstLine = NMEAttemptingFlee;
@@ -36,6 +40,12 @@ public class BatterieIntermission_Dialogue : Dialogue
         }
         return base.Initiate();
     }
+
+    Line Victory => new Line("We got 'em Cap! Blew 'em out of the water!",
+                    new EndBatterie_State(Pack.SetResultType(BatterieResultType.Won)))
+        .SetSpeakerIcon(Assets.Pino)
+        .SetSpeakerName(Pino)
+        ;
 
     Line LowPlayerHealth => new Line("We're in bad shape Cap'n! We can't take much more!")
         .SetSpeakerIcon(Assets.Pino)
@@ -75,9 +85,7 @@ public class BatterieIntermission_Dialogue : Dialogue
 
     Response Flee => new("Attempt to flee", Random.value > .7f ? CantFlee : Fled);
     Line Fled => new Line("It's better we run and live to fight another day!",
-        new MoveNPCOffScreen_State(
-            new CameraPan_State(
-                new SeaScene_State(), Cam.StoredCamRot, Cam.StoredCamPos, 2.3f)))
+                 new EndBatterie_State(Pack.SetResultType(BatterieResultType.Fled)))
         .SetSpeakerIcon(Assets.Pino)
         .SetSpeakerName(Pino)
         ;

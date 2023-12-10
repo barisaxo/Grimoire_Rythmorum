@@ -7,14 +7,14 @@ using System;
 
 public class Card
 {
+    private Card() { }
+
     public Card(string name, Transform parent)
     {
         Name = name;
         GO = new GameObject(name);
         GO.transform.SetParent(parent, false);
     }
-
-    private Card() { }
 
     private Card(string name, Card parentCard, Transform parent)
     {
@@ -123,39 +123,23 @@ public class Card
 
     public Card CreateChild(string name, Transform parent)
     {
-        Children = Children == null ? new Card[1] { NewCard() } : AddNewCard();
+        Children = Children.Add(new Card(name, this, parent));
         return Children[^1];
-
-        Card NewCard() => new(name, this, parent);
-
-
-        Card[] AddNewCard()
-        {
-            Card[] temp = new Card[Children.Length + 1];
-            Children.CopyTo(temp, 0);
-            temp[^1] = NewCard();
-            return temp;
-        }
     }
 
     public Card CreateChild(string name, Transform parent, Canvas _)
     {
-        Children = Children == null ? new Card[1] { NewCard() } : AddNewCard();
+        Children = Children.Add(new Card(name, this, parent, Canvas));
         return Children[^1];
+    }
 
-        Card NewCard() => new(name, this, parent, Canvas);
-
-        Card[] AddNewCard()
-        {
-            Card[] temp = new Card[Children.Length + 1];
-            Children.CopyTo(temp, 0);
-            temp[^1] = NewCard();
-            return temp;
-        }
+    public Card CreateChild(string name, Canvas canvas)
+    {
+        Children = Children.Add(new Card(name, this, canvas.transform, canvas));
+        return Children[^1];
     }
 
     public Card SetClickable(Clickable clickable) { Clickable = clickable; return this; }
-
 
     private List<Action> _builderSteps = null;
     public List<Action> BuilderSteps
@@ -179,8 +163,8 @@ public class Card
             }
             return _builderSteps;
         }
-
     }
+
 }
 
 

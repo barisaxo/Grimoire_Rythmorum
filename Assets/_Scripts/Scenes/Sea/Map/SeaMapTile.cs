@@ -9,7 +9,7 @@ public class SeaMapTile : ITile
     public bool HasGramo;
     public float RotY = Random.Range(0, 360);
     public Vector2Int Coord => new(Loc.x, Loc.z);
-    public bool IsOpen => Type == SeaMapTileType.OpenSea;
+    public bool IsAStarOpen => Type == SeaMapTileType.OpenSea;
 
     public GameObject GO;
 
@@ -24,4 +24,4 @@ public class SeaMapTile : ITile
     }
 }
 
-public enum SeaMapTileType { OpenSea, Cave, Rocks }
+public enum SeaMapTileType { OpenSea, Cave, Rocks, Center }

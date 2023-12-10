@@ -40,7 +40,7 @@ public class QuitAetherMenu_State : State
                 QuitMenu.Selection = QuitMenu.MenuItems[i];
                 break;
             }
-        ConfirmPressed();
+        EastPressed();
     }
 
     protected override void DirectionPressed(Dir dir)
@@ -50,7 +50,7 @@ public class QuitAetherMenu_State : State
         QuitMenu.UpdateTextColors();
     }
 
-    protected override void ConfirmPressed()
+    protected override void EastPressed()
     {
         QuitMenu.UpdateTextColors();
         Cam.Io.Camera.transform.SetParent(null);
@@ -75,7 +75,7 @@ public class QuitAetherMenu_State : State
         }
     }
 
-    protected override void CancelPressed()
+    protected override void SouthPressed()
     {
         SetStateDirectly(SubsequentState);
     }

@@ -1,22 +1,26 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class NMESailApproach_State : State
 {
-    public NMESailApproach_State(State subsequentState)
-    {
-        SubsequentState = subsequentState;
-    }
-
-    readonly State SubsequentState;
     NPCShip NMEShip;
 
-    protected override void EngageState()
+    protected override void PrepareState(Action callback)
     {
+        Audio.BGMusic.Pause();
+        Audio.Ambience.Pause();
+
         Audio.SFX.PlayOneShot(Assets.AlertHalfDim);
         NMEShip = SeaScene.Io.NearNPCShip;
         NMEShip.GO.transform.LookAt(SeaScene.Io.Ship.GO.transform);
+
+        base.PrepareState(callback);
+    }
+
+    protected override void EngageState()
+    {
         SailToward().StartCoroutine();
 
         IEnumerator SailToward()
@@ -30,7 +34,7 @@ public class NMESailApproach_State : State
                 NMEShip.GO.transform.position += posDelta;
             }
 
-            SetStateDirectly(SubsequentState);
+            SetStateDirectly(new DialogStart_State(new PirateEncounter_Dialogue()));
         }
     }
 }

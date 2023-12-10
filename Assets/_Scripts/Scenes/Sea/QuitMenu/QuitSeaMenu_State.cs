@@ -40,7 +40,7 @@ public class QuitSeaMenu_State : State
                 QuitMenu.Selection = QuitMenu.MenuItems[i];
                 break;
             }
-        ConfirmPressed();
+        EastPressed();
     }
 
     protected override void DirectionPressed(Dir dir)
@@ -50,7 +50,7 @@ public class QuitSeaMenu_State : State
         QuitMenu.UpdateTextColors();
     }
 
-    protected override void ConfirmPressed()
+    protected override void EastPressed()
     {
         QuitMenu.UpdateTextColors();
         SeaScene.Io.SelfDestruct();
@@ -78,7 +78,7 @@ public class QuitSeaMenu_State : State
         }
     }
 
-    protected override void CancelPressed()
+    protected override void SouthPressed()
     {
         SetStateDirectly(SubsequentState);
     }

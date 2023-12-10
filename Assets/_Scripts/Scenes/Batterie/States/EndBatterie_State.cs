@@ -34,6 +34,11 @@ public class EndBatterie_State : State
         // mats = (int)(((level + 15f) * 2.55f) * UnityEngine.Random.Range(.15f, 1) * (float)((100 - Result()) * .01f));
         // rations = (int)(1 + ((level + 5f) * UnityEngine.Random.Range(.5f, 1) * (float)((100 - Result()) * .01f)));
 
+        UnityEngine.GameObject.Destroy(Pack.NME);
+        UnityEngine.GameObject.Destroy(Pack.Ship);
+        UnityEngine.GameObject.Destroy(Pack.NMEFire);
+        UnityEngine.GameObject.Destroy(Pack.ShipFire);
+
         map = FoundMap();
 
         callback();
@@ -69,9 +74,13 @@ public class EndBatterie_State : State
                 Data.CharacterData.Rations += rations /= 2;
                 Data.CharacterData.Coins += coins /= 2;
                 SetStateDirectly(
-                        new DialogStart_State(
-                            new EndBatterie_Dialogue(
-                    coins, mats, rations, damage, false, BatterieResultType.NMESurrender)));
+                    new CameraPan_State(
+                        new NPCSailAway_State(
+                            new DialogStart_State(new EndBatterie_Dialogue(
+                                coins, mats, rations, damage, false, BatterieResultType.NMESurrender))),
+                        Cam.StoredCamRot,
+                        Cam.StoredCamPos,
+                        3));
                 return;
 
             case BatterieResultType.Surrender:
@@ -80,18 +89,20 @@ public class EndBatterie_State : State
                 Data.CharacterData.Coins -= coins = Data.CharacterData.Coins /= 2;
                 SetStateDirectly(
                     new CameraPan_State(
-                        new DialogStart_State(
-                            new EndBatterie_Dialogue(
-                    coins, mats, rations, damage, false, BatterieResultType.Surrender)),
-                    Cam.StoredCamRot,
-                    Cam.StoredCamPos,
-                    3));
+                        new NPCSailAway_State(
+                            new DialogStart_State(new EndBatterie_Dialogue(
+                                coins, mats, rations, damage, false, BatterieResultType.Surrender))),
+                        Cam.StoredCamRot,
+                        Cam.StoredCamPos,
+                        3));
                 return;
 
             case BatterieResultType.Spam:
-                SetStateDirectly(new CameraPan_State(
-                    new DialogStart_State(
-                        new EndBatterie_Dialogue(0, 0, 0, damage, false, BatterieResultType.Spam)),
+                SetStateDirectly(
+                    new CameraPan_State(
+                        new NPCSailAway_State(
+                            new DialogStart_State(new EndBatterie_Dialogue(
+                                0, 0, 0, damage, false, BatterieResultType.Spam))),
                         Cam.StoredCamRot,
                         Cam.StoredCamPos,
                         3));
@@ -99,22 +110,28 @@ public class EndBatterie_State : State
 
             case BatterieResultType.Fled:
                 SetStateDirectly(
-                        new DialogStart_State(
-                            new EndBatterie_Dialogue(0, 0, 0, damage, false, BatterieResultType.Fled)));
+                    new MoveNPCOffScreen_State(
+                        new CameraPan_State(
+                            new DialogStart_State(new EndBatterie_Dialogue(
+                                0, 0, 0, damage, false, BatterieResultType.Fled)),
+                            Cam.StoredCamRot,
+                            Cam.StoredCamPos,
+                            3)));
 
                 return;
 
             case BatterieResultType.NMEscaped:
                 SetStateDirectly(
                     new CameraPan_State(
-                        new DialogStart_State(
-                            new EndBatterie_Dialogue(0, 0, 0, damage, false, BatterieResultType.NMEscaped)),
+                        new NPCSailAway_State(
+                            new DialogStart_State(new EndBatterie_Dialogue(
+                                0, 0, 0, damage, false, BatterieResultType.NMEscaped))),
                         Cam.StoredCamRot,
                         Cam.StoredCamPos,
                         3));
                 return;
 
-            case BatterieResultType.Lost:
+            case BatterieResultType.Lost://TODO
                 SetStateDirectly(
                     new CameraPan_State(
                         new DialogStart_State(
@@ -132,12 +149,13 @@ public class EndBatterie_State : State
                 Data.CharacterData.Coins += coins;
 
                 SetStateDirectly(
-                    new CameraPan_State(
-                        new DialogStart_State(
-                            new EndBatterie_Dialogue(coins, mats, rations, damage, map, BatterieResultType.Won)),
-                    Cam.StoredCamRot,
-                    Cam.StoredCamPos,
-                    3));
+                    new MoveNPCOffScreen_State(
+                        new CameraPan_State(
+                            new DialogStart_State(new EndBatterie_Dialogue(
+                                coins, mats, rations, damage, map, BatterieResultType.Won)),
+                            Cam.StoredCamRot,
+                            Cam.StoredCamPos,
+                            3)));
                 return;
         }
 

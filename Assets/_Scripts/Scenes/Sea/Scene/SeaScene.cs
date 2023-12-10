@@ -11,11 +11,16 @@ public class SeaScene
     {
         SeaColor = MyCyan;
 
+        SegmentDivision = 9;
         BoardSize = 11;
-        MapSize = 77;
+        MapSize = BoardSize * SegmentDivision;
 
         Board = SetUpBoard();
-        Map = SetUpMap();
+        SegmentedMapLocs = GetMapIndices();
+
+        // return;
+        Map = InitializeMapTiles();
+        AddMapFeatures();
 
         _ = DayCounterText;
 
@@ -30,7 +35,7 @@ public class SeaScene
         Swells = new(this);
         Swells.EnableSwells();
 
-        RockTheBoat.AddBoat(Ship.GO.transform, .08f, 1, 180);
+        RockTheBoat.AddBoat(Ship.GO.transform, (.08f, 1, 0));
         RockTheBoat.Rocking = true;
 
         AddShips();
@@ -48,6 +53,7 @@ public class SeaScene
 
     public void SelfDestruct()
     {
+        SeaHUD.SelfDestruct();
         Swells.DisableSwells();
         RockTheBoat.SelfDestruct();
         Object.Destroy(TheSea);
@@ -65,6 +71,8 @@ public class SeaScene
     public bool haveMoved = false;
 
     public GameObject TheSea = new(nameof(TheSea));
+    public SeaHUD SeaHUD = new(DataManager.Io.CharacterData);
+
     public List<GameObject> UnusedRocks = new();
     public List<GameObject> UnusedShips = new();
     public List<GameObject> UsedRocks = new();
@@ -78,14 +86,16 @@ public class SeaScene
     public NPCShip NearNPCShip;
     public List<NPCShip> NPCShips = new();
 
-    public int BoardSize { get; private set; } = 11;
+    public int BoardSize { get; private set; }
     public int SeaGridSize => BoardSize * 3;
     public int MapSize { get; private set; }
+    public int SegmentDivision { get; private set; }
     // public Vector2 IslandLoc;
 
     public Vector3Int restoreMapLoc;
     public List<SeaGridTile> Board;
     public SeaMapTile[] Map;
+    public Vector3Int[][] SegmentedMapLocs;
     public Vector3Int BoardCenter => new(BoardOffset, 0, BoardOffset);
     public int BoardOffset => Mathf.FloorToInt(BoardSize * .5f);
 
@@ -125,10 +135,11 @@ public class SeaScene
     private Card _dayCounterText;
     public Card DayCounterText => _dayCounterText ??= new Card(nameof(DayCounterText), TheSea.transform)
         .SetTMPPosition(new Vector2(Cam.UIOrthoX - 1, Cam.UIOrthoY - 1))
-        .SetTMPSize(new Vector2(1, 1))
+        .AutoSizeTextContainer(true)
         .SetTextAlignment(TextAlignmentOptions.Right)
-        .SetFontScale(.55f, .55f)
-        .AutoSizeFont(true);
+        .SetFontScale(.45f, .45f)
+        .AllowWordWrap(false)
+        ;
 
     private Card _sextantText;
     public Card SextantText => _sextantText ??= new Card(nameof(SextantText), TheSea.transform)
@@ -153,12 +164,12 @@ public class SeaScene
     private void AddShips()
     {
         int numShips = Random.Range((int)(MapSize * .3f), (int)(MapSize * .6f));
+        Debug.Log(numShips);
         for (int i = 0; i < numShips; i++)
         {
             Vector3Int randA = Rand(i + BoardSize);
             Vector3Int randB = Rand(i + MapSize);
             Vector3Int randC = Rand(i + BoardSize + MapSize);
-            Vector3Int randD = Rand(i + BoardSize + MapSize * 2);
 
             List<Vector3Int> path = new() { };
 
@@ -174,17 +185,11 @@ public class SeaScene
                  MapSize);
             for (int n = 0; n < bc.Length; n++) path.Add(new Vector3Int(bc[n].Coord.x, 0, bc[n].Coord.y));
 
-            var cd = Map[randC.Vec3ToInt(MapSize)].NewSailingPath(
-                  Map[randD.Vec3ToInt(MapSize)],
-                  Map,
-                  MapSize);
-            for (int n = 0; n < cd.Length; n++) path.Add(new Vector3Int(cd[n].Coord.x, 0, cd[n].Coord.y));
-
-            var da = Map[randD.Vec3ToInt(MapSize)].NewSailingPath(
+            var ca = Map[randC.Vec3ToInt(MapSize)].NewSailingPath(
                  Map[randA.Vec3ToInt(MapSize)],
                  Map,
                  MapSize);
-            for (int n = 0; n < da.Length; n++) path.Add(new Vector3Int(da[n].Coord.x, 0, da[n].Coord.y));
+            for (int n = 0; n < ca.Length; n++) path.Add(new Vector3Int(ca[n].Coord.x, 0, ca[n].Coord.y));
 
             NPCShip ship = new(randA, path.ToArray())
             {
@@ -196,8 +201,12 @@ public class SeaScene
         Vector3Int Rand(int i)
         {
             int r = RandInt();
-            while (!Map[r].IsOpen || LocTaken(Map[r].Loc))
+            int reroll = 0;
+            while (!Map[r].IsAStarOpen || LocTaken(Map[r].Loc))
+            {
+                Debug.Log(++reroll);
                 r = (r + Random.Range(BoardSize + i * BoardSize, MapSize + i * MapSize)) % (Map.Length - 1);
+            }
 
             return Map[r].Loc;
         }
@@ -216,7 +225,6 @@ public class SeaScene
         }
     }
 
-
     List<SeaGridTile> SetUpBoard()
     {
         List<SeaGridTile> boardTiles = new();
@@ -228,63 +236,121 @@ public class SeaScene
         return boardTiles;
     }
 
-    SeaMapTile[] SetUpMap()
+    Vector3Int[][] GetMapIndices()
     {
-        List<SeaMapTile> mapTiles = new();
-        for (int x = 0; x < MapSize; x++)
-            for (int z = 0; z < MapSize; z++)
-                mapTiles.Add(new SeaMapTile(new Vector3Int(x, 0, z))
-                {
-                    Type = SeaMapTileType.OpenSea
-                });
+        int index = 0;
+        int segment = 0;
+        Vector3Int[][] mapIndices = new Vector3Int[SegmentDivision * SegmentDivision][];
 
-
-        for (int i = 0; i < mapTiles.Count; i++)
+        for (int u = 0; u < MapSize; u += BoardSize)
         {
-            if (mapTiles[i].Loc.x < BoardOffset || mapTiles[i].Loc.x > MapSize - BoardOffset ||
-                mapTiles[i].Loc.z < BoardOffset || mapTiles[i].Loc.z > MapSize - BoardOffset)
+            for (int v = 0; v < MapSize; v += BoardSize)
             {
-                mapTiles[i].Type = SeaMapTileType.Rocks;
-                continue;
+                mapIndices[segment] = MapSegment(u, v);
+                segment++;
             }
-
-            mapTiles[i].Type = Random.Range(0, 10) switch
-            {
-                0 => SeaMapTileType.Rocks,
-                _ => SeaMapTileType.OpenSea,
-            };
-
-            if (ClearCenter(mapTiles[i].Loc.x, mapTiles[i].Loc.z))
-            {
-                mapTiles[i].Type = SeaMapTileType.OpenSea;
-                continue;
-            }
-
-            if (mapTiles[i].Type == SeaMapTileType.Rocks)
-                for (int nX = -1; nX < 2; nX++)
-                    for (int nZ = -1; nZ < 2; nZ++)
-                    {
-                        if (nX == nZ) continue;
-
-                        Vector3Int loc = mapTiles[i].Loc + new Vector3Int(nX, 0, nZ);
-                        if (!IsInRange(loc)) continue;
-
-                        if (!mapTiles[loc.Vec3ToInt(MapSize)].IsOpen) continue;
-
-                        if (!mapTiles[(int)(mapTiles.Count * .5f)].IsTileReachable(mapTiles[loc.Vec3ToInt(MapSize)], mapTiles.ToArray(), MapSize))
-                        {
-                            mapTiles[i].Type = SeaMapTileType.OpenSea;
-                            break;
-                        }
-                    }
         }
 
-        return mapTiles.ToArray();
+        return mapIndices;
+
+        Vector3Int[] MapSegment(int u, int v)
+        {
+            List<Vector3Int> MapSegment = new();
+
+            for (int x = 0; x < BoardSize; x++)
+                for (int z = 0; z < BoardSize; z++)
+                {
+                    MapSegment.Add(new Vector3Int(u + x, index, v + z));
+                    index++;
+                }
+
+            return MapSegment.ToArray();
+        }
+    }
+
+
+    private SeaMapTile[] InitializeMapTiles()
+    {
+        Vector3Int[] mapIndices = SegmentedMapLocs.Flatten();
+        SeaMapTile[] mapTiles = new SeaMapTile[mapIndices.Length];
+        int index = 0;
+        // foreach (Vector3Int loc in mapIndices)
+        //     mapTiles[loc.y] = new SeaMapTile(loc) { Type = SeaMapTileType.OpenSea };
+
+        for (int x = 0; x < MapSize; x++)
+            for (int z = 0; z < MapSize; z++)
+            {
+                mapTiles[index] = new SeaMapTile(new Vector3Int(x, mapIndices[index].y, z)) { Type = SeaMapTileType.OpenSea };
+                // Debug.Log(mapIndices[index] + " " + x + " " + z);
+                index++;
+            }
+
+        return mapTiles;
+    }
+
+    void AddMapFeatures()
+    {
+        for (int u = 0; u < SegmentDivision; u++)
+            for (int v = 0; v < SegmentDivision; v++)
+            {
+                // Debug.Log((u * BoardSize) + v);
+                Vector3Int[] locSegment = SegmentedMapLocs[(u * SegmentDivision) + v];
+                SeaMapTile[] mapSegment = GetTilesFromSegment(locSegment);
+
+                for (int x = 0; x < BoardSize; x++)
+                    for (int z = 0; z < BoardSize; z++)
+                    {
+                        int segmentIndex = (x * BoardSize) + z;
+                        // int segmentIndex = (u * BoardSize * MapSize) + (v * BoardSize * BoardSize) + (x * BoardSize) + z;
+                        int mapIndex = new Vector2(locSegment[segmentIndex].x, locSegment[segmentIndex].z).Vec2ToInt(MapSize);
+                        // Debug.Log(index);
+                        // Vector3Int coord = SegmentedMapCoords[(u * MapSize) + (v * BoardSize)][(x * BoardSize) + z];
+                        if (Map[mapIndex].Loc.x < BoardOffset || Map[mapIndex].Loc.x > MapSize - BoardOffset ||
+                            Map[mapIndex].Loc.z < BoardOffset || Map[mapIndex].Loc.z > MapSize - BoardOffset)
+                        {
+                            Map[mapIndex].Type = SeaMapTileType.Rocks;
+                            continue;
+                        }
+
+                        Map[mapIndex].Type = Random.Range(0, 10) switch
+                        {
+                            0 => SeaMapTileType.Rocks,
+                            _ => SeaMapTileType.OpenSea,
+                        };
+
+                        if (ClearCenter(Map[mapIndex].Loc.x, Map[mapIndex].Loc.z))
+                        {
+                            Map[mapIndex].Type = SeaMapTileType.Center;
+                            continue;
+                        }
+
+                        if (Map[mapIndex].Type == SeaMapTileType.Rocks)
+                            for (int nX = -1; nX < 2; nX++)
+                                for (int nZ = -1; nZ < 2; nZ++)
+                                {
+                                    if (Mathf.Abs(nX) == Mathf.Abs(nZ)) continue;
+
+                                    Vector3Int loc = new(nX + x, 0, nZ + z);
+                                    // Debug.Log(mapIndex + " " + Map[mapIndex].Coord + " " + mapSegment[loc.Vec3ToInt(BoardSize)].Coord);
+                                    if (!(nX + x > -1 && nX + x < 11 && nZ + z > -1 && nZ + z < 11)) continue;
+
+                                    if (!Map[mapIndex].IsAStarOpen) continue;
+
+                                    if (!mapSegment[(int)(mapSegment.Length * .5f)]
+                                        .IsTileReachable(mapSegment[loc.Vec3ToInt(BoardSize)], mapSegment, BoardSize))
+                                    {
+                                        Map[mapIndex].Type = SeaMapTileType.OpenSea;
+                                        break;
+                                    }
+                                }
+                    }
+            }
+
 
         bool ClearCenter(int x, int z)
         {
-            for (int i = -2; i < 3; i++)
-                for (int j = -2; j < 3; j++)
+            for (int i = -5; i < 6; i++)
+                for (int j = -5; j < 6; j++)
                     if (x == Mathf.FloorToInt(MapSize * .5f) + i &&
                         z == Mathf.FloorToInt(MapSize * .5f) + j)
                         return true;
@@ -292,6 +358,28 @@ public class SeaScene
             return false;
         }
     }
+
+    private SeaMapTile[] GetTilesFromSegment(Vector3Int[] locSegment)
+    {
+        List<SeaMapTile> temp = new();
+        foreach (Vector3Int v3i in locSegment)
+            temp.Add(Map[v3i.Vec3ToInt(MapSize)]);
+
+        // Debug.Log(temp.Count);
+        return temp.ToArray();
+    }
+    // private SeaMapTile[] GetTilesFromSegment(int u, int v)
+    // {
+    //     List<SeaMapTile> temp = new();
+    //     for (int uu = -1; uu < 2; uu++)
+    //         for (int vv = -1; vv < 2; vv++)
+    //             if (u + uu > -1 && u + uu < 11 && v + vv > -1 && v + vv < 11)
+    //                 foreach (Vector3Int i in SegmentedMap[((u + uu) * BoardSize) + (v + vv)])
+    //                     temp.Add(Map[i.y]);
+
+    //     Debug.Log(u + " " + v + " " + temp.Count);
+    //     return temp.ToArray();
+    // }
 
     void SetUpSeaCam()
     {

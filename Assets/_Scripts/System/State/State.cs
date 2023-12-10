@@ -38,17 +38,6 @@ public abstract class State
     protected virtual void PrepareState(Action callback) { callback?.Invoke(); }
 
     /// <summary>
-    /// Called by SetSceneDirectly() and FadeInToScene().
-    /// </summary>
-    protected void EnableInput()
-    {
-        InputKey.ButtonEvent += GPInput;
-        InputKey.StickEvent += GPStickInput;
-        InputKey.MouseClickEvent += Clicked;
-        MonoHelper.OnUpdate += UpdateStickInput;
-    }
-
-    /// <summary>
     /// Called by FadeToState() after Prepare(), then waits a step before Engage().
     /// Useful for initializing hidden GOs that need a step before disabling them in Engage().
     /// Don't set new states here.
@@ -60,6 +49,17 @@ public abstract class State
     /// </summary>
     protected virtual void EngageState() { }
 
+    /// <summary>
+    /// Called by SetSceneDirectly() and FadeInToScene().
+    /// </summary>
+    protected void EnableInput()
+    {
+        InputKey.ButtonEvent += GPInput;
+        InputKey.StickEvent += GPStickInput;
+        InputKey.MouseClickEvent += Clicked;
+        MonoHelper.OnUpdate += UpdateStickInput;
+    }
+
     protected void SetStateDirectly(State newState)
     {
         DisableInput();
@@ -70,8 +70,14 @@ public abstract class State
         IEnumerator Initiate()
         {
             yield return null;
-            newState.EnableInput();
+            newState.PreEngageState(Wait().StartCoroutine);
+        }
+
+        IEnumerator Wait()
+        {
+            yield return null;
             newState.EngageState();
+            newState.EnableInput();
         }
     }
 
@@ -117,8 +123,8 @@ public abstract class State
             }
 
             fader.SelfDestruct();
-            newState.EnableInput();
             newState.EngageState();
+            newState.EnableInput();
         }
     }
 
@@ -129,9 +135,9 @@ public abstract class State
 
     protected virtual void DirectionPressed(Dir dir) { }
     protected virtual void WestPressed() { }
-    protected virtual void ConfirmPressed() { }
-    protected virtual void InteractPressed() { }
-    protected virtual void CancelPressed() { }
+    protected virtual void EastPressed() { }
+    protected virtual void NorthPressed() { }
+    protected virtual void SouthPressed() { }
     protected virtual void StartPressed() { }
     protected virtual void SelectPressed() { }
     protected virtual void R1Pressed() { }
@@ -140,6 +146,19 @@ public abstract class State
     protected virtual void L2Pressed() { }
     protected virtual void R3Pressed() { }
     protected virtual void L3Pressed() { }
+    protected virtual void DirectionReleased(Dir dir) { }
+    protected virtual void EastReleased() { }
+    protected virtual void NorthReleased() { }
+    protected virtual void SouthReleased() { }
+    protected virtual void WestReleased() { }
+    protected virtual void StartReleased() { }
+    protected virtual void SelectReleased() { }
+    protected virtual void R1Released() { }
+    protected virtual void L1Released() { }
+    protected virtual void R2Released() { }
+    protected virtual void L2Released() { }
+    protected virtual void R3Released() { }
+    protected virtual void L3Released() { }
     protected virtual void LStickInput(Vector2 v2) { }
     protected virtual void RStickInput(Vector2 v2) { }
     protected virtual void ClickedOn(GameObject go) { }
@@ -177,14 +196,13 @@ public abstract class State
         switch (gpb)
         {
             #region BUTTON PRESSED
-
             case GamePadButton.Up_Press: DirectionPressed(Dir.Up); break;
             case GamePadButton.Down_Press: DirectionPressed(Dir.Down); break;
             case GamePadButton.Left_Press: DirectionPressed(Dir.Left); break;
             case GamePadButton.Right_Press: DirectionPressed(Dir.Right); break;
-            case GamePadButton.North_Press: InteractPressed(); break;
-            case GamePadButton.East_Press: ConfirmPressed(); break;
-            case GamePadButton.South_Press: CancelPressed(); break;
+            case GamePadButton.North_Press: NorthPressed(); break;
+            case GamePadButton.East_Press: EastPressed(); break;
+            case GamePadButton.South_Press: SouthPressed(); break;
             case GamePadButton.West_Press: WestPressed(); break;
             case GamePadButton.Start_Press: StartPressed(); break;
             case GamePadButton.Select_Press: SelectPressed(); break;
@@ -194,27 +212,25 @@ public abstract class State
             case GamePadButton.L1_Press: L1Pressed(); break;
             case GamePadButton.L2_Press: L2Pressed(); break;
             case GamePadButton.L3_Press: L3Pressed(); break;
-
             #endregion BUTTON PRESSED
 
             #region BUTTON RELEASED
-
-            case GamePadButton.Up_Release: DirectionPressed(Dir.Up_Off); break;
-            case GamePadButton.Down_Release: DirectionPressed(Dir.Down_Off); break;
-            case GamePadButton.Left_Release: DirectionPressed(Dir.Left_Off); break;
-            case GamePadButton.Right_Release: DirectionPressed(Dir.Right_Off); break;
-            case GamePadButton.North_Release: break;
-            case GamePadButton.East_Release: break;
-            case GamePadButton.South_Release: break;
-            case GamePadButton.Start_Release: break;
-            case GamePadButton.Select_Release: break;
-            case GamePadButton.R1_Release: break;
-            case GamePadButton.R2_Release: break;
-            case GamePadButton.R3_Release: break;
-            case GamePadButton.L1_Release: break;
-            case GamePadButton.L2_Release: break;
-            case GamePadButton.L3_Release: break;
-
+            case GamePadButton.Up_Release: DirectionReleased(Dir.Up_Off); break;
+            case GamePadButton.Down_Release: DirectionReleased(Dir.Down_Off); break;
+            case GamePadButton.Left_Release: DirectionReleased(Dir.Left_Off); break;
+            case GamePadButton.Right_Release: DirectionReleased(Dir.Right_Off); break;
+            case GamePadButton.North_Release: EastReleased(); break;
+            case GamePadButton.East_Release: NorthReleased(); break;
+            case GamePadButton.South_Release: SouthReleased(); break;
+            case GamePadButton.West_Release: WestReleased(); break;
+            case GamePadButton.Start_Release: StartReleased(); break;
+            case GamePadButton.Select_Release: SelectReleased(); break;
+            case GamePadButton.R1_Release: R1Released(); break;
+            case GamePadButton.R2_Release: R2Released(); break;
+            case GamePadButton.R3_Release: R3Released(); break;
+            case GamePadButton.L1_Release: L1Released(); break;
+            case GamePadButton.L2_Release: L2Released(); break;
+            case GamePadButton.L3_Release: L3Released(); break;
                 #endregion BUTTON RELEASED
         }
     }

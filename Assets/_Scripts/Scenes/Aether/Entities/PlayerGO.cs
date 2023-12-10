@@ -22,7 +22,7 @@ public class Player
 
     private Card _bark;
     public Card Bark => _bark ??= new Card(nameof(Bark), GO.transform)
-        .SetFontScale(1.8f, 1.8f)
+        .SetFontScale(1.3f, 1.3f)
         .SetTextString("...")
         .SetOutlineColor(Color.black)
         .SetOutlineWidth(.15f)

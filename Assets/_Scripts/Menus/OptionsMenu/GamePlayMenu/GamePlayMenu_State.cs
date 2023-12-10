@@ -124,7 +124,7 @@ public class GamePlayMenu_State : State
             SetStateDirectly(new ShowControls_State(ConsequentState, MainMenuScene));
     }
 
-    protected override void ConfirmPressed()
+    protected override void EastPressed()
     {
         IncreaseItem(GamePlayMenu.Selection);
     }
@@ -161,7 +161,7 @@ public class GamePlayMenu_State : State
         item.Card.SetTextString(item.Item.DisplayData(Data.GamePlay));
     }
 
-    protected override void CancelPressed()
+    protected override void SouthPressed()
     {
         SetStateDirectly(ConsequentState);
     }

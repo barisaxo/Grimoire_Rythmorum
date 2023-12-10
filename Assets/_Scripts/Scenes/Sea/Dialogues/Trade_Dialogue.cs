@@ -150,8 +150,8 @@ public class Trade_Dialogue : Dialogue
         .SetSpeakerName(SpeakerName)
         .SetSpeakerColor(SpeakerColor);
 
-    Line _transCompleteLine;
-    Line TradeComplete_Line => _transCompleteLine ??= new Line(TransactionComplete_LineText, new NPCSailAway_State(new SeaScene_State()))
+    Line _tradeCompleteLine;
+    Line TradeComplete_Line => _tradeCompleteLine ??= new Line(TradeComplete_LineText, new NPCSailAway_State(new SeaScene_State()))
         .SetSpeakerIcon(SpeakerIcon)
         .SetSpeakerName(SpeakerName)
         .SetSpeakerColor(SpeakerColor)
@@ -186,7 +186,7 @@ public class Trade_Dialogue : Dialogue
 
 
 
-    readonly string TransactionComplete_LineText = "Good deal! Until next time!";
+    readonly string TradeComplete_LineText = "Good deal! Until next time!";
     readonly string Repair_LineText = "How much work do you want done?";
     readonly string Materials_LineText = "How much material do you want?";
     readonly string Rations_LineText = "How much rations do you want?";

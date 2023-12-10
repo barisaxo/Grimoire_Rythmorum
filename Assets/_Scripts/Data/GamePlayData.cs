@@ -15,7 +15,7 @@ public class GameplayData
 
     public bool ExplainBatterie = true;
 
-    public GameDifficulty GameDifficulty = 0;
+    public Difficulty GameDifficulty = 0;
     public bool MediumModeWon = false;
 
     public CellShape RecentCell;
@@ -202,7 +202,7 @@ public enum CadenceDifficulty
     ALL /* LVL4, LVL5, LVL6 */
 }
 
-public enum GameDifficulty
+public enum Difficulty
 {
     Easy,
     Medium,

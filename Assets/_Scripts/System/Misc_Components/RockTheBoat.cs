@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class RockTheBoat
 {
-    private Dictionary<Transform, (float amp, float period, float yPos)> keyValuePairs = new();
+    private readonly Dictionary<Transform, (float amp, float period, float offset)> keyValuePairs = new();
 
     private readonly List<Transform> Boats = new();
-    private readonly List<(float amp, float period, float yPos)> BoatRots = new();
+    private readonly List<(float amp, float period, float offset)> BoatRots = new();
 
     private bool _rocking;
     /// <summary>
@@ -26,16 +26,14 @@ public class RockTheBoat
     /// <summary>
     /// This does NOT subscribe SetSwayPos to MonoHelper.OnUpdate.
     /// </summary>
-    public void AddBoat(Transform t, float amp, float period, float rotY)
+    public void AddBoat(Transform t, (float amp, float period, float offset) sway)
     {
         if (Boats.Contains(t)) return;
 
-        var rot = (amp, period, rotY);
-
-        BoatRots.Add(rot);
+        BoatRots.Add(sway);
         Boats.Add(t);
 
-        keyValuePairs.TryAdd(t, rot);
+        keyValuePairs.TryAdd(t, sway);
     }
 
     /// <summary>
@@ -65,13 +63,17 @@ public class RockTheBoat
     {
         foreach (var boat in keyValuePairs)
         {
-            boat.Key.transform.Rotate(Vector3.forward * Mathf.Sin(Time.time * boat.Value.period) * boat.Value.amp);
-            // boat.Key.transform.rotation =
-            //  Quaternion.Euler(new Vector3(0,
-            //      boat.Value.yPos,
-            //      Mathf.Sin(Time.time * boat.Value.period) * boat.Value.amp));
+            // boat.Key.transform.Rotate(Vector3.forward * Mathf.Sin(Time.time * boat.Value.period) * boat.Value.amp);
+            boat.Key.transform.rotation =
+             Quaternion.Euler(
+                new Vector3(
+                    0,
+                    boat.Key.transform.rotation.eulerAngles.y,
+                    Mathf.Sin((Time.time + boat.Value.offset) * boat.Value.period) * boat.Value.amp * 180));
+
         }
     }
+
 }
 
 

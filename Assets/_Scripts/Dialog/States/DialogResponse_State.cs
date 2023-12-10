@@ -30,18 +30,18 @@ public class DialogResponse_State : State
         }
     }
 
-    protected override void ConfirmPressed()
+    protected override void EastPressed()
     {
         if (Reply.ResponseCards.Length >= 2)
             CheckResponse(Dialog.CurrentLine.Responses[^2]);
     }
 
-    protected override void CancelPressed()
+    protected override void SouthPressed()
     {
         CheckResponse(Dialog.CurrentLine.Responses[^1]);
     }
 
-    protected override void InteractPressed()
+    protected override void NorthPressed()
     {
         if (Reply.ResponseCards.Length >= 3)
             CheckResponse(Dialog.CurrentLine.Responses[^3]);

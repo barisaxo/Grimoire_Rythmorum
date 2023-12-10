@@ -15,14 +15,14 @@ public class InputTest_State : State
         TestObject.SelfDestruct();
     }
 
-    protected override void CancelPressed()
+    protected override void SouthPressed()
     {
         FadeToState(new InputTest_State());
     }
 
-    protected override void ConfirmPressed()
+    protected override void EastPressed()
     {
-        Debug.Log(nameof(ConfirmPressed));
+        Debug.Log(nameof(EastPressed));
         TestCard.SetSpriteColor(Random.Range(0, 8) switch
         {
             1 => Color.red,
@@ -36,7 +36,7 @@ public class InputTest_State : State
         });
     }
 
-    protected override void InteractPressed()
+    protected override void NorthPressed()
     {
         SetStateDirectly(new InputTest_State());
     }

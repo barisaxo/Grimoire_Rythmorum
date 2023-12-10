@@ -86,12 +86,12 @@ public class VolumeMenu_State : State
         UpdateMenu();
     }
 
-    protected override void ConfirmPressed()
+    protected override void EastPressed()
     {
         IncreaseItem(VolumeMenu.MenuItems[VolumeMenu.Selection]);
     }
 
-    protected override void CancelPressed()
+    protected override void SouthPressed()
     {
         SetStateDirectly(ConsequentState);
     }

@@ -27,7 +27,7 @@ public class HowToPlayMenu_State : State
     {
         if (go.transform.IsChildOf(HowToPlay.Back.Button.GO.transform))
         {
-            CancelPressed();
+            SouthPressed();
             return;
         }
 
@@ -35,7 +35,7 @@ public class HowToPlayMenu_State : State
         {
             if (!go.transform.IsChildOf(HowToPlay.MenuItems[i].Card.GO.transform)) continue;
             HowToPlay.Selection = HowToPlay.MenuItems[i];
-            ConfirmPressed();
+            EastPressed();
             return;
         }
     }
@@ -46,7 +46,7 @@ public class HowToPlayMenu_State : State
         HowToPlay.ScrollMenuItems(dir);
     }
 
-    protected override void ConfirmPressed()
+    protected override void EastPressed()
     {
         if (HowToPlay.Selection == HowToPlayMenu.HowToPlayItem.Muscopa)
         {
@@ -62,7 +62,7 @@ public class HowToPlayMenu_State : State
         }
     }
 
-    protected override void CancelPressed()
+    protected override void SouthPressed()
     {
         SetStateDirectly(new MainMenu_State(MainMenuScene));
     }

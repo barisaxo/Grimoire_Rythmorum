@@ -99,9 +99,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Rudder
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 56b2f28001f054f408922692073244d4, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8164078558771037576, guid: 56b2f28001f054f408922692073244d4, type: 3}
       propertyPath: m_Name
       value: rudder
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: 56b2f28001f054f408922692073244d4, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -173,9 +181,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Sail
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 70dff58f2e5e94dacbdcd4e5e70d40b6, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8164078558771037576, guid: 70dff58f2e5e94dacbdcd4e5e70d40b6, type: 3}
       propertyPath: m_Name
       value: sail
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: 70dff58f2e5e94dacbdcd4e5e70d40b6, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -247,9 +263,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tiller
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 92fb6bf0910bc4e28905124b9b66cc51, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8164078558771037576, guid: 92fb6bf0910bc4e28905124b9b66cc51, type: 3}
       propertyPath: m_Name
       value: tiller
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: 92fb6bf0910bc4e28905124b9b66cc51, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -321,9 +345,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: CenterBoard
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 947a5729fc01948c9843e0ca9b1bee8d, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8164078558771037576, guid: 947a5729fc01948c9843e0ca9b1bee8d, type: 3}
       propertyPath: m_Name
       value: centerBoard
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: 947a5729fc01948c9843e0ca9b1bee8d, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -395,9 +427,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Boom
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 79ef97cdf1067423896fb9bf550acb7a, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8164078558771037576, guid: 79ef97cdf1067423896fb9bf550acb7a, type: 3}
       propertyPath: m_Name
       value: boom
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: 79ef97cdf1067423896fb9bf550acb7a, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -469,9 +509,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Hull
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: c6dbc20c2b3c446a4a9ac45cc7780501, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8164078558771037576, guid: c6dbc20c2b3c446a4a9ac45cc7780501, type: 3}
       propertyPath: m_Name
       value: hull
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: c6dbc20c2b3c446a4a9ac45cc7780501, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -543,9 +591,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Vang
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 4607eb50385d6468cae4f7be39793d21, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8164078558771037576, guid: 4607eb50385d6468cae4f7be39793d21, type: 3}
       propertyPath: m_Name
       value: vang
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: 4607eb50385d6468cae4f7be39793d21, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -617,9 +673,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: Mast
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: d96510b405e734055bf390e25a004800, type: 3}
+      propertyPath: m_Layer
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8164078558771037576, guid: d96510b405e734055bf390e25a004800, type: 3}
       propertyPath: m_Name
       value: mast
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: d96510b405e734055bf390e25a004800, type: 3}
+      propertyPath: m_Layer
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

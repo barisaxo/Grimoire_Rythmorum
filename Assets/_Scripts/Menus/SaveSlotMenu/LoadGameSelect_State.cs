@@ -34,7 +34,7 @@ public class LoadGameSelectSlot_State : State
             if (!go.transform.IsChildOf(SaveSlotMenu.MenuItems[i].Card.GO.transform)) continue;
             SaveSlotMenu.Selection = SaveSlotMenu.MenuItems[i];
             SaveSlotMenu.UpdateTextColors();
-            ConfirmPressed();
+            EastPressed();
             return;
         }
     }
@@ -48,7 +48,7 @@ public class LoadGameSelectSlot_State : State
         SaveSlotMenu.UpdateTextColors();
     }
 
-    protected override void CancelPressed()
+    protected override void SouthPressed()
     {
         SetStateDirectly(new MainMenu_State(MainMenuScene));
     }

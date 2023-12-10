@@ -32,7 +32,7 @@ public class EndBatterie_Dialogue : Dialogue
 
             case BatterieResultType.Surrender: FirstLine = SurrenderedToNME; break;
 
-            // case BatterieResultType.Fled: FirstLine = FledLine; break;
+            case BatterieResultType.Fled: FirstLine = FledLine; break;
 
             case BatterieResultType.Won:
                 if (_map) { FirstLine = WonWithMap; }
@@ -49,34 +49,34 @@ public class EndBatterie_Dialogue : Dialogue
         .SetSpeakerIcon(Assets.Pino)
         .SetSpeakerName(Pino);
 
-    Line WonWithOutMap => new Line(Damage + Found + Gold + Mats + Rations, new NPCSailAway_State(new SeaScene_State()))
-        .SetSpeakerIcon(Assets.Pino)
-        .SetSpeakerName(Pino)
-        ;
-    // .FadeToNextState();
-
     Line MapLine => new Line(GhostShip, new SeaScene_State())
         .SetSpeakerIcon(Assets.Pino)
         .SetSpeakerName(Pino)
         ;
-    // .FadeToNextState();
 
-    Line NMEEscapedLine => new Line("They got away Cap!\n" + Damage, new NPCSailAway_State(new SeaScene_State()))
+    Line WonWithOutMap => new Line(Damage + Found + Gold + Mats + Rations, new SeaScene_State())
         .SetSpeakerIcon(Assets.Pino)
         .SetSpeakerName(Pino)
-        // .FadeToNextState()
         ;
 
-    Line NMESurrendered => new Line(Damage + Found + Gold + Mats + Rations, new NPCSailAway_State(new SeaScene_State()))
+    Line FledLine => new Line("We're safe now Cap.\n" + Damage, new SeaScene_State())
         .SetSpeakerIcon(Assets.Pino)
         .SetSpeakerName(Pino)
-        // .FadeToNextState()
         ;
 
-    Line SurrenderedToNME => new Line(Damage + Lost + Gold + Mats + Rations, new NPCSailAway_State(new SeaScene_State()))
+    Line NMEEscapedLine => new Line("They got away Cap!\n" + Damage, new SeaScene_State())
         .SetSpeakerIcon(Assets.Pino)
         .SetSpeakerName(Pino)
-        // .FadeToNextState()
+        ;
+
+    Line NMESurrendered => new Line(Damage + Found + Gold + Mats + Rations, new SeaScene_State())
+        .SetSpeakerIcon(Assets.Pino)
+        .SetSpeakerName(Pino)
+        ;
+
+    Line SurrenderedToNME => new Line(Damage + Lost + Gold + Mats + Rations, new SeaScene_State())
+        .SetSpeakerIcon(Assets.Pino)
+        .SetSpeakerName(Pino)
         ;
 
     Line CheatLine => new Line("...", CheatLine2)
@@ -84,7 +84,7 @@ public class EndBatterie_Dialogue : Dialogue
         .SetSpeakerName(Pino)
         ;
 
-    Line CheatLine2 => new Line("I'm sorry Cap, but acting like that isn't going to get us very far!", new NPCSailAway_State(new SeaScene_State()))
+    Line CheatLine2 => new Line("I'm sorry Cap, but acting like that isn't going to get us very far!", new SeaScene_State())
         .SetSpeakerIcon(Assets.Pino)
         .SetSpeakerName(Pino)
         ;

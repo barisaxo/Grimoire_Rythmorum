@@ -13,6 +13,17 @@ static class Helpers
     }
 
     /// <summary>
+    /// a is ± 1 of b
+    /// </summary>
+    public static bool IsPM1(this Vector3 a, Vector3 b)
+    {
+        return a.x < b.x + 1 && a.x > b.x - 1 &&
+               a.y < b.y + 1 && a.y > b.y - 1 &&
+               a.z < b.z + 1 && a.z > b.z - 1;
+    }
+
+
+    /// <summary>
     /// a is ± n of b
     /// </summary>
     public static bool IsPOM(this float a, float n, float b)
@@ -29,6 +40,44 @@ static class Helpers
     }
 
     /// <summary>
+    /// a is ± n of b
+    /// </summary>
+    public static bool IsPOM(this Vector3 a, float n, Vector3 b)
+    {
+        return a.x < b.x + n && a.x > b.x - n &&
+               a.y < b.y + n && a.y > b.y - n &&
+               a.z < b.z + n && a.z > b.z - n;
+    }
+
+    /// <summary>
+    /// a is ± n of b
+    /// </summary>
+    public static bool IsPOM(this Vector3 a, Vector3 n, Vector3 b)
+    {
+        return a.x < b.x + n.x && a.x > b.x - n.x &&
+               a.y < b.y + n.x && a.y > b.y - n.x &&
+               a.z < b.z + n.x && a.z > b.z - n.x;
+    }
+    /// <summary>
+    /// a is ± n of b
+    /// </summary>
+    public static bool IsPOM(this Vector2 a, float n, Vector2 b)
+    {
+        return a.x < b.x + n && a.x > b.x - n &&
+               a.y < b.y + n && a.y > b.y - n;
+    }
+
+    /// <summary>
+    /// a is ± n of b
+    /// </summary>
+    public static bool IsPOM(this Vector2 a, Vector2 n, Vector2 b)
+    {
+        return a.x < b.x + n.x && a.x > b.x - n.x &&
+               a.y < b.y + n.x && a.y > b.y - n.x;
+    }
+
+
+    /// <summary>
     /// A grid positions listed index.
     /// </summary>
     /// <param name="vector2">Vector2 grid position</param>
@@ -41,14 +90,14 @@ static class Helpers
 
 
     /// <summary>
-    /// A grid positions listed index.
+    /// A grid positions listed index.  (X * height) + Y
     /// </summary>
     /// <returns>(x * height) + y</returns>
     public static int Vec2ToInt(this Vector2Int gridPosition, int boardSize)
     { return (gridPosition.x * boardSize) + gridPosition.y; }
 
     /// <summary>
-    /// A grid positions listed index.
+    /// A grid positions listed index.  (X * height) + Y
     /// </summary>
     /// <returns>(x * height) + y</returns>
     public static int Vec2ToInt(int x, int y, int boardSize)
@@ -71,6 +120,7 @@ static class Helpers
     /// </summary>
     public static int SignedMod(this int a, int b)
     {
+        if (b == 0) return 0;
         b *= b < 0 ? -1 : 1;
         while (a < 0) a += b;
         return a % b;
@@ -81,6 +131,7 @@ static class Helpers
     /// </summary>
     public static float SignedMod(this float a, float b)
     {
+        if (b == 0) return 0;
         b *= b < 0 ? -1 : 1;
         while (a < 0) a += b;
         return a % b;
@@ -107,6 +158,46 @@ static class Helpers
         if (t2 != null) temp.Add(t2);
         return t1 = temp.ToArray();
     }
+
+    /// <summary>
+    /// Returns T t2 added to T[] t1. Neither arg needs to be initialized. Does not ref t1!
+    /// </summary>
+    public static T[] Add<T>(this T[] t1, T[] t2)
+    {
+        List<T> temp = new();
+        if (t1 != null) foreach (T datum in t1) temp.Add(datum);
+        if (t2 != null) foreach (T datum in t2) temp.Add(datum);
+        return t1 = temp.ToArray();
+    }
+
+    /// <summary>
+    /// Returns T t2 added to T[] t1. Neither arg needs to be initialized. Does not ref t1!
+    /// </summary>
+    public static T[] Add<T>(this T[] t1, T t2)
+    {
+        List<T> temp = new();
+        if (t1 != null) foreach (T datum in t1) temp.Add(datum);
+        if (t2 != null) temp.Add(t2);
+        return t1 = temp.ToArray();
+    }
+
+    public static T[] Flatten<T>(this T[][] values)
+    {
+        if (values == null) throw new System.ArgumentNullException();
+
+        int index = 0;
+        int length = 0;
+        foreach (T[] d1Value in values) length += d1Value.Length;
+        T[] flatArray = new T[length];
+
+        foreach (T[] d1Value in values)
+            for (int i = 0; i < d1Value.Length; i++)
+                flatArray[index++] = d1Value[i];
+
+        return flatArray;
+    }
+
+
 
     /// <summary>
     /// _thisIsStartCase => This Is Start Case
@@ -158,13 +249,6 @@ static class Helpers
 
         return temp;
     }
-
-
-    // public static bool Contains<T>(this T[] ts, T item)
-    // {
-    //     foreach (T t in ts) if (item.Equals(t)) return true;
-    //     return false;
-    // }
 
     public static Vector3 NormalDirection(this Vector3 a, Vector3 b)
     {
