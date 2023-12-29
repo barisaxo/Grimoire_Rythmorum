@@ -80,10 +80,10 @@ public static class Assets
     #region SEA
 
     #region SHIPS
-    public static GameObject _schooner => Resources.Load<GameObject>("Prefabs/BigBoat2");
+    public static GameObject _schooner => Resources.Load<GameObject>("Models/Schooner/Schooner1");
     public static GameObject Schooner => GameObject.Instantiate(_schooner);
 
-    public static GameObject _catBoat => Resources.Load<GameObject>("Prefabs/Catboat2");
+    public static GameObject _catBoat => Resources.Load<GameObject>("Models/Schooner/Schooner2");
     public static GameObject CatBoat => GameObject.Instantiate(_catBoat);
 
     public static GameObject _cannonFire => Resources.Load<GameObject>("Prefabs/CannonFire");

@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
 using UnityEngine;
-using MusicTheory.Rhythms;
-using MusicTheory.Scales;
-using MusicTheory.Arithmetic;
+// using MusicTheory.Rhythms;
+// using MusicTheory.Scales;
+// using MusicTheory.Arithmetic;
 public class BootStrap_State : State
 {
     private BootStrap_State() { }
@@ -24,11 +24,9 @@ public class BootStrap_State : State
 
     protected override void EngageState()
     {
+        SetStateDirectly(new MainMenu_State());
+        // FadeToState(new SeaScene_State());
 
-        foreach (var g in UnityEngine.InputSystem.InputSystem.devices)
-            Debug.Log(g.device);
-
-        Debug.Log(UnityEngine.InputSystem.InputSystem.devices[^1].GetType());
         // if (UnityEngine.Random.value > .5f) FadeToState(PuzzleSelector.WeightedRandomPuzzleState(Data.TheoryPuzzleData));
         // else
         // {
@@ -48,15 +46,11 @@ public class BootStrap_State : State
         // FadeToState(new SeaSceneTest_State());
         // FadeToState(new Puzzle_State(new ModePuzzle(new MusicTheory.Scales.Blues(), new MusicTheory.Modes.MajorBlues()), PuzzleType.Aural));
         // SetStateDirectly(new BatteryAndCadenceTestState(RhythmSpecs));
-
         //SetStateDirectly(new Batterie_State(RhythmSpecs));
-
-        SetStateDirectly(new MainMenu_State());
         //SetStateDirectly(new VolumeMenu_State(new MainMenu_State()));
-
         //SetStateDirectly(new TestMusicSheet_State());
-
         //SetStateDirectly(new TheoryPuzzleState());
         //SetStateDirectly(new NewMuscopaState());
+
     }
 }

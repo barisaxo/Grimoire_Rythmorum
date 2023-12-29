@@ -35,7 +35,7 @@ public class CameraPan_State : State
 
     IEnumerator PanCamera()
     {
-        Pan = new Vector3(Pan.x.SignedMod(360), Pan.y.SignedMod(360), Pan.z.SignedMod(360));
+        Pan = new Vector3(Pan.x.Smod(360), Pan.y.Smod(360), Pan.z.Smod(360));
 
         while (!Cam.Io.Camera.transform.rotation.eulerAngles.x.IsPOM(1, Pan.x) ||
                !Cam.Io.Camera.transform.rotation.eulerAngles.y.IsPOM(1, Pan.y) ||
