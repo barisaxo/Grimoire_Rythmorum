@@ -21,9 +21,10 @@ public class EndPuzzle_Dialogue : Dialogue
     public EndPuzzle_Dialogue(bool won)
     {
         _won = won;
-        SpeakerIcon = new UnityEngine.Sprite[] { SeaScene.Io.NearNPCShip.Flag };
-        SpeakerName = SeaScene.Io.NearNPCShip.Name;
-        SpeakerColor = SeaScene.Io.NearNPCShip.FlagColor;
+        Speaker = new Speaker(
+            Sea.Scene.Io.NearestNPC.Flag,
+            Sea.Scene.Io.NearestNPC.Name,
+            Sea.Scene.Io.NearestNPC.FlagColor);
         FirstLine = _won ? RecapLineWithSextant : RecapLineWithOutSextant;
     }
 
@@ -31,49 +32,44 @@ public class EndPuzzle_Dialogue : Dialogue
     public EndPuzzle_Dialogue(Color color, Sprite flag, string region)
     {
         _won = true;
-        SpeakerColor = color;
-        SpeakerIcon = new Sprite[1] { flag };
-        SpeakerName = "[" + region + " Ship]:\n";
+        Speaker = new Speaker(flag, "[" + region + " Ship]:\n", color);
         FirstLine = RecapLineWithSextant;
     }
 
     public EndPuzzle_Dialogue(bool won, int gold, int mats, int rations)
     {
-        SpeakerIcon = new UnityEngine.Sprite[] { SeaScene.Io.NearNPCShip.Flag };
-        SpeakerName = SeaScene.Io.NearNPCShip.Name;
-        SpeakerColor = SeaScene.Io.NearNPCShip.FlagColor;
+        Speaker = new Speaker(
+            Sea.Scene.Io.NearestNPC.Flag,
+            Sea.Scene.Io.NearestNPC.Name,
+            Sea.Scene.Io.NearestNPC.FlagColor);
         _won = won;
         _gold = gold * winSign; _mats = mats * winSign; _rations = rations * winSign;
         FirstLine = RecapLineWithOutSextant;
     }
 
     Line RecapLineWithSextant => new Line(Recap, ResultsWithSextant)
-        .SetSpeakerIcon(SpeakerIcon)
-        .SetSpeakerColor(SpeakerColor)
-        .SetSpeakerName(SpeakerName);
+        .SetSpeaker(Speaker)
+        ;
 
     Line RecapLineWithOutSextant => new Line(Recap, FunFactLine)
-        .SetSpeakerIcon(Assets.Pino)
-        .SetSpeakerName(Pino);
+        .SetSpeaker(Speaker)
+        ;
 
     Line ResultsWithSextant => new Line(Sextant, SextantLine)
-        .SetSpeakerIcon(Assets.Pino)
-        .SetSpeakerName(Pino);
+        .SetSpeaker(Speaker)
+        ;
 
     Line ResultsWithOutSextant => new Line(Won + Gold + Mats + Rations, FunFactLine)
-        .SetSpeakerIcon(SpeakerIcon)
-        .SetSpeakerColor(SpeakerColor)
-        .SetSpeakerName(SpeakerName);
+        .SetSpeaker(Speaker)
+        ;
 
     Line FunFactLine => new Line(FunFact.GetFunFact(), new NPCSailAway_State(new SeaScene_State()))
-        .SetSpeakerIcon(SpeakerIcon)
-        .SetSpeakerColor(SpeakerColor)
-        .SetSpeakerName(SpeakerName)
+        .SetSpeaker(Speaker)
         ;
 
     Line SextantLine => new Line(SextantDef, FunFactLine)
-        .SetSpeakerIcon(Assets.Pino)
-        .SetSpeakerName(Pino);
+        .SetSpeaker(Speaker)
+        ;
 
 }
 

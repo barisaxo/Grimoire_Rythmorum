@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Sea;
 
 public class MoveNPCOffScreen_State : State
 {
@@ -10,7 +11,7 @@ public class MoveNPCOffScreen_State : State
     }
 
     readonly State SubsequentState;
-    NPCShip NPC => SeaScene.Io.NearNPCShip;
+    NPCShip NPC => Scene.Io.NearestNPC;
 
     protected override void EngageState()
     {
@@ -23,9 +24,9 @@ public class MoveNPCOffScreen_State : State
             if (++z == NPC.PatrolPath.Length) { i = NPC.PatrolIndex + (NPC.PatrolPath.Length / 2); break; }
         }
 
-        SeaScene.Io.UnusedShips.Add(NPC.GO);
-        SeaScene.Io.UsedShips.Remove(NPC.GO);
-        SeaScene.Io.RockTheBoat.RemoveBoat(NPC.GO.transform);
+        Scene.Io.UnusedShips.Add(NPC.GO);
+        Scene.Io.UsedShips.Remove(NPC.GO);
+        Scene.Io.RockTheBoat.RemoveBoat(NPC.GO.transform);
         NPC.GO.SetActive(false);
         NPC.GO = null;
         NPC.PatrolIndex = i;
@@ -34,13 +35,15 @@ public class MoveNPCOffScreen_State : State
         SetStateDirectly(SubsequentState);
     }
 
-    bool IsOccupiedAndOnGrid(Vector3Int v3)
+    bool IsOccupiedAndOnGrid(Vector2Int v2)
     {
-        if (v3.x.IsPOM(SeaScene.Io.BoardOffset + 1, SeaScene.Io.Ship.Coord.x) ||
-            v3.z.IsPOM(SeaScene.Io.BoardOffset + 1, SeaScene.Io.Ship.Coord.z))
+        if (v2.x.IsPOM(Scene.Io.Board.Center() + 1, Scene.Io.Ship.GlobalCoord.x) ||
+            v2.y.IsPOM(Scene.Io.Board.Center() + 1, Scene.Io.Ship.GlobalCoord.y))
             return true;
 
-        foreach (var npc in SeaScene.Io.NPCShips) if (npc.Coords == v3) return true;
+        var localRegions = Scene.Io.Map.AdjacentRegions(Scene.Io.Ship);
+        foreach (Region region in localRegions)
+            foreach (NPCShip npc in region.NPCs) if (npc.LocalCoords == v2) return true;
 
         return false;
     }

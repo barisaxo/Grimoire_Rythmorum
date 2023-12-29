@@ -150,7 +150,7 @@ public class AetherScene
         var go = Assets.CatBoat;
         go.transform.SetParent(Parent);
         go.transform.SetLocalPositionAndRotation(new Vector3(6.5f, 1.6f, 17), Quaternion.Euler(0, 90, 0));
-        CapsuleCollider c = go.GetComponent<CapsuleCollider>();
+        CapsuleCollider c = go.GetComponentInChildren<CapsuleCollider>();
         c.isTrigger = false;
         // BoxCollider bc = go.AddComponent<BoxCollider>();
         // bc.size = new Vector3(.4f, 1, 1.5f);

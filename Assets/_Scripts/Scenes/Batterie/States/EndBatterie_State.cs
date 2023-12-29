@@ -56,7 +56,7 @@ public class EndBatterie_State : State
             if (Data.GamePlay.Batterie_Difficulty == 0) return true;
 
             float chance = UnityEngine.Random.value;
-            float percent = ((float)(6 - (int)Data.GamePlay.Batterie_Difficulty)) / (float)(Pack.SeaScene.NPCShips.Count + 1);
+            float percent = ((float)(6 - (int)Data.GamePlay.Batterie_Difficulty));//TODO / (float)(Pack.SeaScene.NPC.Ships.Count + 1);
             //Debug.Log(nameof(chance) + ": " + chance + ", " + nameof(percent) + ": " + percent + ", num of Pirate ships: " + (Board.PirateShipCount() + 1));
             return (chance < percent);
         }

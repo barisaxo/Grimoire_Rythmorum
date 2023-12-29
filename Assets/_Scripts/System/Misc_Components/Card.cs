@@ -165,6 +165,9 @@ public class Card
         }
     }
 
+    public bool CanvasExists => _canvas != null;
+    public bool TMPExists => _tmp != null;
+    public bool SRExists => _sr != null;
 }
 
 

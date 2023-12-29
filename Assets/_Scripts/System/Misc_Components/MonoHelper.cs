@@ -29,6 +29,7 @@ public class MonoHelper : MonoBehaviour
     }
     #endregion INSTANCE
 
+    public string State;
     [SerializeField] private List<string> updateSubscribers = new();
     [SerializeField] private List<string> fixedUpdateSubscribers = new();
     [SerializeField] private List<string> lateUpdateSubscribers = new();

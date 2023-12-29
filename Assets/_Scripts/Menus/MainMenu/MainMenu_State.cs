@@ -109,7 +109,7 @@ public class MainMenu_State : State
     protected override void LStickInput(Vector2 v2)
     {
         MainMenuScene?.CatBoat.transform.Rotate(25 * Time.deltaTime * new Vector3(0, v2.x, 0), Space.World);
-        Cam.Io.SetObliqueness(v2);
+        // Cam.Io.SetObliqueness(v2);
     }
 
     protected override void RStickInput(Vector2 v2)

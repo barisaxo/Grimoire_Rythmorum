@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Dialog;
+using Sea;
 
 public class SeaToDialogueTransition_State : State
 {
@@ -13,7 +14,7 @@ public class SeaToDialogueTransition_State : State
 
     protected override void EngageState()
     {
-        SeaScene.Io.SeaHUD.HUD.GO.SetActive(false);
+        Scene.Io.HUD.Hud.GO.SetActive(false);
         Audio.BGMusic.Pause();
         Audio.Ambience.Pause();
 

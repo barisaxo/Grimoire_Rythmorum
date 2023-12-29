@@ -1,12 +1,12 @@
 using System;
-
+using Sea;
 
 public class MenuToSeaTransition_State : State
 {
     protected override void PrepareState(Action callback)
     {
-        SeaScene.Io.RockTheBoat.Rocking = true;
-        SeaScene.Io.Swells.EnableSwells();
+        Scene.Io.RockTheBoat.Rocking = true;
+        Scene.Io.Swells.EnableSwells();
         base.PrepareState(callback);
     }
 

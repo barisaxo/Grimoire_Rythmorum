@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Sea;
 
 public class NMESailApproach_State : State
 {
@@ -13,8 +14,8 @@ public class NMESailApproach_State : State
         Audio.Ambience.Pause();
 
         Audio.SFX.PlayOneShot(Assets.AlertHalfDim);
-        NMEShip = SeaScene.Io.NearNPCShip;
-        NMEShip.GO.transform.LookAt(SeaScene.Io.Ship.GO.transform);
+        NMEShip = Scene.Io.NearestNPC;
+        NMEShip.GO.transform.LookAt(Scene.Io.Ship.GO.transform);
 
         base.PrepareState(callback);
     }
@@ -25,7 +26,7 @@ public class NMESailApproach_State : State
 
         IEnumerator SailToward()
         {
-            while (Vector3.Distance(NMEShip.GO.transform.position, SeaScene.Io.Ship.GO.transform.position) > .75f)
+            while (Vector3.Distance(NMEShip.GO.transform.position, Scene.Io.Ship.GO.transform.position) > .75f)
             {
                 yield return null;
 

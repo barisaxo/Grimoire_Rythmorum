@@ -315,9 +315,10 @@ public static class CardSystems
     /// </summary>
     public static Card SetSizeAll(this Card Card, Vector2 v)
     {
-        Card.SetSpriteSize(v);
-        Card.SetImageSize(v);
-        return Card.SetTMPSize(v);
+        if (Card.SRExists) Card.SetSpriteSize(v);
+        if (Card.CanvasExists) Card.SetImageSize(v);
+        if (Card.TMPExists) Card.SetTMPSize(v);
+        return Card;
     }
     /// <summary>
     ///  Don't use if there is no Image/TMP or  the call will create an empty canvas.

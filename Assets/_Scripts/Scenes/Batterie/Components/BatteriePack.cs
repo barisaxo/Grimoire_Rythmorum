@@ -7,7 +7,7 @@ public class BatteriePack
         var health = Random.Range(16, 24);
         NMEHealth = (health, health);
     }
-    public SeaScene SeaScene;
+    public Sea.Scene SeaScene;
     public (int cur, int max) NMEHealth;
     public int VolleysFired;
     public bool Escaping;

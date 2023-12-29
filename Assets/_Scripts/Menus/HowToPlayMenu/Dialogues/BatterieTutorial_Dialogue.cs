@@ -27,8 +27,7 @@ public class BatterieTutorial_Dialogue : Dialogue
         var lines = new Line[batterie.Length];
         for (var i = 0; i < lines.Length; i++)
             lines[i] = new Line(batterie[i])
-                .SetSpeakerName(AL)
-                .SetSpeakerIcon(((FacialExpression)Random.Range(0, 9)).Sprites());
+                .SetSpeaker(Speaker.RandomAL);
 
         lines[^1].SetResponses(new[]
         {

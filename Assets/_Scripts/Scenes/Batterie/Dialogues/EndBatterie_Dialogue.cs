@@ -20,6 +20,7 @@ public class EndBatterie_Dialogue : Dialogue
         _damage = damage;
         _map = map;
         Result = result;
+        Speaker = Speaker.Pino;
     }
 
     public override Dialogue Initiate()
@@ -46,47 +47,39 @@ public class EndBatterie_Dialogue : Dialogue
     }
 
     Line WonWithMap => new Line(Damage + Found + Gold + Mats + Rations + Map, MapLine)
-        .SetSpeakerIcon(Assets.Pino)
-        .SetSpeakerName(Pino);
+        .SetSpeaker(Speaker)
+        ;
 
     Line MapLine => new Line(GhostShip, new SeaScene_State())
-        .SetSpeakerIcon(Assets.Pino)
-        .SetSpeakerName(Pino)
+        .SetSpeaker(Speaker)
         ;
 
     Line WonWithOutMap => new Line(Damage + Found + Gold + Mats + Rations, new SeaScene_State())
-        .SetSpeakerIcon(Assets.Pino)
-        .SetSpeakerName(Pino)
+        .SetSpeaker(Speaker)
         ;
 
     Line FledLine => new Line("We're safe now Cap.\n" + Damage, new SeaScene_State())
-        .SetSpeakerIcon(Assets.Pino)
-        .SetSpeakerName(Pino)
+        .SetSpeaker(Speaker)
         ;
 
     Line NMEEscapedLine => new Line("They got away Cap!\n" + Damage, new SeaScene_State())
-        .SetSpeakerIcon(Assets.Pino)
-        .SetSpeakerName(Pino)
+        .SetSpeaker(Speaker)
         ;
 
     Line NMESurrendered => new Line(Damage + Found + Gold + Mats + Rations, new SeaScene_State())
-        .SetSpeakerIcon(Assets.Pino)
-        .SetSpeakerName(Pino)
+        .SetSpeaker(Speaker)
         ;
 
     Line SurrenderedToNME => new Line(Damage + Lost + Gold + Mats + Rations, new SeaScene_State())
-        .SetSpeakerIcon(Assets.Pino)
-        .SetSpeakerName(Pino)
+        .SetSpeaker(Speaker)
         ;
 
     Line CheatLine => new Line("...", CheatLine2)
-        .SetSpeakerIcon(Assets.Pino)
-        .SetSpeakerName(Pino)
+        .SetSpeaker(Speaker)
         ;
 
     Line CheatLine2 => new Line("I'm sorry Cap, but acting like that isn't going to get us very far!", new SeaScene_State())
-        .SetSpeakerIcon(Assets.Pino)
-        .SetSpeakerName(Pino)
+        .SetSpeaker(Speaker)
         ;
 
 

@@ -1,12 +1,13 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using Sea;
 
 public class SeaScene_State : State
 {
-    SeaScene SeaScene => SeaScene.Io;
+    Scene Scene => Scene.Io;
 
-    Vector3 ShipVelocity = Vector3.zero;
+    Vector2 ShipVelocity = Vector2.zero;
     public CameraFollow CameraFollow;
 
     bool up, down, left, right;
@@ -14,11 +15,11 @@ public class SeaScene_State : State
 
     protected override void PrepareState(Action callback)
     {
-        _ = SeaScene;
+        _ = Scene;
         // return;
-        SeaScene.SeaHUD.HUD.GO.SetActive(true);
-        SeaScene.SeaHUD.Show();
-        CameraFollow = new(SeaScene.Ship.Parent.transform)
+        Scene.HUD.Hud.GO.SetActive(true);
+        Scene.HUD.Show();
+        CameraFollow = new(Scene.Ship.Parent.transform)
         {
             LockYPos = true,
             LockXRot = true,
@@ -26,9 +27,9 @@ public class SeaScene_State : State
             LockZRot = true,
         };
 
-        SeaScene.RockTheBoat.Rocking = true;
+        Scene.RockTheBoat.Rocking = true;
 
-        SeaScene.Swells.EnableSwells();
+        Scene.Swells.EnableSwells();
 
         if (Audio.BGMusic.AudioSources[0].clip == Assets.BGMus4)
             Audio.BGMusic.Resume();
@@ -53,31 +54,29 @@ public class SeaScene_State : State
             }
         }
 
-        SeaScene.Io.SeaHUD.HUD.GO.SetActive(true);
+        Scene.HUD.Hud.GO.SetActive(true);
+
+        _ = Scene.UpdateMap(ShipVelocity);
         base.PrepareState(callback);
     }
 
     protected override void EngageState()
     {
-        MonoHelper.OnUpdate += CheckInput;
-        MonoHelper.OnUpdate += ShipCoords;
-        MonoHelper.OnUpdate += CheckNMETriggers;
-        MonoHelper.OnFixedUpdate += Movement;
+        MonoHelper.OnUpdate += Tick;
+        MonoHelper.OnFixedUpdate += FixedTick;
     }
 
     protected override void DisengageState()
     {
-        SeaScene.SeaHUD.Hide();
+        Scene.HUD.Hide();
         RStick.y = .01f;
 
         Cam.StoredCamRot = Cam.Io.Camera.transform.rotation.eulerAngles;
         Cam.StoredCamPos = Cam.Io.Camera.transform.position;
         CameraFollow.SelfDestruct();
 
-        MonoHelper.OnUpdate -= CheckInput;
-        MonoHelper.OnUpdate -= ShipCoords;
-        MonoHelper.OnUpdate -= CheckNMETriggers;
-        MonoHelper.OnFixedUpdate -= Movement;
+        MonoHelper.OnUpdate -= Tick;
+        MonoHelper.OnFixedUpdate -= FixedTick;
     }
 
     protected override void DirectionPressed(Dir dir)
@@ -113,28 +112,33 @@ public class SeaScene_State : State
 
     void Movement()
     {
-        if (up) ShipVelocity.z = Mathf.Clamp(ShipVelocity.z + (Time.deltaTime * .8f), -.3f, .8f);
-        else if (down) ShipVelocity.z = Mathf.Clamp(ShipVelocity.z - Time.deltaTime, -.3f, .8f);
-        else ShipVelocity.z *= .99f;
+        if (up) ShipVelocity.y = Mathf.Lerp(ShipVelocity.y, .8f, Time.fixedDeltaTime);
+        else if (down) ShipVelocity.y = Mathf.Lerp(ShipVelocity.y, -.3f, Time.fixedDeltaTime);
+        else ShipVelocity.y = Mathf.Lerp(ShipVelocity.y, 0, Time.fixedDeltaTime);
 
-        if (left) ShipVelocity.x = Mathf.Clamp(ShipVelocity.x - Time.deltaTime * 2, -1f, 1);
-        else if (right) ShipVelocity.x = Mathf.Clamp(ShipVelocity.x + Time.deltaTime * 2, -1f, 1);
-        else ShipVelocity.x *= .9f;
+        if (left) ShipVelocity.x = Mathf.Lerp(ShipVelocity.x, -1, Time.fixedDeltaTime);
+        else if (right) ShipVelocity.x = Mathf.Lerp(ShipVelocity.x, 1, Time.fixedDeltaTime);
+        else ShipVelocity.x = Mathf.Lerp(ShipVelocity.x, 0, Time.fixedDeltaTime);
 
-        ShipVelocity = SeaScene.UpdateMap(ShipVelocity);
+        ShipVelocity = Scene.UpdateMap(ShipVelocity);
 
-        if (TimeSinceLastL < 1.5f) { SeaScene.SeaHUD.Hide(); }//Debug.Log("Hide");
-        else { SeaScene.SeaHUD.Show(); }//Debug.Log("Show");
+        // if (TimeSinceLastL < 1.5f) { Scene.HUD.Hide(); }//Debug.Log("Hide");
+        // else { Scene.HUD.Show(); }//Debug.Log("Show");
 
-        TimeSinceLastL += Time.deltaTime;
+        // TimeSinceLastL += Time.deltaTime;
     }
 
 
     protected override void EastPressed()
     {
-        if (SeaScene.NearNPCShip == null) return;
-        Audio.SFX.PlayOneShot(SeaScene.Io.NearNPCShip.RegionalSound);
-        SetStateDirectly(new SeaToDialogueTransition_State(new HailShip_Dialogue()));
+        if (Scene.NearestNPC == null) return;
+        Audio.SFX.PlayOneShot(Scene.NearestNPC.RegionalSound);
+        SetStateDirectly(new SeaToDialogueTransition_State(new HailShip_Dialogue(
+            new Speaker(
+                Scene.NearestNPC.Flag,
+                Scene.NearestNPC.Name,
+                Scene.NearestNPC.FlagColor)
+        )));
     }
 
     protected override void StartPressed()
@@ -157,7 +161,7 @@ public class SeaScene_State : State
 
     protected override void LStickInput(Vector2 v2)
     {
-        ShipVelocity.z = Mathf.Clamp(ShipVelocity.z + (Time.deltaTime * v2.y * .8f), -.3f, .8f);
+        ShipVelocity.y = Mathf.Clamp(ShipVelocity.y + (Time.deltaTime * v2.y * .8f), -.3f, .8f);
         ShipVelocity.x = Mathf.Clamp(ShipVelocity.x - Time.deltaTime * -v2.x * 3, -1f, 1f);
         if (v2 != Vector2.zero) { TimeSinceLastL = 0; }
     }
@@ -179,20 +183,36 @@ public class SeaScene_State : State
             ));
     }
 
+    void Tick()
+    {
+        CheckInput();
+        ShipCoords();
+        CheckNMETriggers();
+    }
+
+    void FixedTick()
+    {
+        Movement();
+    }
 
     void ShipCoords()
     {
-        SeaScene.DayCounterText.TextString = SeaScene.Ship.Coord.x.ToString() + " : " + SeaScene.Ship.Coord.z.ToString();
+        Scene.HUD.DayCounterText.TextString =
+            Scene.Ship.GlobalCoord.x.ToString()
+            + " : " +
+            Scene.Ship.GlobalCoord.y.ToString();
     }
 
     void CheckNMETriggers()
     {
-        foreach (NPCShip npc in SeaScene.Io.NPCShips)
-            if (npc.ShipType == NPCShipType.Pirate && Vector3.Distance(npc.Coords, SeaScene.Io.Ship.Coord) < npc.ThreatRange)
-            {
-                SeaScene.Io.NearNPCShip = npc;
-                SetStateDirectly(new NMESailApproach_State());
-                return;
-            }
+        var localRegions = Scene.Map.AdjacentRegions(Scene.Ship);
+        foreach (Region region in localRegions)
+            foreach (NPCShip npc in region.NPCs)
+                if (npc.ShipType == NPCShipType.Pirate && Vector2.Distance(npc.LocalCoords, Scene.Ship.GlobalCoord) < npc.ThreatRange)
+                {
+                    Scene.NearestNPC = npc;
+                    SetStateDirectly(new NMESailApproach_State());
+                    return;
+                }
     }
 }

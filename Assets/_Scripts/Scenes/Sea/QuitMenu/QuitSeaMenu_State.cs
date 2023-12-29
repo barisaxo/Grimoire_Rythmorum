@@ -2,6 +2,7 @@ using System;
 using Menus;
 using Menus.QuitMenu;
 using UnityEngine;
+using Sea;
 
 public class QuitSeaMenu_State : State
 {
@@ -53,7 +54,7 @@ public class QuitSeaMenu_State : State
     protected override void EastPressed()
     {
         QuitMenu.UpdateTextColors();
-        SeaScene.Io.SelfDestruct();
+        Scene.Io.SelfDestruct();
         if (QuitMenu.Selection.Item == QuitSeaMenu.QuitMenuItem.AbandonRun)
         {
             FadeToState(new NewAetherScene_State());

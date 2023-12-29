@@ -2,12 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Sea;
 
 public class SeaToQuitMenuTransition_State : State
 {
     protected override void PrepareState(Action callback)
     {
-        SeaScene.Io.SeaHUD.HUD.GO.SetActive(false);
+        Scene.Io.HUD.Hud.GO.SetActive(false);
         base.PrepareState(callback);
     }
 
@@ -30,7 +31,7 @@ public class SeaToQuitMenuTransition_State : State
         Audio.BGMusic.Pause();
         Audio.Ambience.Pause();
 
-        SeaScene.Io.RockTheBoat.Rocking = false;
-        SeaScene.Io.Swells.DisableSwells();
+        Scene.Io.RockTheBoat.Rocking = false;
+        Scene.Io.Swells.DisableSwells();
     }
 }

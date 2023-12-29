@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Sea;
 
 public class SeaInspection_State : State
 {
@@ -40,33 +41,34 @@ public class SeaInspection_State : State
         switch (dir)
         {
             case Dir.Left:
-                Index = (Index - 1).SignedMod(SeaScene.Io.UsedShips.Count);
-                // x = Mathf.Clamp(x + 1, 0.5f, SeaScene.Io.BoardSize - .5f);
+                Index = (Index - 1).Smod(Scene.Io.UsedShips.Count);
+                // x = Mathf.Clamp(x + 1, 0.5f, Scene.Io.BoardSize - .5f);
                 break;
             case Dir.Right:
-                Index = (Index + 1).SignedMod(SeaScene.Io.UsedShips.Count);
-                // x = Mathf.Clamp(x - 1, 0.5f, SeaScene.Io.BoardSize - .5f);
+                Index = (Index + 1).Smod(Scene.Io.UsedShips.Count);
+                // x = Mathf.Clamp(x - 1, 0.5f, Scene.Io.BoardSize - .5f);
                 break;
             case Dir.Up:
-                // z = Mathf.Clamp(z - 1, 0.5f, SeaScene.Io.BoardSize - .5f);
+                // z = Mathf.Clamp(z - 1, 0.5f, Scene.Io.BoardSize - .5f);
                 break;
             case Dir.Down:
-                // z = Mathf.Clamp(z + 1, 0.5f, SeaScene.Io.BoardSize - .5f);
+                // z = Mathf.Clamp(z + 1, 0.5f, Scene.Io.BoardSize - .5f);
                 break;
         }
         // Overlay.transform.position = new Vector3(x, .5f, z);
-
-        foreach (NPCShip ship in SeaScene.Io.NPCShips)
-        {
-            if (ship.GO != null && SeaScene.Io.UsedShips.Count > 0 &&
-                ship.GO.transform.GetInstanceID() == SeaScene.Io.UsedShips[Index].transform.GetInstanceID())
+        var localRegions = Scene.Io.Map.AdjacentRegions(Scene.Io.Ship);
+        foreach (Region region in localRegions)
+            foreach (NPCShip npc in region.NPCs)
             {
-                Overlay.transform.position = ship.GO.transform.position;
-                Flag.SetImageSprite(ship.Flag)
-                    .SetImageColor(ship.FlagColor);
-                break;
+                if (npc.GO != null && Scene.Io.UsedShips.Count > 0 &&
+                    npc.GO.transform.GetInstanceID() == Scene.Io.UsedShips[Index].transform.GetInstanceID())
+                {
+                    Overlay.transform.position = npc.GO.transform.position;
+                    Flag.SetImageSprite(npc.Flag)
+                        .SetImageColor(npc.FlagColor);
+                    break;
+                }
             }
-        }
 
     }
 

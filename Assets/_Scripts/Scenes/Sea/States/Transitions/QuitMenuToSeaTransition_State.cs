@@ -2,18 +2,19 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Sea;
 
 public class QuitMenuToSeaTransition_State : State
 {
     protected override void PrepareState(Action callback)
     {
-        SeaScene.Io.SeaHUD.HUD.GO.SetActive(false);
+        Scene.Io.HUD.Hud.GO.SetActive(false);
 
         Audio.BGMusic.Resume();
         Audio.Ambience.Resume();
 
-        SeaScene.Io.RockTheBoat.Rocking = true;
-        SeaScene.Io.Swells.EnableSwells();
+        Scene.Io.RockTheBoat.Rocking = true;
+        Scene.Io.Swells.EnableSwells();
         base.PrepareState(callback);
     }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,7 +6,7 @@ using UnityEngine;
 static class Helpers
 {
     /// <summary>
-    /// a is ± 1 of b
+    /// a is ± 1 of b (exclusive)
     /// </summary>
     public static bool IsPM1(this float a, float b)
     {
@@ -13,7 +14,7 @@ static class Helpers
     }
 
     /// <summary>
-    /// a is ± 1 of b
+    /// a is ± 1 of b (exclusive)
     /// </summary>
     public static bool IsPM1(this Vector3 a, Vector3 b)
     {
@@ -24,23 +25,28 @@ static class Helpers
 
 
     /// <summary>
-    /// a is ± n of b
+    /// a is ± n of b (exclusive)
     /// </summary>
     public static bool IsPOM(this float a, float n, float b)
     {
         return a < b + n && a > b - n;
     }
-
     /// <summary>
-    /// a is ± n of b
+    /// a is ± n of b (exclusive)
     /// </summary>
     public static bool IsPOM(this int a, int n, int b)
     {
         return a < b + n && a > b - n;
     }
-
     /// <summary>
-    /// a is ± n of b
+    /// a is ± n of b (exclusive)
+    /// </summary>
+    public static bool IsPOM(this int a, float n, float b)
+    {
+        return a < b + n && a > b - n;
+    }
+    /// <summary>
+    /// a is ± n of b (exclusive)
     /// </summary>
     public static bool IsPOM(this Vector3 a, float n, Vector3 b)
     {
@@ -50,7 +56,7 @@ static class Helpers
     }
 
     /// <summary>
-    /// a is ± n of b
+    /// a is ± n of b (exclusive)
     /// </summary>
     public static bool IsPOM(this Vector3 a, Vector3 n, Vector3 b)
     {
@@ -59,7 +65,7 @@ static class Helpers
                a.z < b.z + n.x && a.z > b.z - n.x;
     }
     /// <summary>
-    /// a is ± n of b
+    /// a is ± n of b (exclusive)
     /// </summary>
     public static bool IsPOM(this Vector2 a, float n, Vector2 b)
     {
@@ -90,14 +96,14 @@ static class Helpers
 
 
     /// <summary>
-    /// A grid positions listed index.  (X * height) + Y
+    /// A grid position's listed index.
     /// </summary>
     /// <returns>(x * height) + y</returns>
     public static int Vec2ToInt(this Vector2Int gridPosition, int boardSize)
     { return (gridPosition.x * boardSize) + gridPosition.y; }
 
     /// <summary>
-    /// A grid positions listed index.  (X * height) + Y
+    /// A grid position's listed index.
     /// </summary>
     /// <returns>(x * height) + y</returns>
     public static int Vec2ToInt(int x, int y, int boardSize)
@@ -116,9 +122,9 @@ static class Helpers
 
 
     /// <summary>
-    /// Always returns a positive remainder.
+    /// (SignedMod) Always returns a positive remainder.
     /// </summary>
-    public static int SignedMod(this int a, int b)
+    public static int Smod(this int a, int b)
     {
         if (b == 0) return 0;
         b *= b < 0 ? -1 : 1;
@@ -127,9 +133,9 @@ static class Helpers
     }
 
     /// <summary>
-    /// Always returns a positive remainder.
+    /// (SignedMod) Always returns a positive remainder.
     /// </summary>
-    public static float SignedMod(this float a, float b)
+    public static float Smod(this float a, float b)
     {
         if (b == 0) return 0;
         b *= b < 0 ? -1 : 1;
@@ -138,7 +144,85 @@ static class Helpers
     }
 
     /// <summary>
-    /// Add T[] t2 to T[] t1. Neither arg needs to be initialized.
+    /// (SignedMod) Always returns a positive remainder.
+    /// </summary>
+    public static Vector2 Smod(this Vector2 a, Vector2 b)
+    {
+        if (b == Vector2.zero) return Vector2.zero;
+        if (b.x == 0) a.x = 0;
+        if (b.y == 0) a.y = 0;
+
+        b.x *= b.x < 0 ? -1 : 1;
+        while (a.x < 0) a.x += b.x;
+
+        b.y *= b.y < 0 ? -1 : 1;
+        while (a.y < 0) a.y += b.y;
+
+        return new Vector2(a.x % b.x, a.y % b.y);
+    }
+
+    /// <summary>
+    /// (SignedMod) Always returns a positive remainder.
+    /// </summary>
+    public static Vector2Int Smod(this Vector2Int a, Vector2Int b)
+    {
+        if (b == Vector2Int.zero) return Vector2Int.zero;
+        if (b.x == 0) a.x = 0;
+        if (b.y == 0) a.y = 0;
+
+        b.x *= b.x < 0 ? -1 : 1;
+        while (a.x < 0) a.x += b.x;
+
+        b.y *= b.y < 0 ? -1 : 1;
+        while (a.y < 0) a.y += b.y;
+
+        return new Vector2Int(a.x % b.x, a.y % b.y);
+    }
+    /// <summary>
+    /// (SignedMod) Always returns a positive remainder.
+    /// </summary>
+    public static Vector2Int Smod(this Vector2 a, Vector2Int b)
+    {
+        if (b == Vector2Int.zero) return Vector2Int.zero;
+        if (b.x == 0) a.x = 0;
+        if (b.y == 0) a.y = 0;
+
+        b.x *= b.x < 0 ? -1 : 1;
+        while (a.x < 0) a.x += b.x;
+
+        b.y *= b.y < 0 ? -1 : 1;
+        while (a.y < 0) a.y += b.y;
+
+        return new Vector2Int((int)(a.x % b.x), (int)(a.y % b.y));
+    }
+    /// <summary>
+    /// (SignedMod) Always returns a positive remainder.
+    /// </summary>
+    public static Vector2 Smod(this Vector2 a, float b)
+    {
+        if (b == 0) return Vector2Int.zero;
+        b *= b < 0 ? -1 : 1;
+        while (a.x < 0) a.x += b;
+        while (a.y < 0) a.y += b;
+
+        return new Vector2(a.x % b, a.y % b);
+    }
+
+    /// <summary>
+    /// (SignedMod) Always returns a positive remainder.
+    /// </summary>
+    public static Vector2Int Smod(this Vector2Int a, int b)
+    {
+        if (b == 0) return Vector2Int.zero;
+        b *= b < 0 ? -1 : 1;
+        while (a.x < 0) a.x += b;
+        while (a.y < 0) a.y += b;
+
+        return new Vector2Int(a.x % b, a.y % b);
+    }
+
+    /// <summary>
+    /// Add T[] t2 to T[] t1. Neither arg needs to be initialized. Refs t1!
     /// </summary>
     public static T[] Combine<T>(ref T[] t1, T[] t2)
     {
@@ -149,7 +233,7 @@ static class Helpers
     }
 
     /// <summary>
-    /// Add T t2 to T[] t1. Neither arg needs to be initialized.
+    /// Add T t2 to T[] t1. Neither arg needs to be initialized. Refs t1!
     /// </summary>
     public static T[] Combine<T>(ref T[] t1, T t2)
     {
@@ -238,17 +322,33 @@ static class Helpers
     /// </summary>
     public static string SentenceCase(this string s)
     {
-        string temp = s[0] == '_' ? string.Empty : s[0].ToString().ToUpper();
+        bool firstCharCapped = false;
+        string temp = "";
 
-        for (int i = 1; i < s.Length; i++)
+        for (int i = 0; i < s.Length; i++)
         {
-            if (char.IsUpper(s[i])) temp += ' ' + s[i].ToString().ToLower();
+            if (!firstCharCapped)
+            {
+                if (s[i] == '_') temp += string.Empty;
+                else
+                {
+                    temp += s[i].ToString().ToUpper();
+                    firstCharCapped = true;
+                }
+            }
+
+            else if (char.IsUpper(s[i]))
+                temp += ' ' + s[i].ToString().ToLower();
+
             else if (s[i] == '_') temp += ' ';
+
             else temp += s[i];
         }
 
         return temp;
     }
+
+
 
     public static Vector3 NormalDirection(this Vector3 a, Vector3 b)
     {
