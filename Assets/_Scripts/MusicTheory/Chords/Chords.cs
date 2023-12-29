@@ -8,10 +8,6 @@ namespace MusicTheory.Chords
     [System.Serializable]
     public abstract class Chord : IMusicalElement
     {
-        //public Chord(Key key, Scale scale, ScaleDegree rootScaleDegree)
-        //{
-        //    //RootNote = scale.ScaleDegrees[(int)rootScaleDegree].;
-        //}
         public Chord(ChordEnum @enum) { Enum = @enum; }
         public ChordEnum Enum;
         ChordTone[] ChordTones;

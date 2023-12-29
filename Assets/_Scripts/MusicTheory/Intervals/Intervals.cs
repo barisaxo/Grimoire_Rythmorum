@@ -16,8 +16,6 @@ namespace MusicTheory.Intervals
         public static explicit operator IntervalEnum(Interval i) => i.Enum;
         public static explicit operator int(Interval i) => i.Enum.Id;
         public override int GetHashCode() => HashCode.Combine(Enum);
-
-
         public override bool Equals(object obj) => obj is Interval e && Enum == e.Enum;
     }
 
@@ -109,7 +107,6 @@ namespace MusicTheory.Intervals
         public static readonly IntervalEnum d4 = new(4, nameof(d4), new Diminished(), new Fourth());
         public static readonly IntervalEnum P4 = new(5, nameof(P4), new Perfect(), new Fourth());
         public static readonly IntervalEnum A4 = new(6, nameof(A4), new Augmented(), new Fourth());
-        //public static readonly IntervalEnum TT = new(6, nameof(TT), new Diminished(), new Fifth());
         public static readonly IntervalEnum d5 = new(6, nameof(d5), new Diminished(), new Fifth());
         public static readonly IntervalEnum P5 = new(7, nameof(P5), new Perfect(), new Fifth());
         public static readonly IntervalEnum A5 = new(8, nameof(A5), new Augmented(), new Fifth());

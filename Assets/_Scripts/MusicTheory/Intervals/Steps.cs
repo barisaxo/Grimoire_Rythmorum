@@ -9,7 +9,6 @@ namespace MusicTheory.Steps
         public int Id => Enum.Id;
         public string Name => Enum.Name;
 
-        //public static explicit operator Step(int i) => new((StepEnum)i);
         public static explicit operator StepEnum(Step i) => i.Enum;
         public static explicit operator int(Step i) => i.Enum.Id;
     }
