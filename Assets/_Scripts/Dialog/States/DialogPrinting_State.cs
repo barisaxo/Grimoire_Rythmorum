@@ -85,9 +85,7 @@ public class DialogPrinting_State : State
         if (Dialog.HasNextDialogue())
         {
             Dialog.Dialogue = Dialog.CurrentLine.NextDialogue
-                .SetSpeakerColor(Dialog.CurrentLine.SpeakerColor)
-                .SetSpeakerIcon(Dialog.CurrentLine.SpeakerIcon)
-                .SetSpeakerName(Dialog.CurrentLine.SpeakerName)
+                .SetSpeaker(Dialog.CurrentLine.Speaker)
                 .Initiate();
 
             Dialog.CurrentLine = Dialog.Dialogue.FirstLine;

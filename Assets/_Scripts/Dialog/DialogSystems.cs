@@ -19,7 +19,7 @@ namespace Dialog
             {
                 while (dialog.LetType)
                 {
-                    var printingDialogue = dialog.CurrentLine.SpeakerName;
+                    var printingDialogue = dialog.CurrentLine.Speaker.Name;
 
                     for (var i = 0; i < dialog.CurrentLine.SpeakerText.Length; i++)
                     {
@@ -33,7 +33,7 @@ namespace Dialog
                     yield return new WaitForSecondsRealtime(.03f);
                 }
 
-                dialog.DialogCard.SetTextString(dialog.CurrentLine.SpeakerName + dialog.CurrentLine.SpeakerText);
+                dialog.DialogCard.SetTextString(dialog.CurrentLine.Speaker.Name + dialog.CurrentLine.SpeakerText);
                 callback();
             }
         }

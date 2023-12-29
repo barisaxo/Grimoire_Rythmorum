@@ -80,9 +80,7 @@ public class DialogResponse_State : State
         {
             Dialog.Dialogue =
                 r.GoToDialogue
-                    .SetSpeakerColor(Dialog.CurrentLine.SpeakerColor)
-                    .SetSpeakerIcon(Dialog.CurrentLine.SpeakerIcon)
-                    .SetSpeakerName(Dialog.CurrentLine.SpeakerName)
+                    .SetSpeaker(Dialog.CurrentLine.Speaker)
                     .Initiate();
 
             Dialog.SetCurrentLine(Dialog.Dialogue.FirstLine);

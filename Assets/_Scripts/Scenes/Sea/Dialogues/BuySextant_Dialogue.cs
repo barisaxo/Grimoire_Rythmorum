@@ -2,11 +2,9 @@ using Dialog;
 
 public class BuySextant_Dialogue : Dialogue
 {
-    public BuySextant_Dialogue()
+    public BuySextant_Dialogue(Speaker speaker)
     {
-        SpeakerIcon = new UnityEngine.Sprite[] { SeaScene.Io.NearNPCShip.Flag };
-        SpeakerName = SeaScene.Io.NearNPCShip.Name;
-        SpeakerColor = SeaScene.Io.NearNPCShip.FlagColor;
+        Speaker = speaker;
     }
 
     public override Dialogue Initiate()
@@ -17,16 +15,12 @@ public class BuySextant_Dialogue : Dialogue
 
     Line _purchased_Line;
     Line Purchased_Line => _purchased_Line ??= new Line(BoughtSextant_Text, new NPCSailAway_State(new SeaScene_State()))
-        .SetSpeakerIcon(SpeakerIcon)
-        .SetSpeakerName(SpeakerName)
-        .SetSpeakerColor(SpeakerColor)
+        .SetSpeaker(Speaker)
         ;
 
     Line _muscopaLine;
     Line Muscopa_Line => _muscopaLine ??= new Line(Muscopa_LineText, PuzzleSelector.WeightedRandomPuzzleState(DataManager.Io.TheoryPuzzleData))
-        .SetSpeakerIcon(SpeakerIcon)
-        .SetSpeakerName(SpeakerName)
-        .SetSpeakerColor(SpeakerColor)
+        .SetSpeaker(Speaker)
         .SetCameraPan(
             new UnityEngine.Vector3(-50, Cam.Io.Camera.transform.rotation.eulerAngles.y, Cam.Io.Camera.transform.rotation.eulerAngles.z),
             Cam.Io.Camera.transform.position,
@@ -35,9 +29,7 @@ public class BuySextant_Dialogue : Dialogue
 
     Line _sextant_Line;
     Line Sextant_Line => _sextant_Line ??= new Line(SextantLine_Text, SextantChallenge_Response)
-        .SetSpeakerIcon(SpeakerIcon)
-        .SetSpeakerName(SpeakerName)
-        .SetSpeakerColor(SpeakerColor);
+        .SetSpeaker(Speaker);
 
     Response _muscopa_response;
     Response Muscopa_Response => _muscopa_response ??= new Response(PlayMuscopa_RepText, Muscopa_Line);
@@ -75,10 +67,8 @@ public class BuySextant_Dialogue : Dialogue
         }
     }
 
-    Response Back_Response => new Response("Back", new ShipTask_Dialogue()
-                .SetSpeakerIcon(SpeakerIcon)
-                .SetSpeakerName(SpeakerName)
-                .SetSpeakerColor(SpeakerColor));
+    Response Back_Response => new Response("Back", new ShipTask_Dialogue(Speaker)
+                .SetSpeaker(Speaker));
 
     private void BuySextant()
     {

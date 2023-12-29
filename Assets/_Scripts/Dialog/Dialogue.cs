@@ -9,25 +9,88 @@ namespace Dialog
         protected readonly State ConsequentState;
 
         public Line FirstLine;
-        public Sprite[] SpeakerIcon = new Sprite[0];
-        public Color SpeakerColor = Color.white;
         public AudioClip StartSound;
-        //public CharacterData CharacterData => DataManager.Io.CharacterData;
         public bool PlayTypingSounds = true;
 
-        public string SpeakerName = "\n";
+        public Speaker Speaker = Speaker.Blank;
         public string SpeakerText = string.Empty;
-        protected readonly string AL = "[AL]:\n";
-        protected readonly string Pino = "[Quartermaster Pino]:\n";
 
-        public Dialogue SetSpeakerIcon(Sprite[] sprites) { SpeakerIcon = sprites; return this; }
-        public Dialogue SetSpeakerIcon(Sprite sprite) { SpeakerIcon = new Sprite[] { sprite }; return this; }
-        public Dialogue SetSpeakerColor(Color color) { SpeakerColor = color; return this; }
-        public Dialogue SetSpeakerName(string name) { SpeakerName = name; return this; }
+        public Dialogue SetSpeaker(Speaker speaker) { Speaker = speaker; return this; }
         public Dialogue SetSpeakerText(string speakerText) { SpeakerText = speakerText; return this; }
         //public Dialogue SetCharacterData(CharacterData characterData) { CharacterData = characterData; return this; }
         public Dialogue MuteTypingSounds() { PlayTypingSounds = false; return this; }
 
-        public virtual Dialogue Initiate() { return this; }
+        public virtual Dialogue Initiate()
+        {
+            return this;
+        }
     }
+}
+
+public struct Speaker
+{
+    public Sprite[] Icon;
+    public string Name;
+    public Color Color;
+
+    public Speaker(Sprite[] icon, string name, Color color)
+    {
+        Name = name;
+        Icon = icon;
+        Color = color;
+    }
+    public Speaker(Sprite icon, string name, Color color)
+    {
+        Name = name;
+        Icon = new Sprite[] { icon };
+        Color = color;
+    }
+    public Speaker(Sprite[] icon, string name)
+    {
+        Name = name;
+        Icon = icon;
+        Color = Color.white;
+    }
+    public Speaker(Sprite icon, string name)
+    {
+        Name = name;
+        Icon = new Sprite[] { icon };
+        Color = Color.white;
+    }
+    public Speaker(Sprite[] icon)
+    {
+        Name = "\n";
+        Icon = icon;
+        Color = Color.white;
+    }
+    public Speaker(Sprite icon)
+    {
+        Name = "\n";
+        Icon = new Sprite[] { icon };
+        Color = Color.white;
+    }
+
+    public Speaker(string name)
+    {
+        Name = name;
+        Icon = new Sprite[] { };
+        Color = Color.white;
+    }
+
+    public static readonly Speaker Blank = new(
+         new Sprite[0],
+        "\n",
+         Color.white
+    );
+    public static readonly Speaker Pino = new(
+       new Sprite[1] { Assets.Pino },
+       "[Quartermaster Pino]:\n",
+       Color.white
+    );
+
+    public static readonly Speaker RandomAL = new(
+        ((FacialExpression)Random.Range(0, 9)).Sprites(),
+        "[AL]:\n",
+        Color.white
+    );
 }

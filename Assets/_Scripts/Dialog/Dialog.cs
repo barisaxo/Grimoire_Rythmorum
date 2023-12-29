@@ -36,7 +36,7 @@ namespace Dialog
             .SetCanvasSortingOrder(1);
 
         private Card[] _npcIcon;
-        public void NPCIcon(Line line) => NPCIcon(line.SpeakerIcon, line.SpeakerColor);
+        public void NPCIcon(Line line) => NPCIcon(line.Speaker.Icon, line.Speaker.Color);
         void NPCIcon(Sprite[] sprites, Color col)
         {
             if (_npcIcon != null) foreach (Card c in _npcIcon) UnityEngine.Object.DestroyImmediate(c.GO);
