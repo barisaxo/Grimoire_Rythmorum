@@ -4,10 +4,6 @@ using Batterie;
 using MusicTheory.Rhythms;
 using System;
 
-
-//TODOTODOTODO rhythm puzzle: find the '1'
-//perform this rhythm to unlock *que music*: (Q)SSL
-
 public class Batterie_State : State
 {
     public Batterie_State(RhythmSpecs specs)
@@ -31,7 +27,6 @@ public class Batterie_State : State
     protected override void PrepareState(Action callback)
     {
         MusicSheet = new MusicSheet() { RhythmSpecs = Specs };
-        // _ = MusicSheet.BackGround;
         MusicSheet.RhythmSpecs.Time.GenerateRhythmCells(MusicSheet);
         MusicSheet.GetNotes();
         MusicSheet.DrawRhythms();

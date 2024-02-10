@@ -61,16 +61,26 @@ public class RockTheBoat
 
     private void SetSwayPos()
     {
-        foreach (var boat in keyValuePairs)
+        List<KeyValuePair<Transform, (float amp, float period, float offset)>> toRemove = new();
+        foreach (KeyValuePair<Transform, (float amp, float period, float offset)> boat in keyValuePairs)
         {
-            // boat.Key.transform.Rotate(Vector3.forward * Mathf.Sin(Time.time * boat.Value.period) * boat.Value.amp);
-            boat.Key.transform.rotation =
-             Quaternion.Euler(
-                new Vector3(
-                    0,
-                    boat.Key.transform.rotation.eulerAngles.y,
-                    Mathf.Sin((Time.time + boat.Value.offset) * boat.Value.period) * boat.Value.amp * 180));
+            if (boat.Key == null)
+            {
+                toRemove.Add(boat);
+                continue;
+            }
 
+            boat.Key.rotation =
+              Quaternion.Euler(
+                 new Vector3(
+                     0,
+                     boat.Key.rotation.eulerAngles.y,
+                     Mathf.Sin((Time.time + boat.Value.offset) * boat.Value.period) * boat.Value.amp * 180));
+        }
+
+        foreach (var boat in toRemove)
+        {
+            keyValuePairs.Remove(boat.Key);
         }
     }
 

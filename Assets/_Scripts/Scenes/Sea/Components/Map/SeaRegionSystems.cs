@@ -1,4 +1,5 @@
 using Sea;
+using Sea.Maps;
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -6,36 +7,96 @@ public static class SeaRegionSystems
 {
     public static Cell[] InitializeCells(this Region region, int size)
     {
-        Cell[] cells = new Cell[size * size];
-        int index = 0;
+        List<Cell> cells = new();
         int halfSize = (int)(size * .5f);
 
-        for (int x = 0; x < size; x++)
-            for (int y = 0; y < size; y++)
+        AddBottle();
+        if (!WorldMapScene.Io.Map.IsHighSeas(region.Coord))
+        {
+            AddRocks();
+        }
+        if (!WorldMapScene.Io.Map.ShippingLanes.Contains(region.Coord)) AddFish();
+        if (WorldMapScene.Io.Map.Features.TryGetValue(region.Coord, out WorldMap.Feature[] Features))
+            foreach (WorldMap.Feature feature in Features)
             {
-                if (((x > 3 && y > 3) || (x < size - 3 && y < size - 3) ||
-                    (x > 3 && y < size - 3) || (x < size - 3 && y > 3) ||
-                    (x > halfSize - 2 && y > halfSize - 2 && x < halfSize + 2 && y < halfSize + 2)) &&
-                    Random.value > .95f)
+                switch (feature)
                 {
-                    cells[index] = new(x, y)
-                    {
-                        Type = CellType.Rocks,
-                        RotY = Random.Range(0, 360)
-                    };
+                    case WorldMap.Feature.Cove:
+                        cells.Add(new Cell(halfSize, halfSize) { Type = CellType.Cove });
+                        break;
+
+                    case WorldMap.Feature.LightHouse:
+                        cells.Add(new Cell(halfSize / 2, halfSize / 2) { Type = CellType.Lighthouse });
+                        break;
                 }
-                else
-                {
-                    cells[index] = new(x, y)
-                    {
-                        Type = CellType.OpenSea
-                    };
-                }
-                index++;
             }
 
-        return cells;
+        return cells.ToArray();
+
+        void AddRocks()
+        {
+            for (int x = 0; x < size; x++)
+                for (int y = 0; y < size; y++)
+                {
+                    if (
+                       ((x > 3 && y > 3) || (x < size - 3 && y < size - 3) ||
+                        (x > 3 && y < size - 3) || (x < size - 3 && y > 3) ||
+                        (x > halfSize - 2 && y > halfSize - 2 && x < halfSize + 2 && y < halfSize + 2))
+                         &&
+                        (Random.value > .95f))
+                    {
+                        cells.Add(new Cell(x, y)
+                        {
+                            Type = CellType.Rocks,
+                            RotY = Random.Range(0, 360)
+                        });
+                    }
+                }
+        }
+
+        void AddFish()
+        {
+            int numOfFish = 0;
+
+            for (int x = 0; x < size; x++)
+                for (int y = 0; y < size; y++)
+                {
+                    if (
+                       ((x > 3 && y > 3) || (x < size - 3 && y < size - 3) ||
+                        (x > 3 && y < size - 3) || (x < size - 3 && y > 3) ||
+                        (x > halfSize - 2 && y > halfSize - 2 && x < halfSize + 2 && y < halfSize + 2))
+                         &&
+                        (numOfFish < 3 && x + y > numOfFish * 8 && Random.value > .9f))
+                    {
+                        numOfFish++;
+                        cells.Add(new Cell(x, y)
+                        {
+                            Type = CellType.Fish,
+                            RotY = Random.Range(0, 360)
+                        });
+                    }
+                }
+        }
+
+        void AddBottle()
+        {
+            for (int i = 0; i < 10; i++)
+                cells.Add(new Cell(Random.Range(3, size - 3), Random.Range(3, size - 3))
+                {
+                    Type = CellType.Bottle,
+                    RotY = Random.Range(0, 360)
+                });
+        }
     }
+
+    public static bool IsCellOccupied(this List<Cell> cells, int x, int y) => cells.IsCellOccupied(new Vector2Int(x, y));
+    public static bool IsCellOccupied(this List<Cell> cells, Vector2Int v2i)
+    {
+        foreach (Cell cell in cells) if (cell.Coord == v2i) return true;
+        return false;
+    }
+
+
 
     public static NPCShip[] SetUpNPCs(this Region region)
     {
@@ -57,12 +118,12 @@ public static class SeaRegionSystems
 
         for (int p = 0; p < nodes.Length; p++)
         {
-            var leg = region.Cells[nodes[p].Vec2ToInt(region.Size)].NewSailingPath(
-                region.Cells[nodes[(p + 1) % nodes.Length].Vec2ToInt(region.Size)],
+            var leg = nodes[p].NewSailingPath(
+                nodes[(p + 1) % nodes.Length],
                 region.Cells,
                 region.Size);
 
-            for (int n = 0; n < leg.Length; n++) path.Add(leg[n].Coord);
+            for (int n = 0; n < leg.Length; n++) path.Add(leg[n]);
         }
 
         return path.ToArray();

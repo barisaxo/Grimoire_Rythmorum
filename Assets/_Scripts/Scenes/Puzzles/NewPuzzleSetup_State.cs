@@ -6,11 +6,12 @@ using Audio;
 
 public class NewPuzzleSetup_State : State
 {
-    public NewPuzzleSetup_State(PuzzleDifficulty difficulty)
+    public NewPuzzleSetup_State(PuzzleDifficulty difficulty, State subsequentState)
     {
         PuzzleDifficulty = difficulty;
+        SubsequentState = subsequentState;
     }
-
+    readonly State SubsequentState;
     readonly PuzzleDifficulty PuzzleDifficulty;
 
     protected override void PrepareState(Action callback)
@@ -21,6 +22,6 @@ public class NewPuzzleSetup_State : State
 
     protected override void EngageState()
     {
-        SetStateDirectly(PuzzleSelector.WeightedRandomPuzzleState(Data.TheoryPuzzleData));
+        SetStateDirectly(PuzzleSelector.WeightedRandomPuzzleState(Data.TheoryPuzzleData, SubsequentState));
     }
 }

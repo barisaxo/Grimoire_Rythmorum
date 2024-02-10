@@ -17,7 +17,6 @@ public class ShipTask_Dialogue : Dialogue
         return this;
     }
 
-
     string Leave_LineText => UnityEngine.Random.Range(0, 4) switch
     {
         0 => "Safe journey!",
@@ -36,8 +35,6 @@ public class ShipTask_Dialogue : Dialogue
         })
         .SetSpeaker(Speaker)
         ;
-
-
 
     Line _leaveLine;
     Line Leave_Line => _leaveLine ??= new Line(Leave_LineText, new NPCSailAway_State(new SeaScene_State()))

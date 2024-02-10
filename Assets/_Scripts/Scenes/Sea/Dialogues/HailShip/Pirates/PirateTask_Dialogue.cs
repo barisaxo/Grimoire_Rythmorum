@@ -14,9 +14,14 @@ public class PirateTask_Dialogue : Dialogue
 
     public override Dialogue Initiate()
     {
+        FirstLine = StartLine;
         return base.Initiate();
     }
 
+    Line _startLine;
+    Line StartLine => _startLine ??= new Line("Always having problems with pirates...", GetResponses())
+        .SetSpeaker(Speaker)
+        ;
 
     Response[] _responses;
     Response[] Responses => _responses ??= GetResponses();

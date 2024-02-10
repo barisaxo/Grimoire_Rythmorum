@@ -26,13 +26,14 @@ public class StartPuzzle_Dialogue : Dialogue
 
     private Response[] Replies()
     {
-        return new[]
-        {
-            new Response("Free", new NewPuzzleSetup_State(PuzzleDifficulty.Free)).FadeToNextState(),
-            new Response("Easy", new NewPuzzleSetup_State(PuzzleDifficulty.Easy)).FadeToNextState(),
-            new Response("Hard", new NewPuzzleSetup_State(PuzzleDifficulty.Hard)).FadeToNextState(),
-            new Response("Challenge", new NewPuzzleSetup_State(PuzzleDifficulty.Challenge)).FadeToNextState()
-        };
+        throw new System.NotImplementedException();
+        // return new[]
+        // {
+        //     new Response("Free", new NewPuzzleSetup_State(PuzzleDifficulty.Free)).FadeToNextState(),
+        //     new Response("Easy", new NewPuzzleSetup_State(PuzzleDifficulty.Easy)).FadeToNextState(),
+        //     new Response("Hard", new NewPuzzleSetup_State(PuzzleDifficulty.Hard)).FadeToNextState(),
+        //     new Response("Challenge", new NewPuzzleSetup_State(PuzzleDifficulty.Challenge)).FadeToNextState()
+        // };
     }
 
 

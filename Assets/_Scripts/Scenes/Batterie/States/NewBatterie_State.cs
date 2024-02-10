@@ -32,15 +32,13 @@ public class NewBatterie_State : State
             Tempo = 90
         };
 
-        Ship = Assets.CatBoat;
-        NME = Assets.Schooner;
+        Ship = Assets.Sloop.gameObject;
+        NME = Assets.Frigate.gameObject;
 
         Ship.transform.SetParent(Cam.Io.Camera.transform);
         NME.transform.SetParent(Cam.Io.Camera.transform);
 
-        Cam.Io.Camera.transform.position = new UnityEngine.Vector3(Cam.Io.Camera.transform.position.x, 15, Cam.Io.Camera.transform.position.z);
-        Cam.Io.Camera.transform.rotation = Quaternion.identity;
-
+        Cam.Io.Camera.transform.SetPositionAndRotation(new UnityEngine.Vector3(Cam.Io.Camera.transform.position.x, 15, Cam.Io.Camera.transform.position.z), Quaternion.identity);
         Ship.transform.LookAt(Cam.Io.Camera.transform);
         NME.transform.LookAt(Cam.Io.Camera.transform);
 

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public static class Assets
+public partial class Assets
 {
     #region AUDIO
 
@@ -23,7 +23,9 @@ public static class Assets
     #region MISC
 
     public static Material Video_Mat => Resources.Load<Material>("Materials/Video_Mat");
-    public static Sprite White => Resources.Load<Sprite>("Sprites/Misc/White");
+    public static Sprite _white;
+    public static Sprite White => _white != null ? _white :
+        _white = Resources.Load<Sprite>("Sprites/Misc/White");
     public static Material Stars => Resources.Load<Material>("Skyboxes/Stars");
 
     public static Sprite CircleKeyboard => Resources.Load<Sprite>("Sprites/Misc/Circle_Keyboard");
@@ -77,46 +79,11 @@ public static class Assets
     #endregion  CHARACTERS
 
 
-    #region SEA
-
-    #region SHIPS
-    public static GameObject _schooner => Resources.Load<GameObject>("Models/Schooner/Schooner1");
-    public static GameObject Schooner => GameObject.Instantiate(_schooner);
-
-    public static GameObject _catBoat => Resources.Load<GameObject>("Models/Schooner/Schooner2");
-    public static GameObject CatBoat => GameObject.Instantiate(_catBoat);
-
-    public static GameObject _cannonFire => Resources.Load<GameObject>("Prefabs/CannonFire");
-    public static ParticleSystem CannonFire => GameObject.Instantiate(_cannonFire).GetComponent<ParticleSystem>();
-    #endregion SHIPS
-
-    #region FLAGS
-    public static Sprite IonianFlag => Resources.Load<Sprite>("Sprites/Flags/IonianFlag");
-    public static Sprite DorianFlag => Resources.Load<Sprite>("Sprites/Flags/DorianFlag");
-    public static Sprite PhrygianFlag => Resources.Load<Sprite>("Sprites/Flags/PhrygianFlag");
-    public static Sprite LydianFlag => Resources.Load<Sprite>("Sprites/Flags/LydianFlag");
-    public static Sprite MixoLydianFlagFlag => Resources.Load<Sprite>("Sprites/Flags/MixoLydianFlag");
-    public static Sprite AeolianFlag => Resources.Load<Sprite>("Sprites/Flags/AeolianFlag");
-    public static Sprite LocrianFlag => Resources.Load<Sprite>("Sprites/Flags/LocrianFlag");
-
-    public static Sprite ChromaticFlag => Resources.Load<Sprite>("Sprites/Flags/ChromaticFlag");
-
-    public static Sprite PirateFlag => Resources.Load<Sprite>("Sprites/Flags/PirateFlag_1");
-    #endregion FLAGS
-
-
-    private static GameObject _rocks => Resources.Load<GameObject>("Prefabs/RocksParent");
-    public static GameObject Rocks => GameObject.Instantiate(_rocks);
-    public static GameObject Island => Resources.Load<GameObject>("Models/Island");
-
-    public static AudioClip SailAmbience => Resources.Load<AudioClip>("Audio/SFX/SailAmbience");
-
-    #endregion SEA
-
-
     #region MATERIALS
 
-    public static Material Overlay_Mat => Resources.Load<Material>("Materials/Overlay_Mat");
+    public static Material _overlay_Mat;
+    public static Material Overlay_Mat => _overlay_Mat != null ? _overlay_Mat :
+     _overlay_Mat = Resources.Load<Material>("Materials/Overlay_Mat");
 
     #endregion MATERIALS
 
@@ -159,4 +126,80 @@ public static class Assets
     public static Color Br = new Color(.333f, .1666f, .666f);
     public static Color M = new Color(.666f, .1666f, .666f);
     public static Color Rb = new Color(.666f, .1666f, .333f);
+}
+
+
+
+public partial class Assets
+{
+
+    #region SEA
+
+    #region SHIPS
+    public static GameObject _schooner => Resources.Load<GameObject>("Prefabs/Sea/Ships/Schooner/Schooner");
+    public static GameObject Schooner => Object.Instantiate(_schooner);
+
+    public static GameObject _outrigger => Resources.Load<GameObject>("Prefabs/Sea/Boats/catboat/outrigger");
+    public static GameObject Outrigger => Object.Instantiate(_outrigger);
+
+    public static Sloop _sloop => Resources.Load<GameObject>("Prefabs/Sea/Ships/Sloop/Sloop").GetComponent<Sloop>();
+    public static Sloop Sloop => Object.Instantiate(_sloop);
+
+    public static Frigate _frigate => Resources.Load<Frigate>("Prefabs/Sea/Ships/Frigate/Frigate");
+    public static Frigate Frigate => Object.Instantiate(_frigate);
+
+    public static Schooner _schooner2 => Resources.Load<Schooner>("Prefabs/Sea/Ships/Schooner/Schooner");
+    public static Schooner Schooner2 => Object.Instantiate(_schooner2);
+
+    public static GameObject _catBoat => Resources.Load<GameObject>("Prefabs/Sea/Boats/CatBoat2");
+    public static GameObject CatBoat => Object.Instantiate(_catBoat);
+
+    public static ParticleSystem _cannonFire => Resources.Load<GameObject>("Prefabs/Sea/CannonFire").GetComponent<ParticleSystem>();
+    public static ParticleSystem CannonFire => Object.Instantiate(_cannonFire);
+
+
+
+
+    #endregion SHIPS
+
+    #region FLAGS
+    public static Sprite IonianFlag => Resources.Load<Sprite>("Sprites/Flags/IonianFlag");
+    public static Sprite DorianFlag => Resources.Load<Sprite>("Sprites/Flags/DorianFlag");
+    public static Sprite PhrygianFlag => Resources.Load<Sprite>("Sprites/Flags/PhrygianFlag");
+    public static Sprite LydianFlag => Resources.Load<Sprite>("Sprites/Flags/LydianFlag");
+    public static Sprite MixoLydianFlagFlag => Resources.Load<Sprite>("Sprites/Flags/MixoLydianFlag");
+    public static Sprite AeolianFlag => Resources.Load<Sprite>("Sprites/Flags/AeolianFlag");
+    public static Sprite LocrianFlag => Resources.Load<Sprite>("Sprites/Flags/LocrianFlag");
+
+    public static Sprite ChromaticFlag => Resources.Load<Sprite>("Sprites/Flags/ChromaticFlag");
+
+    public static Sprite PirateFlag => Resources.Load<Sprite>("Sprites/Flags/PirateFlag_1");
+    #endregion FLAGS
+
+
+    public static Sea.RocksPrefab _rocks => Resources.Load<GameObject>("Prefabs/Sea/RocksPrefab").GetComponent<Sea.RocksPrefab>();
+    public static Sea.RocksPrefab Rocks => Object.Instantiate(_rocks);
+
+    public static FishPrefab _sailFish => Resources.Load<GameObject>("Prefabs/Sea/Fish/Sailfish/SailfishPrefab").GetComponent<FishPrefab>();
+    public static FishPrefab SailFish => Object.Instantiate(_sailFish);
+
+    // public static GameObject _island => Resources.Load<GameObject>("Models/Island");
+    // public static GameObject Island => Resources.Load<GameObject>("Models/Island");
+
+    public static CovePrefab _nullCove => Resources.Load<GameObject>("Prefabs/Sea/CovePrefab").GetComponent<CovePrefab>();
+    public static CovePrefab NullCove => Object.Instantiate(_nullCove);
+
+
+    public static Sea.LighthousePrefab _lighthouse => Resources.Load<GameObject>("Prefabs/Sea/Lighthouse/LighthousePrefab").GetComponent<Sea.LighthousePrefab>();
+    public static Sea.LighthousePrefab Lighthouse => Object.Instantiate(_lighthouse);
+
+    public static Sea.BottleWithScrollPrefab _bottle => Resources.Load<GameObject>("Prefabs/Sea/BottleWithScroll/BottleWithScrollPrefab").GetComponent<Sea.BottleWithScrollPrefab>();
+    public static Sea.BottleWithScrollPrefab Bottle => Object.Instantiate(_bottle);
+
+    public static AudioClip SailAmbience => Resources.Load<AudioClip>("Audio/SFX/SailAmbience");
+
+    public static Sprite Compass => Resources.Load<Sprite>("Sprites/Compass");
+    #endregion SEA
+
+
 }

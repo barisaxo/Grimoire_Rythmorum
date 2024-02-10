@@ -2,25 +2,39 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sea;
+using Sea.Maps;
 using System;
 
 public class PlayerShip
 {
-    private Vector2 _pos;
-    public Vector2 GlobalPos
+    private Vector2 _loc;
+    public Vector2 GlobalLoc
     {
-        get => _pos;
-        set => _pos = value.Smod(GlobalSize);
+        get => _loc;
+        set => _loc = value.Smod(GlobalSize);
     }
-    public Vector2 LocalPos(int regionSize) => GlobalPos.Smod(regionSize);
-    public Vector2 Offset => GlobalCoord - GlobalPos;
-    public Vector2Int GlobalCoord => new((int)GlobalPos.x, (int)GlobalPos.y);
-    public Vector2Int Region => new((int)(GlobalPos.x / RegionSize), (int)(GlobalPos.y / RegionSize));
+    public Vector2 PosV2 => new(GO.transform.position.x, GO.transform.position.z);
+    public Vector2 LocalLoc(int regionSize) => GlobalLoc.Smod(regionSize);
+    public Vector2 Offset => GlobalCoord - GlobalLoc;
+    public Vector2Int GlobalCoord => new((int)GlobalLoc.x, (int)GlobalLoc.y);
+    public Vector2Int RegionCoord => new((int)(GlobalLoc.x / RegionSize), (int)(GlobalLoc.y / RegionSize));
+    public Region Region => WorldMapScene.Io.Map.Regions[WorldMapScene.Io.Map.RegionIndexFromGlobalCoord(GlobalCoord)];
     public Vector2Int LocalCoord(int regionSize) => GlobalCoord.Smod(regionSize);
 
-    public float RotY;
+    private float _rotY;
+    public float RotY
+    {
+        get => _rotY;
+        set
+        {
+            _rotY = value.Smod(360);
+        }
+    }
     public float MoveSpeed = 2.5f;
     public float RotateSpeed = 40f;
+
+    public Vector3 SeaPos;
+    public Quaternion SeaRot;
 
     public NPCShipType ShipType;
     public GameObject Parent;
@@ -30,40 +44,41 @@ public class PlayerShip
     private readonly int RegionSize;
     private readonly int GlobalSize;
 
-    public PlayerShip(Scene scene)
+    public PlayerShip(Sea.WorldMapScene scene)
     {
         RotY = 180;
         MapSize = scene.Map.Size;
         RegionSize = scene.Map.RegionSize;
         GlobalSize = MapSize * RegionSize;
-        GlobalPos = .5f * RegionSize * Vector2.one;
+        GlobalLoc = new Vector2((RegionSize * 5) + (RegionSize * .5f) + 1, (RegionSize * 6) + (RegionSize * .5f) + 1); //Vector2.one + (.5f * RegionSize * Vector2.one);
         GO = SetUpTheShip(scene);
     }
 
-    GameObject SetUpTheShip(Scene scene)
+    GameObject SetUpTheShip(Sea.WorldMapScene scene)
     {
         Parent = new GameObject(nameof(PlayerShip));
         Parent.transform.rotation = Quaternion.Euler(new Vector3(0, RotY, 0));
         Parent.transform.SetParent(scene.TheSea.transform);
-        Parent.transform.position = scene.Board.SubTiles[(int)(scene.Board.SubTiles.Count * .5f)].Loc + (Vector3.up * .3f);
+        Parent.transform.position = new Vector3(
+            (float)((float)scene.Board.Size * (float)(1f / (float)scene.Board.SubDivision)),
+            .1f,
+            (float)((float)scene.Board.Size * (float)(1f / (float)scene.Board.SubDivision)));
 
-        GameObject go = Assets.CatBoat;
-        go.name = nameof(Assets.CatBoat);
+        GameObject go = Assets.Sloop.gameObject;
+        go.name = nameof(PlayerShip);
         go.transform.SetParent(Parent.transform);
-        go.transform.position = Parent.transform.position;
+        go.transform.SetPositionAndRotation(Parent.transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
         go.transform.localScale = Vector3.one * .6f;
-        go.transform.rotation = Quaternion.Euler(new Vector3(0, 180, 0));
         CapsuleCollider = go.GetComponentInChildren<CapsuleCollider>();
 
         return go;
     }
 
-    private Card _bark;
-    public Card Bark => _bark ??= new Card(nameof(Bark), GO.transform)
+    private Card _confirmPopup;
+    public Card ConfirmPopup => _confirmPopup ??= new Card(nameof(ConfirmPopup), GO.transform)
         .SetPositionAll(1, -1)
         .SetFontScale(.5f, .5f)
         .AutoSizeTextContainer(true)
-        .SetTextString("Hail")
         .SetOutlineColor(Color.black)
         .SetTextAlignment(TMPro.TextAlignmentOptions.Right)
         .SetTMPRectPivot(new Vector2(1, .5f))
@@ -75,5 +90,14 @@ public class PlayerShip
         .OffsetImageFromTMP(Vector2.right * .5f)
         ;
 
+}
+
+public static class PlayerShipSystems
+{
+
+    public static void UpdateShipCoords(this PlayerShip player, Sea.WorldMapScene scene)
+    {
+        scene.HUD.UpdateCoords(player.GlobalCoord, scene.Map.GlobalSize, player.RegionCoord);
+    }
 
 }

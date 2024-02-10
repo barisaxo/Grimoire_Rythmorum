@@ -11,7 +11,7 @@ public class MoveNPCOffScreen_State : State
     }
 
     readonly State SubsequentState;
-    NPCShip NPC => Scene.Io.NearestNPC;
+    NPCShip NPC => WorldMapScene.Io.NearestNPC;
 
     protected override void EngageState()
     {
@@ -24,11 +24,9 @@ public class MoveNPCOffScreen_State : State
             if (++z == NPC.PatrolPath.Length) { i = NPC.PatrolIndex + (NPC.PatrolPath.Length / 2); break; }
         }
 
-        Scene.Io.UnusedShips.Add(NPC.GO);
-        Scene.Io.UsedShips.Remove(NPC.GO);
-        Scene.Io.RockTheBoat.RemoveBoat(NPC.GO.transform);
-        NPC.GO.SetActive(false);
-        NPC.GO = null;
+        WorldMapScene.Io.NPCShips.Remove(NPC);
+        WorldMapScene.Io.RockTheBoat.RemoveBoat(NPC.SceneObject.GO.transform);
+        NPC.DestroySceneObject();
         NPC.PatrolIndex = i;
         NPC.Pos = NPC.PatrolPath[NPC.PatrolIndex];
 
@@ -37,11 +35,11 @@ public class MoveNPCOffScreen_State : State
 
     bool IsOccupiedAndOnGrid(Vector2Int v2)
     {
-        if (v2.x.IsPOM(Scene.Io.Board.Center() + 1, Scene.Io.Ship.GlobalCoord.x) ||
-            v2.y.IsPOM(Scene.Io.Board.Center() + 1, Scene.Io.Ship.GlobalCoord.y))
+        if (v2.x.IsPOM(WorldMapScene.Io.Board.Center() + 1, WorldMapScene.Io.Ship.GlobalCoord.x) ||
+            v2.y.IsPOM(WorldMapScene.Io.Board.Center() + 1, WorldMapScene.Io.Ship.GlobalCoord.y))
             return true;
 
-        var localRegions = Scene.Io.Map.AdjacentRegions(Scene.Io.Ship);
+        var localRegions = WorldMapScene.Io.Map.RegionsAdjacentTo(WorldMapScene.Io.Ship);
         foreach (Region region in localRegions)
             foreach (NPCShip npc in region.NPCs) if (npc.LocalCoords == v2) return true;
 

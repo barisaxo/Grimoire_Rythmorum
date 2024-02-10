@@ -20,6 +20,7 @@ public sealed class AmbienceAudioSystem : AudioSystem
     {
         AudioSources[0].loop = true;
         AudioSources[0].clip = ac;
+        AudioSources[0].time = 0;
         AudioSources[0].Play();
     }
 

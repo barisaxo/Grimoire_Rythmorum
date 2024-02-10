@@ -19,13 +19,14 @@ public class BuySextant_Dialogue : Dialogue
         ;
 
     Line _muscopaLine;
-    Line Muscopa_Line => _muscopaLine ??= new Line(Muscopa_LineText, PuzzleSelector.WeightedRandomPuzzleState(DataManager.Io.TheoryPuzzleData))
-        .SetSpeaker(Speaker)
-        .SetCameraPan(
-            new UnityEngine.Vector3(-50, Cam.Io.Camera.transform.rotation.eulerAngles.y, Cam.Io.Camera.transform.rotation.eulerAngles.z),
-            Cam.Io.Camera.transform.position,
-            2.3f)
-        ;
+    Line Muscopa_Line => throw new System.NotImplementedException();
+    // _muscopaLine ??= new Line(Muscopa_LineText, PuzzleSelector.WeightedRandomPuzzleState(DataManager.Io.TheoryPuzzleData))
+    //     .SetSpeaker(Speaker)
+    //     .SetCameraPan(
+    //         new UnityEngine.Vector3(-50, Cam.Io.Camera.transform.rotation.eulerAngles.y, Cam.Io.Camera.transform.rotation.eulerAngles.z),
+    //         Cam.Io.Camera.transform.position,
+    //         2.3f)
+    //     ;
 
     Line _sextant_Line;
     Line Sextant_Line => _sextant_Line ??= new Line(SextantLine_Text, SextantChallenge_Response)

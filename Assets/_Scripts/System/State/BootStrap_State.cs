@@ -26,6 +26,7 @@ public class BootStrap_State : State
     {
         SetStateDirectly(new MainMenu_State());
         // FadeToState(new SeaScene_State());
+        // SetStateDirectly(new NewAngling_State());
 
         // if (UnityEngine.Random.value > .5f) FadeToState(PuzzleSelector.WeightedRandomPuzzleState(Data.TheoryPuzzleData));
         // else
@@ -49,8 +50,8 @@ public class BootStrap_State : State
         //SetStateDirectly(new Batterie_State(RhythmSpecs));
         //SetStateDirectly(new VolumeMenu_State(new MainMenu_State()));
         //SetStateDirectly(new TestMusicSheet_State());
-        //SetStateDirectly(new TheoryPuzzleState());
-        //SetStateDirectly(new NewMuscopaState());
+        // SetStateDirectly(new TheoryPuzzleState());
+        // SetStateDirectly(new NewMuscopaState());
 
     }
 }

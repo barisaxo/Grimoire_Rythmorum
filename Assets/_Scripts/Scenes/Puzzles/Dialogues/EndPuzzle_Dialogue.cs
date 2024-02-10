@@ -22,9 +22,9 @@ public class EndPuzzle_Dialogue : Dialogue
     {
         _won = won;
         Speaker = new Speaker(
-            Sea.Scene.Io.NearestNPC.Flag,
-            Sea.Scene.Io.NearestNPC.Name,
-            Sea.Scene.Io.NearestNPC.FlagColor);
+            Sea.WorldMapScene.Io.NearestNPC.Flag,
+            Sea.WorldMapScene.Io.NearestNPC.Name,
+            Sea.WorldMapScene.Io.NearestNPC.FlagColor);
         FirstLine = _won ? RecapLineWithSextant : RecapLineWithOutSextant;
     }
 
@@ -39,9 +39,9 @@ public class EndPuzzle_Dialogue : Dialogue
     public EndPuzzle_Dialogue(bool won, int gold, int mats, int rations)
     {
         Speaker = new Speaker(
-            Sea.Scene.Io.NearestNPC.Flag,
-            Sea.Scene.Io.NearestNPC.Name,
-            Sea.Scene.Io.NearestNPC.FlagColor);
+            Sea.WorldMapScene.Io.NearestNPC.Flag,
+            Sea.WorldMapScene.Io.NearestNPC.Name,
+            Sea.WorldMapScene.Io.NearestNPC.FlagColor);
         _won = won;
         _gold = gold * winSign; _mats = mats * winSign; _rations = rations * winSign;
         FirstLine = RecapLineWithOutSextant;

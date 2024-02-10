@@ -4,8 +4,8 @@ using UnityEngine;
 
 public sealed class Swells
 {
-    public Swells(Sea.Scene scene) { Scene = scene; }
-    readonly Sea.Scene Scene;
+    public Swells(Sea.WorldMapScene scene) { Scene = scene; }
+    readonly Sea.WorldMapScene Scene;
     const float SwellFrequency = .58f;
     const float SwellAmplitude = .06f;
 
@@ -16,8 +16,8 @@ public sealed class Swells
     public float Offset
     {
         get => _offset;
-        set => _offset = value >= 700f ? value - 700 : value <= -700f ? value + 700 : value;
-        //700 is an arbitrary large number
+        set => _offset = value >= 1700f ? value - 1700 : value <= -1700f ? value + 1700 : value;
+        //1700 is an arbitrary large number
     }
     void Swell()
     {
@@ -34,16 +34,23 @@ public sealed class Swells
                 new Vector3(tile.GO.transform.position.x, yPos, tile.GO.transform.position.z);
 
             float v = 2.5f * yPos;
-            tile.Mesh.material.color = new Color(
-                     Scene.SeaColor.r + v,
-                     Scene.SeaColor.g + v,
-                     Scene.SeaColor.b + v,
+            // tile.Mesh.material.color = new Color(
+
+            tile.SR.color = new Color(
+                     Scene.Board.SeaColor.r + v,
+                     Scene.Board.SeaColor.g + v,
+                     Scene.Board.SeaColor.b + v,
                      .25f + v);
 
-            if (tile.GO.transform.position.x < 5.7 && tile.GO.transform.position.x > 5.3 && tile.GO.transform.position.z < 5.7 && tile.GO.transform.position.z > 5.3)
+
+
+            if (tile.GO.transform.position.x < Scene.Board.HalfSize + .25f &&
+                tile.GO.transform.position.x > Scene.Board.HalfSize - .25f &&
+                tile.GO.transform.position.z < Scene.Board.HalfSize + .25f &&
+                tile.GO.transform.position.z > Scene.Board.HalfSize - .25f)
             {
                 yPos = Mathf.Sin(set + Offset + ((Scene.Ship.GO.transform.position.x + Scene.Ship.GO.transform.position.z) % (i))) * SwellAmplitude;
-                Scene.Ship.GO.transform.position = new Vector3(Scene.Ship.GO.transform.position.x, yPos + .13f, Scene.Ship.GO.transform.position.z);
+                Scene.Ship.GO.transform.position = new Vector3(Scene.Ship.GO.transform.position.x, yPos, Scene.Ship.GO.transform.position.z);
             }
             i++;
         }

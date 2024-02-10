@@ -5,8 +5,8 @@ public class MenuToSeaTransition_State : State
 {
     protected override void PrepareState(Action callback)
     {
-        Scene.Io.RockTheBoat.Rocking = true;
-        Scene.Io.Swells.EnableSwells();
+        WorldMapScene.Io.RockTheBoat.Rocking = true;
+        WorldMapScene.Io.Board.Swells.EnableSwells();
         base.PrepareState(callback);
     }
 

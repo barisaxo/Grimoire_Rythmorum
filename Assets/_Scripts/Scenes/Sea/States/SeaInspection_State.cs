@@ -6,7 +6,6 @@ using Sea;
 
 public class SeaInspection_State : State
 {
-
     GameObject Overlay;
     MeshRenderer MR;
     int Index = 0;
@@ -41,11 +40,11 @@ public class SeaInspection_State : State
         switch (dir)
         {
             case Dir.Left:
-                Index = (Index - 1).Smod(Scene.Io.UsedShips.Count);
+                Index = (Index - 1).Smod(WorldMapScene.Io.NPCShips.Count);
                 // x = Mathf.Clamp(x + 1, 0.5f, Scene.Io.BoardSize - .5f);
                 break;
             case Dir.Right:
-                Index = (Index + 1).Smod(Scene.Io.UsedShips.Count);
+                Index = (Index + 1).Smod(WorldMapScene.Io.NPCShips.Count);
                 // x = Mathf.Clamp(x - 1, 0.5f, Scene.Io.BoardSize - .5f);
                 break;
             case Dir.Up:
@@ -56,19 +55,20 @@ public class SeaInspection_State : State
                 break;
         }
         // Overlay.transform.position = new Vector3(x, .5f, z);
-        var localRegions = Scene.Io.Map.AdjacentRegions(Scene.Io.Ship);
-        foreach (Region region in localRegions)
-            foreach (NPCShip npc in region.NPCs)
+
+        // var localRegions = Scene.Io.Map.RegionsAdjacentTo(Scene.Io.Ship);
+        // foreach (Region region in localRegions)
+        foreach (NPCShip npc in WorldMapScene.Io.NPCShips)
+        {
+            if (npc.SceneObject.GO != null && WorldMapScene.Io.NPCShips.Count > 0 &&
+                npc.SceneObject.GO.transform.GetInstanceID() == WorldMapScene.Io.NPCShips[Index].SceneObject.GO.transform.GetInstanceID())
             {
-                if (npc.GO != null && Scene.Io.UsedShips.Count > 0 &&
-                    npc.GO.transform.GetInstanceID() == Scene.Io.UsedShips[Index].transform.GetInstanceID())
-                {
-                    Overlay.transform.position = npc.GO.transform.position;
-                    Flag.SetImageSprite(npc.Flag)
-                        .SetImageColor(npc.FlagColor);
-                    break;
-                }
+                Overlay.transform.position = npc.SceneObject.GO.transform.position;
+                Flag.SetImageSprite(npc.Flag)
+                    .SetImageColor(npc.FlagColor);
+                break;
             }
+        }
 
     }
 

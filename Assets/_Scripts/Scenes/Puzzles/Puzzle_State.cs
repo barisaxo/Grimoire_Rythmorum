@@ -19,11 +19,13 @@ public class Puzzle_State : State
 
     private KeyboardKey CaretKey;
     private CaretBlink CaretBlink;
+    readonly State SubsequentState;
 
-    public Puzzle_State(IPuzzle puzzle, PuzzleType puzzleType)
+    public Puzzle_State(IPuzzle puzzle, PuzzleType puzzleType, State subsequentState)
     {
         Puzzle = puzzle;
         PuzzleType = puzzleType;
+        SubsequentState = subsequentState;
     }
 
     protected override void PrepareState(Action callback)
@@ -94,9 +96,9 @@ public class Puzzle_State : State
         if (ReadyForEndPuzzle && action == MouseAction.LUp)
         {
             SetStateDirectly(
-            new CameraPan_State(
-                new DialogStart_State(
-                    new EndPuzzle_Dialogue(won: true)),
+                new CameraPan_State(
+                    new DialogStart_State(
+                        new EndPuzzle_Dialogue(won: true)),
                 Cam.StoredCamRot,
                 Cam.StoredCamPos,
                 3));

@@ -54,10 +54,10 @@ public class QuitSeaMenu_State : State
     protected override void EastPressed()
     {
         QuitMenu.UpdateTextColors();
-        Scene.Io.SelfDestruct();
+        WorldMapScene.Io.SelfDestruct();
         if (QuitMenu.Selection.Item == QuitSeaMenu.QuitMenuItem.AbandonRun)
         {
-            FadeToState(new NewAetherScene_State());
+            FadeToState(new NewCoveScene_State());
             return;
         }
         if (QuitMenu.Selection.Item == QuitSeaMenu.QuitMenuItem.QuitToMainMenu)

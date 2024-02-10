@@ -169,7 +169,7 @@ namespace Batterie
                 score--;
                 Debug.Log("HOLD! " + realTime + " " + (holdWindows[0].end + StartTime + LatencyOffset));
                 holdWindows.RemoveAt(0);
-                Hit?.Invoke(Batterie.Hit.Miss);
+                Hit?.Invoke(Batterie.Hit.BadHold);
                 return;
             }
             if (realTime > holdWindows[0].end + StartTime + LatencyOffset)
@@ -227,7 +227,7 @@ namespace Batterie
 
     }
 
-    public enum Hit { Hit, Miss, BadHit, Break }
+    public enum Hit { Hit, Miss, BadHit, Break, BadHold }
 
 
 }

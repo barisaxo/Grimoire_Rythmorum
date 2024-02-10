@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace Sea
 {
@@ -20,7 +21,16 @@ namespace Sea
             Coord = region;
         }
 
+        public void TryRemoveCell(Cell cell)
+        {
+            List<Cell> cells = new();
 
+            for (int i = 0; i < Cells.Length; i++)
+                if (Cells[i] != cell)
+                    cells.Add(Cells[i]);
+
+            _cells = cells.ToArray();
+        }
     }
 
 }

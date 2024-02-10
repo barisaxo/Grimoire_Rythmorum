@@ -33,7 +33,7 @@ public abstract class State
     protected virtual void DisengageState() { }
 
     /// <summary>
-    /// Called by SetStateDirectly() and FadeOutToBlack(). Don't set new states here.
+    /// Initialize the state here. Called by SetStateDirectly() and FadeOutToBlack(). Don't set new states here.
     /// </summary>
     protected virtual void PrepareState(Action callback) { callback?.Invoke(); }
 
@@ -45,7 +45,7 @@ public abstract class State
     protected virtual void PreEngageState(Action callback) { callback?.Invoke(); }
 
     /// <summary>
-    /// Called by SetStateDirectly() and FadeInToScene(). OK to set new states here.
+    /// Called by SetStateDirectly() and FadeInToScene(), after PrepareState(). OK to set new states here.
     /// </summary>
     protected virtual void EngageState() { }
 
@@ -62,6 +62,8 @@ public abstract class State
 
     protected void SetStateDirectly(State newState)
     {
+        if (newState == null) return;
+
         DisableInput();
         DisengageState();
 

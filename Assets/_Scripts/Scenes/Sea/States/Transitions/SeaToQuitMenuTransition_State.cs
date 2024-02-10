@@ -8,7 +8,7 @@ public class SeaToQuitMenuTransition_State : State
 {
     protected override void PrepareState(Action callback)
     {
-        Scene.Io.HUD.Hud.GO.SetActive(false);
+        WorldMapScene.Io.HUD.Hud.GO.SetActive(false);
         base.PrepareState(callback);
     }
 
@@ -31,7 +31,7 @@ public class SeaToQuitMenuTransition_State : State
         Audio.BGMusic.Pause();
         Audio.Ambience.Pause();
 
-        Scene.Io.RockTheBoat.Rocking = false;
-        Scene.Io.Swells.DisableSwells();
+        WorldMapScene.Io.RockTheBoat.Rocking = false;
+        WorldMapScene.Io.Board.Swells.DisableSwells();
     }
 }

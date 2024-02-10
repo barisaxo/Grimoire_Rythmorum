@@ -5,7 +5,7 @@ using UnityEngine;
 public class NPCManager
 {
 
-    public NPCShip NearestShip;
-    public List<NPCShip> Ships = new();
+    // public NPCShip NearestShip;
+    // public List<NPCShip> Ships = new();
 
 }

@@ -123,19 +123,19 @@ public class Card
 
     public Card CreateChild(string name, Transform parent)
     {
-        Children = Children.Add(new Card(name, this, parent));
+        Children = Children.Added(new Card(name, this, parent));
         return Children[^1];
     }
 
     public Card CreateChild(string name, Transform parent, Canvas _)
     {
-        Children = Children.Add(new Card(name, this, parent, Canvas));
+        Children = Children.Added(new Card(name, this, parent, Canvas));
         return Children[^1];
     }
 
     public Card CreateChild(string name, Canvas canvas)
     {
-        Children = Children.Add(new Card(name, this, canvas.transform, canvas));
+        Children = Children.Added(new Card(name, this, canvas.transform, canvas));
         return Children[^1];
     }
 

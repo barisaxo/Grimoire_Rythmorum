@@ -67,7 +67,7 @@ public class MainMenu_State : State
 
         if (MainMenu.Selection.Item == MainMenu.MainMenuItem.Continue)
         {
-            FadeToState(new NewAetherScene_State());
+            FadeToState(new NewCoveScene_State());
             return;
         }
         if (MainMenu.Selection.Item == MainMenu.MainMenuItem.LoadGame)

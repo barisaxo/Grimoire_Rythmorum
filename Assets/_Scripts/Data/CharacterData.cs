@@ -18,6 +18,7 @@ public class CharacterData
 
     public bool Map, Sextant;
 
+    public Sea.Region[] ActivatedLighthouses = new Sea.Region[] { };
     // public NumberOfCannons NumberOfCannons = NumberOfCannons.Four;
 
 }

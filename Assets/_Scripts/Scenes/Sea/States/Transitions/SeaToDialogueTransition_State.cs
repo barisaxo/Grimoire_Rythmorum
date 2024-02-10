@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Dialog;
 using Sea;
 
@@ -14,7 +11,8 @@ public class SeaToDialogueTransition_State : State
 
     protected override void EngageState()
     {
-        Scene.Io.HUD.Hud.GO.SetActive(false);
+        WorldMapScene.Io.HUD.Hud.GO.SetActive(false);
+        WorldMapScene.Io.Ship.ConfirmPopup.GO.SetActive(false);
         Audio.BGMusic.Pause();
         Audio.Ambience.Pause();
 

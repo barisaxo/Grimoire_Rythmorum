@@ -80,7 +80,7 @@ namespace Menus.MainMenu
 
                 GameObject SetUpCatBoat()
                 {
-                    var go = Assets.CatBoat;
+                    var go = Assets.Sloop.gameObject;
                     go.transform.SetParent(Parent);
                     go.transform.SetLocalPositionAndRotation(new Vector3(-2, -1.5f, 0), Quaternion.Euler(0, 180, 0));
                     // go.transform.position = new Vector3(-2, -1.5f, 0);

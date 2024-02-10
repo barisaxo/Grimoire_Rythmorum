@@ -14,7 +14,7 @@ public class BatterieAndCadence_State : State
         Pack = pack;
     }
 
-    BatteriePack Pack;
+    readonly BatteriePack Pack;
     RhythmSpecs Specs;
     MusicSheet MusicSheet;
     Synchronizer Synchro;
@@ -50,7 +50,7 @@ public class BatterieAndCadence_State : State
         {
             RhythmSpecs = Specs
         };
-        // _ = MusicSheet.BackGround;
+        _ = Background;
         MusicSheet.RhythmSpecs.Time.GenerateRhythmCells(MusicSheet);
         MusicSheet.GetNotes();
         MusicSheet.DrawRhythms();
@@ -78,11 +78,11 @@ public class BatterieAndCadence_State : State
 
         if (Pack.Ship == null)
         {
-            Pack.Ship = Assets.CatBoat;
-            Pack.NME = Assets.Schooner;
+            Pack.Ship = Sea.WorldMapScene.Io.Ship.GO;
+            Pack.NME = Sea.WorldMapScene.Io.NearestNPC.SceneObject.GO;
 
-            Pack.Ship.transform.SetParent(Cam.Io.Camera.transform);
-            Pack.NME.transform.SetParent(Cam.Io.Camera.transform);
+            // Pack.Ship.transform.SetParent(Cam.Io.Camera.transform);
+            // Pack.NME.transform.SetParent(Cam.Io.Camera.transform);
 
             Pack.Ship.transform.position = Cam.Io.Camera.transform.position + ((Cam.Io.Camera.transform.forward * 4) - (Cam.Io.Camera.transform.right * 2) - (Cam.Io.Camera.transform.up * 2));
             Pack.NME.transform.position = Cam.Io.Camera.transform.position + ((Cam.Io.Camera.transform.forward * 4) + (Cam.Io.Camera.transform.right * 2) - (Cam.Io.Camera.transform.up * 2));
@@ -109,6 +109,7 @@ public class BatterieAndCadence_State : State
 
     protected override void DisengageState()
     {
+        Background.SelfDestruct();
         Debug.Log((float)((float)score / (float)cap));
         Synchro.TickEvent -= Tick;
         Synchro.BeatEvent -= Click;
@@ -356,5 +357,11 @@ public class BatterieAndCadence_State : State
     public static Genre RandomGenre() => (Genre)UnityEngine.Random.Range(0, Count());
     public static int Count() => Enum.GetNames(typeof(Genre)).Length;
 
+    Card _background;
+    Card Background => _background ??= new Card(nameof(Background), null)
+        .SetImagePosition(Vector2.zero)
+        .SetImageSize(new Vector2(Cam.Io.UICamera.scaledPixelWidth * .8f, Cam.Io.UICamera.scaledPixelHeight * .8f))
+        .SetCanvasSortingOrder(0)
+        .SetImageColor(new Color(0, 0, 0, .25f));
 
 }

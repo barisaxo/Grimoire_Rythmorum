@@ -34,8 +34,12 @@ public class EndBatterie_State : State
         // mats = (int)(((level + 15f) * 2.55f) * UnityEngine.Random.Range(.15f, 1) * (float)((100 - Result()) * .01f));
         // rations = (int)(1 + ((level + 5f) * UnityEngine.Random.Range(.5f, 1) * (float)((100 - Result()) * .01f)));
 
-        UnityEngine.GameObject.Destroy(Pack.NME);
-        UnityEngine.GameObject.Destroy(Pack.Ship);
+        // UnityEngine.GameObject.Destroy(Pack.NME);
+        // UnityEngine.GameObject.Destroy(Pack.Ship);
+        Sea.WorldMapScene.Io.Ship.GO.transform.SetPositionAndRotation(
+            Sea.WorldMapScene.Io.Ship.SeaPos,
+            Sea.WorldMapScene.Io.Ship.SeaRot
+        );
         UnityEngine.GameObject.Destroy(Pack.NMEFire);
         UnityEngine.GameObject.Destroy(Pack.ShipFire);
 

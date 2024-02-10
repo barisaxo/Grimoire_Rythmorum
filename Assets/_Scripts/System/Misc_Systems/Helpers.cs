@@ -227,8 +227,8 @@ static class Helpers
     public static T[] Combine<T>(ref T[] t1, T[] t2)
     {
         List<T> temp = new();
-        if (t1 != null) foreach (T datum in t1) temp.Add(datum);
-        if (t2 != null) foreach (T datum in t2) temp.Add(datum);
+        if (t1 is not null) foreach (T datum in t1) temp.Add(datum);
+        if (t2 is not null) foreach (T datum in t2) temp.Add(datum);
         return t1 = temp.ToArray();
     }
 
@@ -238,31 +238,57 @@ static class Helpers
     public static T[] Combine<T>(ref T[] t1, T t2)
     {
         List<T> temp = new();
-        if (t1 != null) foreach (T datum in t1) temp.Add(datum);
-        if (t2 != null) temp.Add(t2);
+        if (t1 is not null) foreach (T datum in t1) temp.Add(datum);
+        if (t2 is not null) temp.Add(t2);
         return t1 = temp.ToArray();
     }
 
     /// <summary>
     /// Returns T t2 added to T[] t1. Neither arg needs to be initialized. Does not ref t1!
     /// </summary>
-    public static T[] Add<T>(this T[] t1, T[] t2)
+    public static T[] Added<T>(this T[] t1, T[] t2)
     {
         List<T> temp = new();
-        if (t1 != null) foreach (T datum in t1) temp.Add(datum);
-        if (t2 != null) foreach (T datum in t2) temp.Add(datum);
+        if (t1 is not null) foreach (T datum in t1) temp.Add(datum);
+        if (t2 is not null) foreach (T datum in t2) temp.Add(datum);
+        return temp.ToArray();
+    }
+
+    /// <summary>
+    /// Returns T t2 removed from T[] t1. Neither arg needs to be initialized. Does not ref t1!
+    /// </summary>
+    public static T[] Removed<T>(this T[] t1, T t2)
+    {
+        List<T> temp = new();
+        if (t1 is not null) foreach (T datum in t1) if (!datum.Equals(t2)) temp.Add(datum);
+        return temp.ToArray();
+    }
+
+    /// <summary>
+    /// Removes T t2 to T[] t1. Refs t1!
+    /// </summary>
+    public static T[] Removed<T>(ref T[] t1, T t2)
+    {
+        List<T> temp = new();
+        if (t1 is not null) foreach (T datum in t1) if (!datum.Equals(t2)) temp.Add(datum);
         return t1 = temp.ToArray();
     }
 
     /// <summary>
     /// Returns T t2 added to T[] t1. Neither arg needs to be initialized. Does not ref t1!
     /// </summary>
-    public static T[] Add<T>(this T[] t1, T t2)
+    public static T[] Added<T>(this T[] t1, T t2)
     {
         List<T> temp = new();
-        if (t1 != null) foreach (T datum in t1) temp.Add(datum);
-        if (t2 != null) temp.Add(t2);
-        return t1 = temp.ToArray();
+        if (t1 is not null) foreach (T datum in t1) temp.Add(datum);
+        if (t2 is not null) temp.Add(t2);
+        return temp.ToArray();
+    }
+
+    public static bool Contains<T>(this T[] t1, T comparer)
+    {
+        foreach (T t in t1) if (t.Equals(comparer)) return true;
+        return false;
     }
 
     public static T[] Flatten<T>(this T[][] values)

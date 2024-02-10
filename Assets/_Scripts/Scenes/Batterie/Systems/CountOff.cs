@@ -9,94 +9,94 @@ namespace Batterie
         {
             TwoTwo => new Note[]
             {
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Half },
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Half },
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter, TiedFrom = true},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter, TiedFrom = true},
+                new () { QuantizedRhythmicValue = RhythmicValue.Half },
+                new () { QuantizedRhythmicValue = RhythmicValue.Half },
+                new () { QuantizedRhythmicValue = RhythmicValue.Quarter},
+                new () { QuantizedRhythmicValue = RhythmicValue.Quarter, TiedFrom = true},
+                new () { QuantizedRhythmicValue = RhythmicValue.Quarter},
+                new () { QuantizedRhythmicValue = RhythmicValue.Quarter, TiedFrom = true},
             },
 
             TwelveEight or SixEight => new Note[]
             {
-                new Note() { QuantizedRhythmicValue = RhythmicValue.DotQuarter },
-                new Note() { QuantizedRhythmicValue = RhythmicValue.DotQuarter },
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth, TiedFrom = true},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth, TiedFrom = true},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth, TiedFrom = true},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth, TiedFrom = true},
+                new () { QuantizedRhythmicValue = RhythmicValue.DotQuarter },
+                new () { QuantizedRhythmicValue = RhythmicValue.DotQuarter },
+                new () { QuantizedRhythmicValue = RhythmicValue.Eighth},
+                new () { QuantizedRhythmicValue = RhythmicValue.Eighth, TiedFrom = true},
+                new () { QuantizedRhythmicValue = RhythmicValue.Eighth, TiedFrom = true},
+                new () { QuantizedRhythmicValue = RhythmicValue.Eighth},
+                new () { QuantizedRhythmicValue = RhythmicValue.Eighth, TiedFrom = true},
+                new () { QuantizedRhythmicValue = RhythmicValue.Eighth, TiedFrom = true},
             },
 
             SevenFour34 or SevenFour43 => new Note[]
             {
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
+                new () { QuantizedRhythmicValue = RhythmicValue.Quarter},
+                new () { QuantizedRhythmicValue = RhythmicValue.Quarter},
+                new () { QuantizedRhythmicValue = RhythmicValue.Quarter},
+                new () { QuantizedRhythmicValue = RhythmicValue.Quarter},
+                new () { QuantizedRhythmicValue = RhythmicValue.Quarter},
+                new () { QuantizedRhythmicValue = RhythmicValue.Quarter},
+                new () { QuantizedRhythmicValue = RhythmicValue.Quarter},
             },
 
             SevenEight34 or SevenEight43 => new Note[]
             {
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
+                new () { QuantizedRhythmicValue = RhythmicValue.Eighth},
+                new () { QuantizedRhythmicValue = RhythmicValue.Eighth},
+                new () { QuantizedRhythmicValue = RhythmicValue.Eighth},
+                new () { QuantizedRhythmicValue = RhythmicValue.Eighth},
+                new () { QuantizedRhythmicValue = RhythmicValue.Eighth},
+                new () { QuantizedRhythmicValue = RhythmicValue.Eighth},
+                new () { QuantizedRhythmicValue = RhythmicValue.Eighth},
             },
 
             FiveFour23 or FiveFour32 => new Note[]
             {
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
+                new () { QuantizedRhythmicValue = RhythmicValue.Quarter},
+                new () { QuantizedRhythmicValue = RhythmicValue.Quarter},
+                new () { QuantizedRhythmicValue = RhythmicValue.Quarter},
+                new () { QuantizedRhythmicValue = RhythmicValue.Quarter},
+                new () { QuantizedRhythmicValue = RhythmicValue.Quarter},
             },
 
             FiveEight23 or FiveEight32 => new Note[]
             {
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
+                new () { QuantizedRhythmicValue = RhythmicValue.Eighth},
+                new () { QuantizedRhythmicValue = RhythmicValue.Eighth},
+                new () { QuantizedRhythmicValue = RhythmicValue.Eighth},
+                new () { QuantizedRhythmicValue = RhythmicValue.Eighth},
+                new () { QuantizedRhythmicValue = RhythmicValue.Eighth},
             },
 
             ThreeFour or SixFour or ThreeEight => new Note[]
                {
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
+                new () { QuantizedRhythmicValue = RhythmicValue.Quarter},
+                new () { QuantizedRhythmicValue = RhythmicValue.Quarter},
+                new () { QuantizedRhythmicValue = RhythmicValue.Quarter},
+                new () { QuantizedRhythmicValue = RhythmicValue.Quarter},
+                new () { QuantizedRhythmicValue = RhythmicValue.Quarter},
+                new () { QuantizedRhythmicValue = RhythmicValue.Quarter},
                },
 
             ThreeTwo => new Note[]
                 {
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Half},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Half},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Half},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Half},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Half},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Half},
+                new () { QuantizedRhythmicValue = RhythmicValue.Half},
+                new () { QuantizedRhythmicValue = RhythmicValue.Half},
+                new () { QuantizedRhythmicValue = RhythmicValue.Half},
+                new () { QuantizedRhythmicValue = RhythmicValue.Half},
+                new () { QuantizedRhythmicValue = RhythmicValue.Half},
+                new () { QuantizedRhythmicValue = RhythmicValue.Half},
                 },
 
             _ => new Note[]
                 {
-                  new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter },
-                  new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter },
-                  new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                  new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth, TiedFrom = true},
-                  new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                  new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth, TiedFrom = true},
+                  new () { QuantizedRhythmicValue = RhythmicValue.Quarter },
+                  new () { QuantizedRhythmicValue = RhythmicValue.Quarter },
+                  new () { QuantizedRhythmicValue = RhythmicValue.Eighth},
+                  new () { QuantizedRhythmicValue = RhythmicValue.Eighth, TiedFrom = true},
+                  new () { QuantizedRhythmicValue = RhythmicValue.Eighth},
+                  new () { QuantizedRhythmicValue = RhythmicValue.Eighth, TiedFrom = true},
                 },
 
         };
@@ -123,125 +123,3 @@ namespace Batterie
         }
     }
 }
-
-
-/*
- * 
-        static public List<Note> GetNotes(this TimeSignature ts)
-        {
-            return ts switch
-            {
-                _ when ts == TimeSignature.TwelveEight || ts == TimeSignature.SixEight => new()
-                {
-                new Note() { QuantizedRhythmicValue = RhythmicValue.DotQuarter },
-                new Note() { QuantizedRhythmicValue = RhythmicValue.DotQuarter },
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth, TiedFrom = true},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth, TiedFrom = true},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth, TiedFrom = true},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth, TiedFrom = true},
-                },
-
-                _ when ts == TimeSignature.NineEight => new()
-                {
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth, TiedFrom = true},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth, TiedFrom = true},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth, TiedFrom = true},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth, TiedFrom = true},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth, TiedFrom = true},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth, TiedFrom = true},
-                },
-
-                //_ when ts == TimeSignature.ThreeEight => new()
-                //{
-                //    new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                //    new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                //    new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                //    new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                //    new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                //    new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                //},
-
-                _ when ts == TimeSignature.SevenFour34 || ts == TimeSignature.SevenFour43 => new()
-                {
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                },
-
-                _ when ts == TimeSignature.SevenEight34 || ts == TimeSignature.SevenEight43 => new()
-                {
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                },
-
-                _ when ts == TimeSignature.FiveFour23 || ts == TimeSignature.FiveFour32 ||
-                       ts == TimeSignature.FiveEight23 || ts == TimeSignature.FiveEight32 => new()
-                {
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                },
-
-                _ when ts == TimeSignature.ThreeFour || ts == TimeSignature.SixFour ||
-                       ts == TimeSignature.ThreeEight => new()
-                {
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                },
-
-
-                _ when ts == TimeSignature.TwoTwo => new()
-                {
-                  new Note() { QuantizedRhythmicValue = RhythmicValue.Half },
-                  new Note() { QuantizedRhythmicValue = RhythmicValue.Half },
-                  new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                  new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter, TiedFrom = true},
-                  new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter},
-                  new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter, TiedFrom = true},
-                },
-
-                _ when ts == TimeSignature.ThreeTwo => new()
-                {
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Half},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Half},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Half},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Half},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Half},
-                new Note() { QuantizedRhythmicValue = RhythmicValue.Half},
-                },
-
-                _ => new()
-                {
-                  new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter },
-                  new Note() { QuantizedRhythmicValue = RhythmicValue.Quarter },
-                  new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                  new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth, TiedFrom = true},
-                  new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth},
-                  new Note() { QuantizedRhythmicValue = RhythmicValue.Eighth, TiedFrom = true},
-                },
-
-            };
-        }
-
- * 
- */
