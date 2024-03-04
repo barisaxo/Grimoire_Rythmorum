@@ -1,3 +1,6 @@
+using Data;
+using Data.Options;
+
 namespace Audio
 {
     public class AudioManager

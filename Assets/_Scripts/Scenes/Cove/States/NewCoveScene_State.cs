@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class NewCoveScene_State : State
 {
+    public NewCoveScene_State() { Fade = true; }
+
     bool ready = true;
 
     protected override void PrepareState(Action callback)
@@ -26,7 +28,7 @@ public class NewCoveScene_State : State
                 CoveScene.Io.Player.MoveCamera(-.333f);
                 yield return null;
             }
-            SetStateDirectly(new CoveScene_State());
+            SetState(new CoveScene_State());
         }
         base.PrepareState(callback);
     }
@@ -52,9 +54,6 @@ public class NewCoveScene_State : State
 
     void Ready()
     {
-        if (ready)
-        {
-            ready = false;
-        }
+        ready = false;
     }
 }

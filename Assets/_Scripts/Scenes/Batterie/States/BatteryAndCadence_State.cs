@@ -170,7 +170,7 @@ public class BatterieAndCadence_State : State
 
             // FadeToState(PuzzleSelector.WeightedRandomPuzzleState(Data.TheoryPuzzleData));
             Pack.NMEHealth.cur -= (int)(10 * (float)((float)score / (float)cap));
-            SetStateDirectly(new DialogStart_State(new BatterieIntermission_Dialogue(Pack)));
+            SetState(new DialogStart_State(new BatterieIntermission_Dialogue(Pack)));
         }
     }
 
@@ -240,7 +240,7 @@ public class BatterieAndCadence_State : State
 
         // if (Input.GetKeyDown(KeyCode.Tab))
         // {
-        //     SetStateDirectly(new Batterie_State(Specs));
+        //     SetState(new Batterie_State(Specs));
         // }
     }
 

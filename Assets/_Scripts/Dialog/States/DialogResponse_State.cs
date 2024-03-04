@@ -65,7 +65,7 @@ public class DialogResponse_State : State
             Reply.SelfDestruct();
 
             DisengageState();
-            SetStateDirectly(new EndDialog_State(
+            SetState(new EndDialog_State(
                 Dialog,
                 r.NextState,
                 r.FadeOut,
@@ -88,7 +88,7 @@ public class DialogResponse_State : State
 
         Reply.SelfDestruct();
 
-        SetStateDirectly(new DialogPrinting_State(Dialog, SubsequentState));
+        SetState(new DialogPrinting_State(Dialog, SubsequentState));
 
         DisengageState();
     }

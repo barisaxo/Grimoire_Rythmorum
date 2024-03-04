@@ -14,6 +14,10 @@ namespace Sea
             Triggerable = new NotTriggerable();
             UpdatePosition = new UpdateRockPosition();
             Telemeter = new RockTelemetry();
+            Instantiator = new ItemInstantiator(
+                Assets._rocks.gameObject,
+                new Vector3(Random.Range(.85f, 1.1f), Random.Range(.85f, 1.1f), Random.Range(.85f, 1.1f)),
+                new Vector3(0, Random.Range(0, 360), 0));
         }
 
         public RocksPrefab RocksPrefab;
@@ -25,6 +29,7 @@ namespace Sea
         public IInteractable Interactable { get; private set; }
         public ITriggerable Triggerable { get; private set; }
         public IUpdatePosition UpdatePosition { get; private set; }
-        public IInstantiable Instantiable { get; private set; }
+        public IInstantiable Instantiator { get; private set; }
+        public IDescription Description { get; private set; }
     }
 }

@@ -1,13 +1,14 @@
 using System.Collections;
 using Audio;
 using UnityEngine;
+using Data.Options;
 
 public sealed class BGMusic_AudioSystem : AudioSystem
 {
     public BGMusic_AudioSystem(VolumeData data) : base(1, nameof(BGMusic_AudioSystem))
     {
         Loop = true;
-        VolumeLevelSetting = data.GetScaledLevel(VolumeData.DataItem.BGMusic);
+        VolumeLevelSetting = data.GetLevel(VolumeData.DataItem.BGMusic) * .01f;
         foreach (var a in AudioSources) a.playOnAwake = true;
 
         foreach (var a in AudioSources)

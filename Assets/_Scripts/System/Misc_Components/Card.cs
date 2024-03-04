@@ -36,6 +36,8 @@ public class Card
     {
         if (Children != null) { foreach (Card child in Children) child.SelfDestruct(); }
         if (GO != null) UnityEngine.Object.Destroy(GO);
+        if (_uigo != null) UnityEngine.Object.Destroy(_uigo);
+        // if (_uigoCanvas != null) UnityEngine.Object.Destroy(_uigoCanvas);
     }
 
     public string Name { get; private set; }
@@ -43,7 +45,7 @@ public class Card
     public Card[] Children { get; private set; } = null;
     public GameObject GO { get; private set; } = null;
     public Clickable Clickable { get; private set; } = null;
-    private Transform Parent;
+    private readonly Transform Parent;
 
     public string TextString { get => TMP.text; set => TMP.text = value; }
     private SpriteRenderer _sr = null;
@@ -67,12 +69,13 @@ public class Card
         }
     }
 
+
     private Image _image;
     public Image Image
     {
         get
         {
-            return _image = _image != null ? _image : SetUpImage();
+            return _image != null ? _image : _image = SetUpImage();
             Image SetUpImage()
             {
                 Image i = new GameObject(Name + nameof(Image)).AddComponent<Image>();
@@ -101,14 +104,45 @@ public class Card
         }
     }
 
+    private GameObject _uigo;
+    public GameObject UIGO
+    {
+        get => _uigo;
+        set
+        {
+            foreach (Transform tf in value.GetComponentsInChildren<Transform>())
+                tf.gameObject.layer = 5;
+
+            value.transform.SetParent(Cam.Io.UI3DCanvas.transform, true);
+            value.transform.SetPositionAndRotation(new Vector3(0, 0, 10), Quaternion.identity);
+            value.transform.localScale = Vector3.one * 500;
+            _uigo = value;
+        }
+    }
+
+
+    // private Canvas _uigoCanvas;
+    // public Canvas UIGOCanvas
+    // {
+    //     get
+    //     {
+    //         return _uigoCanvas != null ? _uigoCanvas : _uigoCanvas = SetUpCanvas();
+    //         Canvas SetUpCanvas()
+    //         {
+    //             Canvas canvas = new GameObject(Name + nameof(UIGOCanvas)).AddComponent<Canvas>();
+    //             canvas.transform.SetParent(Cam.Io.UI3DCamera.transform, false);
+    //             canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+    //             canvas.worldCamera = Cam.Io.UI3DCamera;
+    //             canvas.sortingOrder = 0;
+    //             return canvas;
+    //         }
+    //     }
+    // }
+
     private CanvasScaler _canvasScaler;
     public CanvasScaler CanvasScaler
     {
-        get
-        {
-            if (_canvasScaler == null) _canvasScaler = SetUpCanvasScaler(Canvas);
-            return _canvasScaler;
-        }
+        get => _canvasScaler != null ? _canvasScaler : _canvasScaler = SetUpCanvasScaler(Canvas);
     }
 
     CanvasScaler SetUpCanvasScaler(Canvas canvas)
@@ -167,6 +201,7 @@ public class Card
 
     public bool CanvasExists => _canvas != null;
     public bool TMPExists => _tmp != null;
+    public bool ImageExists => _image != null;
     public bool SRExists => _sr != null;
 }
 

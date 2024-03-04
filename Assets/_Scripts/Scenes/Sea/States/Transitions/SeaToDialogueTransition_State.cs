@@ -16,7 +16,7 @@ public class SeaToDialogueTransition_State : State
         Audio.BGMusic.Pause();
         Audio.Ambience.Pause();
 
-        SetStateDirectly(new DialogStart_State(Dialogue));
+        SetState(new DialogStart_State(Dialogue));
     }
 
 }

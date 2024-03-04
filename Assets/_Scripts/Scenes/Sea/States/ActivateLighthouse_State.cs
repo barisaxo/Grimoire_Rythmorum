@@ -1,5 +1,5 @@
 using System;
-
+using Data.Inventory;
 namespace Sea
 {
     public class ActivateLighthouse_State : State
@@ -15,18 +15,19 @@ namespace Sea
 
         protected override void PrepareState(Action callback)
         {
-            if (!DataManager.Io.CharacterData.ActivatedLighthouses.Contains(Lighthouse.Region))
-            {
-                DataManager.Io.CharacterData.ActivatedLighthouses = DataManager.Io.CharacterData.ActivatedLighthouses.Added(Lighthouse.Region);
-                Lighthouse.LighthousePrefab.Light.SetActive(true);
-                Lighthouse.RemoveInteractable();
-            }
+            Data.LighthousesData.IncreaseLevel(Lighthouse.RegionData);
+            // if (!DataManager.Io.CharacterData.ActivatedLighthouses.Contains(Lighthouse.Region))
+            // {
+            // DataManager.Io.CharacterData.ActivatedLighthouses = DataManager.Io.CharacterData.ActivatedLighthouses.Added(Lighthouse.Region);
+            Lighthouse.LighthousePrefab.Light.SetActive(true);
+            Lighthouse.RemoveInteractable();
+            // }
             base.PreEngageState(callback);
         }
 
         protected override void EngageState()
         {
-            SetStateDirectly(SubsequentState);
+            SetState(SubsequentState);
         }
     }
 }

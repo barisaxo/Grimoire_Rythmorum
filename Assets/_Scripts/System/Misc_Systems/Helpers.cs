@@ -260,7 +260,7 @@ static class Helpers
     public static T[] Removed<T>(this T[] t1, T t2)
     {
         List<T> temp = new();
-        if (t1 is not null) foreach (T datum in t1) if (!datum.Equals(t2)) temp.Add(datum);
+        if (t1 is not null) foreach (T t in t1) if (!t.Equals(t2)) temp.Add(t);
         return temp.ToArray();
     }
 

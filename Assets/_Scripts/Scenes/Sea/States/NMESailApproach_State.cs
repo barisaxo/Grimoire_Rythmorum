@@ -36,7 +36,7 @@ public class NMESailApproach_State : State
                 NMEShip.SceneObject.GO.transform.position += posDelta;
             }
 
-            SetStateDirectly(new DialogStart_State(new PirateEncounter_Dialogue()));
+            SetState(new DialogStart_State(new PirateEncounter_Dialogue()));
         }
     }
 }

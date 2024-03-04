@@ -10,7 +10,7 @@ public class SeaToCoveTransition_State : State
     }
     protected override void EngageState()
     {
-        FadeToState(new NewCoveScene_State());
+        SetState(new NewCoveScene_State());
     }
 
 }

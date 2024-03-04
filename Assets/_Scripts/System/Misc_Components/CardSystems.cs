@@ -384,4 +384,10 @@ public static class CardSystems
     }
 
 
+    public static Card SetUIGO(this Card card, GameObject go)
+    {
+        card.UIGO = go;
+        return card;
+    }
+
 }

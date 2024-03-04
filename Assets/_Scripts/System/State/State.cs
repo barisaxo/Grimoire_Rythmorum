@@ -16,6 +16,8 @@ public abstract class State
     #region STATE SYSTEMS
     // These state systems are organized in order of execution
 
+    public bool Fade;
+
     /// <summary>
     /// Called by SetStateDirectly() and InitiateFade().
     /// </summary>
@@ -60,7 +62,14 @@ public abstract class State
         MonoHelper.OnUpdate += UpdateStickInput;
     }
 
-    protected void SetStateDirectly(State newState)
+    protected void SetState(State newState)
+    {
+        if (newState is null) return;
+        if (newState.Fade) FadeToState(newState);
+        else SetStateDirectly(newState);
+    }
+
+    private void SetStateDirectly(State newState)
     {
         if (newState == null) return;
 
@@ -83,7 +92,7 @@ public abstract class State
         }
     }
 
-    protected void FadeToState(State newState)
+    private void FadeToState(State newState)
     {
         ScreenFader fader = new();
         InitiateFade().StartCoroutine();

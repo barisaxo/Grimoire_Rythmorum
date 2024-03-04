@@ -29,6 +29,6 @@ public class DialogStart_State : State
     protected override void EngageState()
     {
         //if (Dialog.Dialogue.StartSound != null) { Audio.SoundFX.PlayOneShot(Dialog.Dialogue.StartSound); }
-        SetStateDirectly(new DialogPrinting_State(Dialog, SubsequentState));
+        SetState(new DialogPrinting_State(Dialog, SubsequentState));
     }
 }

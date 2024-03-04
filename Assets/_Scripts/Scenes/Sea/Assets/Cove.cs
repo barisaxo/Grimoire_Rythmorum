@@ -15,6 +15,11 @@ namespace Sea
             Triggerable = new NotTriggerable();
             UpdatePosition = new UpdateCovePosition();
             Telemeter = new RockTelemetry();
+
+            Instantiator = new ItemInstantiator(
+                Assets._bottle.gameObject,
+                Vector3.one,
+                Vector3.zero);
         }
 
         public CovePrefab CovePrefab;
@@ -25,6 +30,7 @@ namespace Sea
         public IInteractable Interactable { get; private set; }
         public ITriggerable Triggerable { get; private set; }
         public IUpdatePosition UpdatePosition { get; private set; }
-        public IInstantiable Instantiable { get; private set; }
+        public IInstantiable Instantiator { get; private set; }
+        public IDescription Description { get; private set; }
     }
 }

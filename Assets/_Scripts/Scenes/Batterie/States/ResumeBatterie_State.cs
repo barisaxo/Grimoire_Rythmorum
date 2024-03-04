@@ -170,9 +170,9 @@ public class ResumeBatterie_State : State
 
     protected override void EngageState()
     {
-        // SetStateDirectly(new NewBatterie_State(Pack));
+        // SetState(new NewBatterie_State(Pack));
 
-        SetStateDirectly(new BatterieAndCadence_State(Pack));
+        SetState(new BatterieAndCadence_State(Pack));
     }
 
 }

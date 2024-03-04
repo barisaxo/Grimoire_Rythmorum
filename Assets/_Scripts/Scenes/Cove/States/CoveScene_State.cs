@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class CoveScene_State : State
 {
-    CoveScene Aether => CoveScene.Io;
+    CoveScene Cove => CoveScene.Io;
     Vector2 lStick, rStick;
 
     protected override void PrepareState(Action callback)
@@ -45,9 +45,9 @@ public class CoveScene_State : State
 
     void HandleInput()
     {
-        Aether.Player.RotatePlayer(rStick.x + (lStick.x * .7f));
-        Aether.Player.MovePlayer(new Vector2(-lStick.x * .7f, -lStick.y));
-        Aether.Player.MoveCamera(rStick.y);
+        Cove.Player.RotatePlayer(rStick.x + (lStick.x * .7f));
+        Cove.Player.MovePlayer(new Vector2(-lStick.x * .7f, -lStick.y));
+        Cove.Player.MoveCamera(rStick.y);
 
         CheckDistances();
     }
@@ -57,24 +57,33 @@ public class CoveScene_State : State
         bool bark = false;
         if (NearShip) bark = true;
 
-        if (bark) Aether.Player.Bark.SetTextString("...");
-        else Aether.Player.Bark.SetTextString("");
+        if (bark) Cove.Player.Bark.SetTextString("...");
+        else Cove.Player.Bark.SetTextString("");
 
-        foreach (var x in Aether.Player.Bark.TMP.material.enabledKeywords)
+        foreach (var x in Cove.Player.Bark.TMP.material.enabledKeywords)
             Debug.Log(x.name);
     }
 
     protected override void EastPressed()
     {
-        if (NearShip) { SetStateDirectly(new CoveToSeaTransition_State()); return; }
+        if (NearShip) { SetState(new CoveToSeaTransition_State()); return; }
     }
 
-    protected override void SelectPressed()
+    protected override void StartPressed()
     {
-        SetStateDirectly(new AetherToQuitMenuTransition_State());
+        SetState(new CameraPan_State(
+            new CoveToMenuTransition_State(new Menus.Options.OptionsMenu(Data, Audio, this) as Menus.IHeaderMenu),
+                pan: new Vector3(
+                    -50,
+                    Cam.Io.Camera.transform.rotation.eulerAngles.y,
+                    Cam.Io.Camera.transform.rotation.eulerAngles.z),
+                strafe: Cam.Io.Camera.transform.position,
+                speed: 3));
     }
 
-    bool NearShip => Dist(Aether.Player.GO, Aether.Ship) < 2.5f;
+
+
+    bool NearShip => Dist(Cove.Player.GO, Cove.Ship) < 2.5f;
     float Dist(GameObject a, GameObject b) => Vector2.Distance(
       new Vector2(a.transform.position.x, a.transform.position.z),
       new Vector2(b.transform.position.x, b.transform.position.z));

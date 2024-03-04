@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using UnityEngine;
+using Data.Inventory;
 // using MusicTheory.Rhythms;
 // using MusicTheory.Scales;
 // using MusicTheory.Arithmetic;
@@ -12,7 +13,7 @@ public class BootStrap_State : State
     private static void Initialize()
     {
         BootStrap_State state = new();
-        state.SetStateDirectly(state);
+        state.SetState(state);
     }
 
     protected override void PrepareState(Action callback)
@@ -24,7 +25,14 @@ public class BootStrap_State : State
 
     protected override void EngageState()
     {
-        SetStateDirectly(new MainMenu_State());
+        // Data.starChartsData.IncreaseLevel(StarChartsData.DataItem.NotesT);
+        // SetStateDirectly(new MainMenu_State());
+        SetState(new MenuTest_State(
+            new Menus.Main.MainMenu(
+                Data,
+                Audio)
+        ));
+
         // FadeToState(new SeaScene_State());
         // SetStateDirectly(new NewAngling_State());
 
@@ -53,5 +61,15 @@ public class BootStrap_State : State
         // SetStateDirectly(new TheoryPuzzleState());
         // SetStateDirectly(new NewMuscopaState());
 
+    }
+}
+
+
+public class ThrowState : State
+{
+    protected override void PrepareState(Action callback)
+    {
+        throw new System.NotImplementedException();
+        base.PrepareState(callback);
     }
 }

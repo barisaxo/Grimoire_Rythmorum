@@ -31,8 +31,8 @@ public class StepsPuzzle : IPuzzle
     {
         Gamut = Random.Range(0, 3) switch
         {
-            1 => new Whole(),
             0 => new Half(),
+            1 => new Whole(),
             2 => new Augmented(),
             _ => throw new System.ArgumentOutOfRangeException()
         };

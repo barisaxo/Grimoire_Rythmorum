@@ -26,6 +26,7 @@ public class Puzzle_State : State
         Puzzle = puzzle;
         PuzzleType = puzzleType;
         SubsequentState = subsequentState;
+        Debug.Log(subsequentState);
     }
 
     protected override void PrepareState(Action callback)
@@ -88,44 +89,15 @@ public class Puzzle_State : State
         Hint.SelfDestruct();
         Listen?.SelfDestruct();
         GiveUp.SelfDestruct();
-        Data.SaveTheoryPuzzleData();
+        // Data.SaveTheoryPuzzleData();
     }
 
     protected override void Clicked(MouseAction action, Vector3 mousePos)
     {
         if (ReadyForEndPuzzle && action == MouseAction.LUp)
         {
-            SetStateDirectly(
-                new CameraPan_State(
-                    new DialogStart_State(
-                        new EndPuzzle_Dialogue(won: true)),
-                Cam.StoredCamRot,
-                Cam.StoredCamPos,
-                3));
-            // FadeToState(new Puzzle_State(new ScalePuzzle(), PuzzleType.Aural)); 
+            SetState(new EndPuzzle_State(won: true, SubsequentState, Puzzle, PuzzleType));
             return;
-
-            // if (UnityEngine.Random.value > .5f) FadeToState(PuzzleSelector.WeightedRandomPuzzleState(Data.TheoryPuzzleData));
-            // else
-            // {
-            //     var RhythmSpecs = new RhythmSpecs()
-            //     {
-            //         Time = new FourFour(),
-            //         NumberOfMeasures = 4,
-            //         SubDivisionTier = SubDivisionTier.D1Only,
-            //         HasTies = UnityEngine.Random.value > .5f,
-            //         HasRests = UnityEngine.Random.value > .5f,
-            //         HasTriplets = false,
-            //         Tempo = 90
-            //     };
-            //     // FadeToState(new BatteryAndCadenceTestState(RhythmSpecs));
-            // }
-
-            // FadeToState(new Puzzle_State(new InvertedSeventhChordPuzzle(), PuzzleType.Theory));
-
-            //FadeToState(new Puzzle_State<MusicTheory.SeventhChords.SeventhChord>(new InvertedSeventhChordPuzzle(), RandPuzzleType()));
-            //PuzzleType RandPuzzleType() => UnityEngine.Random.value > .5f ? PuzzleType.Theory : PuzzleType.Aural;
-            // return;
         }
 
         base.Clicked(action, mousePos);
@@ -147,13 +119,7 @@ public class Puzzle_State : State
 
     private void SkipClicked()
     {
-        SetStateDirectly(
-            new CameraPan_State(
-                new DialogStart_State(
-                    new EndPuzzle_Dialogue(won: false)),
-                pan: Cam.StoredCamRot,
-                strafe: Cam.StoredCamPos,
-                speed: 3));
+        SetState(new EndPuzzle_State(won: false, SubsequentState, Puzzle, PuzzleType));
         // FadeToState(new Puzzle_State(new ModePuzzle(), PuzzleType.Aural)); return;
         // Skipped++;
         // var RhythmSpecs = new RhythmSpecs()
@@ -353,13 +319,7 @@ public class Puzzle_State : State
 
     void Finish()
     {
-        SetStateDirectly(
-            new CameraPan_State(
-                new DialogStart_State(
-                    new EndPuzzle_Dialogue(won: true)),
-                Cam.StoredCamRot,
-                Cam.StoredCamPos,
-                3));
+        SetState(new EndPuzzle_State(won: true, SubsequentState, Puzzle, PuzzleType));
     }
 
     private Card _answer;

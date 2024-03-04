@@ -125,7 +125,11 @@ public class Angling_State : State
     {
         if (!(BeatMap.Length > ++Counter))
         {
-            SetStateDirectly(SubsequentState);
+            SetState(
+                new AnglingToSeaTransition_State(
+                    SubsequentState,
+                    Sea.WorldMapScene.Io.NearestInteractableCell.SceneObject,
+                    won: false));
         }
     }
 
@@ -146,7 +150,11 @@ public class Angling_State : State
                     Audio.Ambience.PlayOneShot(Resources.Load<AudioClip>("Audio/Fishing/FishOutOfWaterA"));
                     Audio.SFX.PlayOneShot(Resources.Load<AudioClip>("Audio/SFX/AlertHalfDim"));
                     //Todo Finish with crash cymbal?
-                    SetStateDirectly(SubsequentState);
+                    SetState(
+                        new AnglingToSeaTransition_State(
+                            SubsequentState,
+                            Sea.WorldMapScene.Io.NearestInteractableCell.SceneObject,
+                            won: true));
                 }
 
                 break;
@@ -165,7 +173,12 @@ public class Angling_State : State
 
                 else
                 {
-                    SetStateDirectly(SubsequentState);//todo lose the fish
+                    SetState(
+                        new AnglingToSeaTransition_State(
+                            SubsequentState,
+                            Sea.WorldMapScene.Io.NearestInteractableCell.SceneObject,
+                            won: false));
+                    //todo lose the fish
                 }
                 break;
 
@@ -182,7 +195,12 @@ public class Angling_State : State
                 }
                 else
                 {
-                    SetStateDirectly(SubsequentState);//todo lose the fish
+                    SetState(
+                        new AnglingToSeaTransition_State(
+                            SubsequentState,
+                            Sea.WorldMapScene.Io.NearestInteractableCell.SceneObject,
+                            won: false));
+                    //todo lose the fish
                 }
                 break;
 

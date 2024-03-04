@@ -5,12 +5,45 @@ using System.Collections.Specialized;
 
 namespace Sea.Maps
 {
-    public class IosMap
+    public interface IMap
     {
-        public readonly int Size = 3;
-        public readonly int RegionSize = 30;
-        public int GlobalSize;
-        public Region[] Regions;
+        public int Size { get; }
+        public int RegionSize { get; }
+        public int GlobalSize { get; }
+        public Region[] Regions { get; }
+        public Dictionary<Vector2Int, Feature[]> Features { get; }
+        public Dictionary<Vector2Int, R> Territories { get; }
+        public Dictionary<Vector2Int, R> LightHouses { get; }
+        public Vector2Int[] ShippingLanes { get; }
+        public Vector2Int[] Docks { get; }
+        public Vector2Int[] Gunneries { get; }
+        public Vector2Int[] Islands { get; }
+        public Vector2Int[] Coves { get; }
+        //Lane, LightHouse, Cove, Dock, ShipYard, Gunnery, Island
+    }
+
+    public class IosMap : IMap
+    {
+        public int Size { get; private set; } = 3;
+        public int RegionSize { get; private set; } = 30;
+        public int GlobalSize { get; private set; }
+        public Region[] Regions { get; private set; }
+
+        public Dictionary<Vector2Int, Feature[]> Features => throw new System.NotImplementedException();
+
+        public Dictionary<Vector2Int, R> Territories => throw new System.NotImplementedException();
+
+        public Dictionary<Vector2Int, R> LightHouses => throw new System.NotImplementedException();
+
+        public Vector2Int[] ShippingLanes => throw new System.NotImplementedException();
+
+        public Vector2Int[] Docks => throw new System.NotImplementedException();
+
+        public Vector2Int[] Gunneries => throw new System.NotImplementedException();
+
+        public Vector2Int[] Islands => throw new System.NotImplementedException();
+
+        public Vector2Int[] Coves => throw new System.NotImplementedException();
 
         public IosMap()
         {
@@ -27,12 +60,13 @@ namespace Sea.Maps
     }
 
 
-    public class WorldMap
+
+    public class WorldMap : IMap
     {
-        public readonly int Size = 12;
-        public readonly int RegionSize = 30;
-        public int GlobalSize;
-        public Region[] Regions;
+        public int Size { get; private set; } = 12;
+        public int RegionSize { get; private set; } = 30;
+        public int GlobalSize { get; private set; }
+        public Region[] Regions { get; private set; }
 
         public WorldMap()
         {
@@ -79,7 +113,7 @@ namespace Sea.Maps
             {new (9, 10), R.t}
         };
 
-        public readonly Dictionary<Vector2Int, R> LightHouses = new(){
+        public Dictionary<Vector2Int, R> LightHouses { get; private set; } = new(){
             { new (1,0), R.a },
             { new (8,0), R.l },
             { new (11,4), R.m },
@@ -90,7 +124,7 @@ namespace Sea.Maps
             { new (9,10), R.t },
         };
 
-        public readonly Dictionary<Vector2Int, Feature[]> Features = new(){
+        public Dictionary<Vector2Int, Feature[]> Features { get; private set; } = new(){
             { new (1,0), new[]{Feature.LightHouse} },
             { new (8,0),  new[]{Feature.LightHouse}},
             { new (11,4), new[]{Feature.LightHouse }},
@@ -101,13 +135,25 @@ namespace Sea.Maps
             { new (9,10), new[]{Feature.LightHouse }},
         };
 
-        public Vector2Int[] ShippingLanes = new Vector2Int[]{
+        public Vector2Int[] ShippingLanes { get; private set; } = new Vector2Int[]{
             new(6,0), new(3,2), new(9,2), new(9,5), new(6,4), new(1,7), new(6,0)
         };
 
-        public enum Feature { Lane, LightHouse, Cove, Dock, ShipYard, Gunnery, Island }
+        Dictionary<Vector2Int, R> IMap.Territories => throw new System.NotImplementedException();
 
+        public Vector2Int[] Docks => throw new System.NotImplementedException();
+
+        public Vector2Int[] Gunneries => throw new System.NotImplementedException();
+
+        public Vector2Int[] Islands => throw new System.NotImplementedException();
+
+        public Vector2Int[] Coves => throw new System.NotImplementedException();
     }
+
+
+    public enum Feature { Lane, LightHouse, Cove, Dock, ShipYard, Gunnery, Island }
+
+
     /// <summary>Regional Occupiers </summary>
     public enum R
     {

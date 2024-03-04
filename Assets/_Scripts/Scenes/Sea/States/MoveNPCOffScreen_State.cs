@@ -30,7 +30,7 @@ public class MoveNPCOffScreen_State : State
         NPC.PatrolIndex = i;
         NPC.Pos = NPC.PatrolPath[NPC.PatrolIndex];
 
-        SetStateDirectly(SubsequentState);
+        SetState(SubsequentState);
     }
 
     bool IsOccupiedAndOnGrid(Vector2Int v2)

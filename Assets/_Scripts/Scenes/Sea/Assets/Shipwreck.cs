@@ -25,5 +25,6 @@ public class Shipwreck : ISceneObject
     public IInteractable Interactable { get; private set; }
     public ITriggerable Triggerable { get; private set; }
     public IUpdatePosition UpdatePosition { get; private set; }
-    public IInstantiable Instantiable { get; private set; }
+    public IInstantiable Instantiator { get; private set; }
+    public IDescription Description { get; private set; }
 }

@@ -1,5 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEngine;
+using Data;
+using Data.Inventory;
 
 namespace Sea
 {
@@ -52,21 +55,26 @@ namespace Sea
 
     public class BottleInteraction : IInteractable
     {
-        public BottleInteraction(State currentState)
+        public BottleInteraction(State currentState, StarChartsData starChartsData, ShipData shipData, ISceneObject obj)
         {
-            _currentState = currentState;
+            CurrentState = currentState;
+            Obj = obj;
+            StarChartsData = starChartsData;
+            ShipData = shipData;
         }
 
-        public WorldMapScene Scene;
-        private readonly State _currentState;
-        public State CurrentState => _currentState;
-        public State SubsequentState =>
-            new DisplayItem_State(
-                new DialogStart_State(
-                    new FoundBottle_Dialogue(CurrentState)),
-                Assets._bottle.gameObject,
-                clearCell: true);
+        readonly StarChartsData StarChartsData;
+        readonly ShipData ShipData;
         public string PopupText => "Pickup";
+        readonly ISceneObject Obj;
+        public State CurrentState { get; }
+
+        public State SubsequentState => new SeaToBottlePickUp_State(CurrentState, Obj);
+        // new DisplayItem_State(
+        //     // () => { StarChartsData.IncreaseLevel(StarChartsData.DataItem.NotesT); },//todo difficulty levels
+        //     Obj.Instantiator.ToInstantiate,
+        //     new DialogStart_State(new FoundItem_Dialogue(Obj, CurrentState)),
+        //     clearCell: true);
     }
 
     public class LighthouseInteraction : IInteractable
@@ -80,19 +88,28 @@ namespace Sea
         private readonly State _currentState;
         public State CurrentState => _currentState;
         public State SubsequentState =>
-            DataManager.Io.CharacterData.ActivatedLighthouses.Contains(Lighthouse.Region) ? null :
+            // DataManager.Io.CharacterData.ActivatedLighthouses.Contains(Lighthouse.Region) ? null :
             new ActivateLighthouse_State(Lighthouse, CurrentState);
         public string PopupText =>
-            DataManager.Io.CharacterData.ActivatedLighthouses.Contains(Lighthouse.Region) ? null :
+            // DataManager.Io.CharacterData.ActivatedLighthouses.Contains(Lighthouse.Region) ? null :
             "Activate Lighthouse";
     }
 
 
     public class FishingInteraction : IInteractable
     {
-        public FishingInteraction(State currentState) => _currentState = currentState;
-        private readonly State _currentState;
-        public State CurrentState => _currentState;
+        public FishingInteraction(State currentState, FishData fishData, ShipData shipData, ISceneObject obj)
+        {
+            CurrentState = currentState;
+            Obj = obj;
+            FishData = fishData;
+            ShipData = shipData;
+        }
+
+        readonly FishData FishData;
+        readonly ShipData ShipData;
+        public State CurrentState { get; }
+        readonly ISceneObject Obj;
         public State SubsequentState => new SeaToAnglingTransition_State(CurrentState);
         public string PopupText => "Fish";
     }

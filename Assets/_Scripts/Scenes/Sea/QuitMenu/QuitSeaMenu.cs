@@ -1,17 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Menus;
+using OldMenus.Generic;
 
-namespace Menus.QuitMenu
+namespace OldMenus.Generic.QuitMenu
 {
     public class QuitSeaMenu : Menu<QuitSeaMenu.QuitMenuItem, QuitSeaMenu>
     {
-        public QuitSeaMenu() : base(nameof(QuitSeaMenu)) { }
+        public QuitSeaMenu() :
+            base(
+                nameof(QuitSeaMenu),
+                new AlignRight<QuitMenuItem>())
+        { }
 
         private BackButton _back;
         public BackButton Back => _back ??= new BackButton(Parent);
-        public override MenuLayoutStyle Style => MenuLayoutStyle.AlignRight;
+        // public override MenuLayoutStyle Style => MenuLayoutStyle.AlignRight;
 
         public override Menu<QuitMenuItem, QuitSeaMenu> Initialize()
         {

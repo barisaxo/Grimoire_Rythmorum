@@ -1,21 +1,55 @@
 using System.IO;
-using UnityEngine;
 using System.Runtime.Serialization.Formatters.Binary;
-using System;
+using Data.Options;
+using UnityEngine;
+using Data;
+using Data.Inventory;
 
+[System.Serializable]
 public class DataManager
 {
     #region  INSTANCE
-    public DataManager() { }
+    private DataManager() { }
 
     public static DataManager Io => Instance.Io;
 
+    [System.Serializable]
     private class Instance
     {
         static Instance() { }
         static DataManager _io;
-        internal static DataManager Io => _io ??= new DataManager();
+        internal static DataManager Io => _io ??= new();
         internal static void Destruct() => _io = null;
+
+        // [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        // private static DataManager TryLoadData()
+        // {
+        //     DataManager tryLoadData = null;
+
+        //     if (File.Exists(Application.persistentDataPath + fileName))
+        //     {
+        //         FileStream stream = new(Application.persistentDataPath + fileName, FileMode.Open)
+        //         {
+        //             Position = 0
+        //         };
+
+        //         try
+        //         {
+        //             tryLoadData = new BinaryFormatter().Deserialize(stream) as DataManager;
+        //             stream.Close();
+        //             Debug.Log(tryLoadData);
+        //         }
+
+        //         catch
+        //         {
+        //             stream.Close();
+        //             Debug.Log("A loading error has ocurred");
+        //         }
+        //     }
+
+        //     if (tryLoadData is not null) return tryLoadData;
+        //     return new DataManager();
+        // }
     }
 
     public void SelfDestruct()
@@ -31,35 +65,73 @@ public class DataManager
     //public PlayerData PlayerData => _playerData ??= new();
 
     private GameplayData _gameplayData;
-    public GameplayData GamePlay => _gameplayData ??= new();
+    public GameplayData GamePlay => _gameplayData ??= GameplayData.GetData();
 
     private VolumeData _volume;
-    public VolumeData Volume => _volume ??= new();
-
+    public VolumeData Volume => _volume ??= VolumeData.GetData();
 
     private TheoryPuzzleData _theoryPuzzle;
     public TheoryPuzzleData TheoryPuzzleData => _theoryPuzzle ??= new();
 
+    private FishData _fishData;
+    public FishData FishData => _fishData ??= FishData.GetData();
+
+    private MaterialsData _materialsData;
+    public MaterialsData MaterialsData => _materialsData ??= MaterialsData.GetData();
+
+    private StarChartsData _starChartsData;
+    public StarChartsData starChartsData => _starChartsData ??= StarChartsData.GetData();
+
+    private SettingsData _settings;
+    public SettingsData Settings => _settings ??= SettingsData.GetData();
+
+    private QuestData _questsData;
+    public QuestData QuestsData => _questsData ??= QuestData.GetData();
+
+    private LighthouseData _lighthousesData;
+    public LighthouseData LighthousesData => _lighthousesData ??= LighthouseData.GetData();
     //public void ResetCharacterAndPlayerData() { _characterData = new CharacterData(); _playerData = new PlayerData(); }
+    private ShipData _shipData;
+    public ShipData ShipData => _shipData ??= ShipData.GetData();
 
-    const string fileName = "save.me";
+    private GramophoneData _gramophoneData;
+    public GramophoneData GramophoneData => _gramophoneData ??= GramophoneData.GetData();
 
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    private static void TryLoadData()
+    // const string fileName = "/save.this";
+    public void Save(IData data)
     {
-        if (File.Exists(Application.persistentDataPath + fileName))
-        {
-            FileStream stream = new(Application.persistentDataPath + fileName, FileMode.Open);
-            var data = new BinaryFormatter().Deserialize(stream) as TheoryPuzzleData;
-            stream.Close();
-            if (Io.TheoryPuzzleData.Stats != null) Io.TheoryPuzzleData.LoadStatsData(data.Stats);
-        }
+        data?.PersistentData?.Save(data);
+        // GramophoneData.PersistentData.Save(GramophoneData);
+        // ShipData.PersistentData.Save(ShipData);
+        // LighthousesData.PersistentData.Save(LighthousesData);
+        // QuestsData.PersistentData.Save(QuestsData);
+        // Settings.PersistentData.Save(Settings);
+        // starChartsData.PersistentData.Save(starChartsData);
+        // MaterialsData.PersistentData.Save(MaterialsData);
+        // FishData.PersistentData.Save(FishData);
+        // Volume.PersistentData.Save(Volume);
+        // GamePlay.PersistentData.Save(GamePlay);
     }
 
-    public void SaveTheoryPuzzleData()
-    {
-        FileStream fileStream = new(Application.persistentDataPath + fileName, FileMode.Create);
-        new BinaryFormatter().Serialize(fileStream, TheoryPuzzleData);
-        fileStream.Close();
-    }
+
+    // public void Save()
+    // {
+    //     FileStream fileStream = new(Application.persistentDataPath + fileName, FileMode.Create);
+    //     new BinaryFormatter().Serialize(fileStream, this);
+    //     fileStream.Close();
+    // }
+
+    // class DataItem : DataEnum
+    // {
+    //     public DataItem() : base(0, "") { }
+    //     private DataItem(int id, string name) : base(id, name) { }
+
+    //     public static readonly DataItem Volume = new(0, nameof(Volume));
+    //     public static readonly DataItem Settings = new(0, nameof(Settings));
+    //     public static readonly DataItem StarChart = new(0, nameof(StarChart));
+    //     public static readonly DataItem Fish = new(0, nameof(Fish));
+    //     public static readonly DataItem Materials = new(0, nameof(Materials));
+    //     public static readonly DataItem Character = new(0, nameof(Character));
+    // }
+
 }

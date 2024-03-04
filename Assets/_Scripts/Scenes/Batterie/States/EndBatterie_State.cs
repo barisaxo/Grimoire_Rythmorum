@@ -69,7 +69,7 @@ public class EndBatterie_State : State
     protected override void EngageState()
     {
         // Board.BoardHUD.UpdatePlayerHealth(Data.CharacterData);
-        // SetStateDirectly(new SeaSceneTest_State());
+        // SetState(new SeaSceneTest_State());
         // return;
         switch (Pack.ResultType)
         {
@@ -77,7 +77,7 @@ public class EndBatterie_State : State
                 Data.CharacterData.Materials += mats /= 2;
                 Data.CharacterData.Rations += rations /= 2;
                 Data.CharacterData.Coins += coins /= 2;
-                SetStateDirectly(
+                SetState(
                     new CameraPan_State(
                         new NPCSailAway_State(
                             new DialogStart_State(new EndBatterie_Dialogue(
@@ -91,7 +91,7 @@ public class EndBatterie_State : State
                 Data.CharacterData.Materials -= mats = Data.CharacterData.Materials /= 2;
                 Data.CharacterData.Rations -= rations = Data.CharacterData.Rations /= 2;
                 Data.CharacterData.Coins -= coins = Data.CharacterData.Coins /= 2;
-                SetStateDirectly(
+                SetState(
                     new CameraPan_State(
                         new NPCSailAway_State(
                             new DialogStart_State(new EndBatterie_Dialogue(
@@ -102,7 +102,7 @@ public class EndBatterie_State : State
                 return;
 
             case BatterieResultType.Spam:
-                SetStateDirectly(
+                SetState(
                     new CameraPan_State(
                         new NPCSailAway_State(
                             new DialogStart_State(new EndBatterie_Dialogue(
@@ -113,7 +113,7 @@ public class EndBatterie_State : State
                 return;
 
             case BatterieResultType.Fled:
-                SetStateDirectly(
+                SetState(
                     new MoveNPCOffScreen_State(
                         new CameraPan_State(
                             new DialogStart_State(new EndBatterie_Dialogue(
@@ -125,7 +125,7 @@ public class EndBatterie_State : State
                 return;
 
             case BatterieResultType.NMEscaped:
-                SetStateDirectly(
+                SetState(
                     new CameraPan_State(
                         new NPCSailAway_State(
                             new DialogStart_State(new EndBatterie_Dialogue(
@@ -136,7 +136,7 @@ public class EndBatterie_State : State
                 return;
 
             case BatterieResultType.Lost://TODO
-                SetStateDirectly(
+                SetState(
                     new CameraPan_State(
                         new DialogStart_State(
                             new EndBatterie_Dialogue(0, 0, 0, damage, false, BatterieResultType.NMEscaped)),
@@ -152,7 +152,7 @@ public class EndBatterie_State : State
                 Data.CharacterData.Rations += rations;
                 Data.CharacterData.Coins += coins;
 
-                SetStateDirectly(
+                SetState(
                     new MoveNPCOffScreen_State(
                         new CameraPan_State(
                             new DialogStart_State(new EndBatterie_Dialogue(

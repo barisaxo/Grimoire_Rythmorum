@@ -13,7 +13,7 @@ public class MenuToSeaTransition_State : State
     protected override void EngageState()
     {
         UnityEngine.Debug.Log(nameof(MenuToSeaTransition_State));
-        SetStateDirectly(
+        SetState(
             new CameraPan_State(
                 new SeaScene_State(),
                 Cam.StoredCamRot,

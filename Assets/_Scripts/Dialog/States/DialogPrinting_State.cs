@@ -65,13 +65,13 @@ public class DialogPrinting_State : State
         if (Dialog.HasNextLine())
         {
             Dialog.SetNextLine();
-            SetStateDirectly(new DialogPrinting_State(Dialog, SubsequentState));
+            SetState(new DialogPrinting_State(Dialog, SubsequentState));
             return;
         }
 
         if (Dialog.HasNextState())
         {
-            SetStateDirectly(new EndDialog_State(
+            SetState(new EndDialog_State(
                 Dialog,
                 Dialog.CurrentLine.NextState,
                 Dialog.CurrentLine.FadeOut,
@@ -90,7 +90,7 @@ public class DialogPrinting_State : State
 
             Dialog.CurrentLine = Dialog.Dialogue.FirstLine;
 
-            SetStateDirectly(new DialogPrinting_State(Dialog, SubsequentState));
+            SetState(new DialogPrinting_State(Dialog, SubsequentState));
         }
     }
 
@@ -99,7 +99,7 @@ public class DialogPrinting_State : State
         Audio.SFX.StopClip();
         if (Dialog.HasResponses())
         {
-            SetStateDirectly(new DialogResponse_State(Dialog, SubsequentState));
+            SetState(new DialogResponse_State(Dialog, SubsequentState));
             return;
         }
 

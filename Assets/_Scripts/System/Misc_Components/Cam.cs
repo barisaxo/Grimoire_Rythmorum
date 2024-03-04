@@ -7,7 +7,7 @@ public class Cam
     {
         _ = Camera;
         _ = UICamera;
-        // _ = UI3DCamera;
+        _ = UI3DCamera;
         _ = AudioListener;
     }
 
@@ -78,25 +78,28 @@ public class Cam
         }
     }
 
-    // private Camera _ui3DCam;
-    // public Camera UI3DCamera
-    // {
-    //     get
-    //     {
-    //         return _ui3DCam != null ? _ui3DCam : _ui3DCam = SetUpCam();
-    //         static Camera SetUpCam()
-    //         {
-    //             Camera c = GameObject.Find("UIGOCamera") != null ? GameObject.Find("UIGOCamera").GetComponent<Camera>() :
-    //                Object.Instantiate(Resources.Load<Camera>("Prefabs/Cameras/UIGOCamera"));
-    //             Object.DontDestroyOnLoad(c);
-    //             c.orthographicSize = 5;
-    //             c.orthographic = true;
-    //             c.transform.position = Vector3.back * 10;
-    //             c.gameObject.SetActive(true);
-    //             return c;
-    //         }
-    //     }
-    // }
+    private Camera _ui3DCam;
+    public Camera UI3DCamera
+    {
+        get
+        {
+            return _ui3DCam != null ? _ui3DCam : _ui3DCam = SetUpCam();
+            static Camera SetUpCam()
+            {
+                Camera c = GameObject.Find("UIGOCamera") != null ? GameObject.Find("UIGOCamera").GetComponent<Camera>() :
+                   Object.Instantiate(Resources.Load<Camera>("Prefabs/Cameras/UIGOCamera"));
+                Object.DontDestroyOnLoad(c);
+                c.orthographicSize = 5;
+                c.orthographic = true;
+                c.transform.position = Vector3.back * 1000;
+                c.gameObject.SetActive(true);
+                return c;
+            }
+        }
+    }
+
+    private Canvas _ui3dCanvas;
+    public Canvas UI3DCanvas => _ui3dCanvas != null ? _ui3dCanvas : _ui3dCanvas = UI3DCamera.GetComponentInChildren<Canvas>();
 
     private AudioListener _audioListener;
     public AudioListener AudioListener => _audioListener != null ? _audioListener :

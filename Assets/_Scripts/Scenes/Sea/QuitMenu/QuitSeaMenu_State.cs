@@ -1,6 +1,6 @@
 using System;
-using Menus;
-using Menus.QuitMenu;
+using OldMenus.Generic;
+using OldMenus.Generic.QuitMenu;
 using UnityEngine;
 using Sea;
 
@@ -19,7 +19,7 @@ public class QuitSeaMenu_State : State
 
     protected override void EngageState()
     {
-        QuitMenu.UpdateTextColors();
+        //TODO QuitMenu.UpdateTextColors();
     }
 
     protected override void DisengageState()
@@ -31,7 +31,7 @@ public class QuitSeaMenu_State : State
     {
         if (go.transform.IsChildOf(QuitMenu.Back.Button.GO.transform))
         {
-            SetStateDirectly(SubsequentState);
+            SetState(SubsequentState);
             return;
         }
 
@@ -47,22 +47,23 @@ public class QuitSeaMenu_State : State
     protected override void DirectionPressed(Dir dir)
     {
         if (dir == Dir.Reset) return;
-        QuitMenu.ScrollMenuItems(dir);
-        QuitMenu.UpdateTextColors();
+        QuitMenu.Selection = QuitMenu.Layout.ScrollMenuItems(dir, QuitMenu.Selection, QuitMenu.MenuItems);
+        //TODO QuitMenu.UpdateTextColors();
     }
 
     protected override void EastPressed()
     {
-        QuitMenu.UpdateTextColors();
+        //TODO  QuitMenu.UpdateTextColors();
         WorldMapScene.Io.SelfDestruct();
         if (QuitMenu.Selection.Item == QuitSeaMenu.QuitMenuItem.AbandonRun)
         {
-            FadeToState(new NewCoveScene_State());
+            SetState(new NewCoveScene_State());
             return;
         }
         if (QuitMenu.Selection.Item == QuitSeaMenu.QuitMenuItem.QuitToMainMenu)
         {
-            FadeToState(new MainMenu_State());
+            // FadeToState(new MainMenu_State());
+            throw new System.NotImplementedException();
             return;
         }
 
@@ -81,12 +82,12 @@ public class QuitSeaMenu_State : State
 
     protected override void SouthPressed()
     {
-        SetStateDirectly(SubsequentState);
+        SetState(SubsequentState);
     }
 
     protected override void SelectPressed()
     {
-        SetStateDirectly(SubsequentState);
+        SetState(SubsequentState);
     }
 
     protected override void LStickInput(Vector2 v2)

@@ -8,7 +8,7 @@ public class CoveToSeaTransition_State : State
     protected override void EngageState()
     {
         Cam.Io.Camera.transform.SetParent(null);
-        FadeToState(new SeaScene_State());
+        SetState(new SeaScene_State() { Fade = true });
         base.EngageState();
     }
 

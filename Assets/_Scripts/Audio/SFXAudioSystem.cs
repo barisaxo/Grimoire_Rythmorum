@@ -1,12 +1,13 @@
 using Audio;
 using UnityEngine;
+using Data.Options;
 
 public sealed class SoundFXAudioSystem : AudioSystem
 {
     public SoundFXAudioSystem(VolumeData volumeData) : base(2, nameof(SoundFXAudioSystem))
     {
-        AudioSources[0].volume = volumeData.GetScaledLevel(VolumeData.DataItem.SoundFX);
-        AudioSources[1].volume = volumeData.GetScaledLevel(VolumeData.DataItem.SoundFX);
+        AudioSources[0].volume = volumeData.GetLevel(VolumeData.DataItem.SoundFX) * .01f;
+        AudioSources[1].volume = volumeData.GetLevel(VolumeData.DataItem.SoundFX) * .01f;
     }
 
     public void PlayOneShot(AudioClip ac)

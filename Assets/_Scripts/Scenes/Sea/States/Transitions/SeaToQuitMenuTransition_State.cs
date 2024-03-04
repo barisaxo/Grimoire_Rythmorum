@@ -14,7 +14,7 @@ public class SeaToQuitMenuTransition_State : State
 
     protected override void EngageState()
     {
-        SetStateDirectly(
+        SetState(
             new CameraPan_State(
                 new QuitSeaMenu_State(
                     new QuitMenuToSeaTransition_State()),

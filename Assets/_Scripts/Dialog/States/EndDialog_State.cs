@@ -3,7 +3,7 @@ public class EndDialog_State : State
 {
     readonly Dialog.Dialog Dialog;
     readonly State SubsequentState;
-    readonly bool Fade;
+    readonly bool FadeToNext;
     readonly bool PanCamera;
     readonly UnityEngine.Vector3 Pan;
     readonly UnityEngine.Vector3 Strafe;
@@ -13,7 +13,7 @@ public class EndDialog_State : State
     {
         Dialog = dialog;
         SubsequentState = subsequentState;
-        Fade = fade;
+        FadeToNext = fade;
         Pan = pan;
         PanCamera = panCamera;
         Strafe = strafe;
@@ -24,18 +24,20 @@ public class EndDialog_State : State
     {
         //Audio.SoundFX.Stop();
 
-        if (Fade)
+        // if (Fade)
+        // {
+        //     FadeToState(SubsequentState);
+        // }
+        SubsequentState.Fade = FadeToNext;
+
+        if (PanCamera)
         {
-            FadeToState(SubsequentState);
-        }
-        else if (PanCamera)
-        {
-            SetStateDirectly(
+            SetState(
                 new CameraPan_State(SubsequentState, Pan, Strafe, Speed));
         }
         else
         {
-            SetStateDirectly(SubsequentState);
+            SetState(SubsequentState);
         }
     }
 

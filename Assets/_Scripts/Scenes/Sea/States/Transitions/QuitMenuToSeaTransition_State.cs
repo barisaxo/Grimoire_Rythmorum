@@ -17,7 +17,7 @@ public class QuitMenuToSeaTransition_State : State
 
     protected override void EngageState()
     {
-        SetStateDirectly(
+        SetState(
             new CameraPan_State(
                 new SeaScene_State(),
                     pan: Cam.StoredCamRot,

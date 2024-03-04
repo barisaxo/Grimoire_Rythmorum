@@ -180,8 +180,8 @@ public partial class Assets
     public static Sea.RocksPrefab _rocks => Resources.Load<GameObject>("Prefabs/Sea/RocksPrefab").GetComponent<Sea.RocksPrefab>();
     public static Sea.RocksPrefab Rocks => Object.Instantiate(_rocks);
 
-    public static FishPrefab _sailFish => Resources.Load<GameObject>("Prefabs/Sea/Fish/Sailfish/SailfishPrefab").GetComponent<FishPrefab>();
-    public static FishPrefab SailFish => Object.Instantiate(_sailFish);
+    // public static FishPrefab _sailFish => Resources.Load<GameObject>("Prefabs/Sea/Fish/Sailfish/SailfishPrefab").GetComponent<FishPrefab>();
+    // public static FishPrefab SailFish => Object.Instantiate(_sailFish);
 
     // public static GameObject _island => Resources.Load<GameObject>("Models/Island");
     // public static GameObject Island => Resources.Load<GameObject>("Models/Island");
@@ -189,6 +189,8 @@ public partial class Assets
     public static CovePrefab _nullCove => Resources.Load<GameObject>("Prefabs/Sea/CovePrefab").GetComponent<CovePrefab>();
     public static CovePrefab NullCove => Object.Instantiate(_nullCove);
 
+    public static Sea.SailFishPrefab _sailFishPrefab => Resources.Load<GameObject>("Prefabs/Sea/Fish/Sailfish/SailfishPrefab").GetComponent<Sea.SailFishPrefab>();
+    public static Sea.SailFishPrefab SailFishPrefab => Object.Instantiate(_sailFishPrefab);
 
     public static Sea.LighthousePrefab _lighthouse => Resources.Load<GameObject>("Prefabs/Sea/Lighthouse/LighthousePrefab").GetComponent<Sea.LighthousePrefab>();
     public static Sea.LighthousePrefab Lighthouse => Object.Instantiate(_lighthouse);

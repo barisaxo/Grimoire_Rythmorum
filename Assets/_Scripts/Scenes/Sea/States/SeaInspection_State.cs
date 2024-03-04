@@ -74,7 +74,7 @@ public class SeaInspection_State : State
 
     protected override void WestPressed()
     {
-        SetStateDirectly(
+        SetState(
             new CameraPan_State(
                 new SeaScene_State(),
                 Cam.StoredCamRot,

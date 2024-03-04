@@ -51,6 +51,6 @@ public class CameraPan_State : State
         }
 
         Cam.Io.Camera.transform.SetPositionAndRotation(Strafe, Quaternion.Euler(Pan));
-        SetStateDirectly(SubsequentState);
+        SetState(SubsequentState);
     }
 }

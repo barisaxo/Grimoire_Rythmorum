@@ -1,4 +1,5 @@
 using UnityEngine;
+using Data.Options;
 namespace Audio
 {
     public class Batterie_AudioSystem : AudioSystem
@@ -7,15 +8,15 @@ namespace Audio
         {
             VolumeData = volumeData;
 
-            AudioSources[0].volume = VolumeData.GetScaledLevel(VolumeData.DataItem.Click);
+            AudioSources[0].volume = VolumeData.GetLevel(VolumeData.DataItem.Click) * .01f;
             AudioSources[0].clip = BatterieAssets.RimShot;
             AudioSources[0].clip.LoadAudioData();
 
-            AudioSources[1].volume = VolumeData.GetScaledLevel(VolumeData.DataItem.Batterie);
+            AudioSources[1].volume = VolumeData.GetLevel(VolumeData.DataItem.Batterie) * .01f;
             AudioSources[1].clip = BatterieAssets.SnareRoll;
             AudioSources[1].clip.LoadAudioData();
 
-            AudioSources[2].volume = VolumeData.GetScaledLevel(VolumeData.DataItem.Batterie);
+            AudioSources[2].volume = VolumeData.GetLevel(VolumeData.DataItem.Batterie) * .01f;
             AudioSources[2].clip = BatterieAssets.MissStick;
             AudioSources[2].clip.LoadAudioData();
         }
@@ -60,7 +61,7 @@ namespace Audio
 
         public void Hit()
         {
-            AudioSources[1].volume = VolumeData.GetScaledLevel(VolumeData.DataItem.Batterie);
+            AudioSources[1].volume = VolumeData.GetLevel(VolumeData.DataItem.Batterie) * .01f;
         }
 
         public override void Stop()

@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using UnityEngine;
 
 
-namespace Menus.QuitMenu
+namespace OldMenus.Generic.QuitMenu
 {
     public class QuitAetherMenu : Menu<QuitAetherMenu.QuitMenuItem, QuitAetherMenu>
     {
-        public QuitAetherMenu() : base(nameof(QuitAetherMenu)) { }
+        public QuitAetherMenu() :
+            base(
+                nameof(QuitAetherMenu),
+                new AlignRight<QuitMenuItem>())
+        { }
 
         private BackButton _back;
         public BackButton Back => _back ??= new BackButton(Parent);
-        public override MenuLayoutStyle Style => MenuLayoutStyle.AlignRight;
 
         public override Menu<QuitMenuItem, QuitAetherMenu> Initialize()
         {

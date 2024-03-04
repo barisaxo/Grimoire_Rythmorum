@@ -61,7 +61,7 @@ public class SeaScene_State : State
 
         Scene.HUD.Hud.GO.SetActive(true);
 
-        _ = Scene.UpdateMap(this, ShipVelocity);
+        _ = Scene.UpdateMap(this, Data, ShipVelocity);
         base.PrepareState(callback);
     }
 
@@ -126,7 +126,7 @@ public class SeaScene_State : State
         else if (right) ShipVelocity.x = Mathf.Lerp(ShipVelocity.x, 1, Time.fixedDeltaTime);
         else ShipVelocity.x = Mathf.Lerp(ShipVelocity.x, 0, Time.fixedDeltaTime);
 
-        ShipVelocity = Scene.UpdateMap(this, ShipVelocity);
+        ShipVelocity = Scene.UpdateMap(this, Data, ShipVelocity);
 
         // if (TimeSinceLastL < 1.5f) { Scene.HUD.Hide(TimeSinceLastL); }
         // else { Scene.HUD.Show(); }
@@ -134,35 +134,49 @@ public class SeaScene_State : State
         TimeSinceLastL += Time.deltaTime;
     }
 
+    protected override void NorthPressed()
+    {
+        SetState(new SeaToMenuTransition_State(new Menus.Inventory.InventoryMenu(Data, this)));
+        // SetState(
+        // SetState(new CameraPan_State(
+        //     new InventoryMenu_State<
+        //         OldMenus.InventoryMenu.InventoryMenu.InventoryItem,
+        //         OldMenus.InventoryMenu.InventoryMenu,
+        //         MaterialsData.DataItem,
+        //         OldMenus.Inventory.Materials.MaterialsMenu>
+        //     (new OldMenus.InventoryMenu.InventoryMenu(),
+        //      new OldMenus.Inventory.Materials.MaterialsMenu()),
+        //      // SetState(new CameraPan_State(
+        //      //      new MaterialsMenu_State(new MenuToSeaTransition_State()),
+        //      pan: new Vector3(
+        //          -50,
+        //          Cam.Io.Camera.transform.rotation.eulerAngles.y,
+        //          Cam.Io.Camera.transform.rotation.eulerAngles.z),
+        //      strafe: Cam.Io.Camera.transform.position,
+        //      speed: 3));
+    }
 
     protected override void EastPressed()
     {
         if (Scene.NearestNPC is not null &&
             Scene.NearestNPC.SceneObject.Interactable is not NoInteraction)
         {
-            SetStateDirectly(Scene.NearestNPC.SceneObject.Interactable.SubsequentState);
+            SetState(Scene.NearestNPC.SceneObject.Interactable.SubsequentState);
             return;
         }
 
         if (Scene.NearestInteractableCell is not null)
-            SetStateDirectly(Scene.NearestInteractableCell.SceneObject.Interactable.SubsequentState);
+            SetState(Scene.NearestInteractableCell.SceneObject.Interactable.SubsequentState);
     }
 
     protected override void StartPressed()
     {
-        SetStateDirectly(new CameraPan_State(
-             new SeaToMenuTransition_State(),
-                 pan: new Vector3(
-                     -50,
-                     Cam.Io.Camera.transform.rotation.eulerAngles.y,
-                     Cam.Io.Camera.transform.rotation.eulerAngles.z),
-                 strafe: Cam.Io.Camera.transform.position,
-                 speed: 3));
+        SetState(new SeaToMenuTransition_State(new Menus.Options.OptionsMenu(Data, Audio, this)));
     }
 
     protected override void SelectPressed()
     {
-        SetStateDirectly(new SeaToQuitMenuTransition_State());
+        // SetState(new SeaToQuitMenuTransition_State());
     }
 
     protected override void LStickInput(Vector2 v2)
@@ -180,7 +194,7 @@ public class SeaScene_State : State
 
     protected override void WestPressed()
     {
-        SetStateDirectly(
+        SetState(
             new CameraPan_State(
                 new SeaInspection_State(),
                 new Vector3(45, 180, 0),
@@ -196,7 +210,7 @@ public class SeaScene_State : State
         CheckDirectionalInput();
         Scene.Ship.UpdateShipCoords(Scene);
         if ((Scene.NearestNPC = Scene.CheckNMETriggers()) != null)
-            SetStateDirectly(Scene.NearestNPC.SceneObject.Triggerable.SubsequentState);
+            SetState(Scene.NearestNPC.SceneObject.Triggerable.SubsequentState);
     }
 
     void FixedTick()

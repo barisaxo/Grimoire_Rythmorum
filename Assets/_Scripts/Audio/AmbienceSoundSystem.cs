@@ -1,12 +1,13 @@
 using Audio;
 using UnityEngine;
 using System.Collections;
+using Data.Options;
 
 public sealed class AmbienceAudioSystem : AudioSystem
 {
     public AmbienceAudioSystem(VolumeData volumeData) : base(1, nameof(SoundFXAudioSystem))
     {
-        AudioSources[0].volume = volumeData.GetScaledLevel(VolumeData.DataItem.SoundFX);
+        AudioSources[0].volume = volumeData.GetLevel(VolumeData.DataItem.SoundFX) * .01f;
     }
 
     public void PlayOneShot(AudioClip ac)

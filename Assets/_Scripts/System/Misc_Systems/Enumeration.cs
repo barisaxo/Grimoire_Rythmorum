@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using System.Linq;
 
+[System.Serializable]
 public abstract class Enumeration
 {
     protected Enumeration(int id, string name) => (Id, Name) = (id, name);
@@ -36,11 +37,11 @@ public abstract class Enumeration
     /// </summary>
     public static bool operator !=(Enumeration a, int b) => a.Id != b;
     /// <summary>
-    /// Matches Id only.
+    /// Matches Id && name.
     /// </summary>
     public static bool operator ==(Enumeration a, Enumeration b) => a.Id == b.Id && a.Name == b.Name;
     /// <summary>
-    /// Matches Id only.
+    /// Matches Id && name.
     /// </summary>
     public static bool operator !=(Enumeration a, Enumeration b) => a.Id != b.Id || a.Name != b.Name;
 

@@ -28,7 +28,8 @@ namespace MusicTheory.SeventhChords
         public static SeventhChordEnum HalfDiminishedSeventh = new(4, "ø7", nameof(HalfDiminishedSeventh)) { };
         public static SeventhChordEnum DiminishedSeventh = new(5, "º7", nameof(DiminishedSeventh)) { };
 
-        public static implicit operator SeventhChord(SeventhChordEnum e) => e switch
+        public static implicit operator SeventhChord(SeventhChordEnum e) =>
+        e switch
         {
             _ when e == MajorSeventh => new MajorSeventh(),
             _ when e == MinorSeventh => new MinorSeventh(),
@@ -39,6 +40,19 @@ namespace MusicTheory.SeventhChords
             _ when e == DiminishedSeventh => new DiminishedSeventh(),
             _ => throw new System.ArgumentOutOfRangeException(e.Id + " : " + e.ToString())
         };
+
+
+        // public static implicit operator SeventhChord(SeventhChordEnum e) => e switch
+        // {
+        //     _ when e == MajorSeventh => new MajorSeventh(),
+        //     _ when e == MinorSeventh => new MinorSeventh(),
+        //     _ when e == MinorMajorSeventh => new MinorMajorSeventh(),
+        //     _ when e == DominantSeventh => new DominantSeventh(),
+        //     _ when e == DominantSeventhSus => new DominantSeventhSus(),
+        //     _ when e == HalfDiminishedSeventh => new HalfDiminishedSeventh(),
+        //     _ when e == DiminishedSeventh => new DiminishedSeventh(),
+        //     _ => throw new System.ArgumentOutOfRangeException(e.Id + " : " + e.ToString())
+        // };
     }
 
     public class MajorSeventh : SeventhChord { public MajorSeventh() : base(SeventhChordEnum.MajorSeventh) { } }

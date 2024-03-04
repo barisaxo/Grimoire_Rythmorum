@@ -12,7 +12,7 @@ public class SeaToAnglingTransition_State : State
         Audio.BGMusic.Pause();
         Audio.Ambience.Pause();
 
-        SetStateDirectly(new Angling_State(SubsequentState));
+        SetState(new Angling_State(SubsequentState));
     }
 
 

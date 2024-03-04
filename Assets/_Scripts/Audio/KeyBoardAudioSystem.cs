@@ -1,8 +1,6 @@
 ﻿using Audio;
 using UnityEngine;
-using System.Collections;
-using System;
-
+using Data.Options;
 public sealed class KeyboardAudioSystem : AudioSystem
 {
     private int _audioSourceIndex = 0;
@@ -11,7 +9,7 @@ public sealed class KeyboardAudioSystem : AudioSystem
     public KeyboardAudioSystem(VolumeData volumeData) : base(25, nameof(KeyboardAudioSystem))
     {
         foreach (var a in AudioSources)
-            a.volume = volumeData.GetScaledLevel(VolumeData.DataItem.SoundFX);
+            a.volume = volumeData.GetLevel(VolumeData.DataItem.SoundFX) * .01f;
     }
 
     public void Play(AudioClip ac) => Play(new AudioClip[] { ac });

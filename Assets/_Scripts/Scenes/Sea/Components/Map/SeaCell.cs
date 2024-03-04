@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System;
 
 namespace Sea
 {
@@ -34,17 +33,17 @@ namespace Sea
 
         public ISceneObject SceneObject;
         public GameObject GO => SceneObject?.GO;
-        public float RotY;
+        // public float RotY;
 
-        public void InstantiateNewSceneObject(State currentState)
+        public void InstantiateNewSceneObject(State currentState, DataManager data)
         {
             SceneObject = Type switch
             {
                 CellType.Cove => new NullCove(),
                 CellType.Rocks => new Rocks(),
-                CellType.Fish => new Fish(currentState),
-                CellType.Lighthouse => new Lighthouse(WorldMapScene.Io.Ship.Region, currentState),
-                CellType.Bottle => new Bottle(currentState),
+                CellType.Fish => new Fish(currentState, data.FishData, data.ShipData, Assets.SailFishPrefab),
+                CellType.Lighthouse => new Lighthouse(WorldMapScene.Io.Ship.Region, data.LighthousesData, currentState),
+                CellType.Bottle => new Bottle(currentState, data.starChartsData, data.ShipData),
                 // CellType.OpenSea => null,
 
                 _ => throw new System.NotImplementedException()
@@ -53,7 +52,7 @@ namespace Sea
 
         public void DestroySceneObject()
         {
-            GameObject.Destroy(GO);
+            Object.Destroy(GO);
             SceneObject = null;
         }
 
@@ -69,21 +68,6 @@ namespace Sea
 
 
 
-        public static bool operator ==(Cell a, Cell b)
-        {
-            if ((a is null && b is not null) || (a is not null && b is null)) return false;
-            if (a is null && b is null) return true;
-            return a._type == b._type && a.Coord == b.Coord;
-        }
-        public static bool operator !=(Cell a, Cell b)
-        {
-            if ((a is null && b is not null) || (a is not null && b is null)) return true;
-            if (a is null && b is null) return false;
-            return a._type != b._type || a.Coord != b.Coord;
-        }
-
-        public override bool Equals(object obj) => obj is Cell c && Coord == c.Coord && _type == c._type;
-        public override int GetHashCode() => HashCode.Combine(_type, Coord);
     }
 
     public enum CellType { OpenSea, Cove, Rocks, Center, Lighthouse, Fish, Bottle }

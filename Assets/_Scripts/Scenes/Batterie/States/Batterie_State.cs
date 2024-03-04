@@ -157,7 +157,7 @@ public class Batterie_State : State
 
         if (Input.GetKeyDown(KeyCode.Tab))
         {
-            SetStateDirectly(new Batterie_State(Specs));
+            SetState(new Batterie_State(Specs));
         }
     }
 

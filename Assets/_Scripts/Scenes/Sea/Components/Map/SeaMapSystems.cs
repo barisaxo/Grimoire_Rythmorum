@@ -39,6 +39,7 @@ public static class SeaMapSystems
                   new Vector2Int((int)(ship.GlobalLoc.x + map.RegionSize), (int)(ship.GlobalLoc.y)).Smod(map.GlobalSize))]);
             x = +1;
         }
+
         if (ship.LocalCoord(map.RegionSize).y < 7)
         {
             regions.Add(map.Regions[map.RegionIndexFromGlobalCoord(

@@ -2,6 +2,7 @@ using System;
 
 public class SeaToBatteryTransition_State : State
 {
+    public SeaToBatteryTransition_State() { Fade = true; }//TODO this might be wrong
     protected override void PrepareState(Action callback)
     {
         Sea.WorldMapScene.Io.Ship.SeaPos = Sea.WorldMapScene.Io.Ship.GO.transform.position;
@@ -12,6 +13,6 @@ public class SeaToBatteryTransition_State : State
 
     protected override void EngageState()
     {
-        FadeToState(new BatterieAndCadence_State(new BatteriePack()));
+        SetState(new BatterieAndCadence_State(new BatteriePack()));//todo this might need to be faded into
     }
 }

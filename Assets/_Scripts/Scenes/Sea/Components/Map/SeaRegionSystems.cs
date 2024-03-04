@@ -5,33 +5,31 @@ using System.Collections.Generic;
 
 public static class SeaRegionSystems
 {
-    public static Cell[] InitializeCells(this Region region, int size)
+    public static List<Cell> InitializeCells(this Region region, int size)
     {
         List<Cell> cells = new();
         int halfSize = (int)(size * .5f);
 
-        AddBottle();
-        if (!WorldMapScene.Io.Map.IsHighSeas(region.Coord))
-        {
-            AddRocks();
-        }
-        if (!WorldMapScene.Io.Map.ShippingLanes.Contains(region.Coord)) AddFish();
-        if (WorldMapScene.Io.Map.Features.TryGetValue(region.Coord, out WorldMap.Feature[] Features))
-            foreach (WorldMap.Feature feature in Features)
+        if (WorldMapScene.Io.Map.Features.TryGetValue(region.Coord, out Feature[] Features))
+            foreach (Feature feature in Features)
             {
                 switch (feature)
                 {
-                    case WorldMap.Feature.Cove:
+                    case Feature.Cove:
                         cells.Add(new Cell(halfSize, halfSize) { Type = CellType.Cove });
                         break;
 
-                    case WorldMap.Feature.LightHouse:
+                    case Feature.LightHouse:
                         cells.Add(new Cell(halfSize / 2, halfSize / 2) { Type = CellType.Lighthouse });
                         break;
                 }
             }
 
-        return cells.ToArray();
+        if (!WorldMapScene.Io.Map.ShippingLanes.Contains(region.Coord)) AddFish();
+        AddBottle();
+        if (!WorldMapScene.Io.Map.IsHighSeas(region.Coord)) AddRocks();
+
+        return cells;
 
         void AddRocks()
         {
@@ -48,7 +46,7 @@ public static class SeaRegionSystems
                         cells.Add(new Cell(x, y)
                         {
                             Type = CellType.Rocks,
-                            RotY = Random.Range(0, 360)
+                            // RotY = Random.Range(0, 360)
                         });
                     }
                 }
@@ -72,7 +70,7 @@ public static class SeaRegionSystems
                         cells.Add(new Cell(x, y)
                         {
                             Type = CellType.Fish,
-                            RotY = Random.Range(0, 360)
+                            // RotY = Random.Range(0, 360)
                         });
                     }
                 }
@@ -80,11 +78,10 @@ public static class SeaRegionSystems
 
         void AddBottle()
         {
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 1; i++)
                 cells.Add(new Cell(Random.Range(3, size - 3), Random.Range(3, size - 3))
                 {
-                    Type = CellType.Bottle,
-                    RotY = Random.Range(0, 360)
+                    Type = CellType.Bottle
                 });
         }
     }
@@ -107,7 +104,6 @@ public static class SeaRegionSystems
             var path = region.PatrolPattern(i);
             ships[i] = new(path, region.Coord * region.Size);
         }
-
         return ships;
     }
 
@@ -120,7 +116,7 @@ public static class SeaRegionSystems
         {
             var leg = nodes[p].NewSailingPath(
                 nodes[(p + 1) % nodes.Length],
-                region.Cells,
+                region.Cells.ToArray(),
                 region.Size);
 
             for (int n = 0; n < leg.Length; n++) path.Add(leg[n]);

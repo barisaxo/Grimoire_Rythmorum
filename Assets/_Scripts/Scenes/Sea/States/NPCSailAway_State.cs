@@ -45,7 +45,7 @@ public class NPCSailAway_State : State
             NPC.PatrolIndex = i;
             NPC.Pos = NPC.PatrolPath[NPC.PatrolIndex];
 
-            SetStateDirectly(SubsequentState);
+            SetState(SubsequentState);
         }
     }
 

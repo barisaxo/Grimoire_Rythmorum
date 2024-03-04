@@ -198,13 +198,28 @@ namespace Batterie
                (NoteAttackMoment <= attackWindows[0].end + StartTime + LatencyOffset))
             {
                 score++;
-                FeedBack("HIT! " + (int)(100f * (NoteAttackMoment - (attackWindows[0].start + StartTime + LatencyOffset + .15f))));
+
+                int msec = (int)(100f * (NoteAttackMoment - (attackWindows[0].start + StartTime + LatencyOffset + .15f)));
+
+                FeedBack(
+                    Mathf.Abs(msec) switch
+                    {
+                        < 2 => "PERFECT!",
+                        < 5 => "<size=90%>Excellent!",
+                        < 10 => "<size=80%>Great!",
+                        _ => "<size=70%>Good!",
+                    } +
+                    "<size=60%> (" +
+                    msec +
+                    " msec)");
+
                 attackWindows.RemoveAt(0);
                 NoteAttacked = false;
                 NoteHolding = true;
                 Hit?.Invoke(Batterie.Hit.Hit);
                 return;
             }
+
             else if (NoteAttacked)
             {
                 score--;
@@ -228,6 +243,4 @@ namespace Batterie
     }
 
     public enum Hit { Hit, Miss, BadHit, Break, BadHold }
-
-
 }

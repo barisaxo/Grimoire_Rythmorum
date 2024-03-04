@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class InputTest_State : State
 {
+    public InputTest_State() { Fade = true; }
+
     TestObject TestObject;
     Card TestCard => TestObject.TestCard;
 
@@ -17,7 +19,7 @@ public class InputTest_State : State
 
     protected override void SouthPressed()
     {
-        FadeToState(new InputTest_State());
+        SetState(new InputTest_State());
     }
 
     protected override void EastPressed()
@@ -38,7 +40,7 @@ public class InputTest_State : State
 
     protected override void NorthPressed()
     {
-        SetStateDirectly(new InputTest_State());
+        SetState(new InputTest_State());
     }
 
     //protected override void SelectPressed()
@@ -100,7 +102,7 @@ public class TestObject
     public Card ControlsText => _controlsText ??= new Card(nameof(ControlsText), Parent)
          .SetTextString("Start = Reset Square\n" +
                        "DPad = Resize Square\n" +
-                       "Interact (North) = SetStateDirectly(new InputTestState());\n" +
+                       "Interact (North) = SetState(new InputTestState());\n" +
                        "Cancel (South) = FadeToState(new InputTestState());\n" +
                        "Confirm (East) = Randomly Color Square\n")
         .SetFontScale(3, 3)
