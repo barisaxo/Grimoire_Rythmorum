@@ -5,7 +5,7 @@ using UnityEngine;
 using Data;
 using Data.Inventory;
 
-[System.Serializable]
+// [System.Serializable]
 public class DataManager
 {
     #region  INSTANCE
@@ -61,6 +61,12 @@ public class DataManager
     private CharacterData _characterData;
     public CharacterData CharacterData => _characterData ??= new();
 
+
+
+    private Data.Player.CharacterData _charData;
+    public Data.Player.CharacterData CharData => _charData ??= Data.Player.CharacterData.GetData();
+
+
     //private PlayerData _playerData;
     //public PlayerData PlayerData => _playerData ??= new();
 
@@ -97,21 +103,26 @@ public class DataManager
     private GramophoneData _gramophoneData;
     public GramophoneData GramophoneData => _gramophoneData ??= GramophoneData.GetData();
 
+    private Data.Player.PlayerData _playerData;
+    public Data.Player.PlayerData PlayerData => _playerData ??= Data.Player.PlayerData.GetData();
+
+    private Data.Player.RhythmCellsData _rhythmCellData;
+    public Data.Player.RhythmCellsData RhythmCellData => _rhythmCellData ??= Data.Player.RhythmCellsData.GetData();
     // const string fileName = "/save.this";
-    public void Save(IData data)
-    {
-        data?.PersistentData?.Save(data);
-        // GramophoneData.PersistentData.Save(GramophoneData);
-        // ShipData.PersistentData.Save(ShipData);
-        // LighthousesData.PersistentData.Save(LighthousesData);
-        // QuestsData.PersistentData.Save(QuestsData);
-        // Settings.PersistentData.Save(Settings);
-        // starChartsData.PersistentData.Save(starChartsData);
-        // MaterialsData.PersistentData.Save(MaterialsData);
-        // FishData.PersistentData.Save(FishData);
-        // Volume.PersistentData.Save(Volume);
-        // GamePlay.PersistentData.Save(GamePlay);
-    }
+    // public void Save(IData data)
+    // {
+    //     data?.PersistentData?.Save(data);
+    //     // GramophoneData.PersistentData.Save(GramophoneData);
+    //     // ShipData.PersistentData.Save(ShipData);
+    //     // LighthousesData.PersistentData.Save(LighthousesData);
+    //     // QuestsData.PersistentData.Save(QuestsData);
+    //     // Settings.PersistentData.Save(Settings);
+    //     // starChartsData.PersistentData.Save(starChartsData);
+    //     // MaterialsData.PersistentData.Save(MaterialsData);
+    //     // FishData.PersistentData.Save(FishData);
+    //     // Volume.PersistentData.Save(Volume);
+    //     // GamePlay.PersistentData.Save(GamePlay);
+    // }
 
 
     // public void Save()

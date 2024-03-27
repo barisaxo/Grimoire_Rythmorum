@@ -15,7 +15,7 @@ namespace Sea
 
         protected override void PrepareState(Action callback)
         {
-            Data.LighthousesData.IncreaseLevel(Lighthouse.RegionData);
+            DataManager.LighthousesData.IncreaseLevel(Lighthouse.RegionData);
             // if (!DataManager.Io.CharacterData.ActivatedLighthouses.Contains(Lighthouse.Region))
             // {
             // DataManager.Io.CharacterData.ActivatedLighthouses = DataManager.Io.CharacterData.ActivatedLighthouses.Added(Lighthouse.Region);

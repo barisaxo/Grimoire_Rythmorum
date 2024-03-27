@@ -32,5 +32,8 @@ namespace Sea
         public IUpdatePosition UpdatePosition { get; private set; }
         public IInstantiable Instantiator { get; private set; }
         public IDescription Description { get; private set; }
+        public IInventoriable Inventoriable { get; } = new NotInventoriable();
+        public IQuestable Questable => new NotQuestable();
+        public IDifficulty Difficulty { get; } = new NoDifficulty();
     }
 }

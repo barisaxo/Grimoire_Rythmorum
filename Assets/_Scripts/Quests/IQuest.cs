@@ -1,75 +1,65 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Sea;
 
 namespace Quests
 {
     public interface IQuest
     {
-
-        public IQuestReward Reward { get; }
+        public IInventoriable Reward { get; }
         public Vector2Int QuestLocation { get; }
         public Vector2Int ReturnLocation { get; }
-
+        public string Description { get; }
     }
 
 
+    [System.Serializable]
     public class NavigationQuest : IQuest
     {
-        public NavigationQuest(IQuestReward reward, Vector2Int loc)
+        public NavigationQuest(IInventoriable reward, Vector2Int globalCoord, string latLong)
         {
             Reward = reward;
-            QuestLocation = loc;
+            _questLocation = (globalCoord.x, globalCoord.y);
+            LatLong = latLong;
         }
 
-        public IQuestReward Reward { get; }
+        public string LatLong;
+        public string Description => "Navigate to " + LatLong;
 
-        public Vector2Int QuestLocation { get; }
+        public IInventoriable Reward { get; }
+
+        private (int x, int y) _questLocation = (0, 0);
+        public Vector2Int QuestLocation
+        {
+            get
+            {
+                Debug.Log(_questLocation);
+                return new(_questLocation.x, _questLocation.y);
+            }
+        }
 
         public Vector2Int ReturnLocation => Vector2Int.zero;
     }
 
-    public interface IQuestReward
+    public interface ISpoils
     {
-        public (Data.Inventory.MaterialsData.DataItem, int)[] Mats { get; }
-        // public int Hemp { get; }
-        // public int Cotton { get; }
-        // public int Linen { get; }
-        // public int Silk { get; }
-        // public int Pine { get; }
-        // public int Fir { get; }
-        // public int Oak { get; }
-        // public int Teak { get; }
-        // public int Iron { get; }
-        // public int CastIron { get; }
-        // public int Brass { get; }
-        // public int Patina { get; }
-
-
-        public int Gramophones { get; }
-        public int Gold { get; }
-
+        public (Data.IData Data, DataEnum DataItem, int Amount)[] Rewards { get; }
+        public void ApplyRewards()
+        {
+            foreach (var r in Rewards)
+                r.Data.SetLevel(r.DataItem, r.Data.GetLevel(r.DataItem) + r.Amount);
+        }
+        // public Data.IData Data { get; }
+        // public DataEnum DataItem { get; }
+        // public int Amount { get; }
     }
 
-    public class SmallGramoReward : IQuestReward
+    [System.Serializable]
+    public class Spoils : ISpoils
     {
-        public (Data.Inventory.MaterialsData.DataItem, int)[] Mats { get; }
-        // public int Hemp { get; }
-        // public int Cotton { get; }
-        // public int Linen { get; }
-        // public int Silk { get; }
-        // public int Pine { get; }
-        // public int Fir { get; }
-        // public int Oak { get; }
-        // public int Teak { get; }
-        // public int Iron { get; }
-        // public int CastIron { get; }
-        // public int Brass { get; }
-        // public int Patina { get; }
-
-
-        public int Gramophones { get; }
-        public int Gold { get; }
+        public Spoils((Data.IData Data, DataEnum DataItem, int Amount)[] rewards) => Rewards = rewards;
+        public (Data.IData Data, DataEnum DataItem, int Amount)[] Rewards { get; private set; }
     }
 
     public interface IMissionParameters

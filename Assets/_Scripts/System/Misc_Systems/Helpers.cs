@@ -381,4 +381,50 @@ static class Helpers
         var AB = b - a;
         return AB.normalized;
     }
+
+    public static int WeightedRandomInt(float rand, float solveRate, int puzzleCount)
+    {
+        // Calculate the weighted index based on the solve rate
+        float weightedIndex = Mathf.Pow(rand, Mathf.Lerp(1.0f, solveRate, solveRate)) * puzzleCount;
+
+        // Convert the weighted index to an integer
+        int weightedRand = Mathf.RoundToInt(weightedIndex);
+
+        // Ensure the weightedRand is within the valid range
+        weightedRand = Mathf.Clamp(weightedRand, 0, puzzleCount - 1);
+
+        return weightedRand;
+    }
+    // int WeightedRandomNumber(float rand, float solveRate, int puzzleCount)
+    // {
+    //     // Calculate the weighted index based on the solve rate
+    //     float weightedIndex = Mathf.Pow(rand, solveRate) * puzzleCount;
+
+    //     // Convert the weighted index to an integer
+    //     int weightedRand = Mathf.RoundToInt(weightedIndex);
+
+    //     // Ensure the weightedRand is within the valid range
+    //     weightedRand = Mathf.Clamp(weightedRand, 0, puzzleCount - 1);
+
+    //     return weightedRand;
+    // }    //         int c = 0;
+    // for (int i = 0; i < 11; i++)
+    // {
+    //     for (int ii = 0; ii < 11; ii++)
+    //     {
+    //         for (int iii = 1; iii < 11; iii++)
+    //         {
+    //             float fakeRand = (float)i * .1f;
+    //             float percent = ((float)ii * .1f);
+    //             float count = iii;
+
+    //             int weightedRand = WeightedRandomNumber(fakeRand, percent, (int)count); //(int)Mathf.Round(((((float)fakeRand / (float)percent)) * (float)count));
+    //             Debug.Log(weightedRand + " " + fakeRand + " " + percent + " " + count + " " + c++);
+    //         }
+    //     }
+    // }
+
+
 }
+
+

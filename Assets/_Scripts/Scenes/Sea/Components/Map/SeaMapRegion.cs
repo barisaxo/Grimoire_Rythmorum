@@ -13,12 +13,13 @@ namespace Sea
         public NPCShip[] NPCs => _npcs ??= this.SetUpNPCs();
 
         private List<Cell> _cells;
-        public List<Cell> Cells => _cells ??= this.InitializeCells(Size);
-
-        public Region(UnityEngine.Vector2Int region, int size)
+        public List<Cell> Cells => _cells ??= this.InitializeCells(Size, QuestData);
+        readonly Data.Inventory.QuestData QuestData;
+        public Region(UnityEngine.Vector2Int region, int size, Data.Inventory.QuestData data)
         {
             Size = size;
             Coord = region;
+            QuestData = data;
         }
     }
 

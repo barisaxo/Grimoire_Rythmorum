@@ -54,9 +54,9 @@ namespace Menus.Main
             _ when Selection == MainMenuData.DataItem.Continue => new NewCoveScene_State(),
             // _ when Selection == MainMenuData.DataItem.NewGame => new NewCoveScene_State(),
             _ when Selection == MainMenuData.DataItem.Options =>
-                new MenuTest_State(
+                new Menu_State(
                     new OptionsMenu(DataManager, AudioManager,
-                        new MenuTest_State(new MainMenu(DataManager, AudioManager)))),
+                        new Menu_State(new MainMenu(DataManager, AudioManager)))),
             _ => throw new System.ArgumentOutOfRangeException()
         };
 

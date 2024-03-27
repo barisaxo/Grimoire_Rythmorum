@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public static class SeaRegionSystems
 {
-    public static List<Cell> InitializeCells(this Region region, int size)
+    public static List<Cell> InitializeCells(this Region region, int size, Data.Inventory.QuestData questData)
     {
         List<Cell> cells = new();
         int halfSize = (int)(size * .5f);
@@ -25,6 +25,7 @@ public static class SeaRegionSystems
                 }
             }
 
+        AddQuestItems();
         if (!WorldMapScene.Io.Map.ShippingLanes.Contains(region.Coord)) AddFish();
         AddBottle();
         if (!WorldMapScene.Io.Map.IsHighSeas(region.Coord)) AddRocks();
@@ -84,7 +85,30 @@ public static class SeaRegionSystems
                     Type = CellType.Bottle
                 });
         }
+        void AddQuestItems()
+        {
+            foreach (var data in questData.DataItems)
+            {
+                if (questData.GetQuest(data) != null)
+                {
+                    Debug.Log(questData.GetQuest(data).QuestLocation / WorldMapScene.Io.Map.RegionSize + " " + region.Coord);
+                    if (questData.GetQuest(data).QuestLocation / WorldMapScene.Io.Map.RegionSize == region.Coord)
+                    {
+                        cells.Add(new Cell(questData.GetQuest(data).QuestLocation.Smod(size))
+                        {
+                            Type = data switch
+                            {
+                                _ when data == Data.Inventory.QuestData.DataItem.StarChart =>
+                                    CellType.Gramo,
+                                _ => throw new System.Exception(),
+                            }
+                        });
+                    }
+                }
+            }
+        }
     }
+
 
     public static bool IsCellOccupied(this List<Cell> cells, int x, int y) => cells.IsCellOccupied(new Vector2Int(x, y));
     public static bool IsCellOccupied(this List<Cell> cells, Vector2Int v2i)
@@ -102,7 +126,7 @@ public static class SeaRegionSystems
         for (int i = 0; i < ships.Length; i++)
         {
             var path = region.PatrolPattern(i);
-            ships[i] = new(path, region.Coord * region.Size);
+            ships[i] = new(path, region.Coord * region.Size) { };
         }
         return ships;
     }
@@ -136,7 +160,7 @@ public static class SeaRegionSystems
         _ => new Vector2Int[4] { RandA(size), RandB(size), RandD(size), RandC(size) },
     };
 
-    public static Vector2Int RandA(int size) => new(Random.Range(0, 3), Random.Range(size - 3, size));
+    public static Vector2Int RandA(int size) => new(0, Random.Range(size - 3, size));
     public static Vector2Int RandB(int size) => new(Random.Range(0, 3), Random.Range(0, 3));
     public static Vector2Int RandC(int size) => new(Random.Range(size - 3, size), Random.Range(size - 3, size));
     public static Vector2Int RandD(int size) => new(Random.Range(size - 3, size), Random.Range(0, 3));

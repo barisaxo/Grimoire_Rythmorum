@@ -50,7 +50,7 @@ namespace Data.Options
         public bool MediumModeWon = false;
 
         public MusicTheory.Rhythms.CellShape RecentCell;
-
+        public bool InventoryIsFull(int Space) => false;
 
         public BatterieDifficulty Batterie_Difficulty
         {

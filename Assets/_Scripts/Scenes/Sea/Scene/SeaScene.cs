@@ -8,9 +8,6 @@ namespace Sea
 {
     public sealed class WorldMapScene
     {
-        public float DebugTimer;
-        public readonly float DebugInterval = 5f;
-
         #region  INSTANCE
 
         private WorldMapScene()
@@ -22,9 +19,6 @@ namespace Sea
             Board.Swells.EnableSwells();
 
             Ship = new PlayerShip(this);
-            // Ship.GO.transform.SetPositionAndRotation(
-            //     Ship.Parent.transform.position,
-            //     Quaternion.Euler(new Vector3(0, 180, 0)));
 
             RockTheBoat.AddBoat(Ship.GO.transform, (.08f, 1, 0));
             RockTheBoat.Rocking = true;
@@ -66,7 +60,7 @@ namespace Sea
 
         public Vector3Int restoreMapLoc;
         private WorldMap _map;
-        public WorldMap Map => _map ??= new();
+        public WorldMap Map => _map ??= new(DataManager.Io.QuestsData);
 
         public HUD _hud;
         public HUD HUD => _hud ??= new(DataManager.Io.CharacterData);
@@ -74,19 +68,7 @@ namespace Sea
         public PlayerShip Ship;
         public RockTheBoat RockTheBoat = new();
         public NPCShip NearestNPC;
-        // public Fish NearestFish;
-
-        // public GameObject Fog;
-        // public Material FogMat;
-
         public Cell NearestInteractableCell;
-
-        // public List<GameObject> UsedRocks = new();
-        // public List<GameObject> UnusedRocks = new();
-        // public List<GameObject> UsedShips = new();
-        // public List<GameObject> UnusedShips = new();
-        // public List<GameObject> UsedFish = new();
-        // public List<GameObject> UnusedFish = new();
 
         public List<ISceneObject> SceneObjects = new();
         public List<NPCShip> NPCShips = new();

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Data.Player;
 using Data.Inventory;
 
 public class AnglingToSeaTransition_State : State
@@ -21,22 +22,21 @@ public class AnglingToSeaTransition_State : State
     {
         if (Won)
         {
-            UnityEngine.Debug.Log(Data.ShipData.GetLevel(ShipData.DataItem.Fish));
-            if (Data.FishData.InventoryIsFull(Data.ShipData.GetLevel(ShipData.DataItem.Fish)))
-            {
-                SetState(new DialogStart_State(new InventoryIsFull_Dialogue(SubsequentState)));
-            }
-            else
-            {
-                Data.FishData.IncreaseLevel(FishData.DataItem.SailFish);
+            DataManager.PlayerData.IncreaseLevel(PlayerData.DataItem.FishCaught);
+            Obj.Inventoriable.AddRewards();
 
-                SetState(new DisplayItem_State(
+            SetState(
+                new DisplayItem_State(
                     Obj.Instantiator.ToInstantiate,
-                    new DialogStart_State(new FoundItem_Dialogue(Obj, SubsequentState)),
-                    clearCell: true));
-            }
+                    new DialogStart_State(
+                        new FoundItem_Dialogue(Obj.Inventoriable, SubsequentState)),
+                        clearCell: true));
         }
-        else SetState(new DialogStart_State(new FishGotAway_Dialogue(SubsequentState)));
+        else
+        {
+            DataManager.PlayerData.IncreaseLevel(PlayerData.DataItem.FishLost);
+            SetState(new DialogStart_State(new FishGotAway_Dialogue(SubsequentState)));
+        }
     }
 
 

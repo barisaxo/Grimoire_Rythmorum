@@ -3,83 +3,134 @@ using UnityEngine;
 
 public class BatterieIntermission_Dialogue : Dialogue
 {
-    public BatterieIntermission_Dialogue(BatteriePack pack)
+    public BatterieIntermission_Dialogue(BatterieScene scene)
     {
-        Pack = pack;
+        Scene = scene;
         Speaker = Speaker.Pino;
+        damageTaken = Scene.NPCShip.ShipStats.VolleyDamage;
+
+        Debug.Log("BatterieIntermission_Dialogue: " + scene.NPCShip.ShipStats.CannonStats.Cannon.Modifier + " " +
+            scene.NPCShip.ShipStats.CannonStats.Metal.Modifier + " " +
+            +scene.NPCShip.ShipStats.NumOfCannons + " " +
+            scene.NPCShip.ShipStats.VolleyDamage + " Damage taken:!! " + damageTaken);
+
+        if (Scene.Pack.Spammed) damageTaken *= 2;
     }
-    readonly BatteriePack Pack;
+    readonly int damageTaken;
+    readonly BatterieScene Scene;
 
     public override Dialogue Initiate()
     {
-        if (Pack.NMEHealth.cur < 1)
-        {
-            FirstLine = Victory;
-        }
-        else if (Pack.NMEHealth.cur < (float)(Pack.NMEHealth.max * .3f) &&
+        if (Scene.NMEHealth.cur < (float)(Scene.NMEHealth.max * .3f) &&
             Random.value > .65f)
         {
-            FirstLine = NMEAttemptingFlee;
-            Pack.Escaping = true;
+            _startLine = NMEAttemptingFlee;
+            Scene.Escaping = true;
         }
-        else if (DataManager.Io.CharacterData.CurrentHealth < (float)(DataManager.Io.CharacterData.MaxHealth * .3f))
+        else if (DataManager.Io.CharData.GetLevel(Data.Player.CharacterData.DataItem.CurrentHP) < (float)(DataManager.Io.CharData.GetLevel(Data.Player.CharacterData.DataItem.MaxHP) * .3f))
         {
-            FirstLine = LowPlayerHealth;
+            _startLine = LowPlayerHealth;
         }
-        else if (Pack.NMEHealth.cur < (float)(Pack.NMEHealth.max * .21f) &&
-                (DataManager.Io.CharacterData.CurrentHealth > (float)(DataManager.Io.CharacterData.MaxHealth * .5f)))
+        else if (Scene.NMEHealth.cur < (float)(Scene.NMEHealth.max * .21f) &&
+                (DataManager.Io.CharData.GetLevel(Data.Player.CharacterData.DataItem.CurrentHP) > (float)(DataManager.Io.CharData.GetLevel(Data.Player.CharacterData.DataItem.MaxHP) * .5f)))
         {
-            FirstLine = NMESurrender;
+            _startLine = NMESurrender;
         }
-        else if (Pack.NMEHealth.cur < (float)(Pack.NMEHealth.max * .3f))
+        else if (Scene.NMEHealth.cur < (float)(Scene.NMEHealth.max * .3f))
         {
-            FirstLine = LowNMEHealth;
+            _startLine = LowNMEHealth;
         }
         else
         {
-            FirstLine = EvenHealth;
+            _startLine = EvenHealth;
+        }
+
+
+        if (Scene.NMEHealth.cur < 1)
+        {
+            FirstLine = Victory;
+            Scene.Pack.SetResultType(BatterieResultType.Won);
+        }
+        else
+        {
+            FirstLine = DamageReport;
+        }
+
+        if (Scene.Pack.Spammed)
+        {
+            FirstLine = Spammed;
+        }
+        if (DataManager.Io.CharData.GetLevel(Data.Player.CharacterData.DataItem.CurrentHP) < 1)
+        {
+            Debug.Log("YOU LOSE");
+
+            FirstLine = GameOver;
         }
         return base.Initiate();
     }
 
+    Line _startLine;
+
     Line Victory => new Line("We got 'em Cap! Blew 'em out of the water!",
-                    new EndBatterie_State(Pack.SetResultType(BatterieResultType.Won)))
+                    new EndBatterie_State(Scene, BatterieResultType.Won))
         .SetSpeaker(Speaker)
         ;
 
-    Line LowPlayerHealth => new Line("We're in bad shape Cap'n! We can't take much more!")
+
+    Line Spammed => new Line("Cap, spamming like that only hurts us, cannons to back fired!\nWe've taken " + damageTaken + " damage", AttackAgain)
+        .SetSpeaker(Speaker);
+
+    Line DamageReport => new Line("Damage report Cap!\nWe've taken " + damageTaken + " damage", _startLine)
+        .SetSpeaker(Speaker);
+
+    Line LowPlayerHealth => new Line("We're in bad shape, we can't take much more!")
         .SetSpeaker(Speaker)
         .SetResponses(new Response[3] { Attack, Flee, Surrender })
         ;
 
-    Line LowNMEHealth => new Line("We almost got'em Cap! Another volley should surely do it!")
+    Line LowNMEHealth => new Line("We almost got'em! Another volley should surely do it!")
         .SetSpeaker(Speaker)
         .SetResponses(new Response[2] { Attack, Flee })
         ;
 
-    Line NMESurrender => new Line("Cap'n, the ship is flying a white flag, they're surrendering!")
+    Line NMESurrender => new Line("The ship is flying a white flag, they're surrendering!")
         .SetSpeaker(Speaker)
         .SetResponses(new Response[2] { Attack, AcceptSurrender })
         ;
 
-    Line NMEAttemptingFlee => new Line("Cap! The ship is attempting to flee")
+    Line NMEAttemptingFlee => new Line("The ship is attempting to flee")
         .SetSpeaker(Speaker)
         .SetResponses(new Response[2] { Attack, LetThemGo })
         ;
 
-    Line EvenHealth => new Line("It's not over yet. What'er your orders Cap'n?")
+    Line EvenHealth => new Line("It's not over yet. What'er your orders")
         .SetSpeaker(Speaker)
         .SetResponses(new Response[2] { Attack, Flee })
         ;
 
     Response Attack => new("Fire another volley", AttackAgain);
-    Line AttackAgain => new Line("Load the cannons! Counting off!...", new ResumeBatterie_State(Pack))
+    Line AttackAgain => new Line("Load the cannons! Counting off!...", new ResumeBatterie_State(Scene))
         .SetSpeaker(Speaker)
         ;
 
-    Response Flee => new("Attempt to flee", Random.value > .7f ? CantFlee : Fled);
+    Response _flee;
+    Response Flee
+    {
+        get
+        {
+            if (Random.value > .7f)
+            {
+                _flee ??= new("Attempt to flee", Fled);
+            }
+            else
+            {
+                _flee ??= new("Attempt to flee", CantFlee);
+            }
+            return _flee;
+        }
+    }
     Line Fled => new Line("It's better we run and live to fight another day!",
-                 new EndBatterie_State(Pack.SetResultType(BatterieResultType.Fled)))
+                 new EndBatterie_State(Scene, BatterieResultType.Fled))
         .SetSpeaker(Speaker)
         ;
 
@@ -87,7 +138,10 @@ public class BatterieIntermission_Dialogue : Dialogue
         .SetSpeaker(Speaker)
         ;
 
-    Response Surrender => new("Surrender to the ship", new EndBatterie_State(Pack.SetResultType(BatterieResultType.Surrender)));
-    Response AcceptSurrender => new("Accept their surrender", new EndBatterie_State(Pack.SetResultType(BatterieResultType.NMESurrender)));
-    Response LetThemGo => new("Let them go.", new EndBatterie_State(Pack.SetResultType(BatterieResultType.NMEscaped)));
+    Response Surrender => new("Surrender to the ship", new EndBatterie_State(Scene, BatterieResultType.Surrender));
+    Response AcceptSurrender => new("Accept their surrender", new EndBatterie_State(Scene, BatterieResultType.NMESurrender));
+    Response LetThemGo => new("Let them go.", new EndBatterie_State(Scene, BatterieResultType.NMEscaped));
+
+    Line GameOver => new("Sorry Cap. Looks like where going down with the ship.",
+        new Menu_State(new Menus.Main.MainMenu(DataManager.Io, Audio.AudioManager.Io)));
 }

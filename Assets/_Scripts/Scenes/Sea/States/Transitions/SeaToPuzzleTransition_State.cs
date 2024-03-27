@@ -15,7 +15,10 @@ public class SeaToPuzzleTransition_State : State
     {
         Audio.Ambience.Pause();
         Audio.BGMusic.Pause();
+        Audio.SFX.PlayOneShot(Assets.AlertHalfDim);
         Sea.WorldMapScene.Io.HUD.Disable();
+        Sea.WorldMapScene.Io.Ship.ConfirmPopup.GO.SetActive(false);
+        Sea.WorldMapScene.Io.MiniMap.Card.GO.SetActive(false);
         base.PrepareState(callback);
     }
 

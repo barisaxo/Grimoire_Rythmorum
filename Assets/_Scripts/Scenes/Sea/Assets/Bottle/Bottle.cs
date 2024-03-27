@@ -6,8 +6,9 @@ namespace Sea
 {
     public class Bottle : ISceneObject
     {
-        public Bottle(State state, StarChartsData starChartsData, ShipData shipData)
+        public Bottle(State state, DataManager data, MusicTheory.RegionalMode region)
         {
+            Difficulty = new StarChartDifficultySetter(data);
             GO = (BottlePrefab = Assets.Bottle).gameObject;
             GO.transform.SetParent(WorldMapScene.Io.TheSea.transform);
             Collidable = new NotCollidable(BottlePrefab.Col);
@@ -21,7 +22,10 @@ namespace Sea
                 Vector3.one * .5f,
                 new Vector3(35, Random.Range(0, 360), 0));
 
-            Interactable = new BottleInteraction(state, starChartsData, shipData, this);
+            Interactable = new BottleInteraction(state, data.starChartsData, data.ShipData, this);
+
+            Inventoriable = new Inventoriable(
+                (data.starChartsData, Difficulty.DifficultyLevel, 1));
         }
 
         public BottleWithScrollPrefab BottlePrefab;
@@ -33,5 +37,8 @@ namespace Sea
         public IUpdatePosition UpdatePosition { get; private set; }
         public IInstantiable Instantiator { get; private set; }
         public IDescription Description { get; private set; }
+        public IInventoriable Inventoriable { get; private set; }
+        public IQuestable Questable => new Sea.NotQuestable();
+        public IDifficulty Difficulty { get; }
     }
 }

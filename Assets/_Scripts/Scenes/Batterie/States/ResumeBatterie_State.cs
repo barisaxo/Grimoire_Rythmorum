@@ -8,16 +8,16 @@ public class ResumeBatterie_State : State
     // RhythmBars RhythmBars;
     // RhythmScriber RhythmScriber;
 
-    readonly BatteriePack Pack;
+    readonly BatterieScene Scene;
 
-    public ResumeBatterie_State(BatteriePack pack)
+    public ResumeBatterie_State(BatterieScene scene)
     {
-        Pack = pack;
+        Scene = scene;
     }
 
     protected override void PrepareState(Action callback)
     {
-        Pack.VolleysFired++;
+        // Scene.VolleysFired++;
 
         // RhythmBars = Data.GamePlay.CurrentLevel switch
         // {
@@ -172,7 +172,7 @@ public class ResumeBatterie_State : State
     {
         // SetState(new NewBatterie_State(Pack));
 
-        SetState(new BatterieAndCadence_State(Pack));
+        SetState(new BatterieAndCadence_State(Scene));
     }
 
 }

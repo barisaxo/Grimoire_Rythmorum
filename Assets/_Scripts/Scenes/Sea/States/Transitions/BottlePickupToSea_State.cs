@@ -3,11 +3,11 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BottlePickupToSea_State : State
+public class ItemPickupToSea_State : State
 {
     readonly State SubsequentState;
 
-    public BottlePickupToSea_State(State subsequentState)
+    public ItemPickupToSea_State(State subsequentState)
     {
         SubsequentState = subsequentState;
     }

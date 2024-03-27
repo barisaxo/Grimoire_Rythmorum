@@ -9,140 +9,93 @@ using Muscopa;
 
 public class BatterieAndCadence_State : State
 {
-    public BatterieAndCadence_State(BatteriePack pack)
+    public BatterieAndCadence_State(BatterieScene batterieScene)
     {
-        Pack = pack;
+        Scene = batterieScene;
+        Scene.Tick = Tick;
     }
 
-    readonly BatteriePack Pack;
-    RhythmSpecs Specs;
-    MusicSheet MusicSheet;
-    Synchronizer Synchro;
-    CountOffFeedback CountOffFeedBack;
-    Note[] CountOffNotes;
-    MappedBeat[] CountOffBeatmap;
-    BatterieInputAnalyzer Analyzer;
-    BatterieFeedback BatterieFeedback;
+    public BatterieAndCadence_State()
+    {
+        Debug.Log(Sea.WorldMapScene.Io.NearestNPC.Name + " " +
+            Sea.WorldMapScene.Io.NearestNPC.ShipStats.CannonStats.Cannon.Modifier + " " +
+            Sea.WorldMapScene.Io.NearestNPC.ShipStats.CannonStats.Metal.Modifier + " " +
+            Sea.WorldMapScene.Io.NearestNPC.ShipStats.NumOfCannons + " " +
+            Sea.WorldMapScene.Io.NearestNPC.ShipStats.VolleyDamage);
 
-    MuscopaSettings MuscopaSettings;
-    MuscopaAudio MuscopaAudio;
+        Scene =
+            new BatterieScene(
+              npcShip: Sea.WorldMapScene.Io.NearestNPC,
+              playerShip: Sea.WorldMapScene.Io.Ship,
+              tick: Tick,
+              batterieAudio: Audio.Batterie
+        );
+    }
+    // public BatteriePack Pack;
+    readonly BatterieScene Scene;
     bool cadenceStarted = false;
-
     public int Counter { get; private set; }
     bool CountingOff = true;
     bool Playing = false;
-
     int score, cap;
 
     protected override void PrepareState(Action callback)
     {
-        Specs = new MusicTheory.Rhythms.RhythmSpecs()
-        {
-            Time = new MusicTheory.Rhythms.FourFour(),
-            NumberOfMeasures = 4,
-            SubDivisionTier = MusicTheory.Rhythms.SubDivisionTier.D1Only,
-            HasTies = UnityEngine.Random.value > .5f,
-            HasRests = UnityEngine.Random.value > .5f,
-            HasTriplets = false,
-            Tempo = 90
-        };
-        MusicSheet = new MusicSheet()
-        {
-            RhythmSpecs = Specs
-        };
-        _ = Background;
-        MusicSheet.RhythmSpecs.Time.GenerateRhythmCells(MusicSheet);
-        MusicSheet.GetNotes();
-        MusicSheet.DrawRhythms();
-        MusicSheet.BeatMap = MusicSheet.Notes.MapBeats(Specs.Tempo);
-        Synchro = new(Specs.Time.GetQuantizement(), Specs.Tempo);
-        CountOffNotes = CountOff.GetNotes(Specs.Time);
-        CountOffBeatmap = CountOffNotes.MapBeats(Specs.Tempo);
-        CountOffFeedBack = new(Specs.Time.GetCounts());
-        BatterieFeedback = new();
-        Analyzer = new(BatterieFeedback.CreateCard, HandleHit, 5, MusicSheet.BeatMap);
-        Analyzer.SetUp();
 
-        BatterieFeedback.UpdateLoop();
-        CountOffFeedBack.UpdateLoop();
-        Synchro.TickEvent += Tick;
+
         Counter = 1;
         MonoHelper.OnUpdate += SpaceBar;
 
-        MuscopaAudio = new(Data.Volume);
-        MuscopaSettings = NewSettings(CadenceDifficulty.ALL, MusicTheory.Musica.RandomMode(), Genre.Stax);
-
-        Cam.Io.Camera.transform.SetPositionAndRotation(
-            new UnityEngine.Vector3(Cam.Io.Camera.transform.position.x, 15, Cam.Io.Camera.transform.position.z),
-            Quaternion.identity);
-
-        if (Pack.Ship == null)
-        {
-            Pack.Ship = Sea.WorldMapScene.Io.Ship.GO;
-            Pack.NME = Sea.WorldMapScene.Io.NearestNPC.SceneObject.GO;
-
-            // Pack.Ship.transform.SetParent(Cam.Io.Camera.transform);
-            // Pack.NME.transform.SetParent(Cam.Io.Camera.transform);
-
-            Pack.Ship.transform.position = Cam.Io.Camera.transform.position + ((Cam.Io.Camera.transform.forward * 4) - (Cam.Io.Camera.transform.right * 2) - (Cam.Io.Camera.transform.up * 2));
-            Pack.NME.transform.position = Cam.Io.Camera.transform.position + ((Cam.Io.Camera.transform.forward * 4) + (Cam.Io.Camera.transform.right * 2) - (Cam.Io.Camera.transform.up * 2));
-
-            Pack.Ship.transform.LookAt(Cam.Io.Camera.transform);
-            Pack.NME.transform.LookAt(Cam.Io.Camera.transform);
-
-            Pack.NMEFire = Assets.CannonFire;
-            Pack.NMEFire.transform.position = Pack.NME.transform.position + (Vector3.left * .25f);
-            Pack.NMEFire.transform.LookAt(Pack.Ship.transform);
-
-            Pack.ShipFire = Assets.CannonFire;
-            Pack.ShipFire.transform.position = Pack.Ship.transform.position + (Vector3.right * .25f);
-            Pack.ShipFire.transform.LookAt(Pack.NME.transform);
-        }
-
-        GetNewSettings(callback).StartCoroutine();
+        Scene.Initialize();
+        Scene.Pack.GetNewSettings(callback).StartCoroutine();
     }
 
     protected override void EngageState()
     {
-        Synchro.KeepTime();
+        Scene.Pack.Synchro.KeepTime();
     }
 
     protected override void DisengageState()
     {
-        Background.SelfDestruct();
         Debug.Log((float)((float)score / (float)cap));
-        Synchro.TickEvent -= Tick;
-        Synchro.BeatEvent -= Click;
+        Scene.Pack.Synchro.TickEvent -= Tick;
+        Scene.Pack.Synchro.BeatEvent -= Click;
         MonoHelper.OnUpdate -= SpaceBar;
 
-        BatterieFeedback.Running = false;
+        Scene.BatterieFeedback.SelfDestruct();
+        Scene.CountOffFeedBack.SelfDestruct();
         Audio.Batterie.Stop();
-        MuscopaAudio.StopTheCadence();
-        MusicSheet.SelfDestruct();
+        Scene.Pack.MuscopaAudio.StopTheCadence();
+        Scene.Pack.MusicSheet.SelfDestruct();
+
+        Scene.BatterieHUD.PlayerCurrent -= Scene.NPCShip.ShipStats.VolleyDamage;
+        // Debug.Log(DataManager.Io.CharData.GetLevel(Data.Player.CharacterData.DataItem.CurrentHP));
+        DataManager.Io.CharData.SetLevel(
+            Data.Player.CharacterData.DataItem.CurrentHP,
+            DataManager.Io.CharData.GetLevel(Data.Player.CharacterData.DataItem.CurrentHP) - Scene.NPCShip.ShipStats.VolleyDamage);
+
+        if (Scene.Pack.Spammed)
+        {
+            DataManager.Io.CharData.SetLevel(
+                Data.Player.CharacterData.DataItem.CurrentHP,
+                DataManager.Io.CharData.GetLevel(Data.Player.CharacterData.DataItem.CurrentHP) - Scene.NPCShip.ShipStats.VolleyDamage);
+
+            Scene.BatterieHUD.NMECurrent = Scene.BatterieHUD.NMEMax;
+        }
+
     }
 
-    public MuscopaSettings NewSettings(CadenceDifficulty difficulty, RegionalMode shipsRegion, Genre genre)
-    {
-        return new MuscopaSettings(
-            key: MusicTheory.Musica.RandomKey(),
-            genre: genre,
-            scale: MusicalScale.Major,
-            cadence: RegionalMode.Aeolian.RandomMode().RandomCadence(difficulty),
-            extension: Extension.Triad,
-            tempo: genre.GetTempo()
-        );
-    }
 
     void Tick()
     {
         if (CountingOff)
         {
             CountOffTimeEvent();
-            if (++Counter == CountOffBeatmap.Length - 1)
+            if (++Counter == Scene.Pack.CountOffBeatmap.Length - 1)
             {
-                MonoHelper.OnUpdate += Analyzer.Tick;
-                Analyzer.Start();
-                Synchro.BeatEvent += Click;
+                MonoHelper.OnUpdate += Scene.Pack.Analyzer.Tick;
+                Scene.Pack.Analyzer.Start();
+                Scene.Pack.Synchro.BeatEvent += Click;
                 CountingOff = false; Playing = true; Counter = 0;
                 // Audio.Batterie.Miss();
             }
@@ -151,35 +104,36 @@ public class BatterieAndCadence_State : State
 
         if (!cadenceStarted)
         {
-            MuscopaAudio.PlayNewMuscopaPuzzleMusic();
+            Scene.Pack.MuscopaAudio.PlayNewMuscopaPuzzleMusic();
             cadenceStarted = true;
         }
 
         if (Playing)
         {
             BatterieTimeEvent();
-            Playing = !(++Counter >= MusicSheet.BeatMap.Length);
+            Playing = !(++Counter >= Scene.Pack.MusicSheet.BeatMap.Length);
         }
 
         if (!Playing && !CountingOff)
         {
             Audio.Batterie.Stop();
-            Synchro.Stop();
-            MonoHelper.OnUpdate -= Analyzer.Tick;
-            MuscopaAudio.StopTheCadence();
+            Scene.Pack.Synchro.Stop();
+            MonoHelper.OnUpdate -= Scene.Pack.Analyzer.Tick;
+            Scene.Pack.MuscopaAudio.StopTheCadence();
 
             // FadeToState(PuzzleSelector.WeightedRandomPuzzleState(Data.TheoryPuzzleData));
-            Pack.NMEHealth.cur -= (int)(10 * (float)((float)score / (float)cap));
-            SetState(new DialogStart_State(new BatterieIntermission_Dialogue(Pack)));
+            // Scene.NMEHealth.cur -= Scene.Pack.GoodHits * DataManager.ShipData.ShipStats.DamagePotential;
+
+            SetState(new DialogStart_State(new BatterieIntermission_Dialogue(Scene)));
         }
     }
 
     void CountOffTimeEvent()
     {
-        switch (CountOffBeatmap[Counter].NoteFunction)
+        switch (Scene.Pack.CountOffBeatmap[Counter].NoteFunction)
         {
             case NoteFunction.Attack:
-                CountOffFeedBack.ReadCountOff();
+                Scene.CountOffFeedBack.ReadCountOff();
                 Audio.Batterie.PlayClick();
                 break;
 
@@ -191,7 +145,7 @@ public class BatterieAndCadence_State : State
 
     void BatterieTimeEvent()
     {
-        switch (MusicSheet.BeatMap[Counter].NoteFunction)
+        switch (Scene.Pack.MusicSheet.BeatMap[Counter].NoteFunction)
         {
             case NoteFunction.Attack:
                 Audio.Batterie.PlaySnareRoll();
@@ -204,7 +158,16 @@ public class BatterieAndCadence_State : State
             case NoteFunction.Hold:
                 break;
         }
-        if (UnityEngine.Random.value < .04f) Pack.NMEFire.Play();
+        if (UnityEngine.Random.value < .04f)
+        {
+            // Scene.BatterieHUD.PlayerCurrent -= Scene.NPCShip.ShipStats.DamagePotential;
+            // DataManager.Io.CharData.SetLevel(
+            //     Data.Player.CharacterData.DataItem.CurrentHP,
+            //     DataManager.Io.CharData.DataItems[Data.Player.CharacterData.DataItem.CurrentHP] - Scene.NPCShip.ShipStats.DamagePotential);
+
+            // UnityEngine.Debug.Log("Damage recieved: " + Scene.NPCShip.ShipStats.DamagePotential);
+            Scene.NMEFire.Play();
+        }
     }
 
     void Click()
@@ -217,11 +180,11 @@ public class BatterieAndCadence_State : State
         switch (action)
         {
             case MouseAction.LUp:
-                Analyzer.InputUpAction();
+                Scene.Pack.Analyzer.InputUpAction();
                 break;
 
             case MouseAction.LDown:
-                Analyzer.InputDownAction();
+                Scene.Pack.Analyzer.InputDownAction();
                 break;
         }
     }
@@ -230,11 +193,11 @@ public class BatterieAndCadence_State : State
     {
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Analyzer.InputDownAction();
+            Scene.Pack.Analyzer.InputDownAction();
         }
         else if (Input.GetKeyUp(KeyCode.Space))
         {
-            Analyzer.InputUpAction();
+            Scene.Pack.Analyzer.InputUpAction();
 
         }
 
@@ -260,7 +223,7 @@ public class BatterieAndCadence_State : State
             case GamePadButton.R1_Release:
             case GamePadButton.L2_Release:
             case GamePadButton.R2_Release:
-                Analyzer.InputUpAction(); break;
+                Scene.Pack.Analyzer.InputUpAction(); break;
 
             case GamePadButton.Up_Press:
             case GamePadButton.Down_Press:
@@ -274,80 +237,36 @@ public class BatterieAndCadence_State : State
             case GamePadButton.R1_Press:
             case GamePadButton.L2_Press:
             case GamePadButton.R2_Press:
-                Analyzer.InputDownAction(); break;
+                Scene.Pack.Analyzer.InputDownAction(); break;
         }
     }
 
-    private void HandleHit(Batterie.Hit hit)
-    {
-        cap++;
-        switch (hit)
-        {
-            case Hit.Hit:
-                score++;
-                Audio.Batterie.Hit();
-                Pack.ShipFire.Play();
-                break;
-            case Hit.Miss:
-                score--;
-                Audio.Batterie.Miss();
-                break;
-            case Hit.BadHit:
-                score++;
-                Audio.Batterie.MissStick();
-                Pack.NMEFire.Play();
-                break;
-            case Hit.Break:
-                break;
-        }
-    }
-
-    IEnumerator GetNewSettings(Action callback)
-    {
-        AudioClip[] chords = new AudioClip[1];
-        AudioClip[] basses = new AudioClip[1];
-
-        for (int i = 0; i < 1; i++)
-        {
-            chords[i] = MuscopaAssets.GetAudioClip(MuscopaSettings.Chords[i].Genre, MuscopaSettings.Chords[i].Axe, (int)MuscopaSettings.Chords[i].Tempo);
-            basses[i] = MuscopaAssets.GetAudioClip(MuscopaSettings.Basses[i].Genre, MuscopaSettings.Basses[i].Axe, (int)MuscopaSettings.Basses[i].Tempo);
-        }
-
-        AudioClip[] drums = new AudioClip[2]
-        {
-            MuscopaAssets.GetDrumAC(MuscopaSettings.Genre, (int)MuscopaSettings.Tempo, 1),
-            MuscopaAssets.GetDrumAC(MuscopaSettings.Genre, (int)MuscopaSettings.Tempo, 2)
-        };
-
-        while (chords[0].loadState != AudioDataLoadState.Loaded)
-        {
-            Debug.Log("Loading");
-            yield return null;
-        }
-        while (basses[0].loadState != AudioDataLoadState.Loaded)
-        {
-            yield return null;
-        }
-
-        MuscopaAudio.LoadNewMuscopaSettings(new MuscopaPuzzle_AudioManager_Settings
-        {
-            StartTimes = MuscopaSettings.StartTimes,
-
-            BPM = (int)MuscopaSettings.Tempo,
-
-            CountsPerClipChords = 4,
-            ChordClips = chords,
-
-            CountsPerClipBass = 4,
-            BassClips = basses,
-
-            CountsPerClipDrums = 16,
-            DrumClips = drums,
-        });
-
-
-        callback();
-    }
+    // private void HandleHit(Batterie.Hit hit)
+    // {
+    //     cap++;
+    //     switch (hit)
+    //     {
+    //         case Hit.Hit:
+    //             score++;
+    //             Pack.GoodHits++;
+    //             Audio.Batterie.Hit();
+    //             Pack.ShipFire.Play();
+    //             break;
+    //         case Hit.Miss:
+    //             score--;
+    //             Pack.MissedHits++;
+    //             Audio.Batterie.Miss();
+    //             break;
+    //         case Hit.BadHit:
+    //             score--;
+    //             Pack.ErroneousAttacks++;
+    //             Audio.Batterie.MissStick();
+    //             Pack.NMEFire.Play();
+    //             break;
+    //         case Hit.Break:
+    //             break;
+    //     }
+    // }
 
     //RegionalMode GetShipRegion()
     //{
@@ -356,12 +275,5 @@ public class BatterieAndCadence_State : State
 
     public static Genre RandomGenre() => (Genre)UnityEngine.Random.Range(0, Count());
     public static int Count() => Enum.GetNames(typeof(Genre)).Length;
-
-    Card _background;
-    Card Background => _background ??= new Card(nameof(Background), null)
-        .SetImagePosition(Vector2.zero)
-        .SetImageSize(new Vector2(Cam.Io.UICamera.scaledPixelWidth * .8f, Cam.Io.UICamera.scaledPixelHeight * .8f))
-        .SetCanvasSortingOrder(0)
-        .SetImageColor(new Color(0, 0, 0, .25f));
 
 }

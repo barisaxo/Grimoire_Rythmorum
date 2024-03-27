@@ -11,11 +11,12 @@ public class SeaToDialogueTransition_State : State
 
     protected override void EngageState()
     {
-        WorldMapScene.Io.HUD.Hud.GO.SetActive(false);
-        WorldMapScene.Io.Ship.ConfirmPopup.GO.SetActive(false);
-        Audio.BGMusic.Pause();
         Audio.Ambience.Pause();
-
+        Audio.BGMusic.Pause();
+        Audio.SFX.PlayOneShot(Assets.AlertHalfDim);
+        Sea.WorldMapScene.Io.HUD.Disable();
+        Sea.WorldMapScene.Io.Ship.ConfirmPopup.GO.SetActive(false);
+        Sea.WorldMapScene.Io.MiniMap.Card.GO.SetActive(false);
         SetState(new DialogStart_State(Dialogue));
     }
 

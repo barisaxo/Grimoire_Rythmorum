@@ -24,7 +24,7 @@ public class BatterieFeedback
         Cards.Add(new FloatyCard(Card, r, 0));
     }
 
-    public bool Running;
+    bool Running;
     public void UpdateLoop()
     {
         Running = true;
@@ -56,13 +56,21 @@ public class BatterieFeedback
         }
     }
 
-    void SelfDestruct()
+    public void SelfDestruct()
     {
-        for (int i = 0; i < Cards.Count; i++)
+        Destruct().StartCoroutine();
+        IEnumerator Destruct()
         {
-            UnityEngine.Object.Destroy(Cards[i].Card.GO);
+            Running = false;
+
+            yield return null;
+
+            for (int i = 0; i < Cards.Count; i++)
+            {
+                UnityEngine.Object.Destroy(Cards[i].Card.GO);
+            }
+            Cards.Clear();
         }
-        Cards.Clear();
     }
 
     class FloatyCard

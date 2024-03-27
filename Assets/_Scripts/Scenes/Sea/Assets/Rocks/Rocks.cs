@@ -10,7 +10,7 @@ namespace Sea
             RocksPrefab = Assets.Rocks;
             TF.SetParent(WorldMapScene.Io.TheSea.transform);
             Collidable = new RockCollision(RocksPrefab.Col);
-            Interactable = new NoInteraction();
+            Interactable = IInteractable.Null;
             Triggerable = new NotTriggerable();
             UpdatePosition = new UpdateRockPosition();
             Telemeter = new RockTelemetry();
@@ -31,5 +31,10 @@ namespace Sea
         public IUpdatePosition UpdatePosition { get; private set; }
         public IInstantiable Instantiator { get; private set; }
         public IDescription Description { get; private set; }
+        public IInventoriable Inventoriable { get; } = new NotInventoriable();
+        public IQuestable Questable => new NotQuestable();
+        public IDifficulty Difficulty { get; } = new NoDifficulty();
     }
+
+
 }

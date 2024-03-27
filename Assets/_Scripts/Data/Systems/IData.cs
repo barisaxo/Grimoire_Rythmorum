@@ -18,6 +18,7 @@ namespace Data
         public void DecreaseLevel(DataEnum item);
         public void SetLevel(DataEnum item, int level);
         public IPersistentData PersistentData { get; }
+        public bool InventoryIsFull(int i);
         // public string FileName { get; }
         // public IData TryLoadData(IData data);
         // public void Save();

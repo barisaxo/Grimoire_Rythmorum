@@ -45,7 +45,10 @@ public static class SeaHUDSystems
     public static void Hide(this HUD hud, float t)
     {
         Color c = new(1, 1, 1, t);
-        foreach (Card card in hud.HidableHud) card.SetImageColor(c).SetTextColor(c);
+        foreach (Card card in hud.HidableHud)
+            card.SetImageColor(
+                    new Color(card.Image.color.r, card.Image.color.g, card.Image.color.b, t))
+                .SetTextColor(c);
     }
 
     public static HUD SetNorthToInteract(this HUD hud)
@@ -62,16 +65,18 @@ public static class SeaHUDSystems
         return hud;
     }
 
-    public static void UpdateCoords(this HUD hud, Vector2Int globalCoord, int globalMapSize, Vector2Int regionCoord)
+    public static void UpdateCoords(this HUD hud, string latLongs)
     {
-        hud.CoordText.TextString =
-           Math.Round(Mathf.Abs((float)((float)(globalMapSize * .25f) - (float)(globalCoord.y * .5f))), 2).ToString() +
-           (globalCoord.y > (globalMapSize * .5f) ? "ºN" : "ºS")
-            + " : " +
-           Math.Round(Mathf.Abs((float)((float)(globalMapSize * .5f) - globalCoord.x)), 2).ToString() +
-           (globalCoord.x > (globalMapSize * .5f) ? "ºE" : "ºW")
-        //    + "\n" + regionCoord.x + " : " + regionCoord.y
-           ;
+        hud.CoordText.TextString = latLongs;
+    }
+
+    public static void UpdateHealthBar(this HUD hud, int cur, int max)
+    {
+        hud.HealthBar.SetImageSize(new Vector2((float)((float)cur / (float)max) * 1.6f, .2f))
+            .SetImageColor(new Color(1f - (float)((float)cur / (float)max), (float)((float)cur / (float)max), 0))
+            .SetTextString(cur + "/" + max);
+        ;
+
     }
 
     public static void BlipRegionUpdate(this HUD hud, MusicTheory.RegionalMode region)

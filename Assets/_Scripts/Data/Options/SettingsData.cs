@@ -60,6 +60,7 @@ namespace Data.Options
             PersistentData.Save(this);
         }
 
+        public bool InventoryIsFull(int Space) => false;
 
         [System.Serializable]
         public class DataItem : DataEnum
@@ -98,9 +99,10 @@ namespace Data.Options
         public static SettingsData GetData()
         {
             SettingsData data = new();
-            var loadData = data.PersistentData.TryLoadData();
-            if (loadData is null) return data;
-            data = (SettingsData)loadData;
+            if (data.PersistentData.TryLoadData() is not SettingsData loadData) return data;
+            for (int i = 0; i < data.DataItems.Length; i++)
+                try { data.SetLevel(data.DataItems[i], loadData.GetLevel(data.DataItems[i])); }
+                catch { }
             return data;
         }
 

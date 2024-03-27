@@ -7,13 +7,14 @@ namespace Sea
 {
     public class Fish : ISceneObject
     {
-        public Fish(State currentState, FishData fishData, ShipData shipData, IMAFish fish)
+        public Fish(State currentState, DataManager data)
         {
-            IMAFish = fish;
+            Difficulty = new FishDifficultySetter(data);
+            IMAFish = Assets.SailFishPrefab;//todo difficultylevel switch
             FishType = IMAFish.FishType;
             TF.SetParent(WorldMapScene.Io.TheSea.transform);
             Collidable = new NotCollidable(IMAFish.Col);
-            Interactable = new FishingInteraction(currentState, fishData, shipData, this);
+            Interactable = new FishingInteraction(currentState, data.FishData, data.ShipData, this);
             Triggerable = new NotTriggerable();
             UpdatePosition = new UpdateFishPosition();
             Telemeter = new FishTelemetry();
@@ -22,6 +23,19 @@ namespace Sea
                 Vector3.one,
                 new Vector3(0, Random.Range(0f, 360f), 0));
             Description = new SceneObjectDescription("Sailfish");
+
+            Inventoriable = new Inventoriable(new (Data.IData Data, DataEnum DataItem, int Amount)[]{
+                (data.FishData, Difficulty.DifficultyLevel, 1),
+                // (data.FishData,region switch
+                //  {
+                //      MusicTheory.RegionalMode.Ionian or MusicTheory.RegionalMode.Dorian => FishData.DataItem.SailFish,
+                //      MusicTheory.RegionalMode.Lydian or MusicTheory.RegionalMode.MixoLydian => FishData.DataItem.Carp,
+                //      MusicTheory.RegionalMode.Phrygian or MusicTheory.RegionalMode.Aeolian => FishData.DataItem.Sturgeon,
+                //      MusicTheory.RegionalMode.Locrian => FishData.DataItem.Tuna,
+                //      _ => FishData.DataItem.Shark,
+                //  }, 1),
+                (data.PlayerData, Data.Player.PlayerData.DataItem.Patterns, 10 * (Difficulty.DifficultyLevel.Id + 1)) });
+
         }
 
         public IMAFish IMAFish;
@@ -36,6 +50,9 @@ namespace Sea
         public IDescription Description { get; private set; }
         public IInstantiable Instantiator { get; private set; }
         public FishData.DataItem FishType;
+        public IInventoriable Inventoriable { get; private set; }
+        public IQuestable Questable => new NotQuestable();
+        public IDifficulty Difficulty { get; }
     }
 
     public interface IMAFish

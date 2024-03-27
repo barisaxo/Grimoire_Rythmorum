@@ -1,4 +1,5 @@
 using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Sea;
@@ -6,6 +7,25 @@ using Sea.Maps;
 
 public static class SeaMapSystems
 {
+    public static void AddToMap(this Sea.Maps.WorldMap map, Vector2Int loc, CellType cellType)
+    {
+        Region region = map.Regions[map.RegionIndexFromGlobalCoord(loc)];
+        Debug.Log(region.Coord + " " + region.RegionalMode);
+        List<Vector2Int> occupied = new();
+        foreach (Cell cell in region.Cells)
+        {
+            occupied.Add(cell.Coord);
+        }
+        Vector2Int rand = loc.Smod(map.RegionSize);
+        for (int i = 0; i < 10; i++)
+        {
+            if (occupied.Contains(rand)) rand += Vector2Int.one;
+            else break;
+        }
+        Debug.Log(rand);
+        region.Cells.Add(new Cell(rand) { Type = cellType });
+    }
+
     public static bool IsInRange(this Sea.WorldMapScene sea, Vector3Int v) =>
     v.x > -1 && v.x < sea.Map.RegionSize && v.z > -1 && v.z < sea.Map.RegionSize;
 
@@ -84,6 +104,14 @@ public static class SeaMapSystems
         return regions.ToArray();
     }
 
+    public static string GlobalCoordsToLatLongs(this Vector2Int globalCoord, int globalMapSize)
+    {
+        return Math.Round(Mathf.Abs((float)((float)(globalMapSize * .25f) - (float)(globalCoord.y * .5f))), 2).ToString() +
+           (globalCoord.y > (globalMapSize * .5f) ? "ºN" : "ºS")
+            + " : " +
+           Math.Round(Mathf.Abs((float)((float)(globalMapSize * .5f) - globalCoord.x)), 2).ToString() +
+           (globalCoord.x > (globalMapSize * .5f) ? "ºE" : "ºW");
+    }
 
     public static Color GetSeaColorFromRegion(this Sea.Maps.WorldMap map, R region) => region switch
     {

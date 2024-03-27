@@ -20,6 +20,7 @@ namespace Data.Main
         public void DecreaseLevel(DataEnum item) { }
         public DataEnum[] DataItems => Enumeration.All<DataItem>();
         readonly DataManager DataManager;
+        public bool InventoryIsFull(int Space) => false;
 
         public MainMenuData(DataManager dataManager)
         {

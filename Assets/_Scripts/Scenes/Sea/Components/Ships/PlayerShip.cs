@@ -36,13 +36,24 @@ public class PlayerShip
     public Vector3 SeaPos;
     public Quaternion SeaRot;
 
-    public NPCShipType ShipType;
+    // public NPCShipType ShipType;
     public GameObject Parent;
     public GameObject GO;
     public CapsuleCollider CapsuleCollider;
     private readonly int MapSize;
     private readonly int RegionSize;
     private readonly int GlobalSize;
+
+    public ShipStats.ShipStats ShipStats = new(
+       new ShipStats.HullStats(
+           hullData: Data.Equipment.HullData.Schooner,
+           timberType: Data.Inventory.MaterialsData.DataItem.Oak),
+       new ShipStats.CannonStats(
+           Data.Equipment.CannonData.Culverin,
+           Data.Inventory.MaterialsData.DataItem.CastIron),
+       numOfCannons: 32
+   );
+
 
     public PlayerShip(Sea.WorldMapScene scene)
     {
@@ -92,12 +103,12 @@ public class PlayerShip
 
 }
 
-public static class PlayerShipSystems
-{
+// public static class PlayerShipSystems
+// {
 
-    public static void UpdateShipCoords(this PlayerShip player, Sea.WorldMapScene scene)
-    {
-        scene.HUD.UpdateCoords(player.GlobalCoord, scene.Map.GlobalSize, player.RegionCoord);
-    }
+//     public static void UpdateShipCoords(this PlayerShip player, Sea.WorldMapScene scene)
+//     {
+//         scene.HUD.UpdateCoords(player.GlobalCoord, scene.Map.GlobalSize);
+//     }
 
-}
+// }

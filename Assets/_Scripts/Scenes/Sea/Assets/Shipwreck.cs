@@ -20,6 +20,7 @@ public class Shipwreck : ISceneObject
     public Transform TF => RocksPrefab.transform;
     public GameObject GO => RocksPrefab.gameObject;
 
+    public IQuestable Questable => new NotQuestable();
     public ITelemeter Telemeter { get; private set; }
     public ICollidable Collidable { get; private set; }
     public IInteractable Interactable { get; private set; }
@@ -27,4 +28,6 @@ public class Shipwreck : ISceneObject
     public IUpdatePosition UpdatePosition { get; private set; }
     public IInstantiable Instantiator { get; private set; }
     public IDescription Description { get; private set; }
+    public IInventoriable Inventoriable { get; } = new NotInventoriable();
+    public IDifficulty Difficulty { get; } = new NoDifficulty();
 }

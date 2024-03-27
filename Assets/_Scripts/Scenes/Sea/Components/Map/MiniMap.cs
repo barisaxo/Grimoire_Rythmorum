@@ -34,6 +34,14 @@ namespace Sea.Maps
             Resources.UnloadUnusedAssets();
         }
 
+        public void Hide()
+        {
+            Card.GO.SetActive(false);
+        }
+        public void Show()
+        {
+            Card.GO.SetActive(true);
+        }
     }
 
     public static class MiniMapSystems

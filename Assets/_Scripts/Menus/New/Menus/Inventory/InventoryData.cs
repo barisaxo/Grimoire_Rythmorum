@@ -19,6 +19,7 @@ namespace Data.Inventory
         public void IncreaseLevel(DataEnum item) { }
         public void DecreaseLevel(DataEnum item) { }
         public DataEnum[] DataItems => Enumeration.All<DataItem>();
+        public bool InventoryIsFull(int Space) => false;
 
         public class DataItem : DataEnum
         {
@@ -31,6 +32,7 @@ namespace Data.Inventory
             public static DataItem Gramophones = new(4, nameof(Gramophones).CapsCase());
             public static DataItem Lighthouses = new(5, nameof(Lighthouses).CapsCase());
             public static DataItem Ship = new(6, nameof(Ship).CapsCase());
+            public static DataItem Player = new(7, nameof(Player).CapsCase());
         }
         public IPersistentData PersistentData { get; } = new NotPersistentData();
     }

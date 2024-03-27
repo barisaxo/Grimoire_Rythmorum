@@ -10,6 +10,8 @@ namespace Data.Options
         public void DecreaseLevel(DataEnum item) { }
         public DataEnum[] DataItems => Enumeration.All<DataItem>();
 
+        public bool InventoryIsFull(int Space) => false;
+
         public class DataItem : DataEnum
         {
             public DataItem() : base(0, "") { }

@@ -198,6 +198,10 @@ public partial class Assets
     public static Sea.BottleWithScrollPrefab _bottle => Resources.Load<GameObject>("Prefabs/Sea/BottleWithScroll/BottleWithScrollPrefab").GetComponent<Sea.BottleWithScrollPrefab>();
     public static Sea.BottleWithScrollPrefab Bottle => Object.Instantiate(_bottle);
 
+
+    public static GramophonePrefab _gramo => Resources.Load<GameObject>("Prefabs/Sea/Gramophone/Gramophone").GetComponent<GramophonePrefab>();
+    public static GramophonePrefab Gramo => Object.Instantiate(_gramo);
+
     public static AudioClip SailAmbience => Resources.Load<AudioClip>("Audio/SFX/SailAmbience");
 
     public static Sprite Compass => Resources.Load<Sprite>("Sprites/Compass");

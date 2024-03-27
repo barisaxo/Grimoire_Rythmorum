@@ -34,10 +34,11 @@ namespace Menus.Inventory
             new QuestsMenu(DataManager.QuestsData),
             new MaterialsMenu(DataManager.MaterialsData),
             new FishMenu(DataManager.FishData),
-            new StarChartsMenu(DataManager.starChartsData, ConsequentState),
+            new StarChartsMenu(DataManager.starChartsData, DataManager.QuestsData, ConsequentState, this),
             new GramophoneMenu(DataManager.GramophoneData),
             new LighthousesMenu(DataManager.LighthousesData),
             new ShipMenu(DataManager.ShipData),
+            new PlayerMenu(DataManager.PlayerData),
         };
 
         public IMenuLayout Layout { get; } = new ScrollingHeader();

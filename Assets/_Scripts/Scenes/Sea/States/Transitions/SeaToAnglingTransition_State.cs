@@ -7,8 +7,9 @@ public class SeaToAnglingTransition_State : State
 
     protected override void EngageState()
     {
-        Sea.WorldMapScene.Io.HUD.Hide(-2);
+        Sea.WorldMapScene.Io.HUD.Disable();
         Sea.WorldMapScene.Io.Ship.ConfirmPopup.GO.SetActive(false);
+        Sea.WorldMapScene.Io.MiniMap.Card.GO.SetActive(false);
         Audio.BGMusic.Pause();
         Audio.Ambience.Pause();
 

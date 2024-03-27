@@ -26,7 +26,6 @@ public class TheoryPuzzleData
         {
             if (stat.Specs.Equals(puzzleStat.Specs))
             {
-                //Debug.Log("Specs equal eachother");
                 containsStat = true;
                 stat.AddStats(puzzleStat);
                 break;

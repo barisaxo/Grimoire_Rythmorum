@@ -3,17 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Data.Inventory;
+using Data;
 
 
-public class SeaToBottlePickUp_State : State
+public class SeaToItemPickUp_State : State
 {
     readonly Sea.ISceneObject Obj;
     readonly State SubsequentState;
+    readonly IData iData;
+    readonly ShipData.DataItem DataItem;
 
-    public SeaToBottlePickUp_State(State subsequentState, Sea.ISceneObject obj)
+    public SeaToItemPickUp_State(State subsequentState, IData data, ShipData.DataItem dataItem, Sea.ISceneObject obj)
     {
         SubsequentState = subsequentState;
         Obj = obj;
+        iData = data;
+        DataItem = dataItem;
     }
 
     protected override void PrepareState(Action callback)
@@ -24,17 +29,19 @@ public class SeaToBottlePickUp_State : State
 
     protected override void EngageState()
     {
-        if (Data.starChartsData.InventoryIsFull(Data.ShipData.GetLevel(ShipData.DataItem.Bottle)))
+        if (iData.InventoryIsFull(DataManager.ShipData.GetLevel(DataItem)))
         {
-            SetState(new DialogStart_State(new InventoryIsFull_Dialogue(new BottlePickupToSea_State(SubsequentState))));
+            SetState(new DialogStart_State(new InventoryIsFull_Dialogue(new ItemPickupToSea_State(SubsequentState))));
             return;
         }
 
-        Data.starChartsData.IncreaseLevel(StarChartsData.DataItem.NotesT);//todo difficulty levels
+        Obj.Questable.QuestComplete();
+        Obj.Inventoriable.AddRewards();
+        // Data.starChartsData.IncreaseLevel(StarChartsData.DataItem.Inverted7thChordsT);//todo difficulty levels
 
         SetState(new DisplayItem_State(
             Obj.Instantiator.ToInstantiate,
-            new DialogStart_State(new FoundItem_Dialogue(Obj, new BottlePickupToSea_State(SubsequentState))),
+            new DialogStart_State(new FoundItem_Dialogue(Obj.Inventoriable, new ItemPickupToSea_State(SubsequentState))),
             clearCell: true));
     }
 

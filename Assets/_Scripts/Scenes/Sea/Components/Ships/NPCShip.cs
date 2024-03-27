@@ -6,15 +6,20 @@ namespace Sea
     public class NPCShip
     {
         public ISceneObject SceneObject;
+        public IMAShip Ship;
 
         public void InstantiateNewSceneObject(State state)
         {
-            SceneObject = ShipType switch
+            switch (ShipType)
             {
-                NPCShipType.Trade => new TradeShip(state),
-                NPCShipType.Pirate => new PirateShip(state, this),
-                _ => null,
-            };
+                case NPCShipType.Trade:
+                    TradeShip ship = new(state);
+                    SceneObject = ship;
+                    Ship = ship.Ship;
+                    break;
+
+                default: throw new System.NotImplementedException();
+            }
         }
 
         public void DestroySceneObject()
@@ -34,7 +39,17 @@ namespace Sea
         public float NewRotY;
 
         public (float amp, float period, float offset) Sway;
-        public IMAShip ImAShip;
+        // public IMAShip ImAShip;
+        public ShipStats.ShipStats ShipStats => Ship.ShipStats;
+        // new(
+        //     new ShipStats.HullStats(
+        //         Data.Equipment.HullData.Frigate,
+        //         Data.Inventory.MaterialsData.DataItem.Oak),
+        //     new ShipStats.CannonStats(
+        //         Data.Equipment.CannonData.Culverin,
+        //         Data.Inventory.MaterialsData.DataItem.CastIron),
+        //     numOfCannons: 32
+        // );
 
         public NPCShipType ShipType;
         public Vector2Int StartNode;
@@ -56,8 +71,9 @@ namespace Sea
         public float StuckTimer = Random.Range(1.1f, 5f);
         public float StuckDelta;
 
-        public const int HideTime = 300;
-        public bool Hiding;
+
+        public readonly int HideTime = Random.Range(10, 12);
+        // public bool Hiding => HideTimer > 0;
         public float HideTimer;
 
         public MusicTheory.RegionalMode RegionalMode = (MusicTheory.RegionalMode)Random.Range(0, 7);
@@ -103,7 +119,7 @@ namespace Sea
     {
         public TradeShip(State state)
         {
-            var obj = Assets.Frigate;
+            Sloop obj = Assets.Sloop;
             Ship = obj;
             GO = obj.gameObject;
             Collidable = new ShipCollision(obj._hull.Col);
@@ -125,13 +141,16 @@ namespace Sea
         public IUpdatePosition UpdatePosition { get; private set; }
         public IInstantiable Instantiator { get; private set; }
         public IDescription Description { get; private set; }
+        public IInventoriable Inventoriable { get; } = new NotInventoriable();
+        public IQuestable Questable => new NotQuestable();
+        public IDifficulty Difficulty { get; } = new NoDifficulty();
     }
 
     public class PirateShip : ISceneObject
     {
         public PirateShip(State currentState, NPCShip ship)
         {
-            var obj = Assets.Frigate;
+            var obj = Assets.Schooner2;
             Ship = obj;
             GO = obj.gameObject;
 
@@ -153,6 +172,9 @@ namespace Sea
         public IUpdatePosition UpdatePosition { get; private set; }
         public IInstantiable Instantiator { get; private set; }
         public IDescription Description { get; private set; }
+        public IInventoriable Inventoriable { get; } = new NotInventoriable();
+        public IQuestable Questable => new NotQuestable();
+        public IDifficulty Difficulty { get; } = new NoDifficulty();
     }
 
     public enum NPCShipType { Trade, Pirate, }

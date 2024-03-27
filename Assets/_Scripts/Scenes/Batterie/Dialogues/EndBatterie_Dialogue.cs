@@ -2,7 +2,7 @@ using Dialog;
 
 public class EndBatterie_Dialogue : Dialogue
 {
-    readonly int _gold, _rations, _damage, _mats;
+    readonly int _gold, _rations, _mats;
     readonly bool _map;
     readonly BatterieResultType Result;
 
@@ -10,14 +10,12 @@ public class EndBatterie_Dialogue : Dialogue
         int gold,
         int mats,
         int rations,
-        int damage,
         bool map,
         BatterieResultType result)
     {
         _gold = gold;
         _mats = mats;
         _rations = rations;
-        _damage = damage;
         _map = map;
         Result = result;
         Speaker = Speaker.Pino;
@@ -46,7 +44,7 @@ public class EndBatterie_Dialogue : Dialogue
         return base.Initiate();
     }
 
-    Line WonWithMap => new Line(Damage + Found + Gold + Mats + Rations + Map, MapLine)
+    Line WonWithMap => new Line(Found + Gold + Mats + Rations + Map, MapLine)
         .SetSpeaker(Speaker)
         ;
 
@@ -54,23 +52,23 @@ public class EndBatterie_Dialogue : Dialogue
         .SetSpeaker(Speaker)
         ;
 
-    Line WonWithOutMap => new Line(Damage + Found + Gold + Mats + Rations, new SeaScene_State())
+    Line WonWithOutMap => new Line(Found + Gold + Mats + Rations, new SeaScene_State())
         .SetSpeaker(Speaker)
         ;
 
-    Line FledLine => new Line("We're safe now Cap.\n" + Damage, new SeaScene_State())
+    Line FledLine => new Line("We're safe now Cap.\n", new SeaScene_State())
         .SetSpeaker(Speaker)
         ;
 
-    Line NMEEscapedLine => new Line("They got away Cap!\n" + Damage, new SeaScene_State())
+    Line NMEEscapedLine => new Line("They got away Cap!\n", new SeaScene_State())
         .SetSpeaker(Speaker)
         ;
 
-    Line NMESurrendered => new Line(Damage + Found + Gold + Mats + Rations, new SeaScene_State())
+    Line NMESurrendered => new Line(Found + Gold + Mats + Rations, new SeaScene_State())
         .SetSpeaker(Speaker)
         ;
 
-    Line SurrenderedToNME => new Line(Damage + Lost + Gold + Mats + Rations, new SeaScene_State())
+    Line SurrenderedToNME => new Line(Lost + Gold + Mats + Rations, new SeaScene_State())
         .SetSpeaker(Speaker)
         ;
 
@@ -83,7 +81,7 @@ public class EndBatterie_Dialogue : Dialogue
         ;
 
 
-    string Damage => "Our ship took " + _damage + " damage.\n";
+    // string Damage => "Our ship took " + _damage + " damage.\n";
     string Lost => "We lost ";
     string Found => "We found ";
     string Gold => _gold + " gold, ";

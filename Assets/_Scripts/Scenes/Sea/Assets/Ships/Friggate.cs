@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class Frigate : MonoBehaviour, Sea.IMAShip
 {
+    // void Awake() { NumOfCannons = UnityEngine.Random.Range(16, 33); }
+
     [Header(nameof(Hull))]
     [SerializeField] private Hull Hull;
     [Space(10)]
@@ -13,16 +15,16 @@ public class Frigate : MonoBehaviour, Sea.IMAShip
     [HideInInspector]
     public int NumOfCannons
     {
-        get => _numOfCannons;
+        get => _numOfCannons < 16 ? _numOfCannons = NumOfCannons = UnityEngine.Random.Range(16, 33) : _numOfCannons;
         set
         {
-            if (value < 16 || value > 32) return;
+            if (value < 16 || value > 32) throw new ArgumentOutOfRangeException(value.ToString());
             _numOfCannons = value;
             for (int i = 0; i < Cannons.Length; i++)
                 Cannons[i].gameObject.SetActive(i < value);
         }
     }
-    private int _numOfCannons = 16;
+    private int _numOfCannons = 0;
 
     [Header(nameof(Rig))]
     [SerializeField] private Rig FrigateRig;
@@ -62,5 +64,15 @@ public class Frigate : MonoBehaviour, Sea.IMAShip
     public event Action Interaction;
     public Transform Transform => _hull.transform;
 
+    private ShipStats.ShipStats _shipStats;
+    public ShipStats.ShipStats ShipStats => _shipStats ??= new(
+        new ShipStats.HullStats(
+            Data.Equipment.HullData.Frigate,
+            Data.Inventory.MaterialsData.DataItem.Oak),
 
+        new ShipStats.CannonStats(
+            Data.Equipment.CannonData.Culverin,
+            Data.Inventory.MaterialsData.DataItem.CastIron),
+        numOfCannons: NumOfCannons
+    );
 }

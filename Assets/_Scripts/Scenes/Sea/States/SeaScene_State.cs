@@ -21,9 +21,12 @@ public class SeaScene_State : State
 
     protected override void PrepareState(Action callback)
     {
+        Fade = false;
         _ = Scene;
-        Scene.HUD.Hud.GO.SetActive(true);
+        Scene.HUD.Enable();
         Scene.HUD.Show();
+        Scene.Ship.ConfirmPopup.GO.SetActive(true);
+        Scene.MiniMap.Card.GO.SetActive(true);
         CameraFollow = new(Scene.Ship.Parent.transform)
         {
             LockYPos = true,
@@ -59,9 +62,14 @@ public class SeaScene_State : State
             }
         }
 
+        Scene.HUD.UpdateHealthBar(
+            DataManager.CharData.GetLevel(Data.Player.CharacterData.DataItem.CurrentHP),
+            DataManager.CharData.GetLevel(Data.Player.CharacterData.DataItem.MaxHP));
         Scene.HUD.Hud.GO.SetActive(true);
 
-        _ = Scene.UpdateMap(this, Data, ShipVelocity);
+        _ = Scene.UpdateMap(this, DataManager, ShipVelocity);
+
+
         base.PrepareState(callback);
     }
 
@@ -126,7 +134,7 @@ public class SeaScene_State : State
         else if (right) ShipVelocity.x = Mathf.Lerp(ShipVelocity.x, 1, Time.fixedDeltaTime);
         else ShipVelocity.x = Mathf.Lerp(ShipVelocity.x, 0, Time.fixedDeltaTime);
 
-        ShipVelocity = Scene.UpdateMap(this, Data, ShipVelocity);
+        ShipVelocity = Scene.UpdateMap(this, DataManager, ShipVelocity);
 
         // if (TimeSinceLastL < 1.5f) { Scene.HUD.Hide(TimeSinceLastL); }
         // else { Scene.HUD.Show(); }
@@ -136,7 +144,13 @@ public class SeaScene_State : State
 
     protected override void NorthPressed()
     {
-        SetState(new SeaToMenuTransition_State(new Menus.Inventory.InventoryMenu(Data, this)));
+        SetState(new SeaToMenuTransition_State(
+            new Menus.Inventory.InventoryMenu(DataManager,
+                new CameraPan_State(
+                    subsequentState: this,
+                    pan: Cam.StoredCamRot = Cam.Io.Camera.transform.rotation.eulerAngles,
+                    strafe: Cam.StoredCamPos = Cam.Io.Camera.transform.position,
+                    speed: 3))));
         // SetState(
         // SetState(new CameraPan_State(
         //     new InventoryMenu_State<
@@ -161,6 +175,7 @@ public class SeaScene_State : State
         if (Scene.NearestNPC is not null &&
             Scene.NearestNPC.SceneObject.Interactable is not NoInteraction)
         {
+            Scene.NearestNPC.HideTimer = Scene.NearestNPC.HideTime;
             SetState(Scene.NearestNPC.SceneObject.Interactable.SubsequentState);
             return;
         }
@@ -171,7 +186,15 @@ public class SeaScene_State : State
 
     protected override void StartPressed()
     {
-        SetState(new SeaToMenuTransition_State(new Menus.Options.OptionsMenu(Data, Audio, this)));
+        SetState(new SeaToMenuTransition_State(
+            new Menus.Options.OptionsMenu(
+                DataManager,
+                Audio,
+                new CameraPan_State(
+                    subsequentState: this,
+                    pan: Cam.StoredCamRot = Cam.Io.Camera.transform.rotation.eulerAngles,
+                    strafe: Cam.StoredCamPos = Cam.Io.Camera.transform.position,
+                    speed: 3))));
     }
 
     protected override void SelectPressed()
@@ -206,11 +229,18 @@ public class SeaScene_State : State
     void Tick()
     {
         Scene.MiniMap.BlinkMiniMap(Scene.Ship.RegionCoord, (int)Scene.Map.Size);
+
         Scene.HUD.SetCompassRotation(Scene.Ship.RotY);
+
         CheckDirectionalInput();
-        Scene.Ship.UpdateShipCoords(Scene);
+
+        Scene.HUD.UpdateCoords(Scene.Ship.GlobalCoord.GlobalCoordsToLatLongs(Scene.Map.GlobalSize));
+
         if ((Scene.NearestNPC = Scene.CheckNMETriggers()) != null)
+        {
+            Scene.NearestNPC.HideTimer = Scene.NearestNPC.HideTime;
             SetState(Scene.NearestNPC.SceneObject.Triggerable.SubsequentState);
+        }
     }
 
     void FixedTick()

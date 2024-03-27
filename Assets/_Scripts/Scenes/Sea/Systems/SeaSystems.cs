@@ -78,7 +78,7 @@ public static class SeaSystems
         scene.Ship.ConfirmPopup.GO.SetActive(false);
 
         foreach (NPCShip npc in scene.NPCShips)
-            if (npc.SceneObject.Interactable is not NoInteraction &&
+            if (npc.SceneObject.Interactable != IInteractable.Null &&
                 Vector3.Distance(npc.SceneObject.GO.transform.position, scene.Ship.GO.transform.position) < 1.5f)
             {
                 scene.NearestNPC = npc;
@@ -122,7 +122,7 @@ public static class SeaSystems
         {
             Vector2Int offsetGlobalCoord = scene.BoardOffsetGlobalCoords(x, y);
 
-            if (IsBorder(x, y, scene, offsetGlobalCoord, scene.LocalRegions)) return;
+            if (IsBorder(x, y, scene, offsetGlobalCoord, scene.LocalRegions, currentState)) return;
 
             foreach (Region region in scene.LocalRegions)
                 foreach (NPCShip npc in region.NPCs)
@@ -139,7 +139,7 @@ public static class SeaSystems
     {
         if (cell.SceneObject is null)
         {
-            cell.InstantiateNewSceneObject(currentState, data);
+            cell.InstantiateNewSceneObject(currentState, data, scene.RegionFromOffsetGlobalCoord(offsetGlobalCoord).RegionalMode);
             if (cell.SceneObject is not null)
             {
                 scene.SceneObjects.Add(cell.SceneObject);
@@ -155,20 +155,29 @@ public static class SeaSystems
         }
     }
 
-    private static bool IsBorder(int x, int y, Sea.WorldMapScene scene, Vector2Int offsetGlobalCoord, Region[] localRegions)
+    private static bool IsBorder(int x, int y, Sea.WorldMapScene scene, Vector2Int offsetGlobalCoord, Region[] localRegions, State currentState)
     {
-        if (x <= -1 || y <= -1 || x >= scene.Board.Size || y >= scene.Board.Size)
+        if (x == -2 || y == -2 || x == scene.Board.Size + 1 || y == scene.Board.Size + 1)
         {
-            Cell cell1 = scene.GetCellOrDefaultFromBoardLoc(x, y, offsetGlobalCoord);
-            if (cell1 is not null && cell1.SceneObject is not null) DeactivateCellBorderObject(scene, cell1);
+            Cell cell = scene.GetCellOrDefaultFromBoardLoc(x, y, offsetGlobalCoord);
+            if (cell is not null && cell.SceneObject is not null) DeactivateCellBorderObject(scene, cell);
             foreach (NPCShip npc in scene.NPCShips)
-                // foreach (Region region in localRegions)
-                //     foreach (NPCShip npc in region.NPCs)
                 if (DeactivateNPCBorderObject(scene, npc, offsetGlobalCoord))
                     return true;
-            // continue;
 
             return true;
+        }
+
+        if (x == -1 || y == -1 || x == scene.Board.Size || y == scene.Board.Size)
+        {
+            foreach (Region region in scene.LocalRegions)
+                foreach (NPCShip npc in region.NPCs)
+                {
+                    if (npc.GlobalCoords != offsetGlobalCoord) continue;
+                    if (npc.HideTimer > 0) { npc.HideTimer -= Time.deltaTime; continue; }
+                    ActivateNPCBorderObject(scene, npc, offsetGlobalCoord, currentState);
+                }
+            return false;
         }
         return false;
     }
@@ -188,6 +197,25 @@ public static class SeaSystems
         return false;
     }
 
+    private static void ActivateNPCBorderObject(Sea.WorldMapScene scene, NPCShip npc, Vector2Int offsetGlobalCoord, State currentState)
+    {
+        if (npc.SceneObject is null)
+        {
+            npc.InstantiateNewSceneObject(currentState);
+            npc.SceneObject.GO.transform.localScale = Vector3.one * .45f;
+            npc.SceneObject.GO.transform.SetParent(Sea.WorldMapScene.Io.TheSea.transform);
+            scene.RockTheBoat.AddBoat(npc.SceneObject.GO.transform, npc.Sway);
+            scene.NPCShips.Add(npc);
+        }
+
+        npc.SceneObject?.GO.transform.SetPositionAndRotation(
+                new Vector3(
+                    (scene.Board.Center() + .3f + npc.GlobalPos.x - scene.Ship.GlobalLoc.x).Smod(scene.Map.GlobalSize),
+                    0,
+                    (scene.Board.Center() + .3f + npc.GlobalPos.y - scene.Ship.GlobalLoc.y).Smod(scene.Map.GlobalSize)),
+                Quaternion.Euler(new Vector3(0, npc.RotY, 0)));
+    }
+
     private static void DeactivateCellBorderObject(Sea.WorldMapScene scene, Cell cell)
     {
         if (cell.SceneObject != null)
@@ -200,15 +228,16 @@ public static class SeaSystems
     private static bool UpdateShipObject(State currentState, Sea.WorldMapScene scene, NPCShip npc, Vector2Int offsetGlobalCoord)
     {
         if (npc.GlobalCoords != offsetGlobalCoord) return false;
+        if (npc.HideTimer > 0) { npc.HideTimer -= Time.deltaTime; return false; }
 
-        if (npc.SceneObject is null)
-        {
-            npc.InstantiateNewSceneObject(currentState);
-            npc.SceneObject.GO.transform.localScale = Vector3.one * .45f;
-            npc.SceneObject.GO.transform.SetParent(Sea.WorldMapScene.Io.TheSea.transform);
-            scene.RockTheBoat.AddBoat(npc.SceneObject.GO.transform, npc.Sway);
-            scene.NPCShips.Add(npc);
-        }
+        // if (npc.SceneObject is null)
+        // {
+        //     npc.InstantiateNewSceneObject(currentState);
+        //     npc.SceneObject.GO.transform.localScale = Vector3.one * .45f;
+        //     npc.SceneObject.GO.transform.SetParent(Sea.WorldMapScene.Io.TheSea.transform);
+        //     scene.RockTheBoat.AddBoat(npc.SceneObject.GO.transform, npc.Sway);
+        //     scene.NPCShips.Add(npc);
+        // }
 
         npc.SceneObject?.GO.transform.SetPositionAndRotation(
                 new Vector3(

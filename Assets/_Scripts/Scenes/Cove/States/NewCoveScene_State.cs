@@ -12,7 +12,10 @@ public class NewCoveScene_State : State
     protected override void PrepareState(Action callback)
     {
         Audio.BGMusic.PlayClip(Assets.BGMus2);
-
+        DataManager.CharData.SetLevel(Data.Player.CharacterData.DataItem.CurrentHP,
+         DataManager.Io.ShipData.ShipStats.HullStrength);
+        DataManager.CharData.SetLevel(Data.Player.CharacterData.DataItem.MaxHP,
+         DataManager.Io.ShipData.ShipStats.HullStrength);
         Cam.Io.Camera.transform.SetPositionAndRotation(
             CoveScene.Io.Player.GO.transform.position,
             CoveScene.Io.Player.GO.transform.rotation);

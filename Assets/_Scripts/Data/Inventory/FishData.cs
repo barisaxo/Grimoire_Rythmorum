@@ -66,9 +66,11 @@ namespace Data.Inventory
         public static FishData GetData()
         {
             FishData data = new();
-            var loadData = data.PersistentData.TryLoadData();
-            if (loadData is null) return data;
-            data = (FishData)loadData;
+            if (data.PersistentData.TryLoadData() is not FishData loadData) return data;
+            for (int i = 0; i < data.DataItems.Length; i++)
+                try { data.SetLevel(data.DataItems[i], loadData.GetLevel(data.DataItems[i])); }
+                catch { }
+            data.PersistentData.Save(data);
             return data;
         }
 

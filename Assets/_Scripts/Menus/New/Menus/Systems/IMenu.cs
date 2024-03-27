@@ -23,62 +23,63 @@ namespace Menus
 
         public void SetUpMenuCards()
         {
-            MenuItem[] items = new MenuItem[Data.DataItems.Length == 0 ? 1 : Data.DataItems.Length];
+            MenuItem[] items = new MenuItem[Data.DataItems.Length];//Data.DataItems.Length == 0 ? 1 :
 
-            if (Data.DataItems.Length == 0)
+            // if (Data.DataItems.Length == 0)
+            // {
+            //     items[0] = new MenuItem()
+            //     {
+            //         Item = EmptyDataItem.Empty,
+            //         Card = new Card("Empty", null)
+            //            .SetTextString("Empty")
+            //            //.SetTMPSize(new Vector2(7, .7f))
+            //            .AutoSizeTextContainer(true)
+            //            .SetTMPPosition(Layout.GetTextPosition(0, 1))
+            //            .AutoSizeFont(true)
+            //            .SetTextAlignment(Layout.ItemTextAlignment)
+            //            .AllowWordWrap(true)
+            //            .SetTMPRectPivot(Layout.ItemTMPRectPivot)
+            //            .SetFontScale(.6f, .6f)
+            //            .TMPClickable()
+            //     };
+            // }
+
+            // else
+            for (int i = 0; i < items.Length; i++)
             {
-                items[0] = new MenuItem()
+                items[i] = new()
                 {
-                    Item = EmptyDataItem.Empty,
-                    Card = new Card("Empty", null)
-                       .SetTextString("Empty")
+                    Item = Data.DataItems[i],
+                    Card = new Card(Data.DataItems[i].Name, null)
+                       .SetTextString(DisplayData(Data.DataItems[i]))
                        //.SetTMPSize(new Vector2(7, .7f))
                        .AutoSizeTextContainer(true)
-                       .SetTMPPosition(Layout.GetTextPosition(0, 1))
+                       .SetTMPPosition(Layout.GetTextPosition(i, items.Length))
                        .AutoSizeFont(true)
                        .SetTextAlignment(Layout.ItemTextAlignment)
-                       .AllowWordWrap(true)
+                       .AllowWordWrap(false)
                        .SetTMPRectPivot(Layout.ItemTMPRectPivot)
                        .SetFontScale(.6f, .6f)
                        .TMPClickable()
                 };
+
+                // if (Data.DataItems[i].Image != null)
+                //     items[i].Card.CreateChild(Data.DataItems[i].Name, items[i].Card.Canvas)
+                //         .SetImageSprite(items[i].Item.Image)
+                //         .SetImagePosition(Layout.GetImagePosition(i, items.Length));
+
+                if (Data.DataItems[i].Description != null)
+                    items[i].Card.CreateChild(Data.DataItems[i].Name, items[i].Card.Canvas)
+                       .SetTextString(Data.DataItems[i].Description)
+                       //.SetTMPSize(new Vector2(7, .7f))
+                       .AutoSizeTextContainer(true)
+                       .SetTMPRectPivot(Layout.DescTMPRectPivot)
+                       .SetTMPPosition(Layout.GetDescPosition())
+                       .AutoSizeFont(true)
+                       .SetTextAlignment(Layout.DescTextAlignment)
+                       .AllowWordWrap(true)
+                       .SetFontScale(.6f, .6f);
             }
-
-            else for (int i = 0; i < items.Length; i++)
-                {
-                    items[i] = new()
-                    {
-                        Item = Data.DataItems[i],
-                        Card = new Card(Data.DataItems[i].Name, null)
-                           .SetTextString(DisplayData(Data.DataItems[i]))
-                           //.SetTMPSize(new Vector2(7, .7f))
-                           .AutoSizeTextContainer(true)
-                           .SetTMPPosition(Layout.GetTextPosition(i, items.Length))
-                           .AutoSizeFont(true)
-                           .SetTextAlignment(Layout.ItemTextAlignment)
-                           .AllowWordWrap(false)
-                           .SetTMPRectPivot(Layout.ItemTMPRectPivot)
-                           .SetFontScale(.6f, .6f)
-                           .TMPClickable()
-                    };
-
-                    // if (Data.DataItems[i].Image != null)
-                    //     items[i].Card.CreateChild(Data.DataItems[i].Name, items[i].Card.Canvas)
-                    //         .SetImageSprite(items[i].Item.Image)
-                    //         .SetImagePosition(Layout.GetImagePosition(i, items.Length));
-
-                    if (Data.DataItems[i].Description != null)
-                        items[i].Card.CreateChild(Data.DataItems[i].Name, items[i].Card.Canvas)
-                           .SetTextString(Data.DataItems[i].Description)
-                           //.SetTMPSize(new Vector2(7, .7f))
-                           .AutoSizeTextContainer(true)
-                           .SetTMPRectPivot(Layout.DescTMPRectPivot)
-                           .SetTMPPosition(Layout.GetDescPosition())
-                           .AutoSizeFont(true)
-                           .SetTextAlignment(Layout.DescTextAlignment)
-                           .AllowWordWrap(true)
-                           .SetFontScale(.6f, .6f);
-                }
 
             MenuItems = items;
             Selection = MenuItems[0];

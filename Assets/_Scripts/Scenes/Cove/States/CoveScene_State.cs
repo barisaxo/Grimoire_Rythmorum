@@ -71,14 +71,24 @@ public class CoveScene_State : State
 
     protected override void StartPressed()
     {
-        SetState(new CameraPan_State(
-            new CoveToMenuTransition_State(new Menus.Options.OptionsMenu(Data, Audio, this) as Menus.IHeaderMenu),
-                pan: new Vector3(
-                    -50,
-                    Cam.Io.Camera.transform.rotation.eulerAngles.y,
-                    Cam.Io.Camera.transform.rotation.eulerAngles.z),
-                strafe: Cam.Io.Camera.transform.position,
-                speed: 3));
+        // SetState(new CameraPan_State(
+        //     new CoveToMenuTransition_State(new Menus.Options.OptionsMenu(Data, Audio, this) as Menus.IHeaderMenu),
+        //         pan: new Vector3(
+        //             -50,
+        //             Cam.Io.Camera.transform.rotation.eulerAngles.y,
+        //             Cam.Io.Camera.transform.rotation.eulerAngles.z),
+        //         strafe: Cam.Io.Camera.transform.position,
+        //         speed: 3));
+
+        SetState(new CoveToMenuTransition_State(
+            new Menus.Options.OptionsMenu(
+                DataManager,
+                Audio,
+                new CameraPan_State(
+                    subsequentState: this,
+                    pan: Cam.StoredCamRot = Cam.Io.Camera.transform.rotation.eulerAngles,
+                    strafe: Cam.StoredCamPos = Cam.Io.Camera.transform.position,
+                    speed: 3))));
     }
 
 

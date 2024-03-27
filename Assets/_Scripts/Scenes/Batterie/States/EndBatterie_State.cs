@@ -4,20 +4,20 @@ using System;
 
 public class EndBatterie_State : State
 {
-    public EndBatterie_State(BatteriePack pack)
+    public EndBatterie_State(BatterieScene scene, BatterieResultType result)
     {
-        Pack = pack;
+        Scene = scene;
+        Scene.Pack.SetResultType(result);
     }
+    readonly BatterieScene Scene;
 
-    readonly BatteriePack Pack;
-
-    int damage => Pack.TotalErrors;
+    // int damage => Scene.Pack.TotalErrors;
     int coins = 0;
     int mats = 0;
     int rations = 0;
     bool map;
 
-    int level => Data.GamePlay.CurrentLevel switch
+    int level => DataManager.GamePlay.CurrentLevel switch
     {
         RegionalMode.Lydian => 2,
         RegionalMode.Aeolian => 2,
@@ -28,6 +28,7 @@ public class EndBatterie_State : State
 
     protected override void PrepareState(Action callback)
     {
+        Scene.BatterieHUD.SelfDestruct();
         // Pack.BHUD.SelfDestruct();
 
         // coins = (int)((level + 25f) * 5.55f * UnityEngine.Random.Range(.15f, 1) * (float)((100 - Result()) * .01f));
@@ -40,8 +41,8 @@ public class EndBatterie_State : State
             Sea.WorldMapScene.Io.Ship.SeaPos,
             Sea.WorldMapScene.Io.Ship.SeaRot
         );
-        UnityEngine.GameObject.Destroy(Pack.NMEFire);
-        UnityEngine.GameObject.Destroy(Pack.ShipFire);
+        UnityEngine.GameObject.Destroy(Scene.NMEFire);
+        UnityEngine.GameObject.Destroy(Scene.ShipFire);
 
         map = FoundMap();
 
@@ -50,17 +51,17 @@ public class EndBatterie_State : State
 
         int Result()
         {
-            if (Pack.Spammed) return -99;
-            else return Pack.TotalErrors;
+            if (Scene.Pack.Spammed) return -99;
+            else return Scene.Pack.TotalErrors;
         }
 
         bool FoundMap()
         {
-            if (Data.CharacterData.Map) return false;
-            if (Data.GamePlay.Batterie_Difficulty == 0) return true;
+            if (DataManager.CharacterData.Map) return false;
+            if (DataManager.GamePlay.Batterie_Difficulty == 0) return true;
 
             float chance = UnityEngine.Random.value;
-            float percent = ((float)(6 - (int)Data.GamePlay.Batterie_Difficulty));//TODO / (float)(Pack.SeaScene.NPC.Ships.Count + 1);
+            float percent = ((float)(6 - (int)DataManager.GamePlay.Batterie_Difficulty));//TODO / (float)(Pack.SeaScene.NPC.Ships.Count + 1);
             //Debug.Log(nameof(chance) + ": " + chance + ", " + nameof(percent) + ": " + percent + ", num of Pirate ships: " + (Board.PirateShipCount() + 1));
             return (chance < percent);
         }
@@ -71,31 +72,31 @@ public class EndBatterie_State : State
         // Board.BoardHUD.UpdatePlayerHealth(Data.CharacterData);
         // SetState(new SeaSceneTest_State());
         // return;
-        switch (Pack.ResultType)
+        switch (Scene.Pack.ResultType)
         {
             case BatterieResultType.NMESurrender:
-                Data.CharacterData.Materials += mats /= 2;
-                Data.CharacterData.Rations += rations /= 2;
-                Data.CharacterData.Coins += coins /= 2;
+                DataManager.CharacterData.Materials += mats /= 2;
+                DataManager.CharacterData.Rations += rations /= 2;
+                DataManager.CharacterData.Coins += coins /= 2;
                 SetState(
                     new CameraPan_State(
                         new NPCSailAway_State(
                             new DialogStart_State(new EndBatterie_Dialogue(
-                                coins, mats, rations, damage, false, BatterieResultType.NMESurrender))),
+                                coins, mats, rations, false, BatterieResultType.NMESurrender))),
                         Cam.StoredCamRot,
                         Cam.StoredCamPos,
                         3));
                 return;
 
             case BatterieResultType.Surrender:
-                Data.CharacterData.Materials -= mats = Data.CharacterData.Materials /= 2;
-                Data.CharacterData.Rations -= rations = Data.CharacterData.Rations /= 2;
-                Data.CharacterData.Coins -= coins = Data.CharacterData.Coins /= 2;
+                DataManager.CharacterData.Materials -= mats = DataManager.CharacterData.Materials /= 2;
+                DataManager.CharacterData.Rations -= rations = DataManager.CharacterData.Rations /= 2;
+                DataManager.CharacterData.Coins -= coins = DataManager.CharacterData.Coins /= 2;
                 SetState(
                     new CameraPan_State(
                         new NPCSailAway_State(
                             new DialogStart_State(new EndBatterie_Dialogue(
-                                coins, mats, rations, damage, false, BatterieResultType.Surrender))),
+                                coins, mats, rations, false, BatterieResultType.Surrender))),
                         Cam.StoredCamRot,
                         Cam.StoredCamPos,
                         3));
@@ -106,7 +107,7 @@ public class EndBatterie_State : State
                     new CameraPan_State(
                         new NPCSailAway_State(
                             new DialogStart_State(new EndBatterie_Dialogue(
-                                0, 0, 0, damage, false, BatterieResultType.Spam))),
+                                0, 0, 0, false, BatterieResultType.Spam))),
                         Cam.StoredCamRot,
                         Cam.StoredCamPos,
                         3));
@@ -117,7 +118,7 @@ public class EndBatterie_State : State
                     new MoveNPCOffScreen_State(
                         new CameraPan_State(
                             new DialogStart_State(new EndBatterie_Dialogue(
-                                0, 0, 0, damage, false, BatterieResultType.Fled)),
+                                0, 0, 0, false, BatterieResultType.Fled)),
                             Cam.StoredCamRot,
                             Cam.StoredCamPos,
                             3)));
@@ -129,7 +130,7 @@ public class EndBatterie_State : State
                     new CameraPan_State(
                         new NPCSailAway_State(
                             new DialogStart_State(new EndBatterie_Dialogue(
-                                0, 0, 0, damage, false, BatterieResultType.NMEscaped))),
+                                0, 0, 0, false, BatterieResultType.NMEscaped))),
                         Cam.StoredCamRot,
                         Cam.StoredCamPos,
                         3));
@@ -139,7 +140,7 @@ public class EndBatterie_State : State
                 SetState(
                     new CameraPan_State(
                         new DialogStart_State(
-                            new EndBatterie_Dialogue(0, 0, 0, damage, false, BatterieResultType.NMEscaped)),
+                            new EndBatterie_Dialogue(0, 0, 0, false, BatterieResultType.NMEscaped)),
                         Cam.StoredCamRot,
                         Cam.StoredCamPos,
                         3));
@@ -147,16 +148,16 @@ public class EndBatterie_State : State
                 return;
 
             case BatterieResultType.Won:
-                if (map) Data.CharacterData.Map = true;
-                Data.CharacterData.Materials += mats;
-                Data.CharacterData.Rations += rations;
-                Data.CharacterData.Coins += coins;
+                if (map) DataManager.CharacterData.Map = true;
+                DataManager.CharacterData.Materials += mats;
+                DataManager.CharacterData.Rations += rations;
+                DataManager.CharacterData.Coins += coins;
 
                 SetState(
                     new MoveNPCOffScreen_State(
                         new CameraPan_State(
                             new DialogStart_State(new EndBatterie_Dialogue(
-                                coins, mats, rations, damage, map, BatterieResultType.Won)),
+                                coins, mats, rations, map, BatterieResultType.Won)),
                             Cam.StoredCamRot,
                             Cam.StoredCamPos,
                             3)));

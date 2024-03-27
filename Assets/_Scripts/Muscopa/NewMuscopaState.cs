@@ -17,7 +17,7 @@ public class NewMuscopaState : State
         //Muscopa = new();
         //MHUD = new();
         //MHUD.Parent.gameObject.SetActive(false);
-        MuscopaAudio = new(Data.Volume);
+        MuscopaAudio = new(DataManager.Volume);
         MuscopaSettings = NewSettings(CadenceDifficulty.ALL, MusicTheory.Musica.RandomMode(), RandomGenre());
 
         GetNewSettings(callback).StartCoroutine();

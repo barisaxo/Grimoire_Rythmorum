@@ -30,11 +30,11 @@ public class Batterie_State : State
         MusicSheet.RhythmSpecs.Time.GenerateRhythmCells(MusicSheet);
         MusicSheet.GetNotes();
         MusicSheet.DrawRhythms();
-        MusicSheet.BeatMap = MusicSheet.Notes.MapBeats(Specs.Tempo);
-        Synchro = new(Specs.Time.GetQuantizement(), Specs.Tempo);
-        CountOffNotes = CountOff.GetNotes(Specs.Time);
-        CountOffBeatmap = CountOffNotes.MapBeats(Specs.Tempo);
-        CountOffFeedBack = new(Specs.Time.GetCounts());
+        MusicSheet.BeatMap = MusicSheet.Notes.MapBeats(MusicSheet.RhythmSpecs.Tempo);
+        Synchro = new(MusicSheet.RhythmSpecs.Time.GetQuantizement(), MusicSheet.RhythmSpecs.Tempo);
+        CountOffNotes = CountOff.GetNotes(MusicSheet.RhythmSpecs.Time);
+        CountOffBeatmap = CountOffNotes.MapBeats(MusicSheet.RhythmSpecs.Tempo);
+        CountOffFeedBack = new(MusicSheet.RhythmSpecs.Time.GetCounts());
         BatterieFeedback = new();
         Analyzer = new(BatterieFeedback.CreateCard, HandleHit, 5, MusicSheet.BeatMap);
         Analyzer.SetUp();
@@ -58,7 +58,7 @@ public class Batterie_State : State
         Synchro.BeatEvent -= Click;
         MonoHelper.OnUpdate -= SpaceBar;
 
-        BatterieFeedback.Running = false;
+        BatterieFeedback.SelfDestruct();//Running = false;
         Audio.Batterie.Stop();
         MusicSheet.SelfDestruct();
     }
@@ -155,11 +155,12 @@ public class Batterie_State : State
             Analyzer.InputUpAction();
         }
 
-        if (Input.GetKeyDown(KeyCode.Tab))
-        {
-            SetState(new Batterie_State(Specs));
-        }
+        // if (Input.GetKeyDown(KeyCode.Tab))
+        // {
+        //     SetState(new Batterie_State(Specs));
+        // }
     }
+    int hits, misses;
 
     private void HandleHit(Batterie.Hit hit)
     {
@@ -167,12 +168,15 @@ public class Batterie_State : State
         {
             case Hit.Hit:
                 Audio.Batterie.Hit();
+                hits++;
                 break;
             case Hit.Miss:
                 Audio.Batterie.Miss();
+                misses++;
                 break;
             case Hit.BadHit:
                 Audio.Batterie.MissStick();
+                misses++;
                 break;
             case Hit.Break:
                 break;

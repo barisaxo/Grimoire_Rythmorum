@@ -20,7 +20,12 @@ public class SeaToMenuTransition_State : State
 
     protected override void PrepareState(Action callback)
     {
-        WorldMapScene.Io.HUD.Hud.GO.SetActive(false);
+        Audio.Ambience.Pause();
+        Audio.BGMusic.Pause();
+        Audio.SFX.PlayOneShot(Assets.AlertHalfDim);
+        Sea.WorldMapScene.Io.HUD.Disable();
+        Sea.WorldMapScene.Io.Ship.ConfirmPopup.GO.SetActive(false);
+        Sea.WorldMapScene.Io.MiniMap.Card.GO.SetActive(false);
         base.PrepareState(callback);
     }
 
@@ -29,7 +34,7 @@ public class SeaToMenuTransition_State : State
         // SetState(new MenuTest_State(Menu));
 
         SetState(new CameraPan_State(HeaderMenu is null ?
-            new MenuTest_State(SubMenu) : new MenuTest_State(HeaderMenu as IHeaderMenu),
+            new Menu_State(SubMenu) : new Menu_State(HeaderMenu as IHeaderMenu),
             new UnityEngine.Vector3(-50, Cam.Io.Camera.transform.rotation.eulerAngles.y,
                 Cam.Io.Camera.transform.rotation.eulerAngles.z),
                 Cam.Io.Camera.transform.position,

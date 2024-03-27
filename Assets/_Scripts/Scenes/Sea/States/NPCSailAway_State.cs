@@ -15,17 +15,17 @@ public class NPCSailAway_State : State
 
     protected override void EngageState()
     {
-        int i = (NPC.PatrolIndex + (NPC.PatrolPath.Length / 2)) % NPC.PatrolPath.Length;
-        int n = 0;
-        while (IsOnGridOrOccupied(NPC.PatrolPath[i]))
-        {
-            i = (i + 1) % NPC.PatrolPath.Length;
-            if (++n == NPC.PatrolPath.Length)
-            {
-                i = (NPC.PatrolIndex + (NPC.PatrolPath.Length / 2)) % NPC.PatrolPath.Length;
-                break;
-            }
-        }
+        // int i = (NPC.PatrolIndex + (NPC.PatrolPath.Length / 2)) % NPC.PatrolPath.Length;
+        // int n = 0;
+        // while (IsOnGridOrOccupied(NPC.PatrolPath[i]))
+        // {
+        //     i = (i + 1) % NPC.PatrolPath.Length;
+        //     if (++n == NPC.PatrolPath.Length)
+        //     {
+        //         i = (NPC.PatrolIndex + (NPC.PatrolPath.Length / 2)) % NPC.PatrolPath.Length;
+        //         break;
+        //     }
+        // }
 
         SailAway().StartCoroutine();
 
@@ -42,8 +42,8 @@ public class NPCSailAway_State : State
             WorldMapScene.Io.RockTheBoat.RemoveBoat(NPC.SceneObject.GO.transform);
 
             NPC.DestroySceneObject();
-            NPC.PatrolIndex = i;
-            NPC.Pos = NPC.PatrolPath[NPC.PatrolIndex];
+            // NPC.PatrolIndex = i;
+            // NPC.Pos = NPC.PatrolPath[NPC.PatrolIndex];
 
             SetState(SubsequentState);
         }

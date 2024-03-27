@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using MusicTheory.Rhythms;
+using Data.Inventory;
 
 public class Puzzle_State : State
 {
@@ -20,17 +21,21 @@ public class Puzzle_State : State
     private KeyboardKey CaretKey;
     private CaretBlink CaretBlink;
     readonly State SubsequentState;
+    readonly StarChartsData.DataItem DataItem;
 
-    public Puzzle_State(IPuzzle puzzle, PuzzleType puzzleType, State subsequentState)
+    public Puzzle_State(IPuzzle puzzle, PuzzleType puzzleType, State subsequentState, StarChartsData.DataItem dataItem)
     {
         Puzzle = puzzle;
         PuzzleType = puzzleType;
         SubsequentState = subsequentState;
         Debug.Log(subsequentState);
+        DataItem = dataItem;
+
     }
 
     protected override void PrepareState(Action callback)
     {
+        DataManager.starChartsData.DecreaseLevel(DataItem);
         Keyboard = Puzzle.NumOfNotes == 1 ? new(Puzzle.NumOfNotes) :
             new(Puzzle.NumOfNotes, Puzzle.Notes[0]);
 
@@ -71,7 +76,7 @@ public class Puzzle_State : State
 
     protected override void DisengageState()
     {
-        Data.TheoryPuzzleData.AddStat(
+        DataManager.TheoryPuzzleData.AddStat(
             new PuzzleStat(
                 specs: new PuzzleSpec(PuzzleType, Puzzle),
                 hints: HintsUsed,
@@ -96,7 +101,7 @@ public class Puzzle_State : State
     {
         if (ReadyForEndPuzzle && action == MouseAction.LUp)
         {
-            SetState(new EndPuzzle_State(won: true, SubsequentState, Puzzle, PuzzleType));
+            SetState(new EndPuzzle_State(winLose: true, SubsequentState, Puzzle, PuzzleType, DataItem));
             return;
         }
 
@@ -119,7 +124,7 @@ public class Puzzle_State : State
 
     private void SkipClicked()
     {
-        SetState(new EndPuzzle_State(won: false, SubsequentState, Puzzle, PuzzleType));
+        SetState(new EndPuzzle_State(winLose: false, SubsequentState, Puzzle, PuzzleType, DataItem));
         // FadeToState(new Puzzle_State(new ModePuzzle(), PuzzleType.Aural)); return;
         // Skipped++;
         // var RhythmSpecs = new RhythmSpecs()
@@ -319,7 +324,7 @@ public class Puzzle_State : State
 
     void Finish()
     {
-        SetState(new EndPuzzle_State(won: true, SubsequentState, Puzzle, PuzzleType));
+        SetState(new EndPuzzle_State(winLose: true, SubsequentState, Puzzle, PuzzleType, DataItem));
     }
 
     private Card _answer;

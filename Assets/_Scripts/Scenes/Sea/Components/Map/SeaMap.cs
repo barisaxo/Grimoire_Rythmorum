@@ -45,7 +45,7 @@ namespace Sea.Maps
 
         public Vector2Int[] Coves => throw new System.NotImplementedException();
 
-        public IosMap()
+        public IosMap(Data.Inventory.QuestData data)
         {
             GlobalSize = Size * RegionSize;
             Regions = new Region[Size * Size];
@@ -53,7 +53,7 @@ namespace Sea.Maps
             int i = 0;
             for (int x = 0; x < Size; x++)
                 for (int y = 0; y < Size; y++)
-                    Regions[i++] = new(new Vector2Int(x, y), RegionSize);
+                    Regions[i++] = new(new Vector2Int(x, y), RegionSize, data);
         }
 
 
@@ -68,7 +68,7 @@ namespace Sea.Maps
         public int GlobalSize { get; private set; }
         public Region[] Regions { get; private set; }
 
-        public WorldMap()
+        public WorldMap(Data.Inventory.QuestData data)
         {
             GlobalSize = Size * RegionSize;
             Regions = new Region[Size * Size];
@@ -76,7 +76,7 @@ namespace Sea.Maps
             int i = 0;
             for (int x = 0; x < Size; x++)
                 for (int y = 0; y < Size; y++)
-                    Regions[i++] = new(new Vector2Int(x, y), RegionSize);
+                    Regions[i++] = new(new Vector2Int(x, y), RegionSize, data);
         }
 
         public readonly Dictionary<Vector2Int, R> Territories = new()
@@ -191,6 +191,51 @@ namespace Sea.Maps
         n,
     }
 
+    public class SmallMap : IMap
+    {
+        public int Size { get; private set; } = 1;
+        public int RegionSize { get; private set; } = 30;
+        public int GlobalSize { get; private set; }
+        public Region[] Regions { get; private set; }
+
+        public SmallMap(Data.Inventory.QuestData data)
+        {
+            GlobalSize = Size * RegionSize;
+            Regions = new Region[Size * Size];
+
+            int i = 0;
+            for (int x = 0; x < Size; x++)
+                for (int y = 0; y < Size; y++)
+                    Regions[i++] = new(new Vector2Int(x, y), RegionSize, data);
+        }
+
+        public readonly Dictionary<Vector2Int, R> Territories = new()
+        {
+            //Ios
+            {new (0, 0), R.i},
+        };
+
+        public Dictionary<Vector2Int, R> LightHouses { get; private set; } = new(){
+            { new (0,0), R.i },
+        };
+
+        public Dictionary<Vector2Int, Feature[]> Features { get; private set; } = new(){
+            { new (0,0),  new[]{Feature.LightHouse, Feature.Cove}},
+        };
+
+        public Vector2Int[] ShippingLanes { get; private set; } = new Vector2Int[]{
+        };
+
+        Dictionary<Vector2Int, R> IMap.Territories => throw new System.NotImplementedException();
+
+        public Vector2Int[] Docks => throw new System.NotImplementedException();
+
+        public Vector2Int[] Gunneries => throw new System.NotImplementedException();
+
+        public Vector2Int[] Islands => throw new System.NotImplementedException();
+
+        public Vector2Int[] Coves => throw new System.NotImplementedException();
+    }
 }
 
 // public readonly R[] RegionMap = new R[]{

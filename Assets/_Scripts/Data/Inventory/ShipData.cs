@@ -9,6 +9,13 @@ namespace Data.Inventory
         private Dictionary<DataItem, int> _ship;
         private Dictionary<DataItem, int> Ship => _ship ??= SetUpShip();
 
+        private ShipStats.ShipStats _shipStats;
+        public ShipStats.ShipStats ShipStats => _shipStats ??= new(
+            new ShipStats.HullStats(Data.Equipment.HullData.Schooner, MaterialsData.DataItem.Pine),
+            new ShipStats.CannonStats(Data.Equipment.CannonData.Carronade, MaterialsData.DataItem.Bronze),
+            numOfCannons: 32
+        );
+
         Dictionary<DataItem, int> SetUpShip()
         {
             Dictionary<DataItem, int> ship = new();
@@ -40,6 +47,7 @@ namespace Data.Inventory
 
         public DataEnum[] DataItems => Enumeration.All<DataItem>();
 
+        public bool InventoryIsFull(int Space) => false;
 
         [System.Serializable]
         public class DataItem : DataEnum
@@ -63,9 +71,10 @@ namespace Data.Inventory
         public static ShipData GetData()
         {
             ShipData data = new();
-            var loadData = data.PersistentData.TryLoadData();
-            if (loadData is null) return data;
-            data = (ShipData)loadData;
+            if (data.PersistentData.TryLoadData() is not ShipData loadData) return data;
+            for (int i = 0; i < data.DataItems.Length; i++)
+                try { data.SetLevel(data.DataItems[i], loadData.GetLevel(data.DataItems[i])); }
+                catch { }
             return data;
         }
 

@@ -38,6 +38,8 @@ namespace Data.Inventory
 
         public DataEnum[] DataItems => Enumeration.All<DataItem>();
 
+        public bool InventoryIsFull(int i) => false;
+
         [System.Serializable]
         public class DataItem : DataEnum
         {
@@ -58,9 +60,10 @@ namespace Data.Inventory
         public static LighthouseData GetData()
         {
             LighthouseData data = new();
-            var loadData = data.PersistentData.TryLoadData();
-            if (loadData is null) return data;
-            data = (LighthouseData)loadData;
+            if (data.PersistentData.TryLoadData() is not LighthouseData loadData) return data;
+            for (int i = 0; i < data.DataItems.Length; i++)
+                try { data.SetLevel(data.DataItems[i], loadData.GetLevel(data.DataItems[i])); }
+                catch { }
             return data;
         }
 

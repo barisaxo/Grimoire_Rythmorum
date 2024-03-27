@@ -8,15 +8,31 @@ namespace Menus.Inventory
 {
     public class QuestsMenu : IMenu
     {
-        public QuestsMenu(QuestData questData) { Data = questData; }
+        public QuestsMenu(QuestData questData) { Data = questData; QuestData = questData; }
         public IData Data { get; }
+        readonly QuestData QuestData;
         public MenuItem Selection { get; set; }
         public MenuItem[] MenuItems { get; set; }
         public IMenuLayout Layout { get; } = new LeftScroll();
 
         public string DisplayData(DataEnum item)
         {
-            return item.Name + ": " + Data.GetDisplayLevel(item);
+            Debug.Log(item.Name);
+            Debug.Log(Data.GetDisplayLevel(item));
+            Debug.Log(QuestData.GetQuest(item));
+            Debug.Log(QuestData.GetQuest(item)?.QuestLocation);
+            if (QuestData.GetQuest(item) is null) return item.Name;
+            return item.Name + ": " +
+                Data.GetDisplayLevel(item) + " " +
+                QuestData.GetQuest(item)?.QuestLocation
+                    .GlobalCoordsToLatLongs(Sea.WorldMapScene.Io.Map.GlobalSize);
+            // return item switch
+            // {
+            //     _ when item == QuestData.DataItem.StarChart =>
+            //         item.Name + ": " + Data.GetDisplayLevel(item) + " " + QuestData.GetQuest(item)?.QuestLocation.GlobalCoordsToLatLongs(Sea.WorldMapScene.Io.Map.GlobalSize),
+            //     _ => "stuff",
+            // };
+            // return item.Name + ": " + Data.GetDisplayLevel(item);
         }
 
         public IInputHandler Input => new MenuInputHandler()

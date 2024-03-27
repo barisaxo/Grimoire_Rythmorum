@@ -35,15 +35,16 @@ namespace Sea
         public GameObject GO => SceneObject?.GO;
         // public float RotY;
 
-        public void InstantiateNewSceneObject(State currentState, DataManager data)
+        public void InstantiateNewSceneObject(State currentState, DataManager data, MusicTheory.RegionalMode region)
         {
             SceneObject = Type switch
             {
                 CellType.Cove => new NullCove(),
                 CellType.Rocks => new Rocks(),
-                CellType.Fish => new Fish(currentState, data.FishData, data.ShipData, Assets.SailFishPrefab),
+                CellType.Fish => new Fish(currentState, data),
                 CellType.Lighthouse => new Lighthouse(WorldMapScene.Io.Ship.Region, data.LighthousesData, currentState),
-                CellType.Bottle => new Bottle(currentState, data.starChartsData, data.ShipData),
+                CellType.Bottle => new Bottle(currentState, data, region),
+                CellType.Gramo => new Gramophone(currentState, data.GramophoneData, data.QuestsData, data.ShipData, region),
                 // CellType.OpenSea => null,
 
                 _ => throw new System.NotImplementedException()
@@ -70,5 +71,5 @@ namespace Sea
 
     }
 
-    public enum CellType { OpenSea, Cove, Rocks, Center, Lighthouse, Fish, Bottle }
+    public enum CellType { OpenSea, Cove, Rocks, Center, Lighthouse, Fish, Bottle, Gramo, Bounty }
 }

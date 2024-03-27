@@ -16,12 +16,12 @@ public class NewPuzzleSetup_State : State
 
     protected override void PrepareState(Action callback)
     {
-        Data.TheoryPuzzleData.PuzzleDifficulty = PuzzleDifficulty;
+        DataManager.TheoryPuzzleData.PuzzleDifficulty = PuzzleDifficulty;
         base.PrepareState(callback);
     }
 
     protected override void EngageState()
     {
-        SetState(PuzzleSelector.WeightedRandomPuzzleState(Data.TheoryPuzzleData, SubsequentState));
+        // SetState(PuzzleSelector.WeightedRandomPuzzleState(Data.TheoryPuzzleData, SubsequentState));
     }
 }

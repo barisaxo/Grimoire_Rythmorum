@@ -40,6 +40,12 @@ namespace Data.Inventory
 
         public DataEnum[] DataItems => Enumeration.All<DataItem>();
 
+        public bool InventoryIsFull(int Space)
+        {
+            int i = 0;
+            foreach (var item in DataItems) i += GetLevel(item);
+            return Space < i;
+        }
 
         [System.Serializable]
         public class DataItem : DataEnum
@@ -59,8 +65,11 @@ namespace Data.Inventory
         public static GramophoneData GetData()
         {
             GramophoneData data = new();
-            IData loadData = data.PersistentData.TryLoadData();
-            return loadData is null ? data : (GramophoneData)loadData;
+            if (data.PersistentData.TryLoadData() is not GramophoneData loadData) return data;
+            for (int i = 0; i < data.DataItems.Length; i++)
+                try { data.SetLevel(data.DataItems[i], loadData.GetLevel(data.DataItems[i])); }
+                catch { }
+            return data;
         }
 
         public IPersistentData PersistentData { get; } = new SaveData("Gramophone.Data");

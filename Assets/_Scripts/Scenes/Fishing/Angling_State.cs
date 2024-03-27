@@ -39,7 +39,7 @@ public class Angling_State : State
             Time = new FourFour(),
             NumberOfMeasures = 16,
             SubDivisionTier = SubDivisionTier.D1Only,
-            Tempo = 110
+            Tempo = 90
         };
 
         Synchro = new(Specs.Time.GetQuantizement(), Specs.Tempo);
@@ -95,7 +95,7 @@ public class Angling_State : State
 
     protected override void EngageState()
     {
-        Audio.BGMusic.PlayClip(Resources.Load<AudioClip>("Audio/Fishing/8BarsDrumsFourFour110bpmA"));
+        Audio.BGMusic.PlayClip(Resources.Load<AudioClip>("Audio/Drums/Stax_Drums_90_1"));
         MonoHelper.OnUpdate += Analyzer.Tick;
         MonoHelper.OnUpdate += ReelingAnimations;
         Synchro.TickEvent += Tick;

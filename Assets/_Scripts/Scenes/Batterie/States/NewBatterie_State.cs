@@ -33,7 +33,7 @@ public class NewBatterie_State : State
         };
 
         Ship = Assets.Sloop.gameObject;
-        NME = Assets.Frigate.gameObject;
+        NME = Sea.WorldMapScene.Io.NearestNPC.SceneObject.Instantiator.ToInstantiate;
 
         Ship.transform.SetParent(Cam.Io.Camera.transform);
         NME.transform.SetParent(Cam.Io.Camera.transform);
