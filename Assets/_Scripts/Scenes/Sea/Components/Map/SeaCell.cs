@@ -35,7 +35,7 @@ namespace Sea
         public GameObject GO => SceneObject?.GO;
         // public float RotY;
 
-        public void InstantiateNewSceneObject(State currentState, DataManager data, MusicTheory.RegionalMode region)
+        public void InstantiateNewSceneObject(State currentState, DataManager data, Sea.Maps.R region)
         {
             SceneObject = Type switch
             {
@@ -43,12 +43,14 @@ namespace Sea
                 CellType.Rocks => new Rocks(),
                 CellType.Fish => new Fish(currentState, data),
                 CellType.Lighthouse => new Lighthouse(WorldMapScene.Io.Ship.Region, data.LighthousesData, currentState),
-                CellType.Bottle => new Bottle(currentState, data, region),
+                CellType.Bottle => new Bottle(currentState, data),
                 CellType.Gramo => new Gramophone(currentState, data.GramophoneData, data.QuestsData, data.ShipData, region),
-                // CellType.OpenSea => null,
+                // CellType.Border => new Border(region),
+                CellType.OpenSea => null,
 
-                _ => throw new System.NotImplementedException()
+                _ => throw new System.NotImplementedException(Type.ToString())
             };
+
         }
 
         public void DestroySceneObject()
@@ -71,5 +73,5 @@ namespace Sea
 
     }
 
-    public enum CellType { OpenSea, Cove, Rocks, Center, Lighthouse, Fish, Bottle, Gramo, Bounty }
+    public enum CellType { OpenSea, Border, Cove, Rocks, Center, Lighthouse, Fish, Bottle, Gramo, Bounty }
 }

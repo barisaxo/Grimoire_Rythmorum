@@ -19,6 +19,7 @@ namespace Data.Player
             return datum;
         }
 
+        public void Reset() => _datum = SetUpRhythmCellsDatum();
         public string GetDisplayLevel(DataEnum item)
         {
             var Item = item as DataItem;

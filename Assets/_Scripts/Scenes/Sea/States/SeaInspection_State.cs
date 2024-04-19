@@ -9,15 +9,26 @@ public class SeaInspection_State : State
     GameObject Overlay;
     MeshRenderer MR;
     int Index = 0;
+    public static Vector3 CameraPos = new(WorldMapScene.Io.Board.Center(), 16, 16);
+    public static Quaternion CameraRotQuat = Quaternion.Euler(new Vector3(65, 180, 0));
+    public static Vector3 CameraRot = new(65, 180, 0);
+    readonly State SubsequentState;
+
+    public SeaInspection_State(State subsequentState)
+    {
+        SubsequentState = subsequentState;
+    }
+
     protected override void PrepareState(Action callback)
     {
         Overlay = GameObject.CreatePrimitive(PrimitiveType.Cube);
-        Overlay.transform.position = new Vector3(5.5f, .5f, 5.5f);
+        Overlay.transform.position = Vector3.one * WorldMapScene.Io.Board.Center();
         MR = Overlay.GetComponent<MeshRenderer>();
         MR.material = Assets.Overlay_Mat;
         // MR.material.color = Color.green;
         Cam.Io.Camera.transform.SetParent(null);
-        Cam.Io.Camera.transform.SetPositionAndRotation(new Vector3(5.5f, 5, 13), Quaternion.Euler(new Vector3(45, 180, 0)));
+        Cam.Io.Camera.transform.SetPositionAndRotation(CameraPos, CameraRotQuat);
+        DirectionPressed(Dir.Right);
         base.PrepareState(callback);
     }
 
@@ -30,6 +41,7 @@ public class SeaInspection_State : State
     {
         GameObject.Destroy(Overlay);
         Flag.SelfDestruct();
+        Info.SelfDestruct();
     }
 
     protected override void DirectionPressed(Dir dir)
@@ -58,17 +70,20 @@ public class SeaInspection_State : State
 
         // var localRegions = Scene.Io.Map.RegionsAdjacentTo(Scene.Io.Ship);
         // foreach (Region region in localRegions)
-        foreach (NPCShip npc in WorldMapScene.Io.NPCShips)
-        {
-            if (npc.SceneObject.GO != null && WorldMapScene.Io.NPCShips.Count > 0 &&
-                npc.SceneObject.GO.transform.GetInstanceID() == WorldMapScene.Io.NPCShips[Index].SceneObject.GO.transform.GetInstanceID())
+        if (WorldMapScene.Io.NPCShips.Count > 0)
+            foreach (NPCShip npc in WorldMapScene.Io.NPCShips)
             {
-                Overlay.transform.position = npc.SceneObject.GO.transform.position;
-                Flag.SetImageSprite(npc.Flag)
-                    .SetImageColor(npc.FlagColor);
-                break;
+                if (npc.SceneObject.GO != null &&
+                    npc.SceneObject.GO.transform.GetInstanceID() == WorldMapScene.Io.NPCShips[Index].SceneObject.GO.transform.GetInstanceID())
+                {
+                    Overlay.transform.position = npc.SceneObject.GO.transform.position;
+                    Flag.SetImageSprite(npc.Flag)
+                        .SetImageColor(npc.FlagColor);
+                    Info.SetTextString(ShipInfo(npc));
+                    break;
+                }
             }
-        }
+        else Overlay.SetActive(false);
 
     }
 
@@ -76,7 +91,7 @@ public class SeaInspection_State : State
     {
         SetState(
             new CameraPan_State(
-                new SeaScene_State(),
+                SubsequentState,
                 Cam.StoredCamRot,
                 Cam.StoredCamPos,
                 3.5f
@@ -86,7 +101,25 @@ public class SeaInspection_State : State
     Card _flag;
     Card Flag => _flag ??= new Card(nameof(Flag), null)
         .SetImageSize(Vector3.one * 2f)
-        .SetImagePosition(new Vector3(-Cam.UIOrthoX + .65f, Cam.UIOrthoY - 1f))
+        .SetImagePosition(new Vector3(-Cam.UIOrthoX + 1.65f, Cam.UIOrthoY - 1f))
         .SetImageRectPivot(0, .5f)
         ;
+
+    Card _info;
+    Card Info => _info ??= new Card(nameof(Info), null)
+        .SetTMPPosition(new Vector3(-Cam.UIOrthoX + 1.65f, Cam.UIOrthoY - 2f))
+        // .SetTMPSize(new Vector2(4, 3))
+        .AllowWordWrap(false)
+        ;
+
+    string ShipInfo(NPCShip npc)
+    {
+        string s = string.Empty;
+        s += npc.RegionalMode + " " + npc.ShipType + " Ship";
+        s += "\nRigging: " + npc.Ship?._rig?.name.StartCase();
+        s += "\nHull Strength: " + npc.ShipStats.HullStrength;
+        s += "\nNumber of Cannons: " + npc.ShipStats.NumOfCannons;
+        s += "\nDamage Potential: " + npc.ShipStats.VolleyDamage;
+        return s;
+    }
 }

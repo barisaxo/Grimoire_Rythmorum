@@ -32,9 +32,9 @@ public class BatterieHUD
         }
     }
 
-    public BatterieHUD(int playerHealth, int playerCurrent, int nmeHealth)
+    public BatterieHUD(int playerMax, int playerCurrent, int nmeHealth)
     {
-        PlayerMax = playerHealth;
+        PlayerMax = playerMax;
         PlayerCurrent = playerCurrent;
         NMECurrent = NMEMax = nmeHealth;
     }

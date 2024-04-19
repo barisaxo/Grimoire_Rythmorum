@@ -10,27 +10,29 @@ public static class SeaMapSystems
     public static void AddToMap(this Sea.Maps.WorldMap map, Vector2Int loc, CellType cellType)
     {
         Region region = map.Regions[map.RegionIndexFromGlobalCoord(loc)];
-        Debug.Log(region.Coord + " " + region.RegionalMode);
         List<Vector2Int> occupied = new();
         foreach (Cell cell in region.Cells)
         {
             occupied.Add(cell.Coord);
         }
-        Vector2Int rand = loc.Smod(map.RegionSize);
+        Vector2Int randV2 = loc.Smod(map.RegionSize);
         for (int i = 0; i < 10; i++)
         {
-            if (occupied.Contains(rand)) rand += Vector2Int.one;
+            if (occupied.Contains(randV2)) randV2 += Vector2Int.one;
             else break;
         }
-        Debug.Log(rand);
-        region.Cells.Add(new Cell(rand) { Type = cellType });
+        Debug.Log(region.Coord + " " + region.R + " " + nameof(AddToMap) + randV2);
+        region.Cells.Add(new Cell(randV2) { Type = cellType });
     }
 
     public static bool IsInRange(this Sea.WorldMapScene sea, Vector3Int v) =>
-    v.x > -1 && v.x < sea.Map.RegionSize && v.z > -1 && v.z < sea.Map.RegionSize;
+        v.x > -1 && v.x < sea.Map.RegionSize && v.z > -1 && v.z < sea.Map.RegionSize;
 
-    public static int RegionIndexFromGlobalCoord(this Sea.Maps.WorldMap map, Vector2Int globalCoord) =>
-      new Vector2Int(globalCoord.x / map.RegionSize, globalCoord.y / map.RegionSize).Vec2ToInt(map.Size);
+    public static int RegionIndexFromGlobalCoord(this Sea.Maps.WorldMap map, Vector2Int globalCoord)
+    {
+        return
+            new Vector2Int(globalCoord.x / map.RegionSize, globalCoord.y / map.RegionSize).Vec2ToInt(map.Size);
+    }
 
     public static int CellIndex(this Region region, Vector2Int localCoord) =>
         localCoord.Vec2ToInt(region.Size);
@@ -112,6 +114,18 @@ public static class SeaMapSystems
            Math.Round(Mathf.Abs((float)((float)(globalMapSize * .5f) - globalCoord.x)), 2).ToString() +
            (globalCoord.x > (globalMapSize * .5f) ? "ºE" : "ºW");
     }
+
+    public static Color GetColor(this MusicTheory.RegionalMode regionalMode) => regionalMode switch
+    {
+        MusicTheory.RegionalMode.Aeolian => Color.red,
+        MusicTheory.RegionalMode.Dorian => Color.yellow,
+        MusicTheory.RegionalMode.MixoLydian => Color.blue,
+        MusicTheory.RegionalMode.Lydian => Color.cyan,
+        MusicTheory.RegionalMode.Phrygian => Color.magenta,
+        MusicTheory.RegionalMode.Ionian => Color.green,
+        MusicTheory.RegionalMode.Locrian => Color.white,
+        _ => Color.black,
+    };
 
     public static Color GetSeaColorFromRegion(this Sea.Maps.WorldMap map, R region) => region switch
     {

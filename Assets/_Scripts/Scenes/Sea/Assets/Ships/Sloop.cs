@@ -43,14 +43,22 @@ public class Sloop : MonoBehaviour, Sea.IMAShip
         get => _config;
         set
         {
-            if (value == _config) return;
+            // if (value == _config) return;
             _config = value;
             SloopRig.gameObject.SetActive(value == SailConfig.Sloop);
-            CutterRig.gameObject.SetActive(value == SailConfig.Cutter);
+            CutterRig.gameObject.SetActive(value == SailConfig.Cutter); Rig = value switch
+            {
+                SailConfig.Sloop => SloopRig,
+                _ => CutterRig,
+            };
         }
     }
     private SailConfig _config;
     public enum SailConfig { Sloop, Cutter }
+    public void RandomRig()
+    {
+        Config = UnityEngine.Random.value < .5f ? SailConfig.Sloop : SailConfig.Cutter;
+    }
 
     public Hull _hull { get => Hull; }
     public Flag _flag { get => Rig.Flag; }
@@ -62,6 +70,7 @@ public class Sloop : MonoBehaviour, Sea.IMAShip
     public string PopupText => "Hail";
     public event Action Interaction;
     public Transform Transform => _hull.transform;
+    public GameObject GO => gameObject;
 
     private ShipStats.ShipStats _shipStats;
     public ShipStats.ShipStats ShipStats => _shipStats ??= new(
@@ -72,6 +81,7 @@ public class Sloop : MonoBehaviour, Sea.IMAShip
         new ShipStats.CannonStats(
             cannon: Data.Equipment.CannonData.Mynion,
             metal: Data.Inventory.MaterialsData.DataItem.CastIron),
+        new ShipStats.RiggingStats(Data.Inventory.MaterialsData.DataItem.Hemp),
         numOfCannons: NumOfCannons
     );
 

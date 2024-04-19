@@ -19,6 +19,7 @@ namespace Data
         public void SetLevel(DataEnum item, int level);
         public IPersistentData PersistentData { get; }
         public bool InventoryIsFull(int i);
+        public void Reset();
         // public string FileName { get; }
         // public IData TryLoadData(IData data);
         // public void Save();
@@ -34,9 +35,15 @@ namespace Data
     [System.Serializable]
     public class SaveData : IPersistentData
     {
-        public SaveData(string name)
+        public string FileName { get; }
+
+        public SaveData(string name) { FileName = name; }
+
+        public void Save(IData data)
         {
-            FileName = name;
+            FileStream fileStream = new(Application.persistentDataPath + FileName, FileMode.Create);
+            new BinaryFormatter().Serialize(fileStream, data);
+            fileStream.Close();
         }
 
         public IData TryLoadData()
@@ -54,28 +61,17 @@ namespace Data
                 {
                     tryLoadData = new BinaryFormatter().Deserialize(stream) as IData;
                     stream.Close();
-                    // Debug.Log(tryLoadData);
                 }
 
                 catch
                 {
                     stream.Close();
-                    Debug.Log("A loading error has ocurred");
+                    Debug.Log("A loading error has ocurred!");
                 }
             }
 
-            if (tryLoadData is not null) return tryLoadData;
-            return null;
+            return tryLoadData is not null ? tryLoadData : null;
         }
-
-        public void Save(IData data)
-        {
-            FileStream fileStream = new(Application.persistentDataPath + FileName, FileMode.Create);
-            new BinaryFormatter().Serialize(fileStream, data);
-            fileStream.Close();
-            // Debug.Log("Saved " + fileStream);
-        }
-        public string FileName { get; }
     }
 
     [System.Serializable]

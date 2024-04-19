@@ -94,7 +94,7 @@ public class PracticeRoom
             {
                 GameObject t = GameObject.CreatePrimitive(PrimitiveType.Cube);
                 t.name = "WallTile: " + v.x + ", " + v.y;
-                t.transform.localScale = new Vector3(1, 2.5f, 1) * Random.Range(1f, 1.666f);
+                t.transform.localScale = new Vector3(1, 2.5f, 1) * Random.Range(1.15f, 1.666f);
                 t.transform.position = new Vector3(v.x, 0, v.y);
                 // t.transform.SetPositionAndRotation(
                 //     new Vector3(v.x, Random.value * .08f, v.y),

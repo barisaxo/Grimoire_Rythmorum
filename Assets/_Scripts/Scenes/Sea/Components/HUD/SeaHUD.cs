@@ -104,7 +104,7 @@ namespace Sea
             .AutoSizeTextContainer(true)
             .SetImageSprite(Assets.NorthButton)
             .SetImageSize(.5f, .5f)
-            .SetTextString("Inventory")
+            .SetTextString("Attack")
             .SetTextAlignment(TextAlignmentOptions.Right)
             .SetTMPRectPivot(new Vector2(1, .5f))
             .SetOutlineWidth(.15f)

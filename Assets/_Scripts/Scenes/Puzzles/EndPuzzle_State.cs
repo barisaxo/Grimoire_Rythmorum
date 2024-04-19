@@ -24,15 +24,17 @@ public class EndPuzzle_State : State
 
     protected override void EngageState()
     {
-        Vector2Int loc = Sea.WorldMapScene.Io.Ship.GlobalCoord + Vector2Int.one;
+        Vector2Int loc = Sea.WorldMapScene.Io.Ship.GlobalCoord + RandomLoc();
         string latLong = loc.GlobalCoordsToLatLongs(Sea.WorldMapScene.Io.Map.GlobalSize);
         int patternsFound = (int)((float)(DataItem.Id + 1f) * 10f * (1f + UnityEngine.Random.value));
 
         if (Won)
         {
-            DataManager.QuestsData.SetQuest(QuestData.DataItem.StarChart, new NavigationQuest(
-                new Sea.Inventoriable((DataManager.GramophoneData, GramophoneData.DataItem.Lvl1, 1))
-                , loc, latLong));
+            DataManager.QuestsData.SetQuest(QuestData.DataItem.StarChart,
+                new NavigationQuest(
+                    new Sea.Inventoriable((DataManager.GramophoneData, GramophoneData.DataItem.Lvl1, 1)),
+                    loc,
+                    latLong));
 
             Sea.WorldMapScene.Io.Map.AddToMap(DataManager.QuestsData.GetQuest(QuestData.DataItem.StarChart).QuestLocation, Sea.CellType.Gramo);
 
@@ -61,26 +63,34 @@ public class EndPuzzle_State : State
             speed: 3));
     }
 
-    Action GiveRewards() => PuzzleType switch
+    private Vector2Int RandomLoc()
     {
-        PuzzleType.Aural => GiveAuralRewards(),
-        PuzzleType.Theory => GiveTheoryRewards(),
-        _ => throw new System.NotImplementedException(),
-    };
+        return new Vector2Int(
+            UnityEngine.Random.Range(30, 60) * (UnityEngine.Random.value < .5f ? 1 : -1),
+            UnityEngine.Random.Range(30, 60) * (UnityEngine.Random.value < .5f ? 1 : -1)
+        );
+    }
 
-    Action GiveTheoryRewards() => Puzzle switch
-    {
-        _ when Puzzle is NotePuzzle => () => { DataManager.QuestsData.IncreaseLevel(QuestData.DataItem.StarChart); }
-        ,
-        _ => null,
-    };
+    // Action GiveRewards() => PuzzleType switch
+    // {
+    //     PuzzleType.Aural => GiveAuralRewards(),
+    //     PuzzleType.Theory => GiveTheoryRewards(),
+    //     _ => throw new System.NotImplementedException(),
+    // };
 
-    Action GiveAuralRewards() => Puzzle switch
-    {
-        _ when Puzzle is NotePuzzle => () => { }
-        ,
-        _ => null,
-    };
+    // Action GiveTheoryRewards() => Puzzle switch
+    // {
+    //     _ when Puzzle is NotePuzzle => () => { DataManager.QuestsData.IncreaseLevel(QuestData.DataItem.StarChart); }
+    //     ,
+    //     _ => null,
+    // };
+
+    // Action GiveAuralRewards() => Puzzle switch
+    // {
+    //     _ when Puzzle is NotePuzzle => () => { DataManager.QuestsData.IncreaseLevel(QuestData.DataItem.StarChart); }
+    //     ,
+    //     _ => null,
+    // };
 
 
 }

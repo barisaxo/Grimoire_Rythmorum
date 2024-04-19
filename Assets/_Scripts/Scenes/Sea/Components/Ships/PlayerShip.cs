@@ -18,7 +18,17 @@ public class PlayerShip
     public Vector2 Offset => GlobalCoord - GlobalLoc;
     public Vector2Int GlobalCoord => new((int)GlobalLoc.x, (int)GlobalLoc.y);
     public Vector2Int RegionCoord => new((int)(GlobalLoc.x / RegionSize), (int)(GlobalLoc.y / RegionSize));
-    public Region Region => WorldMapScene.Io.Map.Regions[WorldMapScene.Io.Map.RegionIndexFromGlobalCoord(GlobalCoord)];
+
+    public Region Region
+    {
+        get
+        {
+            // return WorldMapScene.Io.Map.Territories.GetValueOrDefault(new Vector2Int((int)(GlobalLoc.x / RegionSize), (int)(GlobalLoc.y / RegionSize))).re;
+            return WorldMapScene.Io.Map.Regions[WorldMapScene.Io.Map.RegionIndexFromGlobalCoord(GlobalCoord)];
+        }
+    }
+
+
     public Vector2Int LocalCoord(int regionSize) => GlobalCoord.Smod(regionSize);
 
     private float _rotY;
@@ -44,14 +54,16 @@ public class PlayerShip
     private readonly int RegionSize;
     private readonly int GlobalSize;
 
+    //  TODO get actual data
     public ShipStats.ShipStats ShipStats = new(
-       new ShipStats.HullStats(
+        new ShipStats.HullStats(
            hullData: Data.Equipment.HullData.Schooner,
            timberType: Data.Inventory.MaterialsData.DataItem.Oak),
-       new ShipStats.CannonStats(
+        new ShipStats.CannonStats(
            Data.Equipment.CannonData.Culverin,
            Data.Inventory.MaterialsData.DataItem.CastIron),
-       numOfCannons: 32
+        new ShipStats.RiggingStats(Data.Inventory.MaterialsData.DataItem.Hemp),
+        numOfCannons: 32
    );
 
 
@@ -61,7 +73,7 @@ public class PlayerShip
         MapSize = scene.Map.Size;
         RegionSize = scene.Map.RegionSize;
         GlobalSize = MapSize * RegionSize;
-        GlobalLoc = new Vector2((RegionSize * 5) + (RegionSize * .5f) + 1, (RegionSize * 6) + (RegionSize * .5f) + 1); //Vector2.one + (.5f * RegionSize * Vector2.one);
+        GlobalLoc = new Vector2((RegionSize * 5) + (RegionSize * .5f) + 2, (RegionSize * 6) + (RegionSize * .5f) + 2); //Vector2.one + (.5f * RegionSize * Vector2.one);
         GO = SetUpTheShip(scene);
     }
 
@@ -101,6 +113,21 @@ public class PlayerShip
         .OffsetImageFromTMP(Vector2.right * .5f)
         ;
 
+    private Card _attackPopup;
+    public Card AttackPopup => _attackPopup ??= new Card(nameof(AttackPopup), GO.transform)
+        .SetPositionAll(1, 0)
+        .SetFontScale(.5f, .5f)
+        .AutoSizeTextContainer(true)
+        .SetOutlineColor(Color.black)
+        .SetTextAlignment(TMPro.TextAlignmentOptions.Right)
+        .SetTMPRectPivot(new Vector2(1, .5f))
+        .SetOutlineWidth(.15f)
+        .AutoSizeFont(true)
+        .AllowWordWrap(false)
+        .SetImageSprite(Assets.NorthButton)
+        .SetImageSize(.5f, .5f)
+        .OffsetImageFromTMP(Vector2.right * .5f)
+        ;
 }
 
 // public static class PlayerShipSystems

@@ -1,12 +1,13 @@
-
 using MusicTheory;
-
 
 namespace Data.Options
 {
     [System.Serializable]
     public class SettingsData : IData
     {
+
+        public void Reset() { }
+
         private KeyOf _currentKey = KeyOf.C;
 
         private int _latency = 5;

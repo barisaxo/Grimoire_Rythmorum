@@ -9,6 +9,7 @@ public class SeaToAnglingTransition_State : State
     {
         Sea.WorldMapScene.Io.HUD.Disable();
         Sea.WorldMapScene.Io.Ship.ConfirmPopup.GO.SetActive(false);
+        Sea.WorldMapScene.Io.Ship.AttackPopup.GO.SetActive(false);
         Sea.WorldMapScene.Io.MiniMap.Card.GO.SetActive(false);
         Audio.BGMusic.Pause();
         Audio.Ambience.Pause();

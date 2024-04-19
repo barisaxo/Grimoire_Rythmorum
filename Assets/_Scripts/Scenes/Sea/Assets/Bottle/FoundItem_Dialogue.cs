@@ -26,7 +26,7 @@ public class FoundItem_Dialogue : Dialogue
 
     private Line GetStartLine()
     {
-        if (Rewards.Rewards is null) throw new System.Exception();
+        if (Rewards.Rewards is null) return new Line("You still need to implement this reward, Pino", SubsequentState);
 
         var lines = new Line[Rewards.Rewards.Length];
 

@@ -6,7 +6,7 @@ namespace Sea
 {
     public class Bottle : ISceneObject
     {
-        public Bottle(State state, DataManager data, MusicTheory.RegionalMode region)
+        public Bottle(State state, DataManager data)
         {
             Difficulty = new StarChartDifficultySetter(data);
             GO = (BottlePrefab = Assets.Bottle).gameObject;

@@ -17,6 +17,7 @@ namespace Data.Player
             return playerDatum;
         }
 
+        public void Reset() => _playerDatum = SetUpSkillsDatum();
         public string GetDisplayLevel(DataEnum item)
         {
             var Item = item as DataItem;

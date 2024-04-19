@@ -38,7 +38,7 @@ public class Frigate : MonoBehaviour, Sea.IMAShip
         get => _config;
         set
         {
-            if (value == _config) return;
+            // if (value == _config) return;
             _config = value;
             FrigateRig.gameObject.SetActive(value == SailConfig.Frigate);
             BarqueRig.gameObject.SetActive(value == SailConfig.Barque);
@@ -49,6 +49,10 @@ public class Frigate : MonoBehaviour, Sea.IMAShip
                 _ => throw new System.ArgumentOutOfRangeException(value.ToString())
             };
         }
+    }
+    public void RandomRig()
+    {
+        Config = UnityEngine.Random.value < .5f ? SailConfig.Frigate : SailConfig.Barque;
     }
     private SailConfig _config;
     public enum SailConfig { Frigate, Barque }
@@ -63,6 +67,7 @@ public class Frigate : MonoBehaviour, Sea.IMAShip
     public string PopupText => "Hail";
     public event Action Interaction;
     public Transform Transform => _hull.transform;
+    public GameObject GO => gameObject;
 
     private ShipStats.ShipStats _shipStats;
     public ShipStats.ShipStats ShipStats => _shipStats ??= new(
@@ -73,6 +78,7 @@ public class Frigate : MonoBehaviour, Sea.IMAShip
         new ShipStats.CannonStats(
             Data.Equipment.CannonData.Culverin,
             Data.Inventory.MaterialsData.DataItem.CastIron),
+        new ShipStats.RiggingStats(Data.Inventory.MaterialsData.DataItem.Hemp),
         numOfCannons: NumOfCannons
     );
 }

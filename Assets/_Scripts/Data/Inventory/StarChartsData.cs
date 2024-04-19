@@ -18,6 +18,7 @@ namespace Data.Inventory
             return quests;
         }
 
+        public void Reset() => _starCharts = SetUpStarCharts();
         public string GetDisplayLevel(DataEnum item) => StarCharts.GetValueOrDefault((DataItem)item).ToString();
         public int GetLevel(DataEnum item) => StarCharts.GetValueOrDefault((DataItem)item);
 

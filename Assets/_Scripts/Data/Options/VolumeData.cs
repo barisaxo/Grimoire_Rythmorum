@@ -6,8 +6,8 @@ namespace Data.Options
     public class VolumeData : IData
     {
         private Dictionary<DataItem, int> _volumeLevels;
-        private Dictionary<DataItem, int> VolumeLevels => _volumeLevels ??= SetUpFish();
-        Dictionary<DataItem, int> SetUpFish()
+        private Dictionary<DataItem, int> VolumeLevels => _volumeLevels ??= SetUpVolLvls();
+        Dictionary<DataItem, int> SetUpVolLvls()
         {
             Dictionary<DataItem, int> levels = new();
             var items = DataItems;
@@ -23,6 +23,7 @@ namespace Data.Options
             return levels;
         }
 
+        public void Reset() => _volumeLevels = SetUpVolLvls();
         public string GetDisplayLevel(DataEnum item) => VolumeLevels[(DataItem)item].ToString();
         public float GetScaledLevel(DataEnum item) => (float)GetLevel(item) * .01f;
         public int GetLevel(DataEnum item) => VolumeLevels[(DataItem)item];

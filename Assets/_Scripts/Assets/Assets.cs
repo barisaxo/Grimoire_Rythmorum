@@ -126,6 +126,14 @@ public partial class Assets
     public static Color Br = new Color(.333f, .1666f, .666f);
     public static Color M = new Color(.666f, .1666f, .666f);
     public static Color Rb = new Color(.666f, .1666f, .333f);
+
+
+    public static Sprite Wall0 => Resources.Load<Sprite>("Sprites/Walls/wall0");
+    public static Sprite Wall1 => Resources.Load<Sprite>("Sprites/Walls/wall1");
+    public static Sprite Wall2 => Resources.Load<Sprite>("Sprites/Walls/wall2");
+    public static Sprite Wall2a => Resources.Load<Sprite>("Sprites/Walls/wall2a");
+    public static Sprite Wall3 => Resources.Load<Sprite>("Sprites/Walls/wall3");
+    public static Sprite Wall4 => Resources.Load<Sprite>("Sprites/Walls/wall4");
 }
 
 

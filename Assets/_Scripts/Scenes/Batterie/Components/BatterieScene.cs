@@ -24,8 +24,11 @@ public class BatterieScene
 
     public void Initialize()
     {
+        Debug.Log(DataManager.Io.CharData.GetLevel(Data.Player.CharacterData.DataItem.MaxHP));
+
+        // Sea.WorldMapScene.Io.Ship.ShipStats.HullStrength,
         BatterieHUD ??= new BatterieHUD(
-            Sea.WorldMapScene.Io.Ship.ShipStats.HullStrength,
+            DataManager.Io.CharData.GetLevel(Data.Player.CharacterData.DataItem.MaxHP),
             DataManager.Io.CharData.GetLevel(Data.Player.CharacterData.DataItem.CurrentHP),
             (int)NPCShip.ShipStats.HullStrength);
         Debug.Log("(int)NPCShip.ShipStats.HullStrength: " + NPCShip.ShipStats.HullStats.HullData.Description);
@@ -44,6 +47,8 @@ public class BatterieScene
 
     public void SelfDestruct()
     {
+        GameObject.Destroy(ShipFire.gameObject);
+        GameObject.Destroy(NMEFire.gameObject);
         Background.SelfDestruct();
         BatterieHUD.SelfDestruct();
     }
@@ -92,6 +97,7 @@ public class BatterieScene
         ShipFire.transform.position = ship.transform.position;
         ShipFire.transform.LookAt(NME.transform);
         ShipFire.transform.Translate(Vector3.forward * .25f);
+
         return ship;
     }
 

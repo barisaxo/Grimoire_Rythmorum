@@ -3,13 +3,14 @@ using UnityEngine;
 
 public class BootStrap_State : State
 {
-    private BootStrap_State() { }
+    private BootStrap_State() { Fader.Screen.color = Color.black; }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    private static void Initialize()
+    private static void AutoInitialize()
     {
+        _ = new FPSDisplay();
         BootStrap_State state = new();
-        state.SetState(state);
+        state.SetState(new BootStrap_State() { Fade = true });
     }
 
     protected override void PrepareState(Action callback)
@@ -21,13 +22,19 @@ public class BootStrap_State : State
 
     protected override void EngageState()
     {
-
         SetState(new Menu_State(
             new Menus.Main.MainMenu(
                 DataManager,
                 Audio)
         ));
     }
+
+    protected override void DisengageState()
+    {
+        Fader.SelfDestruct();
+    }
+
+    readonly ScreenFader Fader = new();
 }
 
 public class ThrowState : State

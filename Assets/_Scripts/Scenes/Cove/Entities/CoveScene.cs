@@ -14,8 +14,9 @@ public class CoveScene
         _ = SouthLight;
         _ = WestLight;
         _ = EastLight;
+        // _ = SkillOrb;
         _ = Ship;
-        SetUpCamera();
+        PatternViewer.Init();
     }
 
     private class Instance
@@ -31,8 +32,12 @@ public class CoveScene
         RockTheBoat.SelfDestruct();
         if (Parent) Object.Destroy(Parent.gameObject);
         Instance.Destruct();
+        PatternViewer.SelfDestruct();
     }
     #endregion INSTANCE
+
+    private PatternViewer _patternViewer;
+    public PatternViewer PatternViewer => _patternViewer ??= new();
 
     private Transform _parent;
     private Transform Parent => _parent ? _parent : _parent = new GameObject(nameof(Parent)).transform;
@@ -60,13 +65,15 @@ public class CoveScene
     private GameObject _ship;
     public GameObject Ship => _ship ? _ship : _ship = SetUpShip();
 
-    public RockTheBoat RockTheBoat;
+    // private GameObject _skillOrb;
+    // public GameObject SkillOrb => _skillOrb ? _skillOrb : _skillOrb = SetUpSkillOrb();
 
-
-    private void SetUpCamera()
+    private GameObject SetUpSkillOrb()
     {
-        // Cam.Io.Camera.transform.SetPositionAndRotation(Vector3.back * 10, Quaternion.identity);
+        throw new System.NotImplementedException();
     }
+
+    public RockTheBoat RockTheBoat;
 
 
     private Light SetUpLight()

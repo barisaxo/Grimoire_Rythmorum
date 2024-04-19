@@ -7,8 +7,17 @@ namespace Sea.Maps
 {
     public interface IMap
     {
+        /// <summary>
+        /// The x&y grid length of regions.
+        /// </summary>
         public int Size { get; }
+        /// <summary>
+        /// The subdivision x&y length of cells in a region.
+        /// </summary>
         public int RegionSize { get; }
+        /// <summary>
+        /// Size * RegionSize = the total cell length of all regions on the map.
+        /// </summary>
         public int GlobalSize { get; }
         public Region[] Regions { get; }
         public Dictionary<Vector2Int, Feature[]> Features { get; }
@@ -53,7 +62,7 @@ namespace Sea.Maps
             int i = 0;
             for (int x = 0; x < Size; x++)
                 for (int y = 0; y < Size; y++)
-                    Regions[i++] = new(new Vector2Int(x, y), RegionSize, data);
+                    Regions[i++] = new(new Vector2Int(x, y), RegionSize, data, Territories.GetValueOrDefault(new Vector2Int(x, y)));
         }
 
 
@@ -76,7 +85,7 @@ namespace Sea.Maps
             int i = 0;
             for (int x = 0; x < Size; x++)
                 for (int y = 0; y < Size; y++)
-                    Regions[i++] = new(new Vector2Int(x, y), RegionSize, data);
+                    Regions[i++] = new(new Vector2Int(x, y), RegionSize, data, Territories.GetValueOrDefault(new Vector2Int(x, y)));
         }
 
         public readonly Dictionary<Vector2Int, R> Territories = new()
@@ -206,7 +215,7 @@ namespace Sea.Maps
             int i = 0;
             for (int x = 0; x < Size; x++)
                 for (int y = 0; y < Size; y++)
-                    Regions[i++] = new(new Vector2Int(x, y), RegionSize, data);
+                    Regions[i++] = new(new Vector2Int(x, y), RegionSize, data, Territories.GetValueOrDefault(new Vector2Int(x, y)));
         }
 
         public readonly Dictionary<Vector2Int, R> Territories = new()
@@ -265,3 +274,9 @@ namespace Sea.Maps
 //     /*b*/  R.o,  R.o,  R.o,  R.o,  R.o,  R.o,  R.o,  R.o,  R.o,  R.o,  R.o,  R.o,
 //       //    0     1     2     3     4     5     6     7     8     9     10    11  
 // };
+
+// public static class RToRegionHelper{
+//     public static MusicTheory.RegionalMode RToRegion(this Sea.Maps.R r) => r switch{
+//         Sea.Maps.R.a =
+//     }
+// }

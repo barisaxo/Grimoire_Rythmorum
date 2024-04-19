@@ -68,7 +68,7 @@ namespace Sea
 
                 int weightedRand = Helpers.WeightedRandomInt(rand, percent, enums.Count);
 
-                Debug.Log(enums.Count + " " + rand + " " + percent + " " + weightedRand);
+                // Debug.Log(enums.Count + " " + rand + " " + percent + " " + weightedRand);
 
                 return enums[weightedRand];
             }
@@ -131,7 +131,7 @@ namespace Sea
 
                 int weightedRand = Helpers.WeightedRandomInt(rand, percent, Puzzles.Count);
 
-                Debug.Log(Puzzles.Count + " " + rand + " " + percent + " " + weightedRand);
+                // Debug.Log(Puzzles.Count + " " + rand + " " + percent + " " + weightedRand);
 
                 return Puzzles[weightedRand];
             }
@@ -239,7 +239,7 @@ namespace Sea
     {
         public ItemInstantiator(GameObject toInstantiate, Vector3 scale, Vector3 rot)
         {
-            ToInstantiate = toInstantiate;
+            _toInstantiate = toInstantiate;
             Scale = scale;
             Rot = rot;
         }
@@ -254,7 +254,16 @@ namespace Sea
             return GameObject.Instantiate(ToInstantiate);
         }
 
-        public GameObject ToInstantiate { get; private set; }
+        private GameObject _toInstantiate;
+        public GameObject ToInstantiate
+        {
+            get
+            {
+                Debug.Log(nameof(GetInstantiation) + " " + _toInstantiate.name);
+                return _toInstantiate;
+            }
+            private set => _toInstantiate = value;
+        }
         public Vector3 Scale { get; set; }
         public Vector3 Rot { get; set; }
     }

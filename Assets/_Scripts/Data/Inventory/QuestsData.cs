@@ -17,6 +17,8 @@ namespace Data.Inventory
             return quests;
         }
 
+        public void Reset() => _quests = SetUpQuests();
+
         public string GetDisplayLevel(DataEnum item) => Quests[(DataItem)item] is not null ?
             "Active" : "None active";
 
@@ -41,7 +43,7 @@ namespace Data.Inventory
             PersistentData.Save(this);
         }
 
-        public IQuest GetQuest(DataEnum item) => //Quests.GetValueOrDefault((DataItem)item);
+        public IQuest GetQuest(DataEnum item) =>
             Quests[(DataItem)item] is null ? null : Quests[(DataItem)item];
 
 

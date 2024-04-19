@@ -12,6 +12,8 @@ namespace Data.Options
 
         public bool InventoryIsFull(int Space) => false;
 
+        public void Reset() { }
+
         public class DataItem : DataEnum
         {
             public DataItem() : base(0, "") { }

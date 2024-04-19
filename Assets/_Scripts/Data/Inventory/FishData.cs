@@ -15,6 +15,7 @@ namespace Data.Inventory
             return fish;
         }
 
+        public void Reset() => _fish = SetUpFish();
         public string GetDisplayLevel(DataEnum item) => Fish[(DataItem)item].ToString();
 
         public int GetLevel(DataEnum item) => Fish[(DataItem)item];

@@ -65,7 +65,11 @@ namespace MusicTheory.Rhythms
 
 
     /// <summary>
-    /// unnecessary to define is the 'Multiple Levels' as in the combined beat level eg half & whole notes in 4/4 D1 is the fist division level, eg 8th notes in 4/4/D1T is triplets at the first division, eg trip 8ths in 4/4D2 is the second division level, eg 16th notes in 4/4.There will be no need to go beyond D2 in this game.
+    /// unnecessary to define is the 'Multiple Levels' as in the combined beat level 
+    /// eg half & whole notes in 4/4 D1 is the fist division level, 
+    /// eg 8th notes in 4/4/D1T is triplets at the first division, 
+    /// eg trip 8ths in 4/4D2 is the second division level, 
+    /// eg 16th notes in 4/4.There will be no need to go beyond D2 in this game.
     /// </summary>
     public enum MetricLevel { Beat, BeatT, D1, D1T, D2, }
 

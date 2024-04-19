@@ -23,10 +23,11 @@ public abstract class State
     /// </summary>
     protected void DisableInput()
     {
+        Debug.Log(nameof(DisableInput));
+        MonoHelper.OnUpdate -= UpdateStickInput;
         InputKey.ButtonEvent -= GPInput;
         InputKey.StickEvent -= GPStickInput;
         InputKey.MouseClickEvent -= Clicked;
-        MonoHelper.OnUpdate -= UpdateStickInput;
     }
 
     /// <summary>
@@ -56,22 +57,24 @@ public abstract class State
     /// </summary>
     protected void EnableInput()
     {
+        Debug.Log(nameof(EnableInput));
+        MonoHelper.OnUpdate += UpdateStickInput;
         InputKey.ButtonEvent += GPInput;
         InputKey.StickEvent += GPStickInput;
         InputKey.MouseClickEvent += Clicked;
-        MonoHelper.OnUpdate += UpdateStickInput;
     }
 
     protected void SetState(State newState)
     {
         if (newState is null) return;
+
         if (newState.Fade) FadeToState(newState);
         else SetStateDirectly(newState);
     }
 
     private void SetStateDirectly(State newState)
     {
-        if (newState == null) return;
+        if (newState is null) return;
 
         DisableInput();
         DisengageState();
@@ -127,6 +130,8 @@ public abstract class State
 
         IEnumerator FadeInToScene()
         {
+            newState.EngageState();
+
             while (fader.Screen.color.a > .01f)
             {
                 yield return null;
@@ -134,7 +139,6 @@ public abstract class State
             }
 
             fader.SelfDestruct();
-            newState.EngageState();
             newState.EnableInput();
         }
     }

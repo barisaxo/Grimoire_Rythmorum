@@ -424,7 +424,12 @@ static class Helpers
     //     }
     // }
 
-
+    /// <summary>
+    /// Subtract the larger number by the smaller number. 
+    /// a > b ? a - b : b - a;
+    /// Meant to be used with positive numbers to always return a positive number.
+    /// </summary>
+    public static float ReduceSmaller(this float a, float b) => a > b ? a - b : b - a;
 }
 
 

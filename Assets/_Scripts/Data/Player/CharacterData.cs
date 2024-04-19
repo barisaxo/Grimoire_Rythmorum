@@ -8,8 +8,8 @@ namespace Data.Player
     [System.Serializable]
     public class CharacterData : IData
     {
-        private Dictionary<DataItem, int> _CharacterDatum;
-        public Dictionary<DataItem, int> CharacterDatum => _CharacterDatum ??= SetUpCharacterDatum();
+        private Dictionary<DataItem, int> _characterDatum;
+        public Dictionary<DataItem, int> CharacterDatum => _characterDatum ??= SetUpCharacterDatum();
 
         // private ShipStats.ShipStats _shipStats;
         // public ShipStats.ShipStats ShipStats => _shipStats ??= new(
@@ -24,6 +24,7 @@ namespace Data.Player
             return CharacterDatum;
         }
 
+        public void Reset() => _characterDatum = SetUpCharacterDatum();
         public string GetDisplayLevel(DataEnum item)
         {
             return "";

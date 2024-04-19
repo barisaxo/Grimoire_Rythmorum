@@ -14,9 +14,11 @@ namespace Data.Inventory
             return ship;
         }
 
+        public void Reset() => _lighthouses = SetUpLightHouses();
+
         public string GetDisplayLevel(DataEnum item) => Lighthouses[(DataItem)item] == 1 ? "Active" : "Not active";
 
-        public int GetLevel(DataEnum item) => Lighthouses.GetValueOrDefault((DataItem)item);
+        public int GetLevel(DataEnum item) => Lighthouses[(DataItem)item];// Lighthouses.GetValueOrDefault((DataItem)item);
 
         public void IncreaseLevel(DataEnum item)
         {

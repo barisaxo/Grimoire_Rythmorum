@@ -8,15 +8,16 @@ namespace Data.Inventory
     public class MaterialsData : IData
     {
         private Dictionary<DataItem, int> _materials;
-        private Dictionary<DataItem, int> Materials => _materials ??= SetUpFish();
+        private Dictionary<DataItem, int> Materials => _materials ??= SetUpMats();
 
-        Dictionary<DataItem, int> SetUpFish()
+        Dictionary<DataItem, int> SetUpMats()
         {
             Dictionary<DataItem, int> materials = new();
             foreach (var item in DataItems) materials.TryAdd((DataItem)item, 0);
             return materials;
         }
 
+        public void Reset() => _materials = SetUpMats();
         public string GetDisplayLevel(DataEnum item) => Materials[(DataItem)item].ToString();
 
         public int GetLevel(DataEnum item) => Materials[(DataItem)item];

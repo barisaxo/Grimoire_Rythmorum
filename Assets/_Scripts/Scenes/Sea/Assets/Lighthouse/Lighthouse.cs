@@ -23,6 +23,8 @@ namespace Sea
                 Vector3.one * 3,
                 Vector3.zero);
 
+            Debug.Log(RegionData.Name + " " + WorldMapScene.Io.Ship.GlobalCoord);
+
             if (lighthouseData.GetLevel(RegionData) == 1)
             {
                 LighthousePrefab.Light.SetActive(true);
@@ -46,15 +48,15 @@ namespace Sea
         public IQuestable Questable => new NotQuestable();
         public IDifficulty Difficulty { get; } = new NoDifficulty();
 
-        public LighthouseData.DataItem RegionData => Region.RegionalMode switch
+        public LighthouseData.DataItem RegionData => Region.R switch
         {
-            MusicTheory.RegionalMode.Ionian => LighthouseData.DataItem.Ios,
-            MusicTheory.RegionalMode.Dorian => LighthouseData.DataItem.Doria,
-            MusicTheory.RegionalMode.Phrygian => LighthouseData.DataItem.Phrygia,
-            MusicTheory.RegionalMode.Lydian => LighthouseData.DataItem.Lydia,
-            MusicTheory.RegionalMode.MixoLydian => LighthouseData.DataItem.MixoLydia,
-            MusicTheory.RegionalMode.Aeolian => LighthouseData.DataItem.Aeolia,
-            MusicTheory.RegionalMode.Locrian => LighthouseData.DataItem.Locria,
+            Sea.Maps.R.i => LighthouseData.DataItem.Ios,
+            Sea.Maps.R.d => LighthouseData.DataItem.Doria,
+            Sea.Maps.R.p => LighthouseData.DataItem.Phrygia,
+            Sea.Maps.R.l => LighthouseData.DataItem.Lydia,
+            Sea.Maps.R.m => LighthouseData.DataItem.MixoLydia,
+            Sea.Maps.R.a => LighthouseData.DataItem.Aeolia,
+            Sea.Maps.R.s => LighthouseData.DataItem.Locria,
             _ => LighthouseData.DataItem.Chromatica,
         };
     }

@@ -2,9 +2,16 @@ using System;
 
 public class SeaToBatteryTransition_State : State
 {
-    public SeaToBatteryTransition_State() { Fade = false; }//TODO this might be wrong
+    public SeaToBatteryTransition_State() { Fade = false; }
     protected override void PrepareState(Action callback)
     {
+        Audio.Ambience.Pause();
+        Audio.BGMusic.Pause();
+        Audio.SFX.PlayOneShot(Assets.AlertHalfDim);
+        Sea.WorldMapScene.Io.HUD.Disable();
+        Sea.WorldMapScene.Io.Ship.ConfirmPopup.GO.SetActive(false);
+        Sea.WorldMapScene.Io.Ship.AttackPopup.GO.SetActive(false);
+        Sea.WorldMapScene.Io.MiniMap.Card.GO.SetActive(false);
         Sea.WorldMapScene.Io.Ship.SeaPos = Sea.WorldMapScene.Io.Ship.GO.transform.position;
         Sea.WorldMapScene.Io.Ship.SeaRot = Sea.WorldMapScene.Io.Ship.GO.transform.rotation;
         Sea.WorldMapScene.Io.Board.Swells.DisableSwells();

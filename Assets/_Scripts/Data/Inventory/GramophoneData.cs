@@ -16,6 +16,7 @@ namespace Data.Inventory
             return gramos;
         }
 
+        public void Reset() => _gramos = SetUpGramos();
         public string GetDisplayLevel(DataEnum item) => Gramos[(DataItem)item].ToString();
 
         public int GetLevel(DataEnum item) => Gramos[(DataItem)item];

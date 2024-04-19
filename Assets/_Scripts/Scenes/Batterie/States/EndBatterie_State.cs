@@ -28,7 +28,7 @@ public class EndBatterie_State : State
 
     protected override void PrepareState(Action callback)
     {
-        Scene.BatterieHUD.SelfDestruct();
+        Scene.SelfDestruct();
         // Pack.BHUD.SelfDestruct();
 
         // coins = (int)((level + 25f) * 5.55f * UnityEngine.Random.Range(.15f, 1) * (float)((100 - Result()) * .01f));

@@ -19,7 +19,7 @@ namespace Sea
             _currentState = currentState;
             Ship = ship;
         }
-        NPCShip Ship;
+        readonly NPCShip Ship;
         public WorldMapScene Scene;
         private readonly State _currentState;
         public State CurrentState => _currentState;

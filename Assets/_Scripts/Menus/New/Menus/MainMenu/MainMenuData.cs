@@ -13,6 +13,7 @@ namespace Data.Main
             return levels;
         }
 
+        public void Reset() { }
         public string GetDisplayLevel(DataEnum item) => string.Empty;
         public int GetLevel(DataEnum item) => 0;
         public void SetLevel(DataEnum item, int newMainMenuLevel) { }

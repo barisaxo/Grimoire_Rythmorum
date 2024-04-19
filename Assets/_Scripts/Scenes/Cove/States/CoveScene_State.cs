@@ -17,6 +17,8 @@ public class CoveScene_State : State
 
     protected override void EngageState()
     {
+        DataManager.LighthousesData.Reset();
+
         if (!Audio.BGMusic.AudioSources[0].isPlaying)
             Audio.BGMusic.Resume();
     }
@@ -60,16 +62,15 @@ public class CoveScene_State : State
         if (bark) Cove.Player.Bark.SetTextString("...");
         else Cove.Player.Bark.SetTextString("");
 
-        foreach (var x in Cove.Player.Bark.TMP.material.enabledKeywords)
-            Debug.Log(x.name);
     }
 
     protected override void EastPressed()
     {
         if (NearShip) { SetState(new CoveToSeaTransition_State()); return; }
+        else if (NearPatterns) { SetState(new CoveToSeaTransition_State()); return; }
     }
 
-    protected override void StartPressed()
+    protected override void SelectPressed()
     {
         // SetState(new CameraPan_State(
         //     new CoveToMenuTransition_State(new Menus.Options.OptionsMenu(Data, Audio, this) as Menus.IHeaderMenu),
@@ -94,6 +95,7 @@ public class CoveScene_State : State
 
 
     bool NearShip => Dist(Cove.Player.GO, Cove.Ship) < 2.5f;
+    bool NearPatterns => Dist(Cove.Player.GO, Cove.PatternViewer.Parent) < 2.5f;
     float Dist(GameObject a, GameObject b) => Vector2.Distance(
       new Vector2(a.transform.position.x, a.transform.position.z),
       new Vector2(b.transform.position.x, b.transform.position.z));

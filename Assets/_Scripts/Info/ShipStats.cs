@@ -9,17 +9,20 @@ namespace ShipStats
     {
         public IHullStats HullStats;
         public ICannonStats CannonStats;
+        public IRiggingStats RiggingStats;
         public int NumOfCannons;
 
+        public int Tonnage => (int)(HullStats.HullData.Modifier * RiggingStats.ClothType.Modifier * .1f);
         public int HullStrength => (int)(HullStats.HullData.Modifier * HullStats.TimberType.Modifier);
         public int HitDamage => (int)(CannonStats.Cannon.Modifier * CannonStats.Metal.Modifier);
         public int VolleyDamage => (int)(CannonStats.Cannon.Modifier * CannonStats.Metal.Modifier * NumOfCannons);
 
-        public ShipStats(IHullStats hull, ICannonStats cannon, int numOfCannons)
+        public ShipStats(IHullStats hull, ICannonStats cannon, IRiggingStats rigging, int numOfCannons)
         {
             HullStats = hull;
             CannonStats = cannon;
             NumOfCannons = numOfCannons;
+            RiggingStats = rigging;
             // Debug.Log(cannon.Cannon.Modifier + " " + cannon.Metal.Modifier + " " + numOfCannons);
         }
     }
@@ -67,6 +70,14 @@ namespace ShipStats
     {
         public Data.Inventory.MaterialsData.DataItem ClothType { get; }
     }
-
+    [System.Serializable]
+    public class RiggingStats : IRiggingStats
+    {
+        public RiggingStats(Data.Inventory.MaterialsData.DataItem clothType)
+        {
+            ClothType = clothType;
+        }
+        public Data.Inventory.MaterialsData.DataItem ClothType { get; }
+    }
 
 }

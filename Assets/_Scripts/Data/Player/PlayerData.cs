@@ -16,6 +16,7 @@ namespace Data.Player
             foreach (var item in DataItems) playerDatum.TryAdd((DataItem)item, 0);
             return playerDatum;
         }
+        public void Reset() => _playerDatum = SetUpPlayerDatum();
 
         public string GetDisplayLevel(DataEnum item)
         {

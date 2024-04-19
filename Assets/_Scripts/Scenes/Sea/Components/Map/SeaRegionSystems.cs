@@ -37,17 +37,14 @@ public static class SeaRegionSystems
             for (int x = 0; x < size; x++)
                 for (int y = 0; y < size; y++)
                 {
-                    if (
-                       ((x > 3 && y > 3) || (x < size - 3 && y < size - 3) ||
-                        (x > 3 && y < size - 3) || (x < size - 3 && y > 3) ||
-                        (x > halfSize - 2 && y > halfSize - 2 && x < halfSize + 2 && y < halfSize + 2))
-                         &&
-                        (Random.value > .95f))
+                    if (x > 3 && y > 3 && x < size - 3 && y < size - 3 &&
+                       (x < halfSize + 2 || x > halfSize - 2) &&
+                       (y < halfSize - 2 || y > halfSize + 2) &&
+                        Random.value > .95f)
                     {
                         cells.Add(new Cell(x, y)
                         {
-                            Type = CellType.Rocks,
-                            // RotY = Random.Range(0, 360)
+                            Type = CellType.Rocks
                         });
                     }
                 }
@@ -89,11 +86,12 @@ public static class SeaRegionSystems
         {
             foreach (var data in questData.DataItems)
             {
-                if (questData.GetQuest(data) != null)
+                if (questData.GetQuest(data) is not null)
                 {
-                    Debug.Log(questData.GetQuest(data).QuestLocation / WorldMapScene.Io.Map.RegionSize + " " + region.Coord);
-                    if (questData.GetQuest(data).QuestLocation / WorldMapScene.Io.Map.RegionSize == region.Coord)
+                    if ((questData.GetQuest(data)?.QuestLocation / WorldMapScene.Io.Map.RegionSize) == region.Coord)
                     {
+                        Debug.Log("ADDING QUEST: " + questData.GetQuest(data) + " " + questData.GetQuest(data)?.QuestLocation / WorldMapScene.Io.Map.RegionSize + " " + region.Coord);
+
                         cells.Add(new Cell(questData.GetQuest(data).QuestLocation.Smod(size))
                         {
                             Type = data switch
@@ -126,9 +124,34 @@ public static class SeaRegionSystems
         for (int i = 0; i < ships.Length; i++)
         {
             var path = region.PatrolPattern(i);
-            ships[i] = new(path, region.Coord * region.Size) { };
+            ships[i] = new(path, GetShipType(), GetHull(), region.Coord * region.Size) { };
         }
+
         return ships;
+
+        NPCShipType GetShipType()
+        {
+            return region.R switch
+            {
+                R.o => NPCShipType.Pirate,
+                _ => NPCShipType.Trade
+            };
+        }
+
+        Data.Equipment.HullData GetHull()
+        {
+            // Debug.Log(region.Coord + " " + Mathf.Abs(region.Coord.x - (WorldMapScene.Io.Map.Size * .5f)) + " " + Mathf.Abs(region.Coord.y - (WorldMapScene.Io.Map.Size * .5f)) + " " + WorldMapScene.Io.Map.Size);
+            return Mathf.Abs(Mathf.Abs(region.Coord.x - (WorldMapScene.Io.Map.Size * .5f)) + Mathf.Abs(region.Coord.y - (WorldMapScene.Io.Map.Size * .5f))) switch
+            {
+                < 3 => Data.Equipment.HullData.Sloop,
+                3 => Random.value < .65f ? Data.Equipment.HullData.Sloop : Data.Equipment.HullData.Schooner,
+                4 => Random.value < .35f ? Data.Equipment.HullData.Sloop : Data.Equipment.HullData.Schooner,
+                5 => Data.Equipment.HullData.Schooner,
+                6 => Random.value < .65f ? Data.Equipment.HullData.Schooner : Data.Equipment.HullData.Frigate,
+                7 => Random.value < .35f ? Data.Equipment.HullData.Schooner : Data.Equipment.HullData.Frigate,
+                _ => Data.Equipment.HullData.Frigate
+            };
+        }
     }
 
     public static Vector2Int[] PatrolPattern(this Region region, int i)
@@ -151,17 +174,17 @@ public static class SeaRegionSystems
 
     public static Vector2Int[] Nodes(int i, int size) => i switch
     {
-        0 => new Vector2Int[3] { RandA(size), RandB(size), RandC(size) },
-        1 => new Vector2Int[3] { RandA(size), RandB(size), RandD(size) },
-        2 => new Vector2Int[3] { RandA(size), RandC(size), RandD(size) },
-        3 => new Vector2Int[3] { RandB(size), RandC(size), RandD(size) },
-        4 => new Vector2Int[4] { RandA(size), RandB(size), RandC(size), RandD(size) },
-        5 => new Vector2Int[4] { RandA(size), RandC(size), RandB(size), RandD(size) },
-        _ => new Vector2Int[4] { RandA(size), RandB(size), RandD(size), RandC(size) },
+        0 => new Vector2Int[4] { new(0, 0), new(size - 1, 0), new(size - 1, size - 1), new(0, size - 1) },
+        1 => new Vector2Int[4] { new(1, 1), new(size - 2, 1), new(size - 2, size - 2), new(1, size - 2) },
+        2 => new Vector2Int[4] { new(2, 2), new(size - 3, 2), new(size - 3, size - 2), new(3, size - 2) },
+        3 => new Vector2Int[4] { new(3, 3), new(size - 4, 3), new(size - 4, size - 3), new(4, size - 3) },
+        4 => new Vector2Int[4] { new(4, 4), new(size - 5, 4), new(size - 5, size - 4), new(5, size - 4) },
+        5 => new Vector2Int[4] { new(5, 5), new(size - 6, 5), new(size - 6, size - 6), new(6, size - 5) },
+        _ => new Vector2Int[4] { new(6, 6), new(size - 7, 6), new(size - 7, size - 7), new(7, size - 6) },
     };
 
-    public static Vector2Int RandA(int size) => new(0, Random.Range(size - 3, size));
-    public static Vector2Int RandB(int size) => new(Random.Range(0, 3), Random.Range(0, 3));
-    public static Vector2Int RandC(int size) => new(Random.Range(size - 3, size), Random.Range(size - 3, size));
-    public static Vector2Int RandD(int size) => new(Random.Range(size - 3, size), Random.Range(0, 3));
+    // public static Vector2Int RandA(int size) => new(0, Random.Range(size - 3, size));
+    // public static Vector2Int RandB(int size) => new(Random.Range(0, 3), Random.Range(0, 3));
+    // public static Vector2Int RandC(int size) => new(Random.Range(size - 3, size), Random.Range(size - 3, size));
+    // public static Vector2Int RandD(int size) => new(Random.Range(size - 3, size), Random.Range(0, 3));
 }

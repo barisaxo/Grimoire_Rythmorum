@@ -23,6 +23,7 @@ namespace Data.Options
         //     return levels;
         // }
 
+        public void Reset() { }
         private RegionalMode _currentLevel = RegionalMode.Dorian;
         public RegionalMode CurrentLevel
         {

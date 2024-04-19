@@ -35,8 +35,8 @@ public class SeaToItemPickUp_State : State
             return;
         }
 
-        Obj.Questable.QuestComplete();
         Obj.Inventoriable.AddRewards();
+        Obj.Questable.QuestComplete();
         // Data.starChartsData.IncreaseLevel(StarChartsData.DataItem.Inverted7thChordsT);//todo difficulty levels
 
         SetState(new DisplayItem_State(

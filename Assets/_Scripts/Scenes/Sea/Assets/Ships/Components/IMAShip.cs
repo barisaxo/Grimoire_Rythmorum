@@ -11,6 +11,8 @@ namespace Sea
         public Rigging _rigging { get; }
         public Sail[] _sails { get; }
         public Mast[] _masts { get; }
+        public GameObject GO { get; }
+        public void RandomRig();
     }
 
 }

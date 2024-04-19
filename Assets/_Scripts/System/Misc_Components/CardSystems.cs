@@ -14,6 +14,18 @@ public static class CardSystems
         return Card;
     }
 
+    public static Card SetCanvasRenderMode(this Card card, RenderMode renderMode)
+    {
+        card.Canvas.renderMode = renderMode;
+        return card;
+    }
+
+    public static Card SetCanvasWorldCamera(this Card card, Camera worldCam)
+    {
+        card.Canvas.worldCamera = worldCam;
+        return card;
+    }
+
     public static Card SetFont(this Card Card, TMP_FontAsset f)
     {
         Card.TMP.font = f;

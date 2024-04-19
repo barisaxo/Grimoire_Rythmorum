@@ -33,7 +33,7 @@ public class PirateTask_Dialogue : Dialogue
 
         responses.Add(BountiesResponse);
         responses.Add(RewardsResponse);
-        responses.Add(AttackResponse);
+        // responses.Add(AttackResponse);
         responses.Add(BackResponse);
 
         return responses.ToArray();

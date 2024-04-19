@@ -27,8 +27,9 @@ public class PirateEncounter_Dialogue : Dialogue
 
     Line Line4 => new Line("(press space or tap to perform the rhythms)", Line5);
 
-    Line Line5 => new Line("Sending drum cadence now... Counting off...", new BatterieAndCadence_State())
+    Line Line5 => new Line("Sending drum cadence now... Counting off...", new SeaToBatteryTransition_State())
         .SetSpeaker(Speaker)
-        .FadeToNextState();
+        // .FadeToNextState()
+        ;
 
 }

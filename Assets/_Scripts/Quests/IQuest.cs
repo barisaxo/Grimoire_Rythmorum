@@ -21,6 +21,7 @@ namespace Quests
         {
             Reward = reward;
             _questLocation = (globalCoord.x, globalCoord.y);
+            Debug.Log(nameof(QuestLocation) + _questLocation);
             LatLong = latLong;
         }
 

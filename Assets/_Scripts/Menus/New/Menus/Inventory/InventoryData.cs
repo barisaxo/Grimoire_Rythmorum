@@ -4,18 +4,19 @@ namespace Data.Inventory
     [System.Serializable]
     public class InventoryData : IData
     {
-        private (DataItem volumeItem, int level)[] _volumeLevels;
-        private (DataItem volumeItem, int level)[] VolumeLevels => _volumeLevels ??= SetUpVolumeLevels();
-        private (DataItem volumeItem, int level)[] SetUpVolumeLevels()
+        private (DataItem inventoryItem, int level)[] _inventoryItems;
+        private (DataItem inventoryItem, int level)[] InventoryLevels => _inventoryItems ??= SetUpInventoryItems();
+        private (DataItem inventoryItem, int level)[] SetUpInventoryItems()
         {
             var items = DataItems;
-            var levels = new (DataItem volumeItem, int level)[items.Length];
+            var levels = new (DataItem inventoryItem, int level)[items.Length];
             return levels;
         }
 
+        public void Reset() => _inventoryItems = SetUpInventoryItems();
         public string GetDisplayLevel(DataEnum item) => 0.ToString();
         public int GetLevel(DataEnum item) => 0;
-        public void SetLevel(DataEnum item, int newVolumeLevel) { }
+        public void SetLevel(DataEnum item, int newInventoryLevel) { }
         public void IncreaseLevel(DataEnum item) { }
         public void DecreaseLevel(DataEnum item) { }
         public DataEnum[] DataItems => Enumeration.All<DataItem>();

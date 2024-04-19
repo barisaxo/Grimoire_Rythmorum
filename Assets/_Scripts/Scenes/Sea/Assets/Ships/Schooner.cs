@@ -40,15 +40,30 @@ public class Schooner : MonoBehaviour, Sea.IMAShip
         get => _config;
         set
         {
-            if (value == _config) return;
+            // if (value == _config) return;
             _config = value;
             SchoonerRig.gameObject.SetActive(value == SailConfig.Schooner);
             TopRig.gameObject.SetActive(value == SailConfig.Top);
             BrigRig.gameObject.SetActive(value == SailConfig.Brig);
+            Rig = value switch
+            {
+                SailConfig.Schooner => SchoonerRig,
+                SailConfig.Top => TopRig,
+                _ => BrigRig,
+            };
         }
     }
     private SailConfig _config;
     public enum SailConfig { Schooner, Top, Brig }
+    public void RandomRig()
+    {
+        Config = UnityEngine.Random.Range(0, 3) switch
+        {
+            0 => SailConfig.Schooner,
+            1 => SailConfig.Brig,
+            _ => SailConfig.Top,
+        };
+    }
 
     public Hull _hull { get => Hull; }
     public Flag _flag { get => Rig.Flag; }
@@ -60,6 +75,7 @@ public class Schooner : MonoBehaviour, Sea.IMAShip
     public string PopupText => "Hail";
     public event Action Interaction;
     public Transform Transform => _hull.transform;
+    public GameObject GO => gameObject;
 
     private ShipStats.ShipStats _shipStats;
     public ShipStats.ShipStats ShipStats => _shipStats ??= new(
@@ -70,7 +86,9 @@ public class Schooner : MonoBehaviour, Sea.IMAShip
         new ShipStats.CannonStats(
             Data.Equipment.CannonData.Saker,
             Data.Inventory.MaterialsData.DataItem.CastIron),
-        numOfCannons: NumOfCannons
+            new ShipStats.RiggingStats(
+                Data.Inventory.MaterialsData.DataItem.Hemp),
+            numOfCannons: NumOfCannons
     );
 
 
