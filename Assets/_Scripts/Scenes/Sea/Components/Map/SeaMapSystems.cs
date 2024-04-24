@@ -31,11 +31,11 @@ public static class SeaMapSystems
     public static int RegionIndexFromGlobalCoord(this Sea.Maps.WorldMap map, Vector2Int globalCoord)
     {
         return
-            new Vector2Int(globalCoord.x / map.RegionSize, globalCoord.y / map.RegionSize).Vec2ToInt(map.Size);
+            new Vector2Int(globalCoord.x / map.RegionSize, globalCoord.y / map.RegionSize).Vec2ToInt(map.RegionResolution);
     }
 
     public static int CellIndex(this Region region, Vector2Int localCoord) =>
-        localCoord.Vec2ToInt(region.Size);
+        localCoord.Vec2ToInt(region.Resolution);
 
     public static bool IsCellOpen(this Region region, Vector2Int tile)
     {

@@ -70,10 +70,10 @@ public class PlayerShip
     public PlayerShip(Sea.WorldMapScene scene)
     {
         RotY = 180;
-        MapSize = scene.Map.Size;
+        MapSize = scene.Map.RegionResolution;
         RegionSize = scene.Map.RegionSize;
         GlobalSize = MapSize * RegionSize;
-        GlobalLoc = new Vector2((RegionSize * 5) + (RegionSize * .5f) + 2, (RegionSize * 6) + (RegionSize * .5f) + 2); //Vector2.one + (.5f * RegionSize * Vector2.one);
+        GlobalLoc = new Vector2((RegionSize * 5) + RegionSize - 2, (RegionSize * 6) + 2);//(RegionSize * 5) + (RegionSize * .5f) + 2, (RegionSize * 6) + (RegionSize * .5f) + 2);
         GO = SetUpTheShip(scene);
     }
 

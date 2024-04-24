@@ -57,7 +57,7 @@ namespace MusicTheory.Scales
         public HarmonicMinor() : base(
             @enum: ScaleEnum.HarmonicMinor,
             modes: new Mode[] { new HarmonicI(), new HarmonicII(), new HarmonicIII(), new HarmonicIV(), new HarmonicV(), new HarmonicVI(), new HarmonicVII() },
-            steps: new Step[] { new Whole(), new Half(), new Whole(), new Whole(), new Half(), new Augmented(), new Half() },
+            steps: new Step[] { new Whole(), new Half(), new Whole(), new Whole(), new Half(), new Skip(), new Half() },
             degrees: new ScaleDegree[] { new _1(), new _2(), new b3(), new P4(), new P5(), new b6(), new _7() })
         { }
     }
@@ -107,7 +107,7 @@ namespace MusicTheory.Scales
         public Pentatonic() : base(
             @enum: ScaleEnum.Pentatonic,
             modes: new Mode[] { new PentatonicMajor(), new PentatonicII(), new PentatonicIII(), new PentatonicIV(), new PentatonicMinor() },
-            steps: new Step[] { new Whole(), new Whole(), new Augmented(), new Whole(), new Augmented() },
+            steps: new Step[] { new Whole(), new Whole(), new Skip(), new Whole(), new Skip() },
             degrees: new ScaleDegree[] { new _1(), new _2(), new _3(), new P5(), new _6() })
         { }
     }
@@ -116,7 +116,7 @@ namespace MusicTheory.Scales
         public Blues() : base(
            @enum: ScaleEnum.Blues,
            modes: new Mode[] { new Modes.Blues(), new MajorBlues() },
-           steps: new Step[] { new Augmented(), new Whole(), new Half(), new Half(), new Augmented(), new Whole() },
+           steps: new Step[] { new Skip(), new Whole(), new Half(), new Half(), new Skip(), new Whole() },
            degrees: new ScaleDegree[] { new _1(), new b3(), new P4(), new b5(), new P5(), new b7(), })
         { }
     }

@@ -63,9 +63,9 @@ namespace Data.Inventory
             public DataItem() : base(0, "") { }
             public DataItem(int id, string name) : base(id, name) { }
             public DataItem(int id, string name, string description) : base(id, name) => Description = description;
-            public static DataItem StarChart = new(0, "Star Chart", "Sail to the location");
-            public static DataItem Bounty = new(1, "Bounty", "Hunt down the pirate ship");
-            public static DataItem Fishing = new(2, "Fishing", "Catch the fish");
+            public static DataItem StarChart = new(0, "Star Chart", "Sail to the location.");
+            public static DataItem Bounty = new(1, "Bounty", "Hunt down the pirate ship.");
+            // public static DataItem Fishing = new(2, "Fishing", "Catch the fish");
         }
 
         private QuestData() { }

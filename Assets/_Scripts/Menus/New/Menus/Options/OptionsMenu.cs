@@ -29,6 +29,7 @@ namespace Menus.Options
             }
         }
         public MenuItem[] MenuItems { get; set; }
+        public Card Description { get; set; }
         public IMenu CurrentSub { get; private set; }
         private IMenu[] _subMenus;
         public IMenu[] SubMenus => _subMenus ??= new IMenu[] {
@@ -41,10 +42,11 @@ namespace Menus.Options
 
         public IInputHandler Input => new MenuInputHandler()
         {
-            R1 = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Right, Selection, MenuItems)),
-            L1 = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Left, Selection, MenuItems)),
+            R1 = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Right, this)),
+            L1 = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Left, this)),
         };
 
+        public string GetDescription { get => Selection.Item.Description; }
         public string DisplayData(DataEnum item)
         {
             return item.Name;

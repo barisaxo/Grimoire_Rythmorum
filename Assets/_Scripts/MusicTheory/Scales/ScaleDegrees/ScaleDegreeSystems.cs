@@ -15,7 +15,7 @@ namespace MusicTheory.Arithmetic
          {
              Steps.Half => new Intervals.mi2(),
              Steps.Whole => new Intervals.M2(),
-             Steps.Augmented => new Intervals.A2(),
+             Steps.Skip => new Intervals.A2(),
 
              _ => throw new System.ArgumentOutOfRangeException()
          };

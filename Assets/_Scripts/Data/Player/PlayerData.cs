@@ -120,6 +120,7 @@ namespace Data.Player
                 try { data.SetLevel(data.DataItems[i], loadData.GetLevel(data.DataItems[i])); }
                 catch { }
             data.PersistentData.Save(data);
+            data.SetLevel(DataItem.Patterns, 1500);
             return data;
         }
 

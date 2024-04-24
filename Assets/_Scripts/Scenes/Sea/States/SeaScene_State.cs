@@ -59,10 +59,6 @@ public class SeaScene_State : State
             }
         }
 
-        Scene.HUD.UpdateHealthBar(
-            DataManager.CharData.GetLevel(Data.Player.CharacterData.DataItem.CurrentHP),
-            DataManager.CharData.GetLevel(Data.Player.CharacterData.DataItem.MaxHP));
-        Scene.HUD.Hud.GO.SetActive(true);
 
         _ = Scene.UpdateMap(this, DataManager, ShipVelocity);
 
@@ -72,8 +68,12 @@ public class SeaScene_State : State
     protected override void EngageState()
     {
         Scene.HUD.Enable();
+        Scene.HUD.UpdateHealthBar(
+            DataManager.CharData.GetLevel(Data.Player.CharacterData.DataItem.CurrentHP),
+            DataManager.CharData.GetLevel(Data.Player.CharacterData.DataItem.MaxHP));
+        Scene.HUD.Hud.GO.SetActive(true);
         // Scene.HUD.Show();
-        // Scene.HUD.Hide(1);
+        Scene.HUD.Hide(-1);
         Scene.Ship.ConfirmPopup.GO.SetActive(false);
         Scene.Ship.AttackPopup.GO.SetActive(false);
         Scene.MiniMap.Card.GO.SetActive(true);
@@ -101,14 +101,14 @@ public class SeaScene_State : State
     {
         switch (dir)
         {
-            case Dir.Up: up = true; break;
-            case Dir.Up_Off: up = false; break;
-            case Dir.Down: down = true; break;
-            case Dir.Down_Off: down = false; break;
-            case Dir.Left: left = true; break;
-            case Dir.Left_Off: left = false; break;
-            case Dir.Right: right = true; break;
-            case Dir.Right_Off: right = false; break;
+            // case Dir.Up: up = true; break;
+            // case Dir.Up_Off: up = false; break;
+            // case Dir.Down: down = true; break;
+            // case Dir.Down_Off: down = false; break;
+            // case Dir.Left: left = true; break;
+            // case Dir.Left_Off: left = false; break;
+            // case Dir.Right: right = true; break;
+            // case Dir.Right_Off: right = false; break;
         }
 
     }
@@ -205,7 +205,7 @@ public class SeaScene_State : State
     {
         // Debug.Log(v2);
         ShipVelocity.y = Mathf.Clamp(ShipVelocity.y + (Time.deltaTime * v2.y * .9f), -.15f, .8f);
-        ShipVelocity.x = Mathf.Clamp(ShipVelocity.x - Time.deltaTime * -v2.x * 3, -1f, 1f);
+        ShipVelocity.x = Mathf.Clamp(ShipVelocity.x - Time.deltaTime * -v2.x * 2, -1f, 1f);
         if (v2 != Vector2.zero) { TimeSinceLastL -= Time.deltaTime * 2; }
     }
 
@@ -222,7 +222,7 @@ public class SeaScene_State : State
 
     void Tick()
     {
-        Scene.MiniMap.BlinkMiniMap(Scene.Ship.RegionCoord, (int)Scene.Map.Size);
+        Scene.MiniMap.BlinkMiniMap(Scene.Ship.RegionCoord, (int)Scene.Map.RegionResolution);
 
         Scene.HUD.SetCompassRotation(Scene.Ship.RotY);
 

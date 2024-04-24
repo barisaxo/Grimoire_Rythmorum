@@ -33,7 +33,7 @@ public class StepsPuzzle : IPuzzle
         {
             0 => new Half(),
             1 => new Whole(),
-            2 => new Augmented(),
+            2 => new Skip(),
             _ => throw new System.ArgumentOutOfRangeException()
         };
 

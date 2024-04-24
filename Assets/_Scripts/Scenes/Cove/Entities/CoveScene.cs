@@ -65,6 +65,8 @@ public class CoveScene
     private GameObject _ship;
     public GameObject Ship => _ship ? _ship : _ship = SetUpShip();
 
+    private GameObject _skillSheet;
+    public GameObject SkillSheet => _skillSheet ? _skillSheet : _skillSheet = SetUpSkillSheet();
     // private GameObject _skillOrb;
     // public GameObject SkillOrb => _skillOrb ? _skillOrb : _skillOrb = SetUpSkillOrb();
 
@@ -168,5 +170,11 @@ public class CoveScene
         return go;
     }
 
-
+    private GameObject SetUpSkillSheet()
+    {
+        var go = new GameObject(nameof(SkillSheet));
+        go.transform.SetParent(Parent);
+        go.transform.position = new Vector3(14.5f, 1, 4);
+        return go;
+    }
 }

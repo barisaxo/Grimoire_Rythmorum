@@ -17,6 +17,7 @@ namespace Menus.Inventory
 
         readonly DataManager DataManager;
         public IData Data { get; }
+        public Card Description { get; set; }
         private MenuItem _selection;
         public MenuItem Selection
         {
@@ -27,6 +28,7 @@ namespace Menus.Inventory
                 CurrentSub = SubMenus[_selection.Item.Id];
             }
         }
+        public string GetDescription => null;
         public MenuItem[] MenuItems { get; set; }
         public IMenu CurrentSub { get; private set; }
         private IMenu[] _subMenus;
@@ -45,8 +47,8 @@ namespace Menus.Inventory
 
         public IInputHandler Input => new MenuInputHandler()
         {
-            R1 = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Right, Selection, MenuItems)),
-            L1 = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Left, Selection, MenuItems)),
+            R1 = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Right, this)),
+            L1 = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Left, this)),
         };
 
         public string DisplayData(DataEnum item)

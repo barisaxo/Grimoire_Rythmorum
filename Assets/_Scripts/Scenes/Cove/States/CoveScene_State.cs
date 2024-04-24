@@ -57,17 +57,23 @@ public class CoveScene_State : State
     private void CheckDistances()
     {
         bool bark = false;
-        if (NearShip) bark = true;
+        if (NearShip || NearPatterns) bark = true;
 
         if (bark) Cove.Player.Bark.SetTextString("...");
         else Cove.Player.Bark.SetTextString("");
-
     }
 
     protected override void EastPressed()
     {
-        if (NearShip) { SetState(new CoveToSeaTransition_State()); return; }
-        else if (NearPatterns) { SetState(new CoveToSeaTransition_State()); return; }
+        if (NearShip)
+        {
+            SetState(new CoveToSeaTransition_State()); return;
+        }
+        else if (NearPatterns)
+        {
+            SetState(new Menu_State(new Menus.Inventory.SkillsMenu(DataManager.Io.SkillsData, DataManager.Io.PlayerData, this)));
+            return;
+        }
     }
 
     protected override void SelectPressed()
@@ -95,7 +101,7 @@ public class CoveScene_State : State
 
 
     bool NearShip => Dist(Cove.Player.GO, Cove.Ship) < 2.5f;
-    bool NearPatterns => Dist(Cove.Player.GO, Cove.PatternViewer.Parent) < 2.5f;
+    bool NearPatterns => Dist(Cove.Player.GO, Cove.SkillSheet) < 2.5f;
     float Dist(GameObject a, GameObject b) => Vector2.Distance(
       new Vector2(a.transform.position.x, a.transform.position.z),
       new Vector2(b.transform.position.x, b.transform.position.z));

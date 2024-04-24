@@ -28,11 +28,13 @@ public class Angling_State : State
     Transform Parent;
 
     private int Score = 20;
-    private int Difficulty = 60;
+    private int Difficulty;
     public int Counter = 1;
 
     protected override void PrepareState(Action callback)
     {
+        Difficulty = (int)(60 * (1 / DataManager.SkillsData.GetBonusRatio(Data.Player.SkillsData.DataItem.PulsePerception)));
+        Debug.Log(Difficulty);
         SetUpFishingReel();
         Specs = new RhythmSpecs()
         {

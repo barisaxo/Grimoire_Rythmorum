@@ -41,7 +41,7 @@ namespace Sea
 
         private Card[] _hidableHud;
         public Card[] HidableHud => _hidableHud ??= new Card[]{
-            Icon, HealthBar,North, East, South, West,
+            Icon, HealthBar, North, East, South, West,
         };
 
         private Card _hud;

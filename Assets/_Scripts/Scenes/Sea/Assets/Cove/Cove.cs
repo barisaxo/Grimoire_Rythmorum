@@ -17,7 +17,7 @@ namespace Sea
             Telemeter = new RockTelemetry();
 
             Instantiator = new ItemInstantiator(
-                Assets._bottle.gameObject,
+                Assets._nullCove.gameObject,
                 Vector3.one,
                 Vector3.zero);
         }

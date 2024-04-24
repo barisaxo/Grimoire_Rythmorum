@@ -8,15 +8,18 @@ namespace Menus
         public Data.IData Data { get; }
         public MenuItem Selection { get; set; }
         public MenuItem[] MenuItems { get; set; }
+        public Card Description { get; set; }
         public IMenuLayout Layout { get; }
         public IInputHandler Input { get; }
         public IMenuScene Scene { get; }
+        public string GetDescription { get; }
         public string DisplayData(DataEnum item);
 
         public void SelfDestruct()
         {
             for (int i = 0; i < MenuItems.Length; i++)
-                MenuItems[i].Card.SelfDestruct();
+                MenuItems[i].Card?.SelfDestruct();
+            Description?.SelfDestruct();
             Scene?.SelfDestruct();
             Resources.UnloadUnusedAssets();
         }
@@ -68,24 +71,37 @@ namespace Menus
                 //         .SetImageSprite(items[i].Item.Image)
                 //         .SetImagePosition(Layout.GetImagePosition(i, items.Length));
 
-                if (Data.DataItems[i].Description != null)
-                    items[i].Card.CreateChild(Data.DataItems[i].Name, items[i].Card.Canvas)
-                       .SetTextString(Data.DataItems[i].Description)
-                       //.SetTMPSize(new Vector2(7, .7f))
-                       .AutoSizeTextContainer(true)
-                       .SetTMPRectPivot(Layout.DescTMPRectPivot)
-                       .SetTMPPosition(Layout.GetDescPosition())
-                       .AutoSizeFont(true)
-                       .SetTextAlignment(Layout.DescTextAlignment)
-                       .AllowWordWrap(true)
-                       .SetFontScale(.6f, .6f);
+                // if (Data.DataItems[i].Description != null)
+                //     items[i].Card.CreateChild(Data.DataItems[i].Name, items[i].Card.Canvas)
+                //        .SetTextString(Data.DataItems[i].Description)
+                //        //.SetTMPSize(new Vector2(7, .7f))
+                //        .AutoSizeTextContainer(true)
+                //        .SetTMPRectPivot(Layout.DescTMPRectPivot)
+                //        .SetTMPPosition(Layout.GetDescPosition())
+                //        .AutoSizeFont(true)
+                //        .SetTextAlignment(Layout.DescTextAlignment)
+                //        .AllowWordWrap(true)
+                //        .SetFontScale(.6f, .6f);
             }
 
             MenuItems = items;
             Selection = MenuItems[0];
-            Layout.ScrollMenuItems(Dir.Reset, Selection, MenuItems);
+            Layout.ScrollMenuItems(Dir.Reset, this);
         }
 
+        public void SetUpDescription()
+        {
+            Description = new Card(nameof(Description), null)
+                //.SetTMPSize(new Vector2(7, .7f))
+                .AutoSizeTextContainer(true)
+                .SetTMPRectPivot(Layout.DescTMPRectPivot)
+                .SetTMPPosition(Layout.GetDescPosition())
+                .AutoSizeFont(true)
+                .SetTextAlignment(Layout.DescTextAlignment)
+                .AllowWordWrap(true)
+                .SetFontScale(.6f, .6f);
+            // Layout.ScrollMenuItems(Dir.Reset, this);
+        }
     }
 
     public class EmptyDataItem : DataEnum

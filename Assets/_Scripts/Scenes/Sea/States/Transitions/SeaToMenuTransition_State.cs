@@ -39,7 +39,7 @@ public class SeaToMenuTransition_State : State
             new UnityEngine.Vector3(-50, Cam.Io.Camera.transform.rotation.eulerAngles.y,
                 Cam.Io.Camera.transform.rotation.eulerAngles.z),
                 Cam.Io.Camera.transform.position,
-                3));
+                4.5f));
     }
 
     protected override void DisengageState()

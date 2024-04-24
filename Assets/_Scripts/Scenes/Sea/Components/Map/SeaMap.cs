@@ -10,13 +10,13 @@ namespace Sea.Maps
         /// <summary>
         /// The x&y grid length of regions.
         /// </summary>
-        public int Size { get; }
+        public int RegionResolution { get; }
         /// <summary>
         /// The subdivision x&y length of cells in a region.
         /// </summary>
         public int RegionSize { get; }
         /// <summary>
-        /// Size * RegionSize = the total cell length of all regions on the map.
+        /// Size * RegionSize = the x&y length regions on the map.
         /// </summary>
         public int GlobalSize { get; }
         public Region[] Regions { get; }
@@ -33,7 +33,7 @@ namespace Sea.Maps
 
     public class IosMap : IMap
     {
-        public int Size { get; private set; } = 3;
+        public int RegionResolution { get; private set; } = 3;
         public int RegionSize { get; private set; } = 30;
         public int GlobalSize { get; private set; }
         public Region[] Regions { get; private set; }
@@ -56,12 +56,12 @@ namespace Sea.Maps
 
         public IosMap(Data.Inventory.QuestData data)
         {
-            GlobalSize = Size * RegionSize;
-            Regions = new Region[Size * Size];
+            GlobalSize = RegionResolution * RegionSize;
+            Regions = new Region[RegionResolution * RegionResolution];
 
             int i = 0;
-            for (int x = 0; x < Size; x++)
-                for (int y = 0; y < Size; y++)
+            for (int x = 0; x < RegionResolution; x++)
+                for (int y = 0; y < RegionResolution; y++)
                     Regions[i++] = new(new Vector2Int(x, y), RegionSize, data, Territories.GetValueOrDefault(new Vector2Int(x, y)));
         }
 
@@ -72,19 +72,19 @@ namespace Sea.Maps
 
     public class WorldMap : IMap
     {
-        public int Size { get; private set; } = 12;
+        public int RegionResolution { get; private set; } = 12;
         public int RegionSize { get; private set; } = 30;
         public int GlobalSize { get; private set; }
         public Region[] Regions { get; private set; }
 
         public WorldMap(Data.Inventory.QuestData data)
         {
-            GlobalSize = Size * RegionSize;
-            Regions = new Region[Size * Size];
+            GlobalSize = RegionResolution * RegionSize;
+            Regions = new Region[RegionResolution * RegionResolution];
 
             int i = 0;
-            for (int x = 0; x < Size; x++)
-                for (int y = 0; y < Size; y++)
+            for (int x = 0; x < RegionResolution; x++)
+                for (int y = 0; y < RegionResolution; y++)
                     Regions[i++] = new(new Vector2Int(x, y), RegionSize, data, Territories.GetValueOrDefault(new Vector2Int(x, y)));
         }
 
@@ -202,19 +202,19 @@ namespace Sea.Maps
 
     public class SmallMap : IMap
     {
-        public int Size { get; private set; } = 1;
+        public int RegionResolution { get; private set; } = 1;
         public int RegionSize { get; private set; } = 30;
         public int GlobalSize { get; private set; }
         public Region[] Regions { get; private set; }
 
         public SmallMap(Data.Inventory.QuestData data)
         {
-            GlobalSize = Size * RegionSize;
-            Regions = new Region[Size * Size];
+            GlobalSize = RegionResolution * RegionSize;
+            Regions = new Region[RegionResolution * RegionResolution];
 
             int i = 0;
-            for (int x = 0; x < Size; x++)
-                for (int y = 0; y < Size; y++)
+            for (int x = 0; x < RegionResolution; x++)
+                for (int y = 0; y < RegionResolution; y++)
                     Regions[i++] = new(new Vector2Int(x, y), RegionSize, data, Territories.GetValueOrDefault(new Vector2Int(x, y)));
         }
 

@@ -40,6 +40,7 @@ namespace Data.Inventory
         {
             if (StarCharts.ContainsKey((DataItem)item)) StarCharts[(DataItem)item] = count;
             else StarCharts.TryAdd((DataItem)item, count);
+            PersistentData.Save(this);
         }
 
         public bool InventoryIsFull(int Space)

@@ -7,23 +7,24 @@ namespace Data.Player
     [System.Serializable]
     public class SkillsData : IData
     {
-        private Dictionary<DataItem, int> _playerDatum;
-        public Dictionary<DataItem, int> SkillsDatum => _playerDatum ??= SetUpSkillsDatum();
+        private Dictionary<DataItem, int> _skillsDatum;
+        public Dictionary<DataItem, int> SkillsDatum => _skillsDatum ??= SetUpSkillsDatum();
 
         Dictionary<DataItem, int> SetUpSkillsDatum()
         {
-            Dictionary<DataItem, int> playerDatum = new();
-            foreach (var item in DataItems) playerDatum.TryAdd((DataItem)item, 0);
-            return playerDatum;
+            Dictionary<DataItem, int> skillsDatum = new();
+            foreach (var item in DataItems) skillsDatum.TryAdd((DataItem)item, 0);
+            return skillsDatum;
         }
 
-        public void Reset() => _playerDatum = SetUpSkillsDatum();
+        public void Reset() => _skillsDatum = SetUpSkillsDatum();
         public string GetDisplayLevel(DataEnum item)
         {
             var Item = item as DataItem;
-            return item.Name + " lvl " + SkillsDatum[(DataItem)item] + " : " + item.Description + " + " + Item.Per + "% per level";
+            return item.Name + " lvl " + SkillsDatum[(DataItem)item];
         }
 
+        public float GetBonusRatio(DataEnum item) => 1 + (.01f * SkillsDatum[(DataItem)item] * ((DataItem)item).Per);
         public int GetLevel(DataEnum item) => SkillsDatum[(DataItem)item];
 
         public void IncreaseLevel(DataEnum item)
@@ -44,6 +45,7 @@ namespace Data.Player
             PersistentData.Save(this);
         }
 
+        public int GetSkillCost(DataEnum item) => (SkillsDatum[(DataItem)item] + 1) * ((DataItem)item).Cost;
         public DataEnum[] DataItems { get; } = Enumeration.All<DataItem>();
 
         public bool InventoryIsFull(int Space) => false;
@@ -60,23 +62,19 @@ namespace Data.Player
                 Cost = cost;
                 MaxLevel = max;
             }
-            public readonly int Per;
-            public readonly int Cost;
-            public readonly int MaxLevel;
-            public static DataItem PatternRecognition = new(0, "Pattern Recognition", "You are better at finding patterns.", 2, 4, 50);
-            public static DataItem Apophenia = new(1, "Apophenia", "Retain some unsaved patterns on death", 1, 8, 50);
-            public static DataItem Salvaging = new(2, "Salvaging", "You are better at salvaging shipwrecks.", 2, 4, 50);
-            public static DataItem Fishing = new(3, "Fishing", "You are better at catching fish.", 2, 5, 50);
-            public static DataItem CelestialNavigation = new(4, "Celestial Navigation", "You are better at celestial navigation.", 100, 5000, 2);
-            public static DataItem Gramophone = new(5, "Gramophone", "You are better at unlocking Gramophones.", 100, 7500, 2);
 
-            // public static DataItem GramoSolved = new(4, "Gramophone Solved");
-            // public static DataItem GramoFailed = new(5, "Gramophone Failed");
-            // public static DataItem FishCaught = new(6, "Fish Caught");
-            // public static DataItem FishLost = new(7, "Fish Lost");
-            // public static DataItem Hit = new(8, "Batterie Hit");
-            // public static DataItem Miss = new(9, "Batterie Miss");
-            // public static DataItem Patterns = new(10, "Pattern");
+            public readonly int Per;
+            public readonly int Cost;//1:1275,2:2550,3:3825,4:5100,5:6375,6:7650,7:8925,8:10200,9:11475
+            public readonly int MaxLevel;
+
+            public static DataItem Apophenia = new(0, "Apophenia", "Find more patterns, even if they aren't really there.", 2, 8, 50);
+            public static DataItem PatternRecognition = new(1, "Pattern Recognition", "Retain some unsaved patterns when you lose your ship.", 1, 10, 50);
+            public static DataItem Preparation = new(2, "Preparation", "Leave the Cove with extra materials, rations, and gold.", 2, 7, 50);
+            public static DataItem PulsePerception = new(3, "Pulse Perception", "Fishing for beats is quicker.", 2, 2, 50);
+            public static DataItem CelestialNavigation = new(4, "Celestial Navigation", "Get an extra chance to triangulate Star Charts.", 100, 5000, 2);
+            public static DataItem Touch = new(5, "Touch", "Get an extra chance to unlock Gramophones.", 100, 7500, 2);
+            // public static DataItem TimeDilation = new(6, "Time Dilation", "Higher damage potential with cannons.", 1, 17, 50);//19125
+
         }
 
         private SkillsData() { }
@@ -96,3 +94,5 @@ namespace Data.Player
 
     }
 }
+
+//+ " : " + item.Description + " + " + Item.Per + "% per level"

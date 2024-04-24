@@ -14,8 +14,8 @@ namespace Menus
         public Vector2 GetTextPosition(int i, int length);
         public Vector2 GetImagePosition(int i, int length);
 
-        public MenuItem ScrollMenuItems(Dir dir, MenuItem current, MenuItem[] menuItems);
-        public void UpdateText(MenuItem[] MenuItems, MenuItem Selection);
+        public MenuItem ScrollMenuItems(Dir dir, IMenu menu);
+        public void UpdateText(IMenu menu);
     }
 
     public class AlignLeft : IMenuLayout
@@ -29,16 +29,16 @@ namespace Menus
         public TMPro.TextAlignmentOptions ItemTextAlignment => TMPro.TextAlignmentOptions.Left;
         public TMPro.TextAlignmentOptions DescTextAlignment => TMPro.TextAlignmentOptions.Left;
 
-        public MenuItem ScrollMenuItems(Dir dir, MenuItem current, MenuItem[] menuItems)
+        public MenuItem ScrollMenuItems(Dir dir, IMenu menu)
         {
-            var cur = dir switch
+            menu.Selection = dir switch
             {
-                Dir.Up => PrevItem(current, menuItems),
-                Dir.Down => NextItem(current, menuItems),
-                _ => current,
+                Dir.Up => PrevItem(menu.Selection, menu.MenuItems),
+                Dir.Down => NextItem(menu.Selection, menu.MenuItems),
+                _ => menu.Selection,
             };
-            UpdateText(menuItems, cur);
-            return cur;
+            UpdateText(menu);
+            return menu.Selection;
         }
 
         MenuItem NextItem(MenuItem current, MenuItem[] menuItems) =>
@@ -47,21 +47,25 @@ namespace Menus
         MenuItem PrevItem(MenuItem current, MenuItem[] menuItems) =>
             current <= 0 ? current : menuItems[current - 1];
 
-        public void UpdateText(MenuItem[] MenuItems, MenuItem Selection)
+        public void UpdateText(IMenu menu)
         {
-            for (int i = 0; i < MenuItems.Length; i++)
-                if (MenuItems[i].Card.GO.activeInHierarchy)
-                {
-                    MenuItems[i].Card.SetTextColor(Selection == i ? Color.white : Color.gray);
+            for (int i = 0; i < menu.MenuItems.Length; i++)
+                if (menu.MenuItems[i].Card.GO.activeInHierarchy)
+                    menu.MenuItems[i].Card
+                        .SetTextColor(menu.Selection == i ? Color.white : Color.gray)
+                        .SetTextString(menu.DisplayData(menu.MenuItems[i].Item));
 
-                    if (MenuItems[i].Card.Children is not null)
-                        foreach (Card child in MenuItems[i].Card.Children)
-                        {
-                            if (child.ImageExists) child.SetImageColor(Selection == i ? Color.white : Color.clear);
-                            if (child.TMPExists) child.SetTextColor(Selection == i ? Color.white : Color.clear);
-                        }
-                }
+            menu?.Description?.SetTextString(menu?.GetDescription);
         }
+
+        // if (menu.MenuItems[i].Card.Children is not null)
+        //     foreach (Card child in menu.MenuItems[i].Card.Children)
+        //     {
+        //         if (child.ImageExists) child.SetImageColor(menu.Selection == i ? Color.white : Color.clear);
+        //         if (child.TMPExists) child.SetTextColor(menu.Selection == i ? Color.white : Color.clear);
+        //     }
+
+
     }
 
     public class LeftScroll : IMenuLayout
@@ -76,16 +80,16 @@ namespace Menus
         public TMPro.TextAlignmentOptions ItemTextAlignment => TMPro.TextAlignmentOptions.Left;
         public TMPro.TextAlignmentOptions DescTextAlignment => TMPro.TextAlignmentOptions.Right;
 
-        public MenuItem ScrollMenuItems(Dir dir, MenuItem current, MenuItem[] menuItems)
+        public MenuItem ScrollMenuItems(Dir dir, IMenu menu)
         {
-            var cur = dir switch
+            menu.Selection = dir switch
             {
-                Dir.Up => PrevItem(current, menuItems),
-                Dir.Down => NextItem(current, menuItems),
-                _ => current,
+                Dir.Up => PrevItem(menu.Selection, menu.MenuItems),
+                Dir.Down => NextItem(menu.Selection, menu.MenuItems),
+                _ => menu.Selection,
             };
-            UpdateText(menuItems, cur);
-            return cur;
+            UpdateText(menu);
+            return menu.Selection;
         }
 
         MenuItem NextItem(MenuItem current, MenuItem[] menuItems) =>
@@ -94,24 +98,39 @@ namespace Menus
         MenuItem PrevItem(MenuItem current, MenuItem[] menuItems) =>
             current <= 0 ? current : menuItems[current - 1];
 
-        public void UpdateText(MenuItem[] MenuItems, MenuItem Selection)
+        // public void UpdateText(MenuItem[] MenuItems, MenuItem Selection)
+        // {
+        //     for (int i = 0; i < MenuItems.Length; i++)
+        //     {
+        //         if (MenuItems[i].Card.GO.activeInHierarchy)
+        //             MenuItems[i].Card.SetTextColor(Selection == i ? Color.white : Color.gray);
+
+        //         if (MenuItems[i].Card.Children is not null)
+        //             foreach (Card child in MenuItems[i].Card.Children)
+        //             {
+        //                 if (child.ImageExists) child.SetImageColor(Selection == i ? Color.white : Color.clear);
+        //                 if (child.TMPExists) child.SetTextColor(Selection == i ? Color.white : Color.clear);
+        //             }
+
+        //        menu.Description?.SetTextString(menu.GetDescription);
+        //     }
+        // }
+
+        public void UpdateText(IMenu menu)
         {
-            for (int i = 0; i < MenuItems.Length; i++)
+            for (int i = 0; i < menu.MenuItems.Length; i++)
             {
-                MenuItems[i].Card.SetTMPPosition(
-                    new(-Cam.UIOrthoX + 2.5f, (Selection * .8f) - (i * .8f)));
+                menu.MenuItems[i].Card.SetTMPPosition(
+                    new(-Cam.UIOrthoX + 2.5f, (menu.Selection * .8f) - (i * .8f)));
 
-                if (MenuItems[i].Card.GO.activeInHierarchy)
-                    MenuItems[i].Card.SetTextColor(Selection == i ? Color.white : Color.gray);
-
-                if (MenuItems[i].Card.Children is not null)
-                    foreach (Card child in MenuItems[i].Card.Children)
-                    {
-                        if (child.ImageExists) child.SetImageColor(Selection == i ? Color.white : Color.clear);
-                        if (child.TMPExists) child.SetTextColor(Selection == i ? Color.white : Color.clear);
-                    }
+                if (menu.MenuItems[i].Card.GO.activeInHierarchy)
+                    menu.MenuItems[i].Card
+                        .SetTextColor(menu.Selection == i ? Color.white : Color.gray)
+                        .SetTextString(menu.DisplayData(menu.MenuItems[i].Item));
             }
+            menu?.Description?.SetTextString(menu.GetDescription);
         }
+
     }
 
     public class ScrollingHeader : IMenuLayout
@@ -126,16 +145,16 @@ namespace Menus
         public TMPro.TextAlignmentOptions ItemTextAlignment => TMPro.TextAlignmentOptions.Left;
         public TMPro.TextAlignmentOptions DescTextAlignment => TMPro.TextAlignmentOptions.Left;
 
-        public MenuItem ScrollMenuItems(Dir dir, MenuItem current, MenuItem[] menuItems)
+        public MenuItem ScrollMenuItems(Dir dir, IMenu menu)
         {
-            var cur = dir switch
+            menu.Selection = dir switch
             {
-                Dir.Left => PrevItem(current, menuItems),
-                Dir.Right => NextItem(current, menuItems),
-                _ => current,
+                Dir.Left => PrevItem(menu.Selection, menu.MenuItems),
+                Dir.Right => NextItem(menu.Selection, menu.MenuItems),
+                _ => menu.Selection,
             };
-            UpdateText(menuItems, cur);
-            return cur;
+            UpdateText(menu);
+            return menu.Selection;
         }
 
         MenuItem NextItem(MenuItem current, MenuItem[] menuItems) =>
@@ -144,22 +163,24 @@ namespace Menus
         MenuItem PrevItem(MenuItem current, MenuItem[] menuItems) =>
             current <= 0 ? current : menuItems[current - 1];
 
-        public void UpdateText(MenuItem[] MenuItems, MenuItem Selection)
+        public void UpdateText(IMenu menu)
         {
-            for (int i = 0; i < MenuItems.Length; i++)
+            for (int i = 0; i < menu.MenuItems.Length; i++)
             {
-                MenuItems[i].Card.SetTMPPosition(new(
-                    -(Selection * spacing) + (i * spacing), Cam.UIOrthoY - 1));
+                menu.MenuItems[i].Card.SetTMPPosition(new(
+                    -(menu.Selection * spacing) + (i * spacing), Cam.UIOrthoY - 1));
 
-                if (MenuItems[i].Card.GO.activeInHierarchy)
-                    MenuItems[i].Card.SetTextColor(Selection == i ? Color.white : Color.gray);
+                if (menu.MenuItems[i].Card.GO.activeInHierarchy)
+                    menu.MenuItems[i].Card.SetTextColor(menu.Selection == i ? Color.white : Color.gray)
+                    .SetTextString(menu.DisplayData(menu.MenuItems[i].Item));
 
-                if (MenuItems[i].Card.Children is not null)
-                    foreach (Card child in MenuItems[i].Card.Children)
-                    {
-                        if (child.ImageExists) child.SetImageColor(Selection == i ? Color.white : Color.clear);
-                        if (child.TMPExists) child.SetTextColor(Selection == i ? Color.white : Color.clear);
-                    }
+                // if (MenuItems[i].Card.Children is not null)
+                //     foreach (Card child in MenuItems[i].Card.Children)
+                //     {
+                //         if (child.ImageExists) child.SetImageColor(Selection == i ? Color.white : Color.clear);
+                //         if (child.TMPExists) child.SetTextColor(Selection == i ? Color.white : Color.clear);
+                //     }
+                menu?.Description?.SetTextString(menu.GetDescription);
             }
         }
     }
@@ -175,17 +196,16 @@ namespace Menus
         public TMPro.TextAlignmentOptions DescTextAlignment => TMPro.TextAlignmentOptions.Left;
         public Card Card { get; set; }
 
-        public MenuItem ScrollMenuItems(Dir dir, MenuItem current, MenuItem[] menuItems)
+        public MenuItem ScrollMenuItems(Dir dir, IMenu menu)
         {
-            var cur = dir switch
+            menu.Selection = dir switch
             {
-                Dir.Up => PrevItem(current, menuItems),
-                Dir.Down => NextItem(current, menuItems),
-                _ => current,
+                Dir.Up => PrevItem(menu.Selection, menu.MenuItems),
+                Dir.Down => NextItem(menu.Selection, menu.MenuItems),
+                _ => menu.Selection,
             };
-
-            UpdateText(menuItems, cur);
-            return cur;
+            UpdateText(menu);
+            return menu.Selection;
         }
 
         MenuItem NextItem(MenuItem current, MenuItem[] menuItems) =>
@@ -194,20 +214,23 @@ namespace Menus
         MenuItem PrevItem(MenuItem current, MenuItem[] menuItems) =>
             current <= 0 ? current : menuItems[current - 1];
 
-        public void UpdateText(MenuItem[] MenuItems, MenuItem Selection)
+        public void UpdateText(IMenu menu)
         {
-            for (int i = 0; i < MenuItems.Length; i++)
+            for (int i = 0; i < menu.MenuItems.Length; i++)
             {
-                if (MenuItems[i].Card.GO.activeInHierarchy)
-                    MenuItems[i].Card.SetTextColor(Selection == i ? Color.white : Color.gray);
+                if (menu.MenuItems[i].Card.GO.activeInHierarchy)
+                    menu.MenuItems[i].Card
+                        .SetTextColor(menu.Selection == i ? Color.white : Color.gray)
+                        .SetTextString(menu.DisplayData(menu.MenuItems[i].Item));
 
-                if (MenuItems[i].Card.Children is not null)
-                    foreach (Card child in MenuItems[i].Card.Children)
-                    {
-                        if (child.ImageExists) child.SetImageColor(Selection == i ? Color.white : Color.clear);
-                        if (child.TMPExists) child.SetTextColor(Selection == i ? Color.white : Color.clear);
-                    }
+                // if (MenuItems[i].Card.Children is not null)
+                //     foreach (Card child in MenuItems[i].Card.Children)
+                //     {
+                //         if (child.ImageExists) child.SetImageColor(Selection == i ? Color.white : Color.clear);
+                //         if (child.TMPExists) child.SetTextColor(Selection == i ? Color.white : Color.clear);
+                //     }
             }
+            menu?.Description?.SetTextString(menu.GetDescription);
         }
     }
 
@@ -224,16 +247,16 @@ namespace Menus
         public TMPro.TextAlignmentOptions DescTextAlignment => TMPro.TextAlignmentOptions.Left;
         public Card Card { get; set; }
 
-        public MenuItem ScrollMenuItems(Dir dir, MenuItem current, MenuItem[] menuItems)
+        public MenuItem ScrollMenuItems(Dir dir, IMenu menu)
         {
-            var cur = dir switch
+            menu.Selection = dir switch
             {
-                Dir.Left => PrevItem(current, menuItems),
-                Dir.Right => NextItem(current, menuItems),
-                _ => current,
+                Dir.Left => PrevItem(menu.Selection, menu.MenuItems),
+                Dir.Right => NextItem(menu.Selection, menu.MenuItems),
+                _ => menu.Selection,
             };
-            UpdateText(menuItems, cur);
-            return cur;
+            UpdateText(menu);
+            return menu.Selection;
         }
 
         MenuItem NextItem(MenuItem current, MenuItem[] menuItems) =>
@@ -242,20 +265,23 @@ namespace Menus
         MenuItem PrevItem(MenuItem current, MenuItem[] menuItems) =>
             current <= 0 ? current : menuItems[current - 1];
 
-        public void UpdateText(MenuItem[] MenuItems, MenuItem Selection)
+        public void UpdateText(IMenu menu)
         {
-            for (int i = 0; i < MenuItems.Length; i++)
+            for (int i = 0; i < menu.MenuItems.Length; i++)
             {
-                if (MenuItems[i].Card.GO.activeInHierarchy)
-                    MenuItems[i].Card.SetTextColor(Selection == i ? Color.white : Color.gray);
+                if (menu.MenuItems[i].Card.GO.activeInHierarchy)
+                    menu.MenuItems[i].Card
+                        .SetTextColor(menu.Selection == i ? Color.white : Color.gray)
+                        .SetTextString(menu.DisplayData(menu.MenuItems[i].Item));
 
-                if (MenuItems[i].Card.Children is not null)
-                    foreach (Card child in MenuItems[i].Card.Children)
-                    {
-                        if (child.ImageExists) child.SetImageColor(Selection == i ? Color.white : Color.clear);
-                        if (child.TMPExists) child.SetTextColor(Selection == i ? Color.white : Color.clear);
-                    }
+                // if (menu.MenuItems[i].Card.Children is not null)
+                //     foreach (Card child in menu.MenuItems[i].Card.Children)
+                //     {
+                //         if (child.ImageExists) child.SetImageColor(Selection == i ? Color.white : Color.clear);
+                //         if (child.TMPExists) child.SetTextColor(Selection == i ? Color.white : Color.clear);
+                //     }
             }
+            menu?.Description?.SetTextString(menu.GetDescription);
         }
     }
 
@@ -272,18 +298,18 @@ namespace Menus
         public TMPro.TextAlignmentOptions DescTextAlignment => TMPro.TextAlignmentOptions.Left;
         public Card Card { get; set; }
 
-        public MenuItem ScrollMenuItems(Dir dir, MenuItem current, MenuItem[] menuItems)
+        public MenuItem ScrollMenuItems(Dir dir, IMenu menu)
         {
-            var cur = dir switch
+            menu.Selection = dir switch
             {
-                Dir.Up => PrevItem(current, menuItems),
-                Dir.Down => NextItem(current, menuItems),
-                Dir.Left => ScrollLeft(current, menuItems),
-                Dir.Right => ScrollRight(current, menuItems),
-                _ => current,
+                Dir.Up => PrevItem(menu.Selection, menu.MenuItems),
+                Dir.Down => NextItem(menu.Selection, menu.MenuItems),
+                Dir.Left => ScrollLeft(menu.Selection, menu.MenuItems),
+                Dir.Right => ScrollRight(menu.Selection, menu.MenuItems),
+                _ => menu.Selection,
             };
-            UpdateText(menuItems, cur);
-            return cur;
+            UpdateText(menu);
+            return menu.Selection;
         }
 
         MenuItem NextItem(MenuItem current, MenuItem[] menuItems) =>
@@ -302,20 +328,23 @@ namespace Menus
         MenuItem ScrollLeft(MenuItem current, MenuItem[] menuItems) => current - Mathf.CeilToInt((menuItems.Length - .5f) * .5f) >= 0 ?
             menuItems[current - Mathf.CeilToInt((menuItems.Length - .5f) * .5f)] : current;
 
-        public void UpdateText(MenuItem[] MenuItems, MenuItem Selection)
+        public void UpdateText(IMenu menu)
         {
-            for (int i = 0; i < MenuItems.Length; i++)
+            for (int i = 0; i < menu.MenuItems.Length; i++)
             {
-                if (MenuItems[i].Card.GO.activeInHierarchy)
-                    MenuItems[i].Card.SetTextColor(Selection == i ? Color.white : Color.gray);
+                if (menu.MenuItems[i].Card.GO.activeInHierarchy)
+                    menu.MenuItems[i].Card
+                        .SetTextColor(menu.Selection == i ? Color.white : Color.gray)
+                        .SetTextString(menu.DisplayData(menu.MenuItems[i].Item));
 
-                if (MenuItems[i].Card.Children is not null)
-                    foreach (Card child in MenuItems[i].Card.Children)
-                    {
-                        if (child.ImageExists) child.SetImageColor(Selection == i ? Color.white : Color.clear);
-                        if (child.TMPExists) child.SetTextColor(Selection == i ? Color.white : Color.clear);
-                    }
+                // if (menu.MenuItems[i].Card.Children is not null)
+                //     foreach (Card child in menu.MenuItems[i].Card.Children)
+                //     {
+                //         if (child.ImageExists) child.SetImageColor(menu.Selection == i ? Color.white : Color.clear);
+                //         if (child.TMPExists) child.SetTextColor(Selection == i ? Color.white : Color.clear);
+                //     }
             }
+            menu?.Description?.SetTextString(menu.GetDescription);
         }
     }
 }

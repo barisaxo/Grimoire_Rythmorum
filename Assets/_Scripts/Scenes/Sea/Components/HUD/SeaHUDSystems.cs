@@ -76,7 +76,6 @@ public static class SeaHUDSystems
             .SetImageColor(new Color(1f - (float)((float)cur / (float)max), (float)((float)cur / (float)max), 0))
             .SetTextString(cur + "/" + max);
         ;
-
     }
 
     public static void BlipRegionUpdate(this HUD hud, MusicTheory.RegionalMode region)

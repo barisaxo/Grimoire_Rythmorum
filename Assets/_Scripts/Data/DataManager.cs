@@ -3,6 +3,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using Data.Options;
 using UnityEngine;
 using Data;
+using Data.Player;
 using Data.Inventory;
 
 // [System.Serializable]
@@ -85,6 +86,9 @@ public class DataManager
     private MaterialsData _materialsData;
     public MaterialsData MaterialsData => _materialsData ??= MaterialsData.GetData();
 
+    // private EpisodeData _episodeData;
+    // public EpisodeData EpisodeData => _episodeData ??= new EpisodeData();
+
     private StarChartsData _starChartsData;
     public StarChartsData starChartsData => _starChartsData ??= StarChartsData.GetData();
 
@@ -105,6 +109,9 @@ public class DataManager
 
     private Data.Player.PlayerData _playerData;
     public Data.Player.PlayerData PlayerData => _playerData ??= Data.Player.PlayerData.GetData();
+
+    private Data.Player.SkillsData _skillsData;
+    public Data.Player.SkillsData SkillsData => _skillsData ??= Data.Player.SkillsData.GetData();
 
     private Data.Player.RhythmCellsData _rhythmCellData;
     public Data.Player.RhythmCellsData RhythmCellData => _rhythmCellData ??= Data.Player.RhythmCellsData.GetData();

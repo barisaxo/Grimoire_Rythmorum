@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Data.Inventory;
+using Data.Player;
 
 namespace Sea
 {
@@ -24,7 +25,7 @@ namespace Sea
                 new Vector3(0, Random.Range(0f, 360f), 0));
             Description = new SceneObjectDescription("Sailfish");
 
-            Inventoriable = new Inventoriable(new (Data.IData Data, DataEnum DataItem, int Amount)[]{
+            Inventoriable = new Inventoriable(new (Data.IData IData, DataEnum DataItem, int Amount)[]{
                 (data.FishData, Difficulty.DifficultyLevel, 1),
                 // (data.FishData,region switch
                 //  {
@@ -34,7 +35,9 @@ namespace Sea
                 //      MusicTheory.RegionalMode.Locrian => FishData.DataItem.Tuna,
                 //      _ => FishData.DataItem.Shark,
                 //  }, 1),
-                (data.PlayerData, Data.Player.PlayerData.DataItem.Patterns, 10 * (Difficulty.DifficultyLevel.Id + 1)) });
+                (data.PlayerData,
+                PlayerData.DataItem.Patterns,
+                (int)(10 * (Difficulty.DifficultyLevel.Id + 1)* data.SkillsData.GetBonusRatio(SkillsData.DataItem.Apophenia)))});
 
         }
 

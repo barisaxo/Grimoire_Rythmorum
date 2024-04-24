@@ -11,9 +11,9 @@ namespace Sea
         public Vector3 NewPosition(WorldMapScene scene, Region localRegion, Vector2 cellCoord)
         {
             Vector3 v3 = new(
-             (scene.Board.Center() + .3f + (((localRegion.Coord * localRegion.Size) + cellCoord).x - scene.Ship.GlobalLoc.x)).Smod(scene.Map.GlobalSize),
+             (scene.Board.Center() + .3f + (((localRegion.Coord * localRegion.Resolution) + cellCoord).x - scene.Ship.GlobalLoc.x)).Smod(scene.Map.GlobalSize),
              -.5f,
-             (scene.Board.Center() + .3f + (((localRegion.Coord * localRegion.Size) + cellCoord).y - scene.Ship.GlobalLoc.y)).Smod(scene.Map.GlobalSize));
+             (scene.Board.Center() + .3f + (((localRegion.Coord * localRegion.Resolution) + cellCoord).y - scene.Ship.GlobalLoc.y)).Smod(scene.Map.GlobalSize));
 
             // Debug.Log(localRegion.Coord + " " + cellCoord + " " + ((localRegion.Coord * localRegion.Size) + cellCoord) + " " + scene.Ship.GlobalLoc + " " + v3);
             return v3;
@@ -23,17 +23,17 @@ namespace Sea
     public class UpdateFishPosition : IUpdatePosition
     {
         public Vector3 NewPosition(WorldMapScene scene, Region localRegion, Vector2 cellCoord) => new(
-            (scene.Board.Center() + .3f + (((localRegion.Coord * localRegion.Size) + cellCoord).x - scene.Ship.GlobalLoc.x)).Smod(scene.Map.GlobalSize),
+            (scene.Board.Center() + .3f + (((localRegion.Coord * localRegion.Resolution) + cellCoord).x - scene.Ship.GlobalLoc.x)).Smod(scene.Map.GlobalSize),
             -.35f,
-            (scene.Board.Center() + .3f + (((localRegion.Coord * localRegion.Size) + cellCoord).y - scene.Ship.GlobalLoc.y)).Smod(scene.Map.GlobalSize));
+            (scene.Board.Center() + .3f + (((localRegion.Coord * localRegion.Resolution) + cellCoord).y - scene.Ship.GlobalLoc.y)).Smod(scene.Map.GlobalSize));
     }
 
     public class UpdateCovePosition : IUpdatePosition
     {
         public Vector3 NewPosition(WorldMapScene scene, Region localRegion, Vector2 cellCoord) => new(
-            (scene.Board.Center() + .3f + ((localRegion.Coord * localRegion.Size) + cellCoord).x - scene.Ship.GlobalLoc.x),
+            (scene.Board.Center() + .3f + ((localRegion.Coord * localRegion.Resolution) + cellCoord).x - scene.Ship.GlobalLoc.x),
             .05f,
-            (scene.Board.Center() + .3f + ((localRegion.Coord * localRegion.Size) + cellCoord).y - scene.Ship.GlobalLoc.y));
+            (scene.Board.Center() + .3f + ((localRegion.Coord * localRegion.Resolution) + cellCoord).y - scene.Ship.GlobalLoc.y));
     }
 
     public class UpdateLighthousePosition : IUpdatePosition
@@ -41,9 +41,9 @@ namespace Sea
         public Vector3 NewPosition(WorldMapScene scene, Region localRegion, Vector2 cellCoord)
         {
             return new(
-            (scene.Board.Center() + .3f + ((localRegion.Coord * localRegion.Size) + cellCoord).x - scene.Ship.GlobalLoc.x),
+            (scene.Board.Center() + .3f + ((localRegion.Coord * localRegion.Resolution) + cellCoord).x - scene.Ship.GlobalLoc.x),
             0f,
-            (scene.Board.Center() + .3f + ((localRegion.Coord * localRegion.Size) + cellCoord).y - scene.Ship.GlobalLoc.y));
+            (scene.Board.Center() + .3f + ((localRegion.Coord * localRegion.Resolution) + cellCoord).y - scene.Ship.GlobalLoc.y));
         }
     }
 
@@ -60,9 +60,9 @@ namespace Sea
         public Vector3 NewPosition(WorldMapScene scene, Region localRegion, Vector2 cellCoord)
         {
             return new(
-           (scene.Board.Center() + .3f + ((localRegion.Coord * localRegion.Size) + cellCoord).x - scene.Ship.GlobalLoc.x),
+           (scene.Board.Center() + .3f + ((localRegion.Coord * localRegion.Resolution) + cellCoord).x - scene.Ship.GlobalLoc.x),
            0f,
-           (scene.Board.Center() + .3f + ((localRegion.Coord * localRegion.Size) + cellCoord).y - scene.Ship.GlobalLoc.y));
+           (scene.Board.Center() + .3f + ((localRegion.Coord * localRegion.Resolution) + cellCoord).y - scene.Ship.GlobalLoc.y));
 
         }
     }

@@ -21,6 +21,7 @@ public class Menu_State : State
     {
         Header?.SetUpMenuCards();
         Header?.Scene?.Initialize();
+        Sub?.SetUpDescription();
         Sub?.SetUpMenuCards();
         Sub?.Scene?.Initialize();
         base.PrepareState(callback);
@@ -46,38 +47,49 @@ public class Menu_State : State
 
     protected override void R1Pressed()
     {
-        if (Header == null) return;
-        Header?.Input?.R1?.Action();
-        Sub?.Input?.R1?.Action();
-        ChangeSubMenu();
+        if (Header is not null)
+        {
+            Header?.Input?.R1?.Action();
+            ChangeSubMenu();
+        }
+        else
+        {
+            Sub?.Input?.R1?.Action();
+        }
     }
 
     protected override void L1Pressed()
     {
-        if (Header == null) return;
-        Header?.Input?.L1?.Action();
-        Sub?.Input?.L1?.Action();
-        ChangeSubMenu();
+        if (Header is not null)
+        {
+            Header?.Input?.L1?.Action();
+            ChangeSubMenu();
+        }
+        else
+        {
+            Sub?.Input?.L1?.Action();
+        }
     }
 
     void ChangeSubMenu()
     {
         Sub?.SelfDestruct();
         Sub = Header?.CurrentSub;
+        Sub?.SetUpDescription();
         Sub?.SetUpMenuCards();
     }
 
-    protected override void GPInput(GamePadButton gpb)
-    {
-        base.GPInput(gpb);
-
-    }
+    // protected override void GPInput(GamePadButton gpb)
+    // {
+    //     base.GPInput(gpb);
+    // }
 
     protected override void EastPressed()
     {
         Sub?.Input?.East?.Action();
         SetState(Sub?.ConsequentState);
     }
+
     protected override void NorthPressed() => Sub?.Input?.North?.Action();
     protected override void WestPressed() => Sub?.Input?.West?.Action();
     protected override void SouthPressed()

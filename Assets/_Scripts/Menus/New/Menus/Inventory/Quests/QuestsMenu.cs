@@ -13,8 +13,10 @@ namespace Menus.Inventory
         readonly QuestData QuestData;
         public MenuItem Selection { get; set; }
         public MenuItem[] MenuItems { get; set; }
+        public Card Description { get; set; }
         public IMenuLayout Layout { get; } = new LeftScroll();
 
+        public string GetDescription { get => Selection.Item.Description; }
         public string DisplayData(DataEnum item)
         {
             Debug.Log(item.Name);
@@ -39,8 +41,8 @@ namespace Menus.Inventory
         {
             // North = new ButtonInput(IncreaseItem),
             // West = new ButtonInput(DecreaseItem),
-            Up = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Up, Selection, MenuItems)),
-            Down = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Down, Selection, MenuItems)),
+            Up = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Up, this)),
+            Down = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Down, this)),
         };
 
         // private void IncreaseItem()

@@ -5,7 +5,10 @@ namespace Sea
 {
     public class Region
     {
-        public readonly int Size;
+        /// <summary>
+        /// The resolution of the cell subdivision inside the region.
+        /// </summary>
+        public readonly int Resolution;
         public readonly UnityEngine.Vector2Int Coord;
         public Sea.Maps.R R;
 
@@ -13,12 +16,12 @@ namespace Sea
         public NPCShip[] NPCs => _npcs ??= this.SetUpNPCs();
 
         private List<Cell> _cells;
-        public List<Cell> Cells => _cells ??= this.InitializeCells(Size, QuestData);
+        public List<Cell> Cells => _cells ??= this.InitializeCells(QuestData);
         readonly Data.Inventory.QuestData QuestData;
 
-        public Region(UnityEngine.Vector2Int region, int size, Data.Inventory.QuestData data, Sea.Maps.R r)
+        public Region(UnityEngine.Vector2Int region, int resolution, Data.Inventory.QuestData data, Sea.Maps.R r)
         {
-            Size = size;
+            Resolution = resolution;
             Coord = region;
             QuestData = data;
             R = r;

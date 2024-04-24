@@ -15,7 +15,7 @@ namespace MusicTheory.Steps
 
     public class Half : Step { public Half() : base(StepEnum.Half) { } }
     public class Whole : Step { public Whole() : base(StepEnum.Whole) { } }
-    public class Augmented : Step { public Augmented() : base(StepEnum.Augmented) { } }
+    public class Skip : Step { public Skip() : base(StepEnum.Skip) { } }
 
     public class StepEnum : Enumeration
     {
@@ -24,13 +24,13 @@ namespace MusicTheory.Steps
 
         public static readonly StepEnum Half = new(1, nameof(Half));
         public static readonly StepEnum Whole = new(2, nameof(Whole));
-        public static readonly StepEnum Augmented = new(3, nameof(Augmented));
+        public static readonly StepEnum Skip = new(3, nameof(Skip));
 
         public static implicit operator Step(StepEnum e) => e switch
         {
             _ when e == Half => new Half(),
             _ when e == Whole => new Whole(),
-            _ when e == Augmented => new Augmented(),
+            _ when e == Skip => new Skip(),
             _ => throw new System.ArgumentOutOfRangeException()
         };
 

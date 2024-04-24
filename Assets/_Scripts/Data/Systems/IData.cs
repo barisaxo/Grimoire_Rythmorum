@@ -13,6 +13,7 @@ namespace Data
         /// Give this to the menu objects text to display the current volume level.
         /// </summary>
         public string GetDisplayLevel(DataEnum item);
+        // public string GetDescription(DataEnum item);
         public int GetLevel(DataEnum item);
         public void IncreaseLevel(DataEnum item);
         public void DecreaseLevel(DataEnum item);

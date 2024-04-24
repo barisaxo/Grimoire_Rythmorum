@@ -12,8 +12,10 @@ namespace Menus.Options
         public IData Data { get; }
         public MenuItem Selection { get; set; }
         public MenuItem[] MenuItems { get; set; }
+        public Card Description { get; set; }
         public IMenuLayout Layout { get; } = new TwoColumns();
 
+        public string GetDescription { get => Selection.Item.Description; }
         public string DisplayData(DataEnum item)
         {
             return item.Name + ": " + Data.GetDisplayLevel(item) + "%";
@@ -23,10 +25,10 @@ namespace Menus.Options
         {
             North = new ButtonInput(IncreaseItem),
             West = new ButtonInput(DecreaseItem),
-            Up = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Up, Selection, MenuItems)),
-            Down = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Down, Selection, MenuItems)),
-            Right = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Right, Selection, MenuItems)),
-            Left = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Left, Selection, MenuItems)),
+            Up = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Up, this)),
+            Down = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Down, this)),
+            Right = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Right, this)),
+            Left = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Left, this)),
         };
 
         private void IncreaseItem()

@@ -5,10 +5,12 @@ using System.Collections.Generic;
 
 public static class SeaRegionSystems
 {
-    public static List<Cell> InitializeCells(this Region region, int size, Data.Inventory.QuestData questData)
+    public static List<Cell> InitializeCells(this Region region, Data.Inventory.QuestData questData)
     {
         List<Cell> cells = new();
+        int size = region.Resolution;
         int halfSize = (int)(size * .5f);
+        Debug.Log(size);
 
         if (WorldMapScene.Io.Map.Features.TryGetValue(region.Coord, out Feature[] Features))
             foreach (Feature feature in Features)
@@ -16,11 +18,12 @@ public static class SeaRegionSystems
                 switch (feature)
                 {
                     case Feature.Cove:
-                        cells.Add(new Cell(halfSize, halfSize) { Type = CellType.Cove });
+                        cells.Add(new Cell(size - 1, 1) { Type = CellType.Cove });
+                        Debug.Log((cells[^1].Coord + (region.Coord * size)).GlobalCoordsToLatLongs(Sea.WorldMapScene.Io.Map.GlobalSize));
                         break;
 
                     case Feature.LightHouse:
-                        cells.Add(new Cell(halfSize / 2, halfSize / 2) { Type = CellType.Lighthouse });
+                        cells.Add(new Cell(halfSize, halfSize) { Type = CellType.Lighthouse });
                         break;
                 }
             }
@@ -57,19 +60,24 @@ public static class SeaRegionSystems
             for (int x = 0; x < size; x++)
                 for (int y = 0; y < size; y++)
                 {
-                    if (
+                    if (!(x == size - 1 && y == 1) &&
                        ((x > 3 && y > 3) || (x < size - 3 && y < size - 3) ||
                         (x > 3 && y < size - 3) || (x < size - 3 && y > 3) ||
                         (x > halfSize - 2 && y > halfSize - 2 && x < halfSize + 2 && y < halfSize + 2))
                          &&
                         (numOfFish < 3 && x + y > numOfFish * 8 && Random.value > .9f))
                     {
-                        numOfFish++;
-                        cells.Add(new Cell(x, y)
+                        foreach (Cell cell in cells) if (cell.Coord.x == x && cell.Coord.y == y) continue;
+                        int ii = Random.Range(1, 5);
+                        for (int i = 0; i < ii; i++)
                         {
-                            Type = CellType.Fish,
-                            // RotY = Random.Range(0, 360)
-                        });
+                            numOfFish++;
+                            cells.Add(new Cell(x, y)
+                            {
+                                Type = CellType.Fish,
+                                // RotY = Random.Range(0, 360)
+                            });
+                        }
                     }
                 }
         }
@@ -119,12 +127,12 @@ public static class SeaRegionSystems
 
     public static NPCShip[] SetUpNPCs(this Region region)
     {
-        NPCShip[] ships = new NPCShip[(int)(region.Size * .2f)];
+        NPCShip[] ships = new NPCShip[(int)(region.Resolution * .2f)];
 
         for (int i = 0; i < ships.Length; i++)
         {
             var path = region.PatrolPattern(i);
-            ships[i] = new(path, GetShipType(), GetHull(), region.Coord * region.Size) { };
+            ships[i] = new(path, GetShipType(), GetHull(), region.Coord * region.Resolution) { };
         }
 
         return ships;
@@ -141,7 +149,7 @@ public static class SeaRegionSystems
         Data.Equipment.HullData GetHull()
         {
             // Debug.Log(region.Coord + " " + Mathf.Abs(region.Coord.x - (WorldMapScene.Io.Map.Size * .5f)) + " " + Mathf.Abs(region.Coord.y - (WorldMapScene.Io.Map.Size * .5f)) + " " + WorldMapScene.Io.Map.Size);
-            return Mathf.Abs(Mathf.Abs(region.Coord.x - (WorldMapScene.Io.Map.Size * .5f)) + Mathf.Abs(region.Coord.y - (WorldMapScene.Io.Map.Size * .5f))) switch
+            return Mathf.Abs(Mathf.Abs(region.Coord.x - (WorldMapScene.Io.Map.RegionResolution * .5f)) + Mathf.Abs(region.Coord.y - (WorldMapScene.Io.Map.RegionResolution * .5f))) switch
             {
                 < 3 => Data.Equipment.HullData.Sloop,
                 3 => Random.value < .65f ? Data.Equipment.HullData.Sloop : Data.Equipment.HullData.Schooner,
@@ -156,7 +164,7 @@ public static class SeaRegionSystems
 
     public static Vector2Int[] PatrolPattern(this Region region, int i)
     {
-        Vector2Int[] nodes = Nodes(i % 7, region.Size);
+        Vector2Int[] nodes = Nodes(i % 7, region.Resolution);
         List<Vector2Int> path = new();
 
         for (int p = 0; p < nodes.Length; p++)
@@ -164,7 +172,7 @@ public static class SeaRegionSystems
             var leg = nodes[p].NewSailingPath(
                 nodes[(p + 1) % nodes.Length],
                 region.Cells.ToArray(),
-                region.Size);
+                region.Resolution);
 
             for (int n = 0; n < leg.Length; n++) path.Add(leg[n]);
         }

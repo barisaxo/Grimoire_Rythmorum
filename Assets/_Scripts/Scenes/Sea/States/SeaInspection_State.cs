@@ -94,7 +94,7 @@ public class SeaInspection_State : State
                 SubsequentState,
                 Cam.StoredCamRot,
                 Cam.StoredCamPos,
-                3.5f
+                4.5f
             ));
     }
 

@@ -7,11 +7,11 @@ namespace Sea.Maps
     {
         public MiniMap(WorldMap map)
         {
-            Regions = new Card[map.Size * map.Size];
+            Regions = new Card[map.RegionResolution * map.RegionResolution];
             int i = 0;
 
-            for (int x = 0; x < map.Size; x++)
-                for (int y = 0; y < map.Size; y++)
+            for (int x = 0; x < map.RegionResolution; x++)
+                for (int y = 0; y < map.RegionResolution; y++)
                     Regions[i++] = Card.CreateChild(nameof(Region) + x + ":" + y, Card.Canvas)
                         .SetImageSprite(Assets.White)
                         .SetImagePosition(new Vector2(1 - Cam.UIOrthoX + (x * .15f), 1 - Cam.UIOrthoY + (y * .15f)))
