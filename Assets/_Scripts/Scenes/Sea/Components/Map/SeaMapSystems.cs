@@ -21,7 +21,7 @@ public static class SeaMapSystems
             if (occupied.Contains(randV2)) randV2 += Vector2Int.one;
             else break;
         }
-        Debug.Log(region.Coord + " " + region.R + " " + nameof(AddToMap) + randV2);
+        Debug.Log(cellType + " CELL ADDED: " + region.Coord + " " + region.R + " " + nameof(AddToMap) + randV2);
         region.Cells.Add(new Cell(randV2) { Type = cellType });
     }
 
@@ -132,9 +132,9 @@ public static class SeaMapSystems
         _ when region == R.a => Color.red,
         _ when region == R.d => Color.yellow,
         _ when region == R.m => Color.blue,
-        _ when region == R.l => Color.cyan,
+        _ when region == R.l => Color.green,
         _ when region == R.p => Color.magenta,
-        _ when region == R.i => Color.green,
+        _ when region == R.i => Color.cyan,
         _ when region == R.s => Color.white,
         _ => Color.black,
     };

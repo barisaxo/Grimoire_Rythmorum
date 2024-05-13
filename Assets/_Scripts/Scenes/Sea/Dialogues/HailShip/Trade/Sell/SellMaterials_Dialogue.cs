@@ -6,12 +6,26 @@ using Dialog;
 public class SellMaterials_Dialogue : Dialogue
 {
     readonly Dialogue ReturnTo;
-    int Mats => DataManager.Io.CharacterData.Materials;
+    readonly Data.Two.Standing Standing;
 
-    public SellMaterials_Dialogue(Dialogue returnTo, Speaker speaker)
+
+    int StandingLevel => Data.Two.Manager.Io.StandingData.GetLevel(Standing);
+    readonly int Mats = Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.Material());
+    float StandingsModifier => 2f - (float)(1f - (float)((float)StandingLevel) / 9f);
+
+    int largeGold => (int)(largeMat * 7f * StandingsModifier);
+    int medGold => (int)(medMat * 8.5f * StandingsModifier);
+    int smallGold => (int)(smallMat * 10f * StandingsModifier);
+
+    int largeMat => 150;
+    int medMat => 75;
+    int smallMat => 25;
+
+    public SellMaterials_Dialogue(Dialogue returnTo, Speaker speaker, Data.Two.Standing standing)
     {
         ReturnTo = returnTo;
         Speaker = speaker;
+        Standing = standing;
     }
 
     public override Dialogue Initiate()
@@ -20,9 +34,9 @@ public class SellMaterials_Dialogue : Dialogue
         return base.Initiate();
     }
 
-    readonly string MaterialsLarge_RepText = "50 [150 gold]";
-    readonly string MaterialsMedium_RepText = "25 [80 gold]";
-    readonly string MaterialsSmall_RepText = "5 [20 gold]";
+    string MaterialsLarge_RepText => "-" + largeMat.ToString() + " mats; +" + largeGold.ToString() + " gold";
+    string MaterialsMedium_RepText => "-" + medMat.ToString() + " mats; +" + medGold.ToString() + " gold";
+    string MaterialsSmall_RepText => "-" + smallMat.ToString() + " mats; +" + smallGold.ToString() + " gold";
 
     readonly string Materials_LineText = "How much material do you want to sell?";
 
@@ -63,18 +77,18 @@ public class SellMaterials_Dialogue : Dialogue
 
     void SellMaterialsSmall()
     {
-        DataManager.Io.CharacterData.Materials -= 5;
-        DataManager.Io.CharacterData.Coins += 20;
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Material(), -smallMat);
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), smallGold);
     }
     void SellMaterialsMedium()
     {
-        DataManager.Io.CharacterData.Materials -= 25;
-        DataManager.Io.CharacterData.Coins += 80;
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Material(), -medMat);
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), medGold);
     }
     void SellMaterialsLarge()
     {
-        DataManager.Io.CharacterData.Materials -= 50;
-        DataManager.Io.CharacterData.Coins += 150;
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Material(), -largeMat);
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), largeGold);
     }
 
     readonly string TradeComplete_LineText = "Good deal! Until next time!";

@@ -3,9 +3,11 @@ using Dialog;
 
 public class HailShip_Dialogue : Dialogue
 {
-    public HailShip_Dialogue(Speaker speaker)
+    readonly Data.Two.Standing Standing;
+    public HailShip_Dialogue(Speaker speaker, Data.Two.Standing standing)
     {
         Speaker = speaker;
+        Standing = standing;
     }
 
     public override Dialogue Initiate()
@@ -23,7 +25,7 @@ public class HailShip_Dialogue : Dialogue
     };
 
     Line _startLine;
-    Line StartLine => _startLine ??= new Line(Hail_LineText, new ShipTask_Dialogue(Speaker))
+    Line StartLine => _startLine ??= new Line(Hail_LineText, new ShipTask_Dialogue(Speaker, Standing))
         .SetSpeaker(Speaker);
 
 }

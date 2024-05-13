@@ -6,7 +6,7 @@ using Dialog;
 public class SellGramo_Dialogue : Dialogue
 {
     readonly Dialogue ReturnTo;
-    int Gramos => DataManager.Io.CharacterData.Gramos;
+    int Gramos => Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.Gramos());
 
     public SellGramo_Dialogue(Dialogue returnTo, Speaker speaker)
     {
@@ -59,18 +59,18 @@ public class SellGramo_Dialogue : Dialogue
 
     void SellGramoSmall()
     {
-        DataManager.Io.CharacterData.Gramos -= 1;
-        DataManager.Io.CharacterData.Coins += 100;
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gramos(), -1);
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), 100);
     }
     void SellGramoMedium()
     {
-        DataManager.Io.CharacterData.Gramos -= 3;
-        DataManager.Io.CharacterData.Coins += 275;
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gramos(), -3);
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), 275);
     }
     void SellGramoLarge()
     {
-        DataManager.Io.CharacterData.Gramos -= 5;
-        DataManager.Io.CharacterData.Coins += 400;
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gramos(), -5);
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), 400);
     }
 
     readonly string TradeComplete_LineText = "Good deal! Until next time!";

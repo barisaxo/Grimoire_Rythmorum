@@ -60,10 +60,10 @@ namespace Sea
 
         public Vector3Int restoreMapLoc;
         private WorldMap _map;
-        public WorldMap Map => _map ??= new(DataManager.Io.QuestsData);
+        public WorldMap Map => _map ??= new(Data.Two.Manager.Io.Quests);
 
         public HUD _hud;
-        public HUD HUD => _hud ??= new(DataManager.Io.CharacterData);
+        public HUD HUD => _hud ??= new(Data.Two.Manager.Io.PlayerShip);
 
         public PlayerShip Ship;
         public RockTheBoat RockTheBoat = new();

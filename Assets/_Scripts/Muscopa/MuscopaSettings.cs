@@ -73,6 +73,25 @@ namespace Muscopa
             return newChordBytes;
         }
     }
+
+    public static class MuscopaHelper
+    {
+        public static HarmonicFunction[] DiatonicToHarmonicFunctionCadence(this DiatonicRomanNumeral[] cadence)
+        {
+            var cad = new HarmonicFunction[cadence.Length];
+            for (int i = 0; i < cad.Length; i++) cad[i] = cadence[i].ToHarmonicFunction();
+            return cad;
+        }
+        public static HarmonicFunction ToHarmonicFunction(this DiatonicRomanNumeral rn)
+        {
+            return rn switch
+            {
+                DiatonicRomanNumeral.I or DiatonicRomanNumeral.III or DiatonicRomanNumeral.VI => HarmonicFunction.Tonic,
+                DiatonicRomanNumeral.II or DiatonicRomanNumeral.IV => HarmonicFunction.Predominant,
+                _ => HarmonicFunction.Dominant
+            };
+        }
+    }
 }
 
 

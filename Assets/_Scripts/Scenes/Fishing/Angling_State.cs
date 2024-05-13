@@ -22,7 +22,6 @@ public class Angling_State : State
     Card Reel;
     Card Handle;
     Card Spool;
-
     Card FishingReel;
 
     Transform Parent;
@@ -33,7 +32,7 @@ public class Angling_State : State
 
     protected override void PrepareState(Action callback)
     {
-        Difficulty = (int)(60 * (1 / DataManager.SkillsData.GetBonusRatio(Data.Player.SkillsData.DataItem.PulsePerception)));
+        Difficulty = (int)(60 * (1 / Data.Two.Manager.Io.Skill.GetBonusRatio(new Data.Two.PulsePerception())));
         Debug.Log(Difficulty);
         SetUpFishingReel();
         Specs = new RhythmSpecs()

@@ -5,11 +5,13 @@ using System;
 public class Trade_Dialogue : Dialogue
 {
     readonly Dialogue ReturnTo;
+    readonly Data.Two.Standing Standing;
 
-    public Trade_Dialogue(Dialogue returnTo, Speaker speaker)
+    public Trade_Dialogue(Dialogue returnTo, Speaker speaker, Data.Two.Standing standing)
     {
         ReturnTo = returnTo;
         Speaker = speaker;
+        Standing = standing;
     }
 
     override public Dialogue Initiate()
@@ -33,15 +35,15 @@ public class Trade_Dialogue : Dialogue
     Response[] TradeResponses => _tradeResponses ??= new Response[]{
         BuyResponse,
         SellResponse,
-        WagerResponse,
+        // WagerResponse,
         BackResponse
     };
 
     Response _buyResponse;
-    Response BuyResponse => _buyResponse ??= new Response("Buy", new Buy_Dialogue(this, Speaker));
+    Response BuyResponse => _buyResponse ??= new Response("Buy", new Buy_Dialogue(this, Speaker, Standing));
 
     Response _sellResponse;
-    Response SellResponse => _sellResponse ??= new Response("Sell", new Sell_Dialogue(this, Speaker));
+    Response SellResponse => _sellResponse ??= new Response("Sell", new Sell_Dialogue(this, Speaker, Standing));
 
     Response _wagerResponse;
     Response WagerResponse => _wagerResponse ??= new Response("Wager", new MuscopaWager_Dialogue(this, Speaker));

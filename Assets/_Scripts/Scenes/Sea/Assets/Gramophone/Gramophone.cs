@@ -1,13 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Data.Inventory;
+using Data.Two;
 
 namespace Sea
 {
     public class Gramophone : ISceneObject
     {
-        public Gramophone(State currentState, GramophoneData gramoData, QuestData questData, ShipData shipData, Sea.Maps.R region)
+        public Gramophone(State currentState, GramophoneInventoryData gramoData, QuestData questData, PlayerShipData shipData, Sea.Maps.R region)
         {
             Gramo = Assets.Gramo;
             TF.SetParent(WorldMapScene.Io.TheSea.transform);
@@ -34,7 +34,7 @@ namespace Sea
             //      },
             //     1));
 
-            Questable = new Questable(questData, Data.Inventory.QuestData.DataItem.StarChart);
+            Questable = new Questable(questData, new Navigation());
         }
 
         public GramophonePrefab Gramo;
@@ -49,7 +49,7 @@ namespace Sea
         public IDescription Description { get; private set; }
         public IInstantiable Instantiator { get; private set; }
         public IInventoriable Inventoriable { get; private set; }
-        public FishData.DataItem FishType;
+        public Fish FishType;
         public IQuestable Questable { get; private set; }
         public IDifficulty Difficulty { get; } = new NoDifficulty();
     }

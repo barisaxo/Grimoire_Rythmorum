@@ -55,6 +55,8 @@ public class DialogResponse_State : State
 
     private void CheckResponse(Response r)
     {
+        r.PlayerAction?.Invoke();
+        // r.HasPlayerAction
         if (r.HasGoToLine())
         {
             Dialog.SetCurrentLine(r.GoToLine);

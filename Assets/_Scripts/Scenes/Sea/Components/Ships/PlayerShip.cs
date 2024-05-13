@@ -57,12 +57,12 @@ public class PlayerShip
     //  TODO get actual data
     public ShipStats.ShipStats ShipStats = new(
         new ShipStats.HullStats(
-           hullData: Data.Equipment.HullData.Schooner,
-           timberType: Data.Inventory.MaterialsData.DataItem.Oak),
+            new Data.Two.Schooner(),
+           new Data.Two.Oak()),
         new ShipStats.CannonStats(
-           Data.Equipment.CannonData.Culverin,
-           Data.Inventory.MaterialsData.DataItem.CastIron),
-        new ShipStats.RiggingStats(Data.Inventory.MaterialsData.DataItem.Hemp),
+          new Data.Two.Culverin(),
+           new Data.Two.CastIron()),
+        new ShipStats.RiggingStats(new Data.Two.Hemp()),
         numOfCannons: 32
    );
 

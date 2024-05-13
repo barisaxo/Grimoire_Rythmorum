@@ -1,12 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Data.Inventory;
+using Data.Two;
+
 namespace Sea
 {
     public class Bottle : ISceneObject
     {
-        public Bottle(State state, DataManager data)
+        public Bottle(State state, Manager data)
         {
             Difficulty = new StarChartDifficultySetter(data);
             GO = (BottlePrefab = Assets.Bottle).gameObject;
@@ -22,10 +23,10 @@ namespace Sea
                 Vector3.one * .5f,
                 new Vector3(35, Random.Range(0, 360), 0));
 
-            Interactable = new BottleInteraction(state, data.starChartsData, data.ShipData, this);
+            Interactable = new BottleInteraction(state, data.StarChart, data.PlayerShip, this);
 
             Inventoriable = new Inventoriable(
-                (data.starChartsData, Difficulty.DifficultyLevel, 1));
+                (data.StarChart, Difficulty.DifficultyLevel, 1));
         }
 
         public BottleWithScrollPrefab BottlePrefab;

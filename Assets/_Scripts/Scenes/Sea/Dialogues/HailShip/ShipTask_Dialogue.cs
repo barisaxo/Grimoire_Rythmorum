@@ -4,11 +4,12 @@ using MusicTheory.Arithmetic;
 public class ShipTask_Dialogue : Dialogue
 {
     readonly string OneTask_LineText = "We've got time for one task, so what will it be?";
-    readonly string TradeGoods_RepText = "Trade goods";
+    readonly Data.Two.Standing Standing;
 
-    public ShipTask_Dialogue(Speaker speaker)
+    public ShipTask_Dialogue(Speaker speaker, Data.Two.Standing standing)
     {
         Speaker = speaker;
+        Standing = standing;
     }
 
     override public Dialogue Initiate()
@@ -29,12 +30,13 @@ public class ShipTask_Dialogue : Dialogue
     Line OneTaskLine => _oneTaskLine ??= new Line(OneTask_LineText, new Response[4]
         {
             Trade_Response,
-            MusicaResponse,
-            PirateResponse,
+            RepairResponse,
+            BountyResponse,
             Leave,
         })
         .SetSpeaker(Speaker)
         ;
+
 
     Line _leaveLine;
     Line Leave_Line => _leaveLine ??= new Line(Leave_LineText, new NPCSailAway_State(new SeaScene_State()))
@@ -42,13 +44,13 @@ public class ShipTask_Dialogue : Dialogue
         ;
 
     Response _trade_response;
-    Response Trade_Response => _trade_response ??= new Response(TradeGoods_RepText, new Trade_Dialogue(this, Speaker));
+    Response Trade_Response => _trade_response ??= new Response("Trade goods", new Trade_Dialogue(this, Speaker, Standing));
 
-    Response _musicaResponse;
-    Response MusicaResponse => _musicaResponse ??= new Response("Musica", new MusicaTask_Dialogue(this, Speaker));
+    Response _repairResponse;
+    Response RepairResponse => _repairResponse ??= new Response("Repair ship", new BuyRepairs_Dialogue(this, Speaker, Standing));
 
-    Response _pirateResponse;
-    Response PirateResponse => _pirateResponse ??= new Response("Pirates", new PirateTask_Dialogue(this, Speaker));
+    Response _bountyResponse;
+    Response BountyResponse => _bountyResponse ??= new Response("Bounties", new Bounty_Dialogue(this, Speaker, Standing));
 
     Response _leave;
     Response Leave => _leave ??= new Response(nameof(Leave), Leave_Line);

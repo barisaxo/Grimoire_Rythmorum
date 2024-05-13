@@ -10,28 +10,25 @@ using MusicTheory;
 public class BatteriePack
 {
     // public Bard2D.BattleHUD.BattleHUD BHUD;
-    public BatteriePack()
-    {
+    // public BatteriePack(RhythmSpecs specs)
+    // {
 
+    // }
+
+    public BatteriePack(RhythmSpecs rhythmSpecs)
+    {
+        _rhythmSpecs = rhythmSpecs;
     }
+
+    readonly RhythmSpecs _rhythmSpecs = null;
 
     public void Initialize(Action<Batterie.Hit> HandleHit, BatterieFeedback BatterieFeedback, Action Tick)
     {
-
         MusicSheet = new()
         {
-            RhythmSpecs = new MusicTheory.Rhythms.RhythmSpecs()
-            {
-                Time = new MusicTheory.Rhythms.FourFour(),
-                NumberOfMeasures = 4,
-                SubDivisionTier = MusicTheory.Rhythms.SubDivisionTier.D1Only,
-                HasTies = UnityEngine.Random.value > .5f,
-                HasRests = UnityEngine.Random.value > .5f,
-                HasTriplets = false,
-                Tempo = 90
-            }
+            RhythmSpecs = _rhythmSpecs
         };
-        MuscopaAudio = new(DataManager.Io.Volume);
+        MuscopaAudio = new(Data.Two.Manager.Io.Volume);
         MusicSheet.RhythmSpecs.Time.GenerateRhythmCells(MusicSheet);
         MusicSheet.GetNotes();
         MusicSheet.DrawRhythms();
@@ -43,7 +40,6 @@ public class BatteriePack
         Analyzer.SetUp();
 
         Synchro.TickEvent += Tick;
-
 
         MuscopaSettings = NewSettings(CadenceDifficulty.ALL, MusicTheory.Musica.RandomMode(), Genre.Stax);
         GoodHits = GoodRests = GoodHolds = ErroneousAttacks = MissedHits = MissedHolds = MissedRests = 0;

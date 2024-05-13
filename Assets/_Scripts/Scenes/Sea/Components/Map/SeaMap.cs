@@ -54,7 +54,7 @@ namespace Sea.Maps
 
         public Vector2Int[] Coves => throw new System.NotImplementedException();
 
-        public IosMap(Data.Inventory.QuestData data)
+        public IosMap(Data.Two.QuestData data)
         {
             GlobalSize = RegionResolution * RegionSize;
             Regions = new Region[RegionResolution * RegionResolution];
@@ -77,7 +77,7 @@ namespace Sea.Maps
         public int GlobalSize { get; private set; }
         public Region[] Regions { get; private set; }
 
-        public WorldMap(Data.Inventory.QuestData data)
+        public WorldMap(Data.Two.QuestData data)
         {
             GlobalSize = RegionResolution * RegionSize;
             Regions = new Region[RegionResolution * RegionResolution];
@@ -207,7 +207,7 @@ namespace Sea.Maps
         public int GlobalSize { get; private set; }
         public Region[] Regions { get; private set; }
 
-        public SmallMap(Data.Inventory.QuestData data)
+        public SmallMap(Data.Two.QuestData data)
         {
             GlobalSize = RegionResolution * RegionSize;
             Regions = new Region[RegionResolution * RegionResolution];

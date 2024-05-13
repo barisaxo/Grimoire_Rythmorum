@@ -6,10 +6,14 @@ using Dialog;
 public class PirateTask_Dialogue : Dialogue
 {
     public Dialogue ReturnTo;
-    public PirateTask_Dialogue(Dialogue returnTo, Speaker speaker)
+    bool pending => Data.Two.Manager.Io.Quests.GetLevel(new Data.Two.Bounty()) == 1;
+    readonly Data.Two.Standing Standing;
+
+    public PirateTask_Dialogue(Dialogue returnTo, Speaker speaker, Data.Two.Standing standing)
     {
         ReturnTo = returnTo;
         Speaker = speaker;
+        Standing = standing;
     }
 
     public override Dialogue Initiate()
@@ -29,10 +33,10 @@ public class PirateTask_Dialogue : Dialogue
     {
         List<Response> responses = new();
 
-        //TODO //if (pending bounty) { responses.Add(BountiesResponse); }
+        if (pending) { responses.Add(BountiesResponse); }
 
         responses.Add(BountiesResponse);
-        responses.Add(RewardsResponse);
+        // responses.Add(RewardsResponse);
         // responses.Add(AttackResponse);
         responses.Add(BackResponse);
 
@@ -40,13 +44,13 @@ public class PirateTask_Dialogue : Dialogue
     }
 
     Response _bountiesResponse;
-    Response BountiesResponse => _bountiesResponse ??= new Response("Bounties", new Bounty_Dialogue(this));
+    Response BountiesResponse => _bountiesResponse ??= new Response("Bounties", new Bounty_Dialogue(this, Speaker, Standing));
 
-    Response _rewardsResponse;
-    Response RewardsResponse => _rewardsResponse ??= new Response("Rewards", new BountyRewards_Dialogue(this, Speaker));
+    // Response _rewardsResponse;
+    // Response RewardsResponse => _rewardsResponse ??= new Response("Rewards", new BountyRewards_Dialogue(this, Speaker));
 
-    Response _attackResponse;
-    Response AttackResponse => _attackResponse ??= new Response("[Attack the ship]", new AttackShip_Dialogue(this, Speaker));
+    // Response _attackResponse;
+    // Response AttackResponse => _attackResponse ??= new Response("[Attack the ship]", new AttackShip_Dialogue(this, Speaker));
 
     Response _backResponse;
     Response BackResponse => _backResponse ??= new Response("Never mind", ReturnTo);

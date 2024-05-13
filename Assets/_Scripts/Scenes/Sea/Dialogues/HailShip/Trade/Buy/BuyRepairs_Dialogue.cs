@@ -2,18 +2,33 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Dialog;
+using Data.Two;
 
 public class BuyRepairs_Dialogue : Dialogue
 {
     readonly Dialogue ReturnTo;
+    readonly Standing Standing;
 
-    int Coins => DataManager.Io.CharacterData.Coins;
-    int Mats => DataManager.Io.CharacterData.Materials;
+    int StandingMod => Data.Two.Manager.Io.StandingData.GetLevel(Standing);
+    int Gold => Manager.Io.Inventory.GetLevel(new Gold());
+    int Mats => Manager.Io.Inventory.GetLevel(new Materials());
+    int CurHP => Manager.Io.PlayerShip.GetLevel(new CurrentHitPoints());
+    int MaxHP => Manager.Io.PlayerShip.GetLevel(new CurrentHitPoints());
 
-    public BuyRepairs_Dialogue(Dialogue returnTo, Speaker speaker)
+    float PCHP => CurHP / MaxHP;
+    int HPDown => MaxHP - CurHP;
+
+    float StandingsModifier => 1f + (float)(1f - (float)((float)StandingMod) / 9f);
+
+    int largeAmount => (int)(MaxHP * .5f * StandingsModifier);
+    int medAmount => (int)(MaxHP * .25f * StandingsModifier);
+    int smallAmount => (int)(MaxHP * .15f * StandingsModifier);
+
+    public BuyRepairs_Dialogue(Dialogue returnTo, Speaker speaker, Standing standing)
     {
         ReturnTo = returnTo;
         Speaker = speaker;
+        Standing = standing;
     }
 
     public override Dialogue Initiate()
@@ -28,10 +43,10 @@ public class BuyRepairs_Dialogue : Dialogue
         .SetSpeaker(Speaker)
         ;
 
-
-    readonly string RepairLarge_RepText = "25 hull [750 gold, 50 mats]";
-    readonly string RepairMedium_RepText = "10 hull [250 gold, 20 mats]";
-    readonly string RepairSmall_RepText = "5 hull [100 gold, 10 mats]";
+    //TODOTODO
+    readonly string RepairLarge_RepText = "50% hull [*** gold, ** mats]";
+    readonly string RepairMedium_RepText = "25% hull [*** gold, ** mats]";
+    readonly string RepairSmall_RepText = "15% hull [*** gold, ** mats]";
     Response _repairLarge_response;
     Response RepairLarge_Response => _repairLarge_response ??= new Response(RepairLarge_RepText, TradeComplete_Line)
         .SetPlayerAction(RepairLarge);
@@ -50,34 +65,41 @@ public class BuyRepairs_Dialogue : Dialogue
     {
         List<Response> responses = new();
 
-        if (!(Coins < 25 * 30 || Mats < 25 * 2)) { responses.Add(RepairLarge_Response); }
-        if (!(Coins < 10 * 25 || Mats < 10 * 2)) { responses.Add(RepairMedium_Response); }
-        if (!(Coins < 5 * 20 || Mats < 5 * 2)) { responses.Add(RepairSmall_Response); }
+        if (LargeRepairs) { responses.Add(RepairLarge_Response); }
+        if (MedRepairs) { responses.Add(RepairMedium_Response); }
+        if (SmallRepairs) { responses.Add(RepairSmall_Response); }
+
         responses.Add(BackResponse);
 
         return responses.ToArray();
     }
 
+    bool LargeRepairs => PCHP < .75f && !(Gold < largeAmount * goldPer) && !(Mats < largeAmount * matsPer);
+    bool MedRepairs => PCHP < .85f && !(Gold < medAmount * goldPer) && !(Mats < medAmount * matsPer);
+    bool SmallRepairs => PCHP < 1f && !(Gold < smallAmount * goldPer) && !(Mats < smallAmount * matsPer);
+
+    readonly int matsPer = 3;
+    readonly int goldPer = 25;
+
     void RepairSmall()
     {
-        int amount = 5;
-        DataManager.Io.CharacterData.CurrentHealth += amount;
-        DataManager.Io.CharacterData.Materials -= amount * 2;
-        DataManager.Io.CharacterData.Coins -= amount * 20;
+        Manager.Io.PlayerShip.AdjustLevel(new CurrentHitPoints(), smallAmount);
+        Manager.Io.Inventory.AdjustLevel(new Materials(), -smallAmount * matsPer);
+        Manager.Io.Inventory.AdjustLevel(new Gold(), -smallAmount * goldPer);
     }
+
     void RepairMedium()
     {
-        int amount = 10;
-        DataManager.Io.CharacterData.CurrentHealth += amount;
-        DataManager.Io.CharacterData.Materials -= amount * 2;
-        DataManager.Io.CharacterData.Coins -= amount * 25;
+        Manager.Io.PlayerShip.AdjustLevel(new CurrentHitPoints(), medAmount);
+        Manager.Io.Inventory.AdjustLevel(new Materials(), -medAmount * matsPer);
+        Manager.Io.Inventory.AdjustLevel(new Gold(), -medAmount * goldPer);
     }
+
     void RepairLarge()
     {
-        int amount = 25;
-        DataManager.Io.CharacterData.CurrentHealth += amount;
-        DataManager.Io.CharacterData.Materials -= amount * 2;
-        DataManager.Io.CharacterData.Coins -= amount * 30;
+        Manager.Io.PlayerShip.AdjustLevel(new CurrentHitPoints(), largeAmount);
+        Manager.Io.Inventory.AdjustLevel(new Materials(), -largeAmount * matsPer);
+        Manager.Io.Inventory.AdjustLevel(new Gold(), -largeAmount * goldPer);
     }
 
     readonly string TradeComplete_LineText = "Good deal! Until next time!";

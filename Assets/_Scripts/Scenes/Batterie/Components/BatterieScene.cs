@@ -9,29 +9,59 @@ using Muscopa;
 
 public class BatterieScene
 {
-    public BatterieScene(Sea.NPCShip npcShip, PlayerShip playerShip, Action tick, Audio.Batterie_AudioSystem batterieAudio)
+    public BatterieScene(ShipStats.ShipStats nmeShipStats, GameObject nmeGO, PlayerShip playerShip, Action tick, RhythmSpecs specs, string nmeName)
     {
-        NPCShip = npcShip;
+        NMEGO = nmeGO;
+        NMEShipStats = nmeShipStats;
         PlayerShip = playerShip;
 
-        int nmeHealth = (int)(NPCShip.ShipStats.HullStrength * UnityEngine.Random.Range(0.8f, 1.1f));
+        NMEName = nmeName;
+        int nmeHealth = (int)(NMEShipStats.HullStrength * UnityEngine.Random.Range(0.8f, 1.1f));
         NMEHealth = (nmeHealth, nmeHealth);
 
-        Pack = new();
+        Pack = new(specs);
         Tick = tick;
-        BatterieAudio = batterieAudio;
+        BatterieAudio = Audio.AudioManager.Io.Batterie;
     }
+
+    public BatterieScene(ShipStats.ShipStats nmeShipStats, GameObject nmeGO, PlayerShip playerShip, Action tick, BatteriePack pack, string nmeName)
+    {
+        NMEGO = nmeGO;
+        NMEName = nmeName;
+        NMEShipStats = nmeShipStats;
+        PlayerShip = playerShip;
+
+        int nmeHealth = (int)(NMEShipStats.HullStrength * UnityEngine.Random.Range(0.8f, 1.1f));
+        NMEHealth = (nmeHealth, nmeHealth);
+
+        Pack = pack;
+        Tick = tick;
+        BatterieAudio = Audio.AudioManager.Io.Batterie;
+    }
+    // public BatterieScene(Sea.NPCShip npcShip, PlayerShip playerShip, BatteriePack pack)
+    // {
+    //     NPCShip = npcShip;
+    //     PlayerShip = playerShip;
+
+    //     int nmeHealth = (int)(NPCShip.ShipStats.HullStrength * UnityEngine.Random.Range(0.8f, 1.1f));
+    //     NMEHealth = (nmeHealth, nmeHealth);
+
+    //     Pack = pack;
+    //     // Tick = tick;
+    //     BatterieAudio = Audio.AudioManager.Io.Batterie;
+    // }
 
     public void Initialize()
     {
-        Debug.Log(DataManager.Io.CharData.GetLevel(Data.Player.CharacterData.DataItem.MaxHP));
+        Debug.Log(Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.MaxHitPoints()));
 
         // Sea.WorldMapScene.Io.Ship.ShipStats.HullStrength,
         BatterieHUD ??= new BatterieHUD(
-            DataManager.Io.CharData.GetLevel(Data.Player.CharacterData.DataItem.MaxHP),
-            DataManager.Io.CharData.GetLevel(Data.Player.CharacterData.DataItem.CurrentHP),
-            (int)NPCShip.ShipStats.HullStrength);
-        Debug.Log("(int)NPCShip.ShipStats.HullStrength: " + NPCShip.ShipStats.HullStats.HullData.Description);
+            Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.MaxHitPoints()),
+            Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.CurrentHitPoints()),
+            (int)NMEShipStats.HullStrength,
+            NMEName);
+        Debug.Log("(int)NPCShip.ShipStats.HullStrength: " + NMEShipStats.HullStats.Hull.Description);
         _ = Background;
         _ = Ship;
         BatterieFeedback = new();
@@ -58,7 +88,9 @@ public class BatterieScene
     public Action Tick;
     readonly Audio.Batterie_AudioSystem BatterieAudio;
     public BatteriePack Pack;
-    public Sea.NPCShip NPCShip;
+    // public Sea.NPCShip NPCShip;
+    public readonly string NMEName;
+    public ShipStats.ShipStats NMEShipStats;
     public PlayerShip PlayerShip;
     public (int cur, int max) NMEHealth;
     public int NMEDamage;
@@ -70,7 +102,7 @@ public class BatterieScene
     public BatterieFeedback BatterieFeedback;
     public CountOffFeedback CountOffFeedBack;
 
-    public GameObject NME;
+    public GameObject NMEGO;
     public ParticleSystem NMEFire;
 
     private GameObject _ship;
@@ -80,22 +112,26 @@ public class BatterieScene
     private GameObject SetUpShip()
     {
         var ship = Sea.WorldMapScene.Io.Ship.GO;
-        NME = Sea.WorldMapScene.Io.NearestNPC.SceneObject.GO;
+        // NMEGO = Sea.WorldMapScene.Io.NearestNPC.SceneObject.GO;
 
         ship.transform.position = Cam.Io.Camera.transform.position + ((Cam.Io.Camera.transform.forward * 4) - (Cam.Io.Camera.transform.right * 2) - (Cam.Io.Camera.transform.up * 2));
-        NME.transform.position = Cam.Io.Camera.transform.position + ((Cam.Io.Camera.transform.forward * 4) + (Cam.Io.Camera.transform.right * 2) - (Cam.Io.Camera.transform.up * 2));
+        NMEGO.transform.position = Cam.Io.Camera.transform.position + ((Cam.Io.Camera.transform.forward * 4) + (Cam.Io.Camera.transform.right * 2) - (Cam.Io.Camera.transform.up * 2));
 
-        ship.transform.LookAt(Cam.Io.Camera.transform);
-        NME.transform.LookAt(Cam.Io.Camera.transform);
+        // ship.transform.rotation = Cam.Io.Camera.transform.rotation;
+        // NME.transform.rotation = Cam.Io.Camera.transform.rotation;
+
+        // ship.transform.LookAt(Cam.Io.Camera.transform);
+        // NME.transform.LookAt(Cam.Io.Camera.transform);
+
 
         NMEFire = Assets.CannonFire;
-        NMEFire.transform.position = NME.transform.position;
+        NMEFire.transform.position = NMEGO.transform.position;
         NMEFire.transform.LookAt(ship.transform);
         NMEFire.transform.Translate(Vector3.forward * .25f);
 
         ShipFire = Assets.CannonFire;
         ShipFire.transform.position = ship.transform.position;
-        ShipFire.transform.LookAt(NME.transform);
+        ShipFire.transform.LookAt(NMEGO.transform);
         ShipFire.transform.Translate(Vector3.forward * .25f);
 
         return ship;
@@ -120,8 +156,8 @@ public class BatterieScene
                 Pack.GoodHits++;
                 BatterieAudio.Hit();
                 ShipFire.Play();
-                BatterieHUD.NMECurrent = NMEHealth.cur -= DataManager.Io.ShipData.ShipStats.HitDamage;
-                UnityEngine.Debug.Log("Damage: " + DataManager.Io.ShipData.ShipStats.HitDamage);
+                BatterieHUD.NMECurrent = NMEHealth.cur -= Data.Two.Manager.Io.PlayerShip.ShipStats.HitDamage;
+                UnityEngine.Debug.Log("Damage: " + Data.Two.Manager.Io.PlayerShip.ShipStats.HitDamage);
                 break;
             case Hit.Miss:
                 // score--;

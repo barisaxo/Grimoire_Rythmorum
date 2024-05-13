@@ -1,8 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Data;
-using Data.Inventory;
+using Data.Two;
 
 namespace Sea
 {
@@ -33,11 +32,12 @@ namespace Sea
 
     public class HailShipInteraction : IInteractable
     {
-        public HailShipInteraction(State currentState)
+        public HailShipInteraction(State currentState, Standing standing)
         {
             _currentState = currentState;
+            Standing = standing;
         }
-
+        readonly Standing Standing;
         public WorldMapScene Scene => WorldMapScene.Io;
         private readonly State _currentState;
         public State CurrentState => _currentState;
@@ -45,7 +45,8 @@ namespace Sea
                 new Speaker(
                     Scene.NearestNPC.Flag,
                     Scene.NearestNPC.Name,
-                    Scene.NearestNPC.FlagColor)
+                    Scene.NearestNPC.FlagColor),
+                Standing
             ));
         public string PopupText => "Hail";
     }
@@ -65,33 +66,35 @@ namespace Sea
 
     public class BottleInteraction : IInteractable
     {
-        public BottleInteraction(State currentState, StarChartsData starChartsData, ShipData shipData, ISceneObject obj)
+        public BottleInteraction(State currentState, StarChartData starChartsData, PlayerShipData shipData, ISceneObject obj)
         {
             CurrentState = currentState;
             Obj = obj;
-            StarChartsData = starChartsData;
+            StarChartData = starChartsData;
             ShipData = shipData;
         }
 
-        readonly StarChartsData StarChartsData;
-        readonly ShipData ShipData; private string _popupText;
-        public string PopupText => _popupText ??= StarChartsData.InventoryIsFull(ShipData.GetLevel(ShipData.DataItem.Bottle)) ?
-            "(inventory full)" :
+        readonly StarChartData StarChartData;
+        readonly PlayerShipData ShipData;
+        private string _popupText;
+        public string PopupText =>
+            // _popupText ??= StarChartsData.InventoryIsFull(ShipData.GetLevel(ShipData.DataItem.Bottle)) ?
+            // "(inventory full)" :
             "Pickup";
         readonly ISceneObject Obj;
         public State CurrentState { get; }
 
         private State _subsequentState;
-        public State SubsequentState => _subsequentState ??=
-            StarChartsData.InventoryIsFull(ShipData.GetLevel(ShipData.DataItem.Bottle)) ?
-                new DialogStart_State(new InventoryIsFull_Dialogue(CurrentState)) :
-                new SeaToItemPickUp_State(CurrentState, StarChartsData, ShipData.DataItem.Bottle, Obj);
+        public State SubsequentState => _subsequentState ??= new SeaToItemPickUp_State(CurrentState, StarChartData, new Data.Two.Bottle(), Obj);
+        // StarChartsData.InventoryIsFull(ShipData.GetLevel(ShipData.DataItem.Bottle)) ?
+        //     new DialogStart_State(new InventoryIsFull_Dialogue(CurrentState)) :
+        //     new SeaToItemPickUp_State(CurrentState, StarChartsData, ShipData.DataItem.Bottle, Obj);
 
     }
 
     public class GramoInteraction : IInteractable
     {
-        public GramoInteraction(State currentState, GramophoneData gramoData, ShipData shipData, ISceneObject obj)
+        public GramoInteraction(State currentState, GramophoneInventoryData gramoData, PlayerShipData shipData, ISceneObject obj)
         {
             CurrentState = currentState;
             Obj = obj;
@@ -99,22 +102,42 @@ namespace Sea
             ShipData = shipData;
         }
 
-        readonly GramophoneData GramoData;
-        readonly ShipData ShipData; private string _popupText;
-        public string PopupText => _popupText ??= GramoData.InventoryIsFull(ShipData.GetLevel(ShipData.DataItem.Gramos)) ?
-            "(inventory full)" :
+        readonly GramophoneInventoryData GramoData;
+        readonly PlayerShipData ShipData; private string _popupText;
+        public string PopupText =>
+            // _popupText ??= GramoData.InventoryIsFull(ShipData.GetLevel(new Data.Two.Gramophone())) ?
+            // "(inventory full)" :
             "Pickup";
         readonly ISceneObject Obj;
         public State CurrentState { get; }
 
         private State _subsequentState;
         public State SubsequentState => _subsequentState ??=
-            GramoData.InventoryIsFull(ShipData.GetLevel(ShipData.DataItem.Gramos)) ?
-                new DialogStart_State(new InventoryIsFull_Dialogue(CurrentState)) :
-                new SeaToItemPickUp_State(CurrentState, GramoData, ShipData.DataItem.Gramos, Obj);
+                // GramoData.InventoryIsFull(ShipData.GetLevel(ShipData.DataItem.Gramos)) ?
+                //     new DialogStart_State(new InventoryIsFull_Dialogue(CurrentState)) :
+                new SeaToItemPickUp_State(CurrentState, GramoData, new Gramos(), Obj);
 
     }
 
+    public class BountyInteraction : IInteractable
+    {
+        public BountyInteraction(State currentState, ShipStats.ShipStats nmeShipStats, GameObject nmeGO)
+        {
+            _currentState = currentState;
+            // Standing = standing;
+            Manager.Io.Quests.GetQuest(new Bounty()).Complete = true;
+            NMEShipStats = nmeShipStats;
+            NMEGO = nmeGO;
+        }
+        readonly GameObject NMEGO;
+        readonly ShipStats.ShipStats NMEShipStats;
+        // readonly Standing Standing;
+        public WorldMapScene Scene => WorldMapScene.Io;
+        private readonly State _currentState;
+        public State CurrentState => _currentState;
+        public State SubsequentState => new SeaToBountyTransition_State(NMEShipStats, NMEGO);
+        public string PopupText => "Attack";
+    }
 
     public class LighthouseInteraction : IInteractable
     {
@@ -136,7 +159,7 @@ namespace Sea
 
     public class FishingInteraction : IInteractable
     {
-        public FishingInteraction(State currentState, FishData fishData, ShipData shipData, ISceneObject obj)
+        public FishingInteraction(State currentState, FishInventoryData fishData, PlayerShipData shipData, ISceneObject obj)
         {
             CurrentState = currentState;
             Obj = obj;
@@ -144,17 +167,19 @@ namespace Sea
             ShipData = shipData;
         }
 
-        readonly FishData FishData;
-        readonly ShipData ShipData;
+        readonly FishInventoryData FishData;
+        readonly PlayerShipData ShipData;
         public State CurrentState { get; }
         readonly ISceneObject Obj;
         private State _subsequentState;
-        public State SubsequentState => _subsequentState ??= FishData.InventoryIsFull(ShipData.GetLevel(ShipData.DataItem.Fish)) ?
-            new DialogStart_State(new InventoryIsFull_Dialogue(CurrentState)) :
+        public State SubsequentState =>
+            // _subsequentState ??= FishData.InventoryIsFull(ShipData.GetLevel()) ?
+            // new DialogStart_State(new InventoryIsFull_Dialogue(CurrentState)) :
             new SeaToAnglingTransition_State(CurrentState);
         private string _popupText;
-        public string PopupText => _popupText ??= FishData.InventoryIsFull(ShipData.GetLevel(ShipData.DataItem.Fish)) ?
-            "(inventory full)" :
+        public string PopupText =>
+            // _popupText ??= FishData.InventoryIsFull(ShipData.GetLevel(ShipData.DataItem.Fish)) ?
+            // "(inventory full)" :
             "Fish";
     }
 

@@ -7,7 +7,7 @@ public abstract class State
 {
     #region REFERENCES
 
-    protected DataManager DataManager => DataManager.Io;
+    protected Data.Two.Manager DataManager => Data.Two.Manager.Io;
     protected AudioManager Audio => AudioManager.Io;
 
     #endregion REFERENCES
@@ -23,7 +23,7 @@ public abstract class State
     /// </summary>
     protected void DisableInput()
     {
-        Debug.Log(nameof(DisableInput));
+        // Debug.Log(nameof(DisableInput));
         MonoHelper.OnUpdate -= UpdateStickInput;
         InputKey.ButtonEvent -= GPInput;
         InputKey.StickEvent -= GPStickInput;
@@ -57,7 +57,7 @@ public abstract class State
     /// </summary>
     protected void EnableInput()
     {
-        Debug.Log(nameof(EnableInput));
+        // Debug.Log(nameof(EnableInput));
         MonoHelper.OnUpdate += UpdateStickInput;
         InputKey.ButtonEvent += GPInput;
         InputKey.StickEvent += GPStickInput;

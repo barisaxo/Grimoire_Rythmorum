@@ -97,5 +97,10 @@ namespace Dialog
         {
             return dialog.CurrentLine.NextDialogue != null;
         }
+
+        // public static bool HasPlayerAction(this Response response)
+        // {
+        //     return response.PlayerAction != null;
+        // }
     }
 }

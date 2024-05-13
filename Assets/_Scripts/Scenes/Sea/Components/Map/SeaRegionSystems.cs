@@ -5,12 +5,13 @@ using System.Collections.Generic;
 
 public static class SeaRegionSystems
 {
-    public static List<Cell> InitializeCells(this Region region, Data.Inventory.QuestData questData)
+    public static List<Cell> InitializeCells(this Region region, Data.Two.QuestData questData)
     {
+        Debug.Log("Initializing region: " + region.Coord);
         List<Cell> cells = new();
         int size = region.Resolution;
         int halfSize = (int)(size * .5f);
-        Debug.Log(size);
+        // Debug.Log(size);
 
         if (WorldMapScene.Io.Map.Features.TryGetValue(region.Coord, out Feature[] Features))
             foreach (Feature feature in Features)
@@ -28,11 +29,12 @@ public static class SeaRegionSystems
                 }
             }
 
-        AddQuestItems();
+        // AddQuestItems();
         if (!WorldMapScene.Io.Map.ShippingLanes.Contains(region.Coord)) AddFish();
         AddBottle();
         if (!WorldMapScene.Io.Map.IsHighSeas(region.Coord)) AddRocks();
 
+        // foreach (var cell in cells) { Debug.Log("Region: " + region.Coord + ", cell: " + cell.Coord + ", type: " + cell.Type); }
         return cells;
 
         void AddRocks()
@@ -92,23 +94,31 @@ public static class SeaRegionSystems
         }
         void AddQuestItems()
         {
-            foreach (var data in questData.DataItems)
+            foreach (var item in questData.Items)
             {
-                if (questData.GetQuest(data) is not null)
+                if (questData.GetQuest(item) is not null)
                 {
-                    if ((questData.GetQuest(data)?.QuestLocation / WorldMapScene.Io.Map.RegionSize) == region.Coord)
+                    if ((questData.GetQuest(item)?.QuestLocation / WorldMapScene.Io.Map.RegionSize) == region.Coord)
                     {
-                        Debug.Log("ADDING QUEST: " + questData.GetQuest(data) + " " + questData.GetQuest(data)?.QuestLocation / WorldMapScene.Io.Map.RegionSize + " " + region.Coord);
-
-                        cells.Add(new Cell(questData.GetQuest(data).QuestLocation.Smod(size))
+                        Cell newCell = new(questData.GetQuest(item).QuestLocation.Smod(size))
                         {
-                            Type = data switch
+                            Type = item switch
                             {
-                                _ when data == Data.Inventory.QuestData.DataItem.StarChart =>
-                                    CellType.Gramo,
+                                Data.Two.Navigation => CellType.Gramo,
+                                Data.Two.Bounty => CellType.Bounty,
                                 _ => throw new System.Exception(),
                             }
-                        });
+                        };
+
+                        foreach (var cell in cells)
+                            if (cell.Type == newCell.Type)
+                            {
+                                Debug.Log("Preventing Duplicate " + cell.Type);
+                                return;
+                            }
+
+                        Debug.Log("Adding " + newCell.Type);
+                        cells.Add(newCell);
                     }
                 }
             }
@@ -146,18 +156,18 @@ public static class SeaRegionSystems
             };
         }
 
-        Data.Equipment.HullData GetHull()
+        Data.Two.BoatHull GetHull()
         {
             // Debug.Log(region.Coord + " " + Mathf.Abs(region.Coord.x - (WorldMapScene.Io.Map.Size * .5f)) + " " + Mathf.Abs(region.Coord.y - (WorldMapScene.Io.Map.Size * .5f)) + " " + WorldMapScene.Io.Map.Size);
             return Mathf.Abs(Mathf.Abs(region.Coord.x - (WorldMapScene.Io.Map.RegionResolution * .5f)) + Mathf.Abs(region.Coord.y - (WorldMapScene.Io.Map.RegionResolution * .5f))) switch
             {
-                < 3 => Data.Equipment.HullData.Sloop,
-                3 => Random.value < .65f ? Data.Equipment.HullData.Sloop : Data.Equipment.HullData.Schooner,
-                4 => Random.value < .35f ? Data.Equipment.HullData.Sloop : Data.Equipment.HullData.Schooner,
-                5 => Data.Equipment.HullData.Schooner,
-                6 => Random.value < .65f ? Data.Equipment.HullData.Schooner : Data.Equipment.HullData.Frigate,
-                7 => Random.value < .35f ? Data.Equipment.HullData.Schooner : Data.Equipment.HullData.Frigate,
-                _ => Data.Equipment.HullData.Frigate
+                < 3 => new Data.Two.Sloop(),
+                3 => Random.value < .65f ? new Data.Two.Sloop() : new Data.Two.Schooner(),
+                4 => Random.value < .35f ? new Data.Two.Sloop() : new Data.Two.Schooner(),
+                5 => new Data.Two.Schooner(),
+                6 => Random.value < .65f ? new Data.Two.Schooner() : new Data.Two.Frigate(),
+                7 => Random.value < .35f ? new Data.Two.Schooner() : new Data.Two.Frigate(),
+                _ => new Data.Two.Frigate()
             };
         }
     }

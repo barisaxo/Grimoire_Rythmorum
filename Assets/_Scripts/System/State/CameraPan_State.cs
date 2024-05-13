@@ -9,8 +9,6 @@ public class CameraPan_State : State
     readonly float Speed;
     readonly State SubsequentState;
 
-
-
     public CameraPan_State(State subsequentState, Vector3 pan, Vector3 strafe, float speed)
     {
         SubsequentState = subsequentState;
@@ -37,12 +35,8 @@ public class CameraPan_State : State
     {
         Pan = new Vector3(Pan.x.Smod(360), Pan.y.Smod(360), Pan.z.Smod(360));
 
-        while (!Cam.Io.Camera.transform.rotation.eulerAngles.x.IsPOM(1, Pan.x) ||
-               !Cam.Io.Camera.transform.rotation.eulerAngles.y.IsPOM(1, Pan.y) ||
-               !Cam.Io.Camera.transform.rotation.eulerAngles.z.IsPOM(1, Pan.z) ||
-               !Cam.Io.Camera.transform.position.x.IsPOM(1, Strafe.x) ||
-               !Cam.Io.Camera.transform.position.y.IsPOM(1, Strafe.y) ||
-               !Cam.Io.Camera.transform.position.z.IsPOM(1, Strafe.z))
+        while (!Cam.Io.Camera.transform.rotation.eulerAngles.IsPOM(1, Pan) ||
+               !Cam.Io.Camera.transform.position.IsPOM(1, Strafe))
         {
             Cam.Io.Camera.transform.SetPositionAndRotation(
                 Vector3.Lerp(Cam.Io.Camera.transform.position, Strafe, Time.deltaTime * Speed),

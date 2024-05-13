@@ -47,6 +47,7 @@ public class DialogPrinting_State : State
 
     protected override void EngageState()
     {
+
         if (Dialog.CurrentLine.VideoClip != null) Dialog.VideoPlayer.Play();
         if (Dialog.Dialogue.PlayTypingSounds) Audio.SFX.PlayClip(Assets.TypingClicks);
         Dialog.NPCIcon(Dialog.CurrentLine);

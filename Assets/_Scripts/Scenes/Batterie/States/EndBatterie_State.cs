@@ -15,16 +15,17 @@ public class EndBatterie_State : State
     int coins = 0;
     int mats = 0;
     int rations = 0;
-    bool map;
+    // bool map;
 
-    int level => DataManager.GamePlay.CurrentLevel switch
-    {
-        RegionalMode.Lydian => 2,
-        RegionalMode.Aeolian => 2,
-        RegionalMode.Phrygian => 3,
-        RegionalMode.Locrian => 3,
-        _ => 1,
-    };
+    int level => 1;
+    // DataManager.GamePlay.CurrentLevel switch
+    // {
+    //     RegionalMode.Lydian => 2,
+    //     RegionalMode.Aeolian => 2,
+    //     RegionalMode.Phrygian => 3,
+    //     RegionalMode.Locrian => 3,
+    //     _ => 1,
+    // };
 
     protected override void PrepareState(Action callback)
     {
@@ -44,7 +45,7 @@ public class EndBatterie_State : State
         UnityEngine.GameObject.Destroy(Scene.NMEFire);
         UnityEngine.GameObject.Destroy(Scene.ShipFire);
 
-        map = FoundMap();
+        // map = FoundMap();
 
         callback();
         return;
@@ -55,16 +56,17 @@ public class EndBatterie_State : State
             else return Scene.Pack.TotalErrors;
         }
 
-        bool FoundMap()
-        {
-            if (DataManager.CharacterData.Map) return false;
-            if (DataManager.GamePlay.Batterie_Difficulty == 0) return true;
+        // bool FoundMap()
+        // {
+        //     return false;
+        //     // if (DataManager.CharacterData.Map) return false;
+        //     // if (DataManager.GamePlay.Batterie_Difficulty == 0) return true;
 
-            float chance = UnityEngine.Random.value;
-            float percent = ((float)(6 - (int)DataManager.GamePlay.Batterie_Difficulty));//TODO / (float)(Pack.SeaScene.NPC.Ships.Count + 1);
-            //Debug.Log(nameof(chance) + ": " + chance + ", " + nameof(percent) + ": " + percent + ", num of Pirate ships: " + (Board.PirateShipCount() + 1));
-            return (chance < percent);
-        }
+        //     float chance = UnityEngine.Random.value;
+        //     float percent = ((float)(6 - (int)DataManager.GamePlay.Batterie_Difficulty));//TODO / (float)(Pack.SeaScene.NPC.Ships.Count + 1);
+        //     //Debug.Log(nameof(chance) + ": " + chance + ", " + nameof(percent) + ": " + percent + ", num of Pirate ships: " + (Board.PirateShipCount() + 1));
+        //     return (chance < percent);
+        // }
     }
 
     protected override void EngageState()
@@ -75,9 +77,9 @@ public class EndBatterie_State : State
         switch (Scene.Pack.ResultType)
         {
             case BatterieResultType.NMESurrender:
-                DataManager.CharacterData.Materials += mats /= 2;
-                DataManager.CharacterData.Rations += rations /= 2;
-                DataManager.CharacterData.Coins += coins /= 2;
+                Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Material(), mats /= 2);
+                Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Ration(), rations /= 2);
+                Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), coins /= 2);
                 SetState(
                     new CameraPan_State(
                         new NPCSailAway_State(
@@ -89,9 +91,9 @@ public class EndBatterie_State : State
                 return;
 
             case BatterieResultType.Surrender:
-                DataManager.CharacterData.Materials -= mats = DataManager.CharacterData.Materials /= 2;
-                DataManager.CharacterData.Rations -= rations = DataManager.CharacterData.Rations /= 2;
-                DataManager.CharacterData.Coins -= coins = DataManager.CharacterData.Coins /= 2;
+                Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Material(), mats /= -2);
+                Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Ration(), rations /= -2);
+                Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), coins /= -2);
                 SetState(
                     new CameraPan_State(
                         new NPCSailAway_State(
@@ -148,16 +150,16 @@ public class EndBatterie_State : State
                 return;
 
             case BatterieResultType.Won:
-                if (map) DataManager.CharacterData.Map = true;
-                DataManager.CharacterData.Materials += mats;
-                DataManager.CharacterData.Rations += rations;
-                DataManager.CharacterData.Coins += coins;
+                //  DataManager.CharacterData.Map = map;
+                Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Material(), mats);
+                Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Ration(), rations);
+                Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), coins);
 
                 SetState(
                     new MoveNPCOffScreen_State(
                         new CameraPan_State(
                             new DialogStart_State(new EndBatterie_Dialogue(
-                                coins, mats, rations, map, BatterieResultType.Won)),
+                                coins, mats, rations, false, BatterieResultType.Won)),
                             Cam.StoredCamRot,
                             Cam.StoredCamPos,
                             3)));

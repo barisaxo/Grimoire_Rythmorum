@@ -15,7 +15,7 @@ public class BatterieAndCadence_State : State
         Scene.Tick = Tick;
     }
 
-    public BatterieAndCadence_State()
+    public BatterieAndCadence_State(RhythmSpecs specs)
     {
         Debug.Log(Sea.WorldMapScene.Io.NearestNPC.Name + " " +
             Sea.WorldMapScene.Io.NearestNPC.ShipStats.CannonStats.Cannon.Modifier + " " +
@@ -25,10 +25,12 @@ public class BatterieAndCadence_State : State
 
         Scene =
             new BatterieScene(
-              npcShip: Sea.WorldMapScene.Io.NearestNPC,
+              Sea.WorldMapScene.Io.NearestNPC.ShipStats,
+              Sea.WorldMapScene.Io.NearestNPC.SceneObject.GO,
               playerShip: Sea.WorldMapScene.Io.Ship,
               tick: Tick,
-              batterieAudio: Audio.Batterie
+              specs: specs,
+              nmeName: Sea.WorldMapScene.Io.NearestNPC.Name
         );
     }
     // public BatteriePack Pack;
@@ -41,12 +43,17 @@ public class BatterieAndCadence_State : State
 
     protected override void PrepareState(Action callback)
     {
-
-
         Counter = 1;
         MonoHelper.OnUpdate += SpaceBar;
 
         Scene.Initialize();
+
+
+        Cam.Io.Camera.transform.SetPositionAndRotation(Cam.Io.Camera.transform.position + (UnityEngine.Vector3.up * 7),
+           Quaternion.Euler(new Vector3(-20f, Cam.Io.Camera.transform.rotation.eulerAngles.y + 180, Cam.Io.Camera.transform.rotation.eulerAngles.z))
+       );
+
+
         Scene.Pack.GetNewSettings(callback).StartCoroutine();
     }
 
@@ -68,17 +75,17 @@ public class BatterieAndCadence_State : State
         Scene.Pack.MuscopaAudio.StopTheCadence();
         Scene.Pack.MusicSheet.SelfDestruct();
 
-        Scene.BatterieHUD.PlayerCurrent -= Scene.NPCShip.ShipStats.VolleyDamage;
+        Scene.BatterieHUD.PlayerCurrent -= Scene.NMEShipStats.VolleyDamage;
         // Debug.Log(DataManager.Io.CharData.GetLevel(Data.Player.CharacterData.DataItem.CurrentHP));
-        DataManager.Io.CharData.SetLevel(
-            Data.Player.CharacterData.DataItem.CurrentHP,
-            DataManager.Io.CharData.GetLevel(Data.Player.CharacterData.DataItem.CurrentHP) - Scene.NPCShip.ShipStats.VolleyDamage);
+        Data.Two.Manager.Io.PlayerShip.SetLevel(
+            new Data.Two.CurrentHitPoints(),
+            Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.CurrentHitPoints()) - Scene.NMEShipStats.VolleyDamage);
 
         if (Scene.Pack.Spammed)
         {
-            DataManager.Io.CharData.SetLevel(
-                Data.Player.CharacterData.DataItem.CurrentHP,
-                DataManager.Io.CharData.GetLevel(Data.Player.CharacterData.DataItem.CurrentHP) - Scene.NPCShip.ShipStats.VolleyDamage);
+            Data.Two.Manager.Io.PlayerShip.SetLevel(
+                new Data.Two.CurrentHitPoints(),
+                Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.CurrentHitPoints()) - Scene.NMEShipStats.VolleyDamage);
 
             Scene.BatterieHUD.NMECurrent = Scene.BatterieHUD.NMEMax;
         }
@@ -160,12 +167,6 @@ public class BatterieAndCadence_State : State
         }
         if (UnityEngine.Random.value < .04f)
         {
-            // Scene.BatterieHUD.PlayerCurrent -= Scene.NPCShip.ShipStats.DamagePotential;
-            // DataManager.Io.CharData.SetLevel(
-            //     Data.Player.CharacterData.DataItem.CurrentHP,
-            //     DataManager.Io.CharData.DataItems[Data.Player.CharacterData.DataItem.CurrentHP] - Scene.NPCShip.ShipStats.DamagePotential);
-
-            // UnityEngine.Debug.Log("Damage recieved: " + Scene.NPCShip.ShipStats.DamagePotential);
             Scene.NMEFire.Play();
         }
     }

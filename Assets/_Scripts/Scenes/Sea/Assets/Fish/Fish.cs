@@ -1,21 +1,20 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Data.Inventory;
-using Data.Player;
+using Data.Two;
 
 namespace Sea
 {
     public class Fish : ISceneObject
     {
-        public Fish(State currentState, DataManager data)
+        public Fish(State currentState, Manager data)
         {
             Difficulty = new FishDifficultySetter(data);
             IMAFish = Assets.SailFishPrefab;//todo difficultylevel switch
             FishType = IMAFish.FishType;
             TF.SetParent(WorldMapScene.Io.TheSea.transform);
             Collidable = new NotCollidable(IMAFish.Col);
-            Interactable = new FishingInteraction(currentState, data.FishData, data.ShipData, this);
+            Interactable = new FishingInteraction(currentState, data.Fish, data.PlayerShip, this);
             Triggerable = new NotTriggerable();
             UpdatePosition = new UpdateFishPosition();
             Telemeter = new FishTelemetry();
@@ -25,8 +24,11 @@ namespace Sea
                 new Vector3(0, Random.Range(0f, 360f), 0));
             Description = new SceneObjectDescription("Sailfish");
 
-            Inventoriable = new Inventoriable(new (Data.IData IData, DataEnum DataItem, int Amount)[]{
-                (data.FishData, Difficulty.DifficultyLevel, 1),
+            int patterns = (int)(10 * (Difficulty.DifficultyLevel.ID + 1) * data.Skill.GetBonusRatio(new Apophenia()));
+
+            Inventoriable = new Inventoriable(new (IData IData, IItem DataItem, int Amount)[]{
+                // (data.Fish, Difficulty.DifficultyLevel, 1),
+                (data.Inventory, new Ration(), Difficulty.DifficultyLevel.ID + 1),
                 // (data.FishData,region switch
                 //  {
                 //      MusicTheory.RegionalMode.Ionian or MusicTheory.RegionalMode.Dorian => FishData.DataItem.SailFish,
@@ -35,9 +37,8 @@ namespace Sea
                 //      MusicTheory.RegionalMode.Locrian => FishData.DataItem.Tuna,
                 //      _ => FishData.DataItem.Shark,
                 //  }, 1),
-                (data.PlayerData,
-                PlayerData.DataItem.Patterns,
-                (int)(10 * (Difficulty.DifficultyLevel.Id + 1)* data.SkillsData.GetBonusRatio(SkillsData.DataItem.Apophenia)))});
+                (data.Player, new PatternsFound(), patterns),
+                 (data.Player, new PatternsAvailable(), patterns)});
 
         }
 
@@ -52,7 +53,7 @@ namespace Sea
         public IUpdatePosition UpdatePosition { get; private set; }
         public IDescription Description { get; private set; }
         public IInstantiable Instantiator { get; private set; }
-        public FishData.DataItem FishType;
+        public Data.Two.Fish FishType;
         public IInventoriable Inventoriable { get; private set; }
         public IQuestable Questable => new NotQuestable();
         public IDifficulty Difficulty { get; }
@@ -63,6 +64,6 @@ namespace Sea
         public GameObject GO { get; }
         public GameObject ToInstantiate { get; }
         public CapsuleCollider Col { get; }
-        public FishData.DataItem FishType { get; }
+        public Data.Two.Fish FishType { get; }
     }
 }

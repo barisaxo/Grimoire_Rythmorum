@@ -1,5 +1,5 @@
 using UnityEngine;
-using Data.Inventory;
+using Data.Two;
 
 namespace Sea
 {
@@ -12,6 +12,6 @@ namespace Sea
         [SerializeField] private CapsuleCollider _col;
         public CapsuleCollider Col => _col;
 
-        public FishData.DataItem FishType => FishData.DataItem.SailFish;
+        public Data.Two.Fish FishType => new SailFish();
     }
 }

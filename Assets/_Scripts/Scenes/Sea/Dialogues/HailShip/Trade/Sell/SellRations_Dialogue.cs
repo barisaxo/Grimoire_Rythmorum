@@ -3,25 +3,38 @@ using System.Collections.Generic;
 using UnityEngine;
 using Dialog;
 
-public class SellMaps_Dialogue : Dialogue
+public class SellRations_Dialogue : Dialogue
 {
     readonly Dialogue ReturnTo;
-    int Maps => DataManager.Io.CharacterData.Maps;
+    readonly Data.Two.Standing Standing;
 
-    public SellMaps_Dialogue(Dialogue returnTo, Speaker speaker)
+    int StandingLevel => Data.Two.Manager.Io.StandingData.GetLevel(Standing);
+    readonly int Rations = Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.Ration());
+    float StandingsModifier => 2f - (float)(1f - (float)((float)StandingLevel) / 9f);
+
+    int largeGold => (int)(largeRation * 17.5f * StandingsModifier);
+    int medGold => (int)(medRation * 20f * StandingsModifier);
+    int smallGold => (int)(smallRation * 22.5f * StandingsModifier);
+
+    int largeRation => 50;
+    int medRation => 25;
+    int smallRation => 5;
+
+    public SellRations_Dialogue(Dialogue returnTo, Speaker speaker, Data.Two.Standing standing)
     {
         ReturnTo = returnTo;
         Speaker = speaker;
+        Standing = standing;
     }
 
     public override Dialogue Initiate()
     {
-        FirstLine = BuyMaps_Line;
+        FirstLine = BuyRations_Line;
         return base.Initiate();
     }
 
-    Line _MapsLine;
-    Line BuyMaps_Line => _MapsLine ??= new Line(Maps_LineText, MapsResponses)
+    Line _RationsLine;
+    Line BuyRations_Line => _RationsLine ??= new Line(Rations_LineText, RationsResponses)
         .SetSpeaker(Speaker);
 
     Line _tradeCompleteLine;
@@ -30,57 +43,57 @@ public class SellMaps_Dialogue : Dialogue
         ;
 
     readonly string TradeComplete_LineText = "Good deal! Until next time!";
-    readonly string Maps_LineText = "How many maps do you want to sell?";
+    readonly string Rations_LineText = "How many Rations do you want to sell?";
 
-    readonly string MapsLarge_RepText = "10 [350 gold]";
-    readonly string MapsMedium_RepText = "5 [200 gold]";
-    readonly string MapsSmall_RepText = "1 [50 gold]";
+    string RationsLarge_RepText => "-" + largeRation.ToString() + " rations; +" + largeGold.ToString() + " gold";
+    string RationsMedium_RepText => "-" + medRation.ToString() + " rations; +" + medGold.ToString() + " gold";
+    string RationsSmall_RepText => "-" + smallRation.ToString() + " rations; +" + smallGold.ToString() + " gold";
 
-    Response _MapsLarge_response;
-    Response MapsLarge_Response => _MapsLarge_response ??= new Response(MapsLarge_RepText, TradeComplete_Line)
-        .SetPlayerAction(SellMapsLarge);
+    Response _RationsLarge_response;
+    Response RationsLarge_Response => _RationsLarge_response ??= new Response(RationsLarge_RepText, TradeComplete_Line)
+        .SetPlayerAction(SellRationsLarge);
 
-    Response _MapsMedium_response;
-    Response MapsMedium_Response => _MapsMedium_response ??= new Response(MapsMedium_RepText, TradeComplete_Line)
-        .SetPlayerAction(SellMapsMedium);
+    Response _RationsMedium_response;
+    Response RationsMedium_Response => _RationsMedium_response ??= new Response(RationsMedium_RepText, TradeComplete_Line)
+        .SetPlayerAction(SellRationsMedium);
 
-    Response _MapsSmall_response;
-    Response MapsSmall_Response => _MapsSmall_response ??= new Response(MapsSmall_RepText, TradeComplete_Line)
-        .SetPlayerAction(SellMapsSmall);
+    Response _RationsSmall_response;
+    Response RationsSmall_Response => _RationsSmall_response ??= new Response(RationsSmall_RepText, TradeComplete_Line)
+        .SetPlayerAction(SellRationsSmall);
 
     Response _backResponse;
     Response BackResponse => _backResponse ??= new Response("Never mind", ReturnTo);
 
-    Response[] _MapsResponses;
-    Response[] MapsResponses => _MapsResponses ??= GetMapsResponses();
-    Response[] GetMapsResponses()
+    Response[] _RationsResponses;
+    Response[] RationsResponses => _RationsResponses ??= GetRationsResponses();
+    Response[] GetRationsResponses()
     {
         List<Response> responses = new();
 
-        if (!(Maps < 10)) { responses.Add(MapsLarge_Response); }
-        if (!(Maps < 5)) { responses.Add(MapsMedium_Response); }
-        if (!(Maps < 1)) { responses.Add(MapsSmall_Response); }
+        if (!(Rations < largeRation)) { responses.Add(RationsLarge_Response); }
+        if (!(Rations < medRation)) { responses.Add(RationsMedium_Response); }
+        if (!(Rations < smallRation)) { responses.Add(RationsSmall_Response); }
         responses.Add(BackResponse);
 
         return responses.ToArray();
     }
 
-    void SellMapsSmall()
+    void SellRationsSmall()
     {
-        DataManager.Io.CharacterData.Maps -= 1;
-        DataManager.Io.CharacterData.Coins += 50;
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Ration(), -smallRation);
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), smallGold);
     }
 
-    void SellMapsMedium()
+    void SellRationsMedium()
     {
-        DataManager.Io.CharacterData.Maps -= 5;
-        DataManager.Io.CharacterData.Coins += 5 * 40;
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Ration(), -medRation);
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), medGold);
     }
 
-    void SellMapsLarge()
+    void SellRationsLarge()
     {
-        DataManager.Io.CharacterData.Maps -= 10;
-        DataManager.Io.CharacterData.Coins += 10 * 35;
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Ration(), -largeRation);
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), largeGold);
     }
 
 }

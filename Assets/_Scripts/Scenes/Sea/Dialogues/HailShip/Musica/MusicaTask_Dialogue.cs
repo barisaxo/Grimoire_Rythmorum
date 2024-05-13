@@ -30,9 +30,9 @@ public class MusicaTask_Dialogue : Dialogue
     Response[] GetResponses()
     {
         List<Response> temp = new();
-        if (!DataManager.Io.CharacterData.Sextant) temp.Add(SextantResponse);
-        if (DataManager.Io.CharacterData.Maps > 0) temp.Add(MapResponse);
-        if (DataManager.Io.CharacterData.Gramos > 0) temp.Add(GramoResponse);
+        // if (!DataManager.Io.CharacterData.Sextant) temp.Add(SextantResponse);
+        if (Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.Bottle()) > 0) temp.Add(MapResponse);
+        if (Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.Gramos()) > 0) temp.Add(GramoResponse);
 
         if (temp.Count == 0) temp.Add(CantResponse);
         else temp.Add(BackResponse);

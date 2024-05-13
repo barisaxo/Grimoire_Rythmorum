@@ -3,6 +3,7 @@ using System.Collections;
 using UnityEngine;
 using Sea;
 using Sea.Maps;
+using Data.Two;
 
 public class SeaScene_State : State
 {
@@ -69,8 +70,8 @@ public class SeaScene_State : State
     {
         Scene.HUD.Enable();
         Scene.HUD.UpdateHealthBar(
-            DataManager.CharData.GetLevel(Data.Player.CharacterData.DataItem.CurrentHP),
-            DataManager.CharData.GetLevel(Data.Player.CharacterData.DataItem.MaxHP));
+            DataManager.PlayerShip.GetLevel(new CurrentHitPoints()),
+            DataManager.PlayerShip.GetLevel(new MaxHitPoints()));
         Scene.HUD.Hud.GO.SetActive(true);
         // Scene.HUD.Show();
         Scene.HUD.Hide(-1);
@@ -149,18 +150,27 @@ public class SeaScene_State : State
 
     protected override void NorthPressed()
     {
+        Debug.Log("North pressed;");
+        _ = Scene.NearestNPC;
+        // + " Scene.NearestNPC is not null: " +
+        //         (Scene.NearestNPC is not null) +
+        //         ", Scene.NearestNPC.SceneObject.Interactable is not NoInteraction: " +
+        //         (Scene.NearestNPC.SceneObject.Interactable is not NoInteraction));
+
         if (Scene.NearestNPC is not null &&
             Scene.NearestNPC.SceneObject.Interactable is not NoInteraction)
         {
             Scene.NearestNPC.HideTimer = Scene.NearestNPC.HideTime;
             // SetState(Scene.NearestNPC.SceneObject.Interactable.SubsequentState);
             SetState(new SeaToBatteryTransition_State());
+            Debug.Log("battery transition state setting");
             return;
         }
     }
 
     protected override void EastPressed()
     {
+        Debug.Log("East pressed;" + " " + Scene.NearestNPC + " " + Scene.NearestNPC?.SceneObject.Interactable.GetType() + " " + Scene.NearestNPC?.SceneObject.Interactable.SubsequentState);
         if (Scene.NearestNPC is not null &&
             Scene.NearestNPC.SceneObject.Interactable is not NoInteraction)
         {
@@ -175,22 +185,33 @@ public class SeaScene_State : State
 
     protected override void StartPressed()
     {
-        SetState(new SeaToMenuTransition_State(
-            new Menus.Inventory.InventoryMenu(DataManager,
-            this
-                    // new CameraPan_State(
-                    //     subsequentState: this,
-                    //     pan: Cam.StoredCamRot = Cam.Io.Camera.transform.rotation.eulerAngles,
-                    //     strafe: Cam.StoredCamPos = Cam.Io.Camera.transform.position,
-                    //     speed: 3)
-                    )));
+        SetState(new SeaToNewMenuTransition_State(
+        new Menus.Two.SeaMenu(
+               Manager.Io,
+               this
+                   // new CameraPan_State(
+                   //     subsequentState: this,
+                   //     pan: Cam.StoredCamRot = Cam.Io.Camera.transform.rotation.eulerAngles,
+                   //     strafe: Cam.StoredCamPos = Cam.Io.Camera.transform.position,
+                   //     speed: 3)
+                   )));
+
+        // SetState(new SeaToMenuTransition_State(
+        //     new Menus.Inventory.InventoryMenu(DataManager,
+        //     this
+        //             // new CameraPan_State(
+        //             //     subsequentState: this,
+        //             //     pan: Cam.StoredCamRot = Cam.Io.Camera.transform.rotation.eulerAngles,
+        //             //     strafe: Cam.StoredCamPos = Cam.Io.Camera.transform.position,
+        //             //     speed: 3)
+        //             )));
     }
 
     protected override void SelectPressed()
     {
-        SetState(new SeaToMenuTransition_State(
-            new Menus.Options.OptionsMenu(
-                DataManager,
+        SetState(new SeaToNewMenuTransition_State(
+         new Menus.Two.OptionsMenu(
+                Manager.Io,
                 Audio,
                 this
                     // new CameraPan_State(

@@ -14,9 +14,22 @@ namespace Data.Two
             return datum;
         }
 
-        public static IItem[] Items => new Fish[] {
-            new Carp(), new SailFish(), new Tuna(), new Halibut(),
-            new Sturgeon(), new Shark() };
+        private IItem[] _items;
+        public IItem[] Items
+        {
+            get
+            {
+                return _items ??= SetUp();
+                static IItem[] SetUp()
+                {
+                    var enums = Enumeration.All<FishEnum>();
+                    var temp = new IItem[enums.Length];
+                    for (int i = 0; i < enums.Length; i++)
+                        temp[i] = FishEnum.ToItem(enums[i]);
+                    return temp;
+                }
+            }
+        }
 
         public string GetDescription(IItem item)
         {
@@ -30,11 +43,6 @@ namespace Data.Two
             return Datum[(Fish)item].ToString();
         }
 
-        public void DecreaseLevel(IItem item)
-        {
-            if (item is not Fish) throw new System.Exception(item.GetType().ToString());
-            Datum[(Fish)item] = -1 < 0 ? 0 : Datum[(Fish)item] - 1;
-        }
 
         public int GetLevel(IItem item)
         {
@@ -42,11 +50,36 @@ namespace Data.Two
             return Datum[(Fish)item];
         }
 
-        public void IncreaseLevel(IItem item)
+        public void AdjustLevel(IItem item, int i)
         {
             if (item is not Fish) throw new System.Exception(item.GetType().ToString());
-            Datum[(Fish)item] = +1 > 999 ? 999 : Datum[(Fish)item] + 1;
+            Datum[(Fish)item] =
+                Datum[(Fish)item] + i > 999 ? 999 :
+                Datum[(Fish)item] + i < 0 ? 0 :
+                Datum[(Fish)item] + i;
         }
+
+        // public void DecreaseLevel(IItem item)
+        // {
+        //     if (item is not Fish) throw new System.Exception(item.GetType().ToString());
+        //     Datum[(Fish)item] = Datum[(Fish)item] - 1 < 0 ? 0 : Datum[(Fish)item] - 1;
+        // }
+        // public void DecreaseLevel(IItem item, int i)
+        // {
+        //     if (item is not Fish) throw new System.Exception(item.GetType().ToString());
+        //     Datum[(Fish)item] = Datum[(Fish)item] - i < 0 ? 0 : Datum[(Fish)item] - i;
+        // }
+
+        // public void IncreaseLevel(IItem item)
+        // {
+        //     if (item is not Fish) throw new System.Exception(item.GetType().ToString());
+        //     Datum[(Fish)item] = Datum[(Fish)item] + 1 > 999 ? 999 : Datum[(Fish)item] + 1;
+        // }
+        // public void IncreaseLevel(IItem item, int i)
+        // {
+        //     if (item is not Fish) throw new System.Exception(item.GetType().ToString());
+        //     Datum[(Fish)item] = Datum[(Fish)item] + i > 999 ? 999 : Datum[(Fish)item] + i;
+        // }
 
         public void SetLevel(IItem item, int level)
         {

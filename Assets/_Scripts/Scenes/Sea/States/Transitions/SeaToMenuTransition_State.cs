@@ -1,8 +1,6 @@
 using System;
 using Sea;
-using Menus;
-using Menus.Options;
-using Menus.Inventory;
+using Menus.Two;
 
 public class SeaToMenuTransition_State : State
 {
@@ -35,7 +33,7 @@ public class SeaToMenuTransition_State : State
         // SetState(new MenuTest_State(Menu));
 
         SetState(new CameraPan_State(HeaderMenu is null ?
-            new Menu_State(SubMenu) : new Menu_State(HeaderMenu as IHeaderMenu),
+            new MenuState(SubMenu) : new MenuState(HeaderMenu as IHeaderMenu),
             new UnityEngine.Vector3(-50, Cam.Io.Camera.transform.rotation.eulerAngles.y,
                 Cam.Io.Camera.transform.rotation.eulerAngles.z),
                 Cam.Io.Camera.transform.position,

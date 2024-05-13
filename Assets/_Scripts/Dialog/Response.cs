@@ -18,7 +18,11 @@ namespace Dialog
         public float Speed { get; private set; }
         public System.Action PlayerAction { get; private set; } = null;
 
-        public Response SetPlayerAction(System.Action action) { PlayerAction = action; return this; }
+        public Response SetPlayerAction(System.Action action)
+        {
+            PlayerAction = action;
+            return this;
+        }
         public Response SetGoToLine(Line gotoLine) { GoToLine = gotoLine; return this; }
         public Response FadeToNextState() { FadeOut = true; return this; }
     }

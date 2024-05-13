@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Ships;
 namespace Sea
 {
     public class NPCShip
@@ -8,12 +9,14 @@ namespace Sea
         public ISceneObject SceneObject;
         public IMAShip Ship;
 
-        public void InstantiateNewSceneObject(State state)
+        public void InstantiateNewSceneObject(State state, Data.Two.StandingData standingData)
         {
+            RegionalMode = (MusicTheory.RegionalMode)Random.Range(0, 7);
+
             switch (ShipType)
             {
                 case NPCShipType.Trade:
-                    TradeShip tradeShip = new(state, Hull);
+                    TradeShip tradeShip = new(state, Hull, standingData, Standing);
                     SceneObject = tradeShip;
                     Ship = tradeShip.Ship;
                     break;
@@ -22,6 +25,12 @@ namespace Sea
                     PirateShip pirateShip = new(state, this, Hull);
                     SceneObject = pirateShip;
                     Ship = pirateShip.Ship;
+                    break;
+
+                case NPCShipType.Bounty:
+                    BountyShipSO bountyShip = new(state, this, Hull);
+                    SceneObject = bountyShip;
+                    Ship = bountyShip.Ship;
                     break;
 
                 default: throw new System.NotImplementedException();
@@ -83,8 +92,20 @@ namespace Sea
         // public bool Hiding => HideTimer > 0;
         public float HideTimer;
 
-        public Data.Equipment.HullData Hull;
-        public MusicTheory.RegionalMode RegionalMode = (MusicTheory.RegionalMode)Random.Range(0, 7);
+        public Data.Two.BoatHull Hull;
+        public Data.Two.Standing Standing => RegionalMode switch
+        {
+            MusicTheory.RegionalMode.Aeolian => new Data.Two.AeolianStanding(),
+            MusicTheory.RegionalMode.Ionian => new Data.Two.IonianStanding(),
+            MusicTheory.RegionalMode.Lydian => new Data.Two.LydianStanding(),
+            MusicTheory.RegionalMode.Locrian => new Data.Two.LocrianStanding(),
+            MusicTheory.RegionalMode.MixoLydian => new Data.Two.MixolydianStanding(),
+            MusicTheory.RegionalMode.Dorian => new Data.Two.DorianStanding(),
+            MusicTheory.RegionalMode.Phrygian => new Data.Two.PhrygianStanding(),
+            _ => throw new System.ArgumentOutOfRangeException(RegionalMode.GetColor().ToString()),
+        };
+
+        public MusicTheory.RegionalMode RegionalMode;
         public AudioClip RegionalSound => Assets.GetScaleChordClip(RegionalMode);
         public string Name => "[" + RegionalMode.ToString() + " " + ShipType + " ship]:\n";
         public Color FlagColor = Assets.RandomColor;
@@ -99,7 +120,7 @@ namespace Sea
             _ => Assets.LocrianFlag,
         } : Assets.PirateFlag;
 
-        public NPCShip(Vector2Int[] path, NPCShipType shipType, Data.Equipment.HullData hull, Vector2Int regionalCoordOffset)
+        public NPCShip(Vector2Int[] path, NPCShipType shipType, Data.Two.BoatHull hull, Vector2Int regionalCoordOffset)
         {
             ShipType = shipType;
             Hull = hull;
@@ -126,18 +147,20 @@ namespace Sea
 
     public class TradeShip : ISceneObject
     {
-        public TradeShip(State state, Data.Equipment.HullData hull)
+        public TradeShip(State state, Data.Two.BoatHull hull, Data.Two.StandingData standingData, Data.Two.Standing standing)
         {
             IMAShip obj = hull switch
             {
-                _ when hull == Data.Equipment.HullData.Sloop => Assets.Sloop,
-                _ when hull == Data.Equipment.HullData.Schooner => Assets.Schooner2,
-                _ => Assets.Frigate,
+                Data.Two.Sloop => Assets.Sloop,
+                Data.Two.Schooner => Assets.Schooner2,
+                Data.Two.Frigate => Assets.Frigate,
+                _ => throw new System.ArgumentException(hull.Name)
             };
+
             Ship = obj;
             GO = obj.GO;
             Collidable = new ShipCollision(obj._hull.Col);
-            Interactable = new HailShipInteraction(state);
+            Interactable = new HailShipInteraction(state, standing);
             Triggerable = new NotTriggerable();
             Telemeter = new ShipTelemetry();
             UpdatePosition = new UpdateNPCShipPosition();
@@ -160,15 +183,16 @@ namespace Sea
         public IDifficulty Difficulty { get; } = new NoDifficulty();
     }
 
-    public class PirateShip : ISceneObject
+    public class BountyShipSO : ISceneObject
     {
-        public PirateShip(State currentState, NPCShip ship, Data.Equipment.HullData hull)
+        public BountyShipSO(State currentState, NPCShip ship, Data.Two.BoatHull hull)
         {
             IMAShip obj = hull switch
             {
-                _ when hull == Data.Equipment.HullData.Sloop => Assets.Sloop,
-                _ when hull == Data.Equipment.HullData.Schooner => Assets.Schooner2,
-                _ => Assets.Frigate,
+                Data.Two.Sloop => Assets.Sloop,
+                Data.Two.Schooner => Assets.Schooner2,
+                Data.Two.Frigate => Assets.Frigate,
+                _ => throw new System.NotImplementedException(hull.Name)
             };
 
             Ship = obj;
@@ -197,7 +221,45 @@ namespace Sea
         public IDifficulty Difficulty { get; } = new NoDifficulty();
     }
 
-    public enum NPCShipType { Trade, Pirate, }
+    public class PirateShip : ISceneObject
+    {
+        public PirateShip(State currentState, NPCShip ship, Data.Two.BoatHull hull)
+        {
+            IMAShip obj = hull switch
+            {
+                Data.Two.Sloop => Assets.Sloop,
+                Data.Two.Schooner => Assets.Schooner2,
+                Data.Two.Frigate => Assets.Frigate,
+                _ => throw new System.NotImplementedException(hull.Name)
+            };
+
+            Ship = obj;
+            GO = obj.GO;
+
+            Collidable = new NotCollidable(obj._hull.Col);
+            Interactable = new NoInteraction();
+            Triggerable = new PirateTrigger(currentState, ship);
+            UpdatePosition = new UpdateFishPosition();
+            Telemeter = new ShipTelemetry();
+        }
+
+        public IMAShip Ship { get; private set; }
+
+        public GameObject GO { get; private set; }
+
+        public ITelemeter Telemeter { get; private set; }
+        public ICollidable Collidable { get; private set; }
+        public IInteractable Interactable { get; private set; }
+        public ITriggerable Triggerable { get; private set; }
+        public IUpdatePosition UpdatePosition { get; private set; }
+        public IInstantiable Instantiator { get; private set; }
+        public IDescription Description { get; private set; }
+        public IInventoriable Inventoriable { get; } = new NotInventoriable();
+        public IQuestable Questable => new NotQuestable();
+        public IDifficulty Difficulty { get; } = new NoDifficulty();
+    }
+
+    public enum NPCShipType { Trade, Pirate, Bounty }
     //todo privateer, exploration vessel, Whaling Ship, Fishing boat, Packet Ship
 
 }

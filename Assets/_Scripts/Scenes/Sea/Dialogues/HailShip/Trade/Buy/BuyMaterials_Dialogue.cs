@@ -6,12 +6,26 @@ using Dialog;
 public class BuyMaterials_Dialogue : Dialogue
 {
     readonly Dialogue ReturnTo;
-    int Coins => DataManager.Io.CharacterData.Coins;
+    readonly Data.Two.Standing Standing;
+    int StandingMod => Data.Two.Manager.Io.StandingData.GetLevel(Standing);
+    int Gold => Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.Gold());
 
-    public BuyMaterials_Dialogue(Dialogue returnTo, Speaker speaker)
+    float StandingsModifier => 1f + (float)(1f - (float)((float)StandingMod) / 9f);
+
+    int largeGold => (int)(largeMat * 15f * StandingsModifier);
+    int medGold => (int)(medMat * 17.5f * StandingsModifier);
+    int smallGold => (int)(smallMat * 20f * StandingsModifier);
+
+    int largeMat => 250;
+    int medMat => 150;
+    int smallMat => 50;
+
+
+    public BuyMaterials_Dialogue(Dialogue returnTo, Speaker speaker, Data.Two.Standing standing)
     {
         ReturnTo = returnTo;
         Speaker = speaker;
+        Standing = standing;
     }
 
     public override Dialogue Initiate()
@@ -20,10 +34,10 @@ public class BuyMaterials_Dialogue : Dialogue
         return base.Initiate();
     }
 
-    readonly string MaterialsLarge_RepText = "25 mats [250 gold]";
-    readonly string MaterialsMedium_RepText = "10 mats [150 gold]";
-    readonly string MaterialsSmall_RepText = "5 mats [100 gold]";
-    readonly string Materials_LineText = "How much material do you want?";
+    string MaterialsLarge_RepText => "+" + largeMat.ToString() + " mats; " + "-" + largeGold + " gold";
+    string MaterialsMedium_RepText => "+" + medMat.ToString() + " mats; " + "-" + medGold + " gold";
+    string MaterialsSmall_RepText => "+" + smallMat.ToString() + " mats; " + "-" + smallGold + " gold";
+    string Materials_LineText => "How much material do you want?";
 
     Line _matsLine;
     Line SellMaterials_Line => _matsLine ??= new Line(Materials_LineText, MaterialResponses)
@@ -51,9 +65,9 @@ public class BuyMaterials_Dialogue : Dialogue
     {
         List<Response> responses = new();
 
-        if (!(Coins < 250)) { responses.Add(MaterialsLarge_Response); }
-        if (!(Coins < 150)) { responses.Add(MaterialsMedium_Response); }
-        if (!(Coins < 100)) { responses.Add(MaterialsSmall_Response); }
+        if (!(Gold < largeGold)) { responses.Add(MaterialsLarge_Response); }
+        if (!(Gold < medGold)) { responses.Add(MaterialsMedium_Response); }
+        if (!(Gold < smallGold)) { responses.Add(MaterialsSmall_Response); }
         responses.Add(BackResponse);
 
         return responses.ToArray();
@@ -61,18 +75,18 @@ public class BuyMaterials_Dialogue : Dialogue
 
     void BuyMaterialsSmall()
     {
-        DataManager.Io.CharacterData.Materials += 5;
-        DataManager.Io.CharacterData.Coins -= 100;
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Material(), smallMat);
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), -smallGold);
     }
     void BuyMaterialsMedium()
     {
-        DataManager.Io.CharacterData.Materials += 10;
-        DataManager.Io.CharacterData.Coins -= 150;
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Material(), medMat);
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), -medGold);
     }
     void BuyMaterialsLarge()
     {
-        DataManager.Io.CharacterData.Materials += 25;
-        DataManager.Io.CharacterData.Coins -= 250;
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Material(), largeMat);
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), -largeGold);
     }
 
     readonly string TradeComplete_LineText = "Good deal! Until next time!";

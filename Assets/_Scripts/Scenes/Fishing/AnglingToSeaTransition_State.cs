@@ -2,8 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Data.Player;
-using Data.Inventory;
+using Data.Two;
 
 public class AnglingToSeaTransition_State : State
 {
@@ -22,7 +21,7 @@ public class AnglingToSeaTransition_State : State
     {
         if (Won)
         {
-            DataManager.PlayerData.IncreaseLevel(PlayerData.DataItem.FishCaught);
+            Manager.Io.Player.AdjustLevel(new FishCaught(), 1);
             Obj.Inventoriable.AddRewards();
 
             SetState(
@@ -34,7 +33,7 @@ public class AnglingToSeaTransition_State : State
         }
         else
         {
-            DataManager.PlayerData.IncreaseLevel(PlayerData.DataItem.FishLost);
+            Manager.Io.Player.AdjustLevel(new FishLost(), 1);
             SetState(new DialogStart_State(new FishGotAway_Dialogue(SubsequentState)));
         }
     }

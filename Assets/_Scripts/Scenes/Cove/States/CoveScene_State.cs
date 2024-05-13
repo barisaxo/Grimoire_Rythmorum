@@ -17,7 +17,7 @@ public class CoveScene_State : State
 
     protected override void EngageState()
     {
-        DataManager.LighthousesData.Reset();
+        Data.Two.Manager.Io.Lighthouse.Reset();
 
         if (!Audio.BGMusic.AudioSources[0].isPlaying)
             Audio.BGMusic.Resume();
@@ -71,7 +71,13 @@ public class CoveScene_State : State
         }
         else if (NearPatterns)
         {
-            SetState(new Menu_State(new Menus.Inventory.SkillsMenu(DataManager.Io.SkillsData, DataManager.Io.PlayerData, this)));
+            SetState(new CoveToMenuTransition_State(
+                new Menus.Two.SkillsMenu(Data.Two.Manager.Io.Skill, Data.Two.Manager.Io.Player,
+                    new CameraPan_State(
+                    subsequentState: this,
+                    pan: Cam.StoredCamRot = Cam.Io.Camera.transform.rotation.eulerAngles,
+                    strafe: Cam.StoredCamPos = Cam.Io.Camera.transform.position,
+                    speed: 5))));
             return;
         }
     }
@@ -88,17 +94,15 @@ public class CoveScene_State : State
         //         speed: 3));
 
         SetState(new CoveToMenuTransition_State(
-            new Menus.Options.OptionsMenu(
+            new Menus.Two.OptionsMenu(
                 DataManager,
                 Audio,
                 new CameraPan_State(
                     subsequentState: this,
                     pan: Cam.StoredCamRot = Cam.Io.Camera.transform.rotation.eulerAngles,
                     strafe: Cam.StoredCamPos = Cam.Io.Camera.transform.position,
-                    speed: 3))));
+                    speed: 5))));
     }
-
-
 
     bool NearShip => Dist(Cove.Player.GO, Cove.Ship) < 2.5f;
     bool NearPatterns => Dist(Cove.Player.GO, Cove.SkillSheet) < 2.5f;

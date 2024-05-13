@@ -14,14 +14,34 @@ namespace Data.Two
             return datum;
         }
 
-        public static IItem[] Items => new Gramophone[] {
-            new Gramo1(),new Gramo2(), new Gramo3(),new Gramo4(),new Gramo5() };
+        private IItem[] _items;
+        public IItem[] Items
+        {
+            get
+            {
+                return _items ??= SetUp();
+                static IItem[] SetUp()
+                {
+                    var enums = Enumeration.All<GramophoneEnum>();
+                    var temp = new IItem[enums.Length];
+                    for (int i = 0; i < enums.Length; i++)
+                        temp[i] = GramophoneEnum.ToItem(enums[i]);
+                    return temp;
+                }
+            }
+        }
 
         public string GetDescription(IItem item)
         {
             if (item is not Gramophone) throw new System.Exception(item.GetType().ToString());
             return item.Description;
         }
+        public int GetLevel(IItem item)
+        {
+            if (item is not Gramophone) throw new System.Exception(item.GetType().ToString());
+            return Datum[(Gramophone)item];
+        }
+
 
         public string GetDisplayLevel(IItem item)
         {
@@ -29,23 +49,35 @@ namespace Data.Two
             return Datum[(Gramophone)item].ToString();
         }
 
-        public void DecreaseLevel(IItem item)
+        public void AdjustLevel(IItem item, int i)
         {
             if (item is not Gramophone) throw new System.Exception(item.GetType().ToString());
-            Datum[(Gramophone)item] = -1 < 0 ? 0 : Datum[(Gramophone)item] - 1;
+            Datum[(Gramophone)item] =
+                Datum[(Gramophone)item] + i > 999 ? 999 :
+                Datum[(Gramophone)item] + i < 0 ? 0 :
+                Datum[(Gramophone)item] + i;
         }
 
-        public int GetLevel(IItem item)
-        {
-            if (item is not Gramophone) throw new System.Exception(item.GetType().ToString());
-            return Datum[(Gramophone)item];
-        }
-
-        public void IncreaseLevel(IItem item)
-        {
-            if (item is not Gramophone) throw new System.Exception(item.GetType().ToString());
-            Datum[(Gramophone)item] = +1 > 999 ? 999 : Datum[(Gramophone)item] + 1;
-        }
+        // public void DecreaseLevel(IItem item)
+        // {
+        //     if (item is not Gramophone) throw new System.Exception(item.GetType().ToString());
+        //     Datum[(Gramophone)item] = Datum[(Gramophone)item] - 1 < 0 ? 0 : Datum[(Gramophone)item] - 1;
+        // }
+        // public void DecreaseLevel(IItem item, int i)
+        // {
+        //     if (item is not Gramophone) throw new System.Exception(item.GetType().ToString());
+        //     Datum[(Gramophone)item] = Datum[(Gramophone)item] - i < 0 ? 0 : Datum[(Gramophone)item] - i;
+        // }
+        // public void IncreaseLevel(IItem item)
+        // {
+        //     if (item is not Gramophone) throw new System.Exception(item.GetType().ToString());
+        //     Datum[(Gramophone)item] = Datum[(Gramophone)item] + 1 > 999 ? 999 : Datum[(Gramophone)item] + 1;
+        // }
+        // public void IncreaseLevel(IItem item, int i)
+        // {
+        //     if (item is not Gramophone) throw new System.Exception(item.GetType().ToString());
+        //     Datum[(Gramophone)item] = Datum[(Gramophone)item] + i > 999 ? 999 : Datum[(Gramophone)item] + i;
+        // }
 
         public void SetLevel(IItem item, int level)
         {

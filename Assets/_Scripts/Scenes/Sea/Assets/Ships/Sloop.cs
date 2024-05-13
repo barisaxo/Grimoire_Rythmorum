@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using Ships;
 
 //https://docs.unity3d.com/ScriptReference/HeaderAttribute.html
 public class Sloop : MonoBehaviour, Sea.IMAShip
@@ -75,13 +76,13 @@ public class Sloop : MonoBehaviour, Sea.IMAShip
     private ShipStats.ShipStats _shipStats;
     public ShipStats.ShipStats ShipStats => _shipStats ??= new(
         new ShipStats.HullStats(
-            hullData: Data.Equipment.HullData.Sloop,
-            timberType: Data.Inventory.MaterialsData.DataItem.Pine),
+            new Data.Two.Sloop(),
+            new Data.Two.Pine()),
 
         new ShipStats.CannonStats(
-            cannon: Data.Equipment.CannonData.Mynion,
-            metal: Data.Inventory.MaterialsData.DataItem.CastIron),
-        new ShipStats.RiggingStats(Data.Inventory.MaterialsData.DataItem.Hemp),
+            new Data.Two.Mynion(),
+           new Data.Two.CastIron()),
+        new ShipStats.RiggingStats(new Data.Two.Hemp()),
         numOfCannons: NumOfCannons
     );
 

@@ -6,13 +6,27 @@ using Dialog;
 public class BuyRations_Dialogue : Dialogue
 {
     readonly Dialogue ReturnTo;
+    readonly Data.Two.Standing Standing;
 
-    int Coins => DataManager.Io.CharacterData.Coins;
+    int StandingMod => Data.Two.Manager.Io.StandingData.GetLevel(Standing);
+    int Coins => Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.Gold());
+    float StandingsModifier => 1f + (float)(1f - (float)((float)StandingMod) / 9f);
 
-    public BuyRations_Dialogue(Dialogue returnTo, Speaker speaker)
+    int largeGold => (int)(largeRation * 35f * StandingsModifier);
+    int medGold => (int)(medRation * 42.5f * StandingsModifier);
+    int smallGold => (int)(smallRation * 50f * StandingsModifier);
+
+
+    int largeRation => 100;
+    int medRation => 50;
+    int smallRation => 10;
+
+
+    public BuyRations_Dialogue(Dialogue returnTo, Speaker speaker, Data.Two.Standing standing)
     {
         ReturnTo = returnTo;
         Speaker = speaker;
+        Standing = standing;
     }
 
     public override Dialogue Initiate()
@@ -51,9 +65,9 @@ public class BuyRations_Dialogue : Dialogue
     {
         List<Response> responses = new();
 
-        if (!(Coins < 250)) { responses.Add(RationsLarge_Response); }
-        if (!(Coins < 150)) { responses.Add(RationsMedium_Response); }
-        if (!(Coins < 50)) { responses.Add(RationsSmall_Response); }
+        if (!(Coins < largeGold)) { responses.Add(RationsLarge_Response); }
+        if (!(Coins < medGold)) { responses.Add(RationsMedium_Response); }
+        if (!(Coins < smallGold)) { responses.Add(RationsSmall_Response); }
         responses.Add(BackResponse);
 
         return responses.ToArray();
@@ -64,24 +78,24 @@ public class BuyRations_Dialogue : Dialogue
     readonly string TradeComplete_LineText = "Good deal! Until next time!";
     readonly string Rations_LineText = "How many rations do you want?";
 
-    readonly string RationsLarge_RepText = "10 bottles [250 gold]";
-    readonly string RationsMedium_RepText = "5 bottles [150 gold]";
-    readonly string RationsSmall_RepText = "1 bottle [50 gold]";
+    string RationsLarge_RepText => "+" + largeRation.ToString() + " rations; -" + largeGold.ToString() + " gold";
+    string RationsMedium_RepText => "+" + medRation.ToString() + " rations; -" + medGold.ToString() + " gold";
+    string RationsSmall_RepText => "+" + smallRation.ToString() + " rations; -" + smallGold.ToString() + " gold";
 
     void BuyRationsSmall()
     {
-        DataManager.Io.CharacterData.Rations += 1;
-        DataManager.Io.CharacterData.Coins -= 50;
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Ration(), smallRation);
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), -smallGold);
     }
     void BuyRationsMedium()
     {
-        DataManager.Io.CharacterData.Rations += 5;
-        DataManager.Io.CharacterData.Coins -= 150;
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Ration(), medRation);
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), -medGold);
     }
     void BuyRationsLarge()
     {
-        DataManager.Io.CharacterData.Rations += 10;
-        DataManager.Io.CharacterData.Coins -= 250;
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Ration(), largeRation);
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), -largeGold);
     }
 
 }

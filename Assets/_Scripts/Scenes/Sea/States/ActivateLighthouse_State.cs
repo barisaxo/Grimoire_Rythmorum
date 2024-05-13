@@ -1,5 +1,5 @@
 using System;
-using Data.Inventory;
+using Data.Two;
 namespace Sea
 {
     public class ActivateLighthouse_State : State
@@ -15,7 +15,7 @@ namespace Sea
 
         protected override void PrepareState(Action callback)
         {
-            DataManager.LighthousesData.IncreaseLevel(Lighthouse.RegionData);
+            Manager.Io.Lighthouse.AdjustLevel(Lighthouse.RegionData, 1);
             // if (!DataManager.Io.CharacterData.ActivatedLighthouses.Contains(Lighthouse.Region))
             // {
             // DataManager.Io.CharacterData.ActivatedLighthouses = DataManager.Io.CharacterData.ActivatedLighthouses.Added(Lighthouse.Region);

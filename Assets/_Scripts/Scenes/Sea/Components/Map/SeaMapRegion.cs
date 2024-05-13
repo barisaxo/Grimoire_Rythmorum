@@ -17,9 +17,9 @@ namespace Sea
 
         private List<Cell> _cells;
         public List<Cell> Cells => _cells ??= this.InitializeCells(QuestData);
-        readonly Data.Inventory.QuestData QuestData;
+        readonly Data.Two.QuestData QuestData;
 
-        public Region(UnityEngine.Vector2Int region, int resolution, Data.Inventory.QuestData data, Sea.Maps.R r)
+        public Region(UnityEngine.Vector2Int region, int resolution, Data.Two.QuestData data, Sea.Maps.R r)
         {
             Resolution = resolution;
             Coord = region;

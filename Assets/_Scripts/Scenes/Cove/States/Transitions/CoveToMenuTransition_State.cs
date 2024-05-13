@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Menus;
+using Menus.Two;
 
 public class CoveToMenuTransition_State : State
 {
@@ -25,10 +25,10 @@ public class CoveToMenuTransition_State : State
         CoveScene.Io.RockTheBoat.Rocking = false;
 
         SetState(new CameraPan_State(HeaderMenu is null ?
-            new Menu_State(SubMenu) : new Menu_State(HeaderMenu as IHeaderMenu),
+            new MenuState(SubMenu) : new MenuState(HeaderMenu as IHeaderMenu),
             new Vector3(-50, Cam.Io.Camera.transform.rotation.eulerAngles.y,
                 Cam.Io.Camera.transform.rotation.eulerAngles.z),
                 Cam.Io.Camera.transform.position,
-                3));
+                5));
     }
 }

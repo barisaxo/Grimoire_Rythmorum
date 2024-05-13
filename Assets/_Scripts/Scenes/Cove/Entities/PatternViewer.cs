@@ -33,7 +33,7 @@ public class PatternViewer
     }
 
 
-    private int Patterns => DataManager.Io.PlayerData.GetLevel(Data.Player.PlayerData.DataItem.Patterns);
+    private int Patterns => Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.PatternsFound());
 
     private Card _patternIDText;
     public Card PatternIDText => _patternIDText ??= new Card(nameof(PatternIDText), null)

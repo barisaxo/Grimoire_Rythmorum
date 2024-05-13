@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Data.Inventory;
+using Data.Two;
 
 namespace Sea
 {
@@ -42,7 +42,7 @@ namespace Sea
         public IDescription Description { get; private set; }
         public IInstantiable Instantiator { get; private set; }
         public IInventoriable Inventoriable { get; private set; }
-        public FishData.DataItem FishType;
+        public Fish FishType;
         public IQuestable Questable { get; private set; }
         public IDifficulty Difficulty { get; } = new NoDifficulty();
     }

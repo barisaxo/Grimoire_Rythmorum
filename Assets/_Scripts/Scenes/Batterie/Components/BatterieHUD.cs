@@ -32,11 +32,13 @@ public class BatterieHUD
         }
     }
 
-    public BatterieHUD(int playerMax, int playerCurrent, int nmeHealth)
+    public BatterieHUD(int playerMax, int playerCurrent, int nmeHealth, string nmeDesc)
     {
         PlayerMax = playerMax;
         PlayerCurrent = playerCurrent;
         NMECurrent = NMEMax = nmeHealth;
+        // NMEDescSTR = nmeDesc;
+        NMEDesc.SetTextString(nmeDesc);
     }
 
     public void SelfDestruct()
@@ -48,6 +50,7 @@ public class BatterieHUD
     {
         _ = Parent.Canvas;
         _ = NMEHealthBar;
+        _ = NMEDesc;
         _ = PlayerHealthBar;
     }
 
@@ -64,5 +67,13 @@ public class BatterieHUD
         .SetImagePosition(Cam.Io.UICamera.orthographicSize, -Cam.Io.UICamera.orthographicSize + 1f)
         ;
 
+    readonly string NMEDescSTR;
+    private Card _nmeDesc;
+    public Card NMEDesc => _nmeDesc ??= Parent.CreateChild(nameof(NMEDesc), Parent.Canvas)
+        .SetTMPPosition(Cam.Io.UICamera.orthographicSize, -Cam.Io.UICamera.orthographicSize + 1.25f)
+        // .SetTextString(NMEDescSTR)
+        .AllowWordWrap(false)
+        .SetTextAlignment(TMPro.TextAlignmentOptions.Center)
+        ;
 
 }

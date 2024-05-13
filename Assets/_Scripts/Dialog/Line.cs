@@ -49,7 +49,7 @@ namespace Dialog
             return this;
         }
         public Line SetResponses(Response[] responses) { Responses = responses; return this; }
-        public void SetNextDialogue(Dialogue dialogue) { NextDialogue = dialogue; }
+        public Line SetNextDialogue(Dialogue dialogue) { NextDialogue = dialogue; return this; }
 
     }
 }

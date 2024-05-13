@@ -4,23 +4,27 @@ using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-public interface IItem
-{
-    public string Name { get; }
-    public string Description { get; }
-    public int ID { get; }
-}
 
 namespace Data.Two
 {
+    public interface IItem
+    {
+        public string Name { get; }
+        public string Description { get; }
+        public int ID { get; }
+    }
+
     public interface IData
     {
-        public static IItem[] Items { get; }
+        public IItem[] Items { get; }
         public string GetDisplayLevel(IItem item);
         public string GetDescription(IItem item);
         public int GetLevel(IItem item);
-        public void IncreaseLevel(IItem item);
-        public void DecreaseLevel(IItem item);
+        public void AdjustLevel(IItem item, int level);
+        // public void IncreaseLevel(IItem item) => IncreaseLevel(item, 1);
+        // public void DecreaseLevel(IItem item) => IncreaseLevel(item, 1);
+        // public void IncreaseLevel(IItem item, int i);
+        // public void DecreaseLevel(IItem item, int i);
         public void SetLevel(IItem item, int level);
         public bool InventoryIsFull(int space);
         public void Reset();

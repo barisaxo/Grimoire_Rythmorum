@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using Ships;
 
 public class Frigate : MonoBehaviour, Sea.IMAShip
 {
@@ -72,13 +73,13 @@ public class Frigate : MonoBehaviour, Sea.IMAShip
     private ShipStats.ShipStats _shipStats;
     public ShipStats.ShipStats ShipStats => _shipStats ??= new(
         new ShipStats.HullStats(
-            Data.Equipment.HullData.Frigate,
-            Data.Inventory.MaterialsData.DataItem.Oak),
+            new Data.Two.Frigate(),
+            new Data.Two.Oak()),
 
         new ShipStats.CannonStats(
-            Data.Equipment.CannonData.Culverin,
-            Data.Inventory.MaterialsData.DataItem.CastIron),
-        new ShipStats.RiggingStats(Data.Inventory.MaterialsData.DataItem.Hemp),
+            new Data.Two.Culverin(),
+           new Data.Two.CastIron()),
+        new ShipStats.RiggingStats(new Data.Two.Hemp()),
         numOfCannons: NumOfCannons
     );
 }

@@ -6,14 +6,24 @@ using Dialog;
 public class Buy_Dialogue : Dialogue
 {
     readonly Dialogue ReturnTo;
+    readonly Data.Two.Standing Standing;
 
-    int Coins => DataManager.Io.CharacterData.Coins;
-    int Mats => DataManager.Io.CharacterData.Materials;
+    int StandingMod => Data.Two.Manager.Io.StandingData.GetLevel(Standing);
+    int Gold => Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.Gold());
+    int Mats => Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.Materials());
+    int CurHP => Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.CurrentHitPoints());
+    int MaxHP => Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.CurrentHitPoints());
+    float StandingsModifier => 1f + (float)(1f - (float)((float)StandingMod) / 9f);
 
-    public Buy_Dialogue(Dialogue returnTo, Speaker speaker)
+    int smallAmount => (int)(MaxHP * .15f);
+    readonly int matsPer = 3;
+    readonly int goldPer = 25;
+
+    public Buy_Dialogue(Dialogue returnTo, Speaker speaker, Data.Two.Standing standing)
     {
         ReturnTo = returnTo;
         Speaker = speaker;
+        Standing = standing;
     }
 
     public override Dialogue Initiate()
@@ -32,13 +42,13 @@ public class Buy_Dialogue : Dialogue
         ;
 
     Response _buyRepairs_response;
-    Response BuyRepairs_Response => _buyRepairs_response ??= new Response(Repair_RepText, new BuyRepairs_Dialogue(this, Speaker));
+    Response BuyRepairs_Response => _buyRepairs_response ??= new Response(Repair_RepText, new BuyRepairs_Dialogue(this, Speaker, Standing));
 
     Response _buyMaterials_response;
-    Response BuyMaterials_Response => _buyMaterials_response ??= new Response(BuyMat_RepText, new BuyMaterials_Dialogue(this, Speaker));
+    Response BuyMaterials_Response => _buyMaterials_response ??= new Response(BuyMat_RepText, new BuyMaterials_Dialogue(this, Speaker, Standing));
 
     Response _buyRations_response;
-    Response BuyRations_Response => _buyRations_response ??= new Response(BuyRations_RepText, new BuyRations_Dialogue(this, Speaker));
+    Response BuyRations_Response => _buyRations_response ??= new Response(BuyRations_RepText, new BuyRations_Dialogue(this, Speaker, Standing));
 
     Response[] _BuyResponses;
     Response[] BuyResponses => _BuyResponses ??= GetBuyResponses();
@@ -46,12 +56,11 @@ public class Buy_Dialogue : Dialogue
     {
         List<Response> responses = new();
 
-        if (!(Coins < 100 || Mats < 10)) { responses.Add(BuyMaterials_Response); }
-        if (!(Coins < 100)) { responses.Add(BuyRations_Response); }
-        if (!(Coins < 50)) { responses.Add(BuyRepairs_Response); }
-        if (Coins < 50) responses.Add(CantResponse);
+        if (!(Gold < (1000f * StandingsModifier))) { responses.Add(BuyMaterials_Response); }
+        if (!(Gold < (500f * StandingsModifier))) { responses.Add(BuyRations_Response); }
+        if (buyRepairs) { responses.Add(BuyRepairs_Response); }
+        if (Gold < (500f * StandingsModifier) && !buyRepairs) responses.Add(CantResponse);
         else responses.Add(BackResponse);
-
         return responses.ToArray();
     }
 
@@ -60,4 +69,5 @@ public class Buy_Dialogue : Dialogue
 
     Response _backResponse;
     Response BackResponse => _backResponse ??= new Response("Never mind", ReturnTo);
+    bool buyRepairs => CurHP < MaxHP && !(Gold < smallAmount * goldPer) && !(Mats < smallAmount * matsPer);
 }

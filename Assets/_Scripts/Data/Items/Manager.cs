@@ -7,6 +7,7 @@ namespace Data.Two
     {
         #region  INSTANCE
         private Manager() { }
+
         public static Manager Io => Instance.Io;
         private class Instance
         {
@@ -16,19 +17,49 @@ namespace Data.Two
         }
         #endregion INSTANCE
 
+        // private WoodInventoryData _woodInventoryData;
+        // public WoodInventoryData WoodInventoryData => _woodInventoryData ??= new();
 
-        private WoodInventoryData _woodInventoryData;
-        public WoodInventoryData WoodInventoryData => _woodInventoryData ??= new();
+        // private WoodStorageData _woodStorageData;
+        // public WoodStorageData WoodStorage => _woodStorageData ??= WoodStorageData.GetData();
 
-        private WoodStorageData _woodStorageData;
-        public WoodStorageData WoodStorageData => _woodStorageData ??= WoodStorageData.GetData();
+        // private FishInventoryData _fishInventoryData;
+        // public FishInventoryData FishInventoryData => _fishInventoryData ??= new();
 
-        private FishInventoryData _fishInventoryData;
-        public FishInventoryData FishInventoryData => _fishInventoryData ??= new();
+        private InventoryData _inventory;
+        public InventoryData Inventory => _inventory ??= new();
 
-        private StarChartInventoryData _starChartInventoryData;
-        public StarChartInventoryData StarChartInventoryData => _starChartInventoryData ??= new();
+        private StarChartData _starChartInventoryData;
+        public StarChartData StarChart => _starChartInventoryData ??= new();
 
+        private GramophoneInventoryData _gramophone;
+        public GramophoneInventoryData Gramophones => _gramophone ??= new();
 
+        private LighthouseData _lighthouse;
+        public LighthouseData Lighthouse => _lighthouse ??= new();
+
+        private PlayerShipData _playerShip;
+        public PlayerShipData PlayerShip => _playerShip ??= PlayerShipData.GetData();
+
+        private FishInventoryData _fish;
+        public FishInventoryData Fish => _fish ??= new();
+
+        private VolumeData _volumeData;
+        public VolumeData Volume => _volumeData ??= VolumeData.GetData();
+
+        private GameplayData _gameplayData;
+        public GameplayData Gameplay => _gameplayData ??= GameplayData.GetData();
+
+        private SkillData _skillData;
+        public SkillData Skill => _skillData ??= SkillData.GetData();
+
+        private QuestData _questData;
+        public QuestData Quests => _questData ??= new();
+
+        private PlayerData _playerData;
+        public PlayerData Player => _playerData ??= PlayerData.GetData();
+
+        private StandingData _standingData;
+        public StandingData StandingData => _standingData ??= new StandingData();
     }
 }

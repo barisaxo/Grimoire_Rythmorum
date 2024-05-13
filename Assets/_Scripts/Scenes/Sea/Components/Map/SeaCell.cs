@@ -35,18 +35,20 @@ namespace Sea
         public GameObject GO => SceneObject?.GO;
         // public float RotY;
 
-        public void InstantiateNewSceneObject(State currentState, DataManager data, Sea.Maps.R region)
+        public ISceneObject InstantiateNewSceneObject(State currentState, Data.Two.Manager data, Sea.Maps.R region)
         {
-            SceneObject = Type switch
+            // Debug.Log("Instantiating new scene object: " + Type.ToString() + " " + Coord);
+            return SceneObject = Type switch
             {
                 CellType.Cove => new NullCove(),
                 CellType.Rocks => new Rocks(),
                 CellType.Fish => new Fish(currentState, data),
-                CellType.Lighthouse => new Lighthouse(WorldMapScene.Io.Ship.Region, data.LighthousesData, currentState),
+                CellType.Lighthouse => new Lighthouse(WorldMapScene.Io.Ship.Region, data.Lighthouse, currentState),
                 CellType.Bottle => new Bottle(currentState, data),
-                CellType.Gramo => new Gramophone(currentState, data.GramophoneData, data.QuestsData, data.ShipData, region),
+                CellType.Gramo => new Gramophone(currentState, data.Gramophones, data.Quests, data.PlayerShip, region),
                 // CellType.Border => new Border(region),
                 CellType.OpenSea => null,
+                CellType.Bounty => new BountyShip(currentState, data.Quests, data.PlayerShip),
 
                 _ => throw new System.NotImplementedException(Type.ToString())
             };

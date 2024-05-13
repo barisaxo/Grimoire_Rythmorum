@@ -2,7 +2,7 @@ using System.Collections.Generic;
 
 namespace Data.Two
 {
-    public class StarChartInventoryData : IData
+    public class StarChartData : IData
     {
         private Dictionary<StarChart, int> _datum;
         private Dictionary<StarChart, int> Datum => _datum ??= SetUpDatum();
@@ -14,28 +14,22 @@ namespace Data.Two
             return datum;
         }
 
-        public static IItem[] Items => new StarChart[] {
-            new NotesT(),
-            new NotesA(),
-            new StepsT(),
-            new StepsA(),
-            new ScalesT (),
-            new ScalesA (),
-            new IntervalsT (),
-            new IntervalsA (),
-            new TriadsT (),
-            new TriadsA (),
-            new InversionsT(),
-            new InversionsA(),
-            new InvertedTriadsT(),
-            new InvertedTriadsA(),
-            new SeventhChordsT (),
-            new SeventhChordsA (),
-            new ModesT(),
-            new ModesA(),
-            new Inverted7thChordsT(),
-            new Inverted7thChordsA(),
-            };
+        private IItem[] _items;
+        public IItem[] Items
+        {
+            get
+            {
+                return _items ??= SetUp();
+                static IItem[] SetUp()
+                {
+                    var enums = Enumeration.All<StarChartEnum>();
+                    var items = new IItem[enums.Length];
+                    for (int i = 0; i < enums.Length; i++)
+                        items[i] = StarChartEnum.ToItem(enums[i]);
+                    return items;
+                }
+            }
+        }
 
         public string GetDescription(IItem item)
         {
@@ -49,11 +43,6 @@ namespace Data.Two
             return Datum[(StarChart)item].ToString();
         }
 
-        public void DecreaseLevel(IItem item)
-        {
-            if (item is not StarChart) throw new System.Exception(item.GetType().ToString());
-            Datum[(StarChart)item] = -1 < 0 ? 0 : Datum[(StarChart)item] - 1;
-        }
 
         public int GetLevel(IItem item)
         {
@@ -61,10 +50,34 @@ namespace Data.Two
             return Datum[(StarChart)item];
         }
 
-        public void IncreaseLevel(IItem item)
+        // public void DecreaseLevel(IItem item)
+        // {
+        //     if (item is not StarChart) throw new System.Exception(item.GetType().ToString());
+        //     Datum[(StarChart)item] = Datum[(StarChart)item] - 1 < 0 ? 0 : Datum[(StarChart)item] - 1;
+        // }
+        // public void DecreaseLevel(IItem item, int i)
+        // {
+        //     if (item is not StarChart) throw new System.Exception(item.GetType().ToString());
+        //     Datum[(StarChart)item] = Datum[(StarChart)item] - i < 0 ? 0 : Datum[(StarChart)item] - i;
+        // }
+        // public void IncreaseLevel(IItem item)
+        // {
+        //     if (item is not StarChart) throw new System.Exception(item.GetType().ToString());
+        //     Datum[(StarChart)item] = Datum[(StarChart)item] + 1 > 999 ? 999 : Datum[(StarChart)item] + 1;
+        // }
+        // public void IncreaseLevel(IItem item, int i)
+        // {
+        //     if (item is not StarChart) throw new System.Exception(item.GetType().ToString());
+        //     Datum[(StarChart)item] = Datum[(StarChart)item] + i > 999 ? 999 : Datum[(StarChart)item] + i;
+        // }
+
+        public void AdjustLevel(IItem item, int i)
         {
             if (item is not StarChart) throw new System.Exception(item.GetType().ToString());
-            Datum[(StarChart)item] = +1 > 999 ? 999 : Datum[(StarChart)item] + 1;
+            Datum[(StarChart)item] =
+                Datum[(StarChart)item] + i > 999 ? 999 :
+                Datum[(StarChart)item] + i < 0 ? 0 :
+                Datum[(StarChart)item] + i;
         }
 
         public void SetLevel(IItem item, int level)

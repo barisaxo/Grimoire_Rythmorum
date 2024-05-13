@@ -1,5 +1,7 @@
 using UnityEngine;
 using System;
+using Ships;
+
 namespace Sea
 {
     public interface IMAShip //: Sea.IInteractable, Sea.ICollidable

@@ -1,4 +1,5 @@
 using UnityEngine;
+using Ships;
 
 public partial class Assets
 {
@@ -159,6 +160,9 @@ public partial class Assets
     public static Schooner _schooner2 => Resources.Load<Schooner>("Prefabs/Sea/Ships/Schooner/Schooner");
     public static Schooner Schooner2 => Object.Instantiate(_schooner2);
 
+    public static Sloop _bountyShip => Resources.Load<Sloop>("Prefabs/Sea/Ships/BountyShip/BountyShip");
+    public static Sloop BountyShip => Object.Instantiate(_bountyShip);
+
     public static GameObject _catBoat => Resources.Load<GameObject>("Prefabs/Sea/Boats/CatBoat2");
     public static GameObject CatBoat => Object.Instantiate(_catBoat);
 
@@ -166,9 +170,42 @@ public partial class Assets
     public static ParticleSystem CannonFire => Object.Instantiate(_cannonFire);
 
 
-
-
     #endregion SHIPS
+
+
+    #region GRAMO
+    public static Material[][] DialMats => GetDialMats(); static Material[][] GetDialMats()
+    {
+        Material[][] mats = new Material[4][];
+        mats[0] = new Material[3];
+        mats[0][0] = Resources.Load<Material>("Sprites/Materials/Answer1/ton 1");
+        mats[0][1] = Resources.Load<Material>("Sprites/Materials/Answer1/sub 1");
+        mats[0][2] = Resources.Load<Material>("Sprites/Materials/Answer1/dom 1");
+
+        mats[1] = new Material[3];
+        mats[1][0] = Resources.Load<Material>("Sprites/Materials/Answer2/ton 2");
+        mats[1][1] = Resources.Load<Material>("Sprites/Materials/Answer2/sub 2");
+        mats[1][2] = Resources.Load<Material>("Sprites/Materials/Answer2/dom 2");
+
+        mats[2] = new Material[3];
+        mats[2][0] = Resources.Load<Material>("Sprites/Materials/Answer3/ton 3");
+        mats[2][1] = Resources.Load<Material>("Sprites/Materials/Answer3/sub 3");
+        mats[2][2] = Resources.Load<Material>("Sprites/Materials/Answer3/dom 3");
+
+        mats[3] = new Material[3];
+        mats[3][0] = Resources.Load<Material>("Sprites/Materials/Answer4/ton 4");
+        mats[3][1] = Resources.Load<Material>("Sprites/Materials/Answer4/sub 4");
+        mats[3][2] = Resources.Load<Material>("Sprites/Materials/Answer4/dom 4");
+        return mats;
+    }
+
+    public static GameObject _gramoPuzzle => Resources.Load<GameObject>("Prefabs/Gramo/GramoPuzzle");
+    public static GameObject GramoPuzzle => Object.Instantiate(_gramoPuzzle);
+
+    #endregion GRAMO
+
+
+
 
     #region FLAGS
     public static Sprite IonianFlag => Resources.Load<Sprite>("Sprites/Flags/IonianFlag");

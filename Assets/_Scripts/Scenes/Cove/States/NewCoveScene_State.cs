@@ -13,11 +13,11 @@ public class NewCoveScene_State : State
     {
         Audio.BGMusic.PlayClip(Assets.BGMus2);
 
-        DataManager.CharData.SetLevel(Data.Player.CharacterData.DataItem.MaxHP,
-            DataManager.Io.ShipData.ShipStats.HullStrength);
+        Data.Two.Manager.Io.PlayerShip.SetLevel(new Data.Two.MaxHitPoints(),
+            Data.Two.Manager.Io.PlayerShip.ShipStats.HullStrength);
 
-        DataManager.CharData.SetLevel(Data.Player.CharacterData.DataItem.CurrentHP,
-            DataManager.Io.ShipData.ShipStats.HullStrength);
+        Data.Two.Manager.Io.PlayerShip.SetLevel(new Data.Two.CurrentHitPoints(),
+            Data.Two.Manager.Io.PlayerShip.ShipStats.HullStrength);
 
         Cam.Io.Camera.transform.SetPositionAndRotation(
             CoveScene.Io.Player.GO.transform.position,

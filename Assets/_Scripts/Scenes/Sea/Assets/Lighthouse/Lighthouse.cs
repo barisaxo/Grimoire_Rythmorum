@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Data.Inventory;
+using Data.Two;
 
 namespace Sea
 {
@@ -48,16 +48,16 @@ namespace Sea
         public IQuestable Questable => new NotQuestable();
         public IDifficulty Difficulty { get; } = new NoDifficulty();
 
-        public LighthouseData.DataItem RegionData => Region.R switch
+        public Data.Two.Lighthouse RegionData => Region.R switch
         {
-            Sea.Maps.R.i => LighthouseData.DataItem.Ios,
-            Sea.Maps.R.d => LighthouseData.DataItem.Doria,
-            Sea.Maps.R.p => LighthouseData.DataItem.Phrygia,
-            Sea.Maps.R.l => LighthouseData.DataItem.Lydia,
-            Sea.Maps.R.m => LighthouseData.DataItem.MixoLydia,
-            Sea.Maps.R.a => LighthouseData.DataItem.Aeolia,
-            Sea.Maps.R.s => LighthouseData.DataItem.Locria,
-            _ => LighthouseData.DataItem.Chromatica,
+            Sea.Maps.R.i => new IonianLighthouse(),
+            Sea.Maps.R.d => new DorianLighthouse(),
+            Sea.Maps.R.p => new PhrygianLighthouse(),
+            Sea.Maps.R.l => new LydianLighthouse(),
+            Sea.Maps.R.m => new MixolydianLighthouse(),
+            Sea.Maps.R.a => new AeolianLighthouse(),
+            Sea.Maps.R.s => new LocrianLighthouse(),
+            _ => new ChromaticLighthouse(),
         };
     }
 }

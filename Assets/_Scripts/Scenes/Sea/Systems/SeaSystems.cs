@@ -4,7 +4,7 @@ using Sea.Maps;
 
 public static class SeaSystems
 {
-    public static Vector3 UpdateMap(this Sea.WorldMapScene scene, State current, DataManager data, Vector3 dir)
+    public static Vector3 UpdateMap(this Sea.WorldMapScene scene, State current, Data.Two.Manager data, Vector3 dir)
     {
         scene.UpdateLocalRegions(current);
         scene.UpdateBoardSubTiles();
@@ -85,7 +85,7 @@ public static class SeaSystems
                 scene.NearestNPC = npc;
 
                 scene.Ship.ConfirmPopup.GO.SetActive(true);
-                scene.Ship.ConfirmPopup.TextString = "Hail";
+                scene.Ship.ConfirmPopup.TextString = npc.SceneObject.Interactable.PopupText;
 
                 scene.Ship.AttackPopup.GO.SetActive(true);
                 scene.Ship.AttackPopup.TextString = "Attack";
@@ -118,7 +118,7 @@ public static class SeaSystems
         scene.LocalRegions = scene.Map.RegionsAdjacentTo(scene.Ship);
     }
 
-    private static void UpdateMapObjects(this Sea.WorldMapScene scene, State currentState, DataManager data)
+    private static void UpdateMapObjects(this Sea.WorldMapScene scene, State currentState, Data.Two.Manager data)
     {
         for (int x = -1; x < scene.Board.Size + 1; x++)
             for (int y = -1; y < scene.Board.Size + 1; y++)
@@ -141,16 +141,15 @@ public static class SeaSystems
         }
     }
 
-    private static void UpdateCellObject(Sea.WorldMapScene scene, State currentState, Cell cell, Vector2Int offsetGlobalCoord, DataManager data)
+    private static void UpdateCellObject(Sea.WorldMapScene scene, State currentState, Cell cell, Vector2Int offsetGlobalCoord, Data.Two.Manager data)
     {
         if (cell.SceneObject is null)
         {
-            cell.InstantiateNewSceneObject(currentState, data, scene.RegionFromOffsetGlobalCoord(offsetGlobalCoord).R);
-            if (cell.SceneObject is not null)
-            {
-                scene.SceneObjects.Add(cell.SceneObject);
-                // cell.SceneObject.Instantiator.Instantiate();
-            }
+            scene.SceneObjects.Add(
+                cell.InstantiateNewSceneObject(
+                    currentState,
+                    data,
+                    scene.RegionFromOffsetGlobalCoord(offsetGlobalCoord).R));
         }
         if (cell.SceneObject is not null)
         {
@@ -210,8 +209,8 @@ public static class SeaSystems
     {
         if (npc.SceneObject is null)
         {
-            npc.InstantiateNewSceneObject(currentState);
-            npc.SceneObject.GO.transform.localScale = Vector3.one * .45f;
+            npc.InstantiateNewSceneObject(currentState, Data.Two.Manager.Io.StandingData);
+            npc.SceneObject.GO.transform.localScale = Vector3.one * Random.Range(.55f, .75f);
             npc.SceneObject.GO.transform.SetParent(Sea.WorldMapScene.Io.TheSea.transform);
             scene.RockTheBoat.AddBoat(npc.SceneObject.GO.transform, npc.Sway);
             scene.NPCShips.Add(npc);

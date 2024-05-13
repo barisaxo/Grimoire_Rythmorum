@@ -1,42 +1,43 @@
+using System;
 namespace Data.Two
 {
     public interface StarChart : IItem
     {
-        public static StarChartEnum Enum { get; }
+        StarChartEnum Enum { get; }
         int IItem.ID => Enum.Id;
         string IItem.Name => Enum.Name;
         string IItem.Description => Enum.Description;
     }
 
-    public struct NotesT : StarChart { public static StarChartEnum Enum => StarChartEnum.NotesT; }
-    public struct NotesA : StarChart { public static StarChartEnum Enum => StarChartEnum.NotesA; }
-    public struct StepsT : StarChart { public static StarChartEnum Enum => StarChartEnum.StepsT; }
-    public struct StepsA : StarChart { public static StarChartEnum Enum => StarChartEnum.StepsA; }
-    public struct ScalesT : StarChart { public static StarChartEnum Enum => StarChartEnum.ScalesT; }
-    public struct ScalesA : StarChart { public static StarChartEnum Enum => StarChartEnum.ScalesA; }
-    public struct IntervalsT : StarChart { public static StarChartEnum Enum => StarChartEnum.IntervalsT; }
-    public struct IntervalsA : StarChart { public static StarChartEnum Enum => StarChartEnum.IntervalsA; }
-    public struct TriadsT : StarChart { public static StarChartEnum Enum => StarChartEnum.TriadsT; }
-    public struct TriadsA : StarChart { public static StarChartEnum Enum => StarChartEnum.TriadsA; }
-    public struct InversionsT : StarChart { public static StarChartEnum Enum => StarChartEnum.InversionsT; }
-    public struct InversionsA : StarChart { public static StarChartEnum Enum => StarChartEnum.InversionsA; }
-    public struct InvertedTriadsT : StarChart { public static StarChartEnum Enum => StarChartEnum.InvertedTriadsT; }
-    public struct InvertedTriadsA : StarChart { public static StarChartEnum Enum => StarChartEnum.InvertedTriadsA; }
-    public struct SeventhChordsT : StarChart { public static StarChartEnum Enum => StarChartEnum.SeventhChordsT; }
-    public struct SeventhChordsA : StarChart { public static StarChartEnum Enum => StarChartEnum.SeventhChordsA; }
-    public struct ModesT : StarChart { public static StarChartEnum Enum => StarChartEnum.ModesT; }
-    public struct ModesA : StarChart { public static StarChartEnum Enum => StarChartEnum.ModesA; }
-    public struct Inverted7thChordsT : StarChart { public static StarChartEnum Enum => StarChartEnum.Inverted7thChordsT; }
-    public struct Inverted7thChordsA : StarChart { public static StarChartEnum Enum => StarChartEnum.Inverted7thChordsA; }
+    [Serializable] public struct NotesT : StarChart { public readonly StarChartEnum Enum => StarChartEnum.NotesT; }
+    [Serializable] public struct NotesA : StarChart { public readonly StarChartEnum Enum => StarChartEnum.NotesA; }
+    [Serializable] public struct StepsT : StarChart { public readonly StarChartEnum Enum => StarChartEnum.StepsT; }
+    [Serializable] public struct StepsA : StarChart { public readonly StarChartEnum Enum => StarChartEnum.StepsA; }
+    [Serializable] public struct ScalesT : StarChart { public readonly StarChartEnum Enum => StarChartEnum.ScalesT; }
+    [Serializable] public struct ScalesA : StarChart { public readonly StarChartEnum Enum => StarChartEnum.ScalesA; }
+    [Serializable] public struct IntervalsT : StarChart { public readonly StarChartEnum Enum => StarChartEnum.IntervalsT; }
+    [Serializable] public struct IntervalsA : StarChart { public readonly StarChartEnum Enum => StarChartEnum.IntervalsA; }
+    [Serializable] public struct TriadsT : StarChart { public readonly StarChartEnum Enum => StarChartEnum.TriadsT; }
+    [Serializable] public struct TriadsA : StarChart { public readonly StarChartEnum Enum => StarChartEnum.TriadsA; }
+    [Serializable] public struct InversionsT : StarChart { public readonly StarChartEnum Enum => StarChartEnum.InversionsT; }
+    [Serializable] public struct InversionsA : StarChart { public readonly StarChartEnum Enum => StarChartEnum.InversionsA; }
+    [Serializable] public struct InvertedTriadsT : StarChart { public readonly StarChartEnum Enum => StarChartEnum.InvertedTriadsT; }
+    [Serializable] public struct InvertedTriadsA : StarChart { public readonly StarChartEnum Enum => StarChartEnum.InvertedTriadsA; }
+    [Serializable] public struct SeventhChordsT : StarChart { public readonly StarChartEnum Enum => StarChartEnum.SeventhChordsT; }
+    [Serializable] public struct SeventhChordsA : StarChart { public readonly StarChartEnum Enum => StarChartEnum.SeventhChordsA; }
+    [Serializable] public struct ModesT : StarChart { public readonly StarChartEnum Enum => StarChartEnum.ModesT; }
+    [Serializable] public struct ModesA : StarChart { public readonly StarChartEnum Enum => StarChartEnum.ModesA; }
+    [Serializable] public struct Inverted7thChordsT : StarChart { public readonly StarChartEnum Enum => StarChartEnum.Inverted7thChordsT; }
+    [Serializable] public struct Inverted7thChordsA : StarChart { public readonly StarChartEnum Enum => StarChartEnum.Inverted7thChordsA; }
 
-    [System.Serializable]
+    [Serializable]
     public class StarChartEnum : Enumeration
     {
+        public StarChartEnum() : base(0, null) { }
         public StarChartEnum(int id, string name) : base(id, name) { }
         public StarChartEnum(int id, string name, string description) : base(id, name)
         {
             Description = description;
-
         }
 
         public readonly string Description;
@@ -60,5 +61,33 @@ namespace Data.Two
         public static StarChartEnum ModesA = new(17, "Modes[Aural]", "Difficulty: !!!!!");
         public static StarChartEnum Inverted7thChordsT = new(18, "Inverted 7th Chords[Theory]", "Difficulty: *****");
         public static StarChartEnum Inverted7thChordsA = new(19, "Inverted 7th Chords[Aural]", "Difficulty: !!!!!");
+
+        internal static IItem ToItem(StarChartEnum @enum)
+        {
+            return @enum switch
+            {
+                _ when @enum == NotesT => new NotesT(),
+                _ when @enum == NotesA => new NotesA(),
+                _ when @enum == StepsT => new StepsT(),
+                _ when @enum == StepsA => new StepsA(),
+                _ when @enum == ScalesT => new ScalesT(),
+                _ when @enum == ScalesA => new ScalesA(),
+                _ when @enum == IntervalsT => new IntervalsT(),
+                _ when @enum == IntervalsA => new IntervalsA(),
+                _ when @enum == TriadsT => new TriadsT(),
+                _ when @enum == TriadsA => new TriadsA(),
+                _ when @enum == InversionsT => new InversionsT(),
+                _ when @enum == InversionsA => new InversionsA(),
+                _ when @enum == InvertedTriadsT => new InvertedTriadsT(),
+                _ when @enum == InvertedTriadsA => new InvertedTriadsA(),
+                _ when @enum == SeventhChordsT => new SeventhChordsT(),
+                _ when @enum == SeventhChordsA => new SeventhChordsA(),
+                _ when @enum == ModesT => new ModesT(),
+                _ when @enum == ModesA => new ModesA(),
+                _ when @enum == Inverted7thChordsT => new Inverted7thChordsT(),
+                _ when @enum == Inverted7thChordsA => new Inverted7thChordsA(),
+                _ => throw new System.ArgumentOutOfRangeException(@enum.Name)
+            };
+        }
     }
 }

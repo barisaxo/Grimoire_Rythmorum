@@ -22,11 +22,7 @@ public class BootStrap_State : State
 
     protected override void EngageState()
     {
-        SetState(new Menu_State(
-            new Menus.Main.MainMenu(
-                DataManager,
-                Audio)
-        ));
+        SetState(new MenuState(new Menus.Two.MainMenu(Data.Two.Manager.Io, Audio)));
     }
 
     protected override void DisengageState()

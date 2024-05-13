@@ -1,6 +1,6 @@
 using UnityEngine;
 using Audio;
-using Data.Options;
+using Data.Two;
 
 namespace Muscopa
 {
@@ -23,7 +23,7 @@ namespace Muscopa
 
         public void LoadNewMuscopaSettings(MuscopaPuzzle_AudioManager_Settings newSettings)
         {
-            MuscopaChords.VolumeLevelSetting = VolumeData.GetLevel(VolumeData.DataItem.Chords) * .01f;
+            MuscopaChords.VolumeLevelSetting = VolumeData.GetScaledLevel(new Chords());
             MuscopaChords.AudioClipSettings = new AudioClipSettings()
             {
                 StartTimes = newSettings.StartTimes,
@@ -32,7 +32,7 @@ namespace Muscopa
                 BPM = newSettings.BPM,
             };
 
-            MuscopaBass.VolumeLevelSetting = VolumeData.GetScaledLevel(VolumeData.DataItem.Bass);
+            MuscopaBass.VolumeLevelSetting = VolumeData.GetScaledLevel(new Bass());
             MuscopaBass.AudioClipSettings = new AudioClipSettings()
             {
                 StartTimes = newSettings.StartTimes,
@@ -40,7 +40,7 @@ namespace Muscopa
                 BeatsPerAudioClip = newSettings.CountsPerClipBass,
                 BPM = newSettings.BPM,
             };
-            MuscopaDrums.VolumeLevelSetting = VolumeData.GetScaledLevel(VolumeData.DataItem.Drums);
+            MuscopaDrums.VolumeLevelSetting = VolumeData.GetScaledLevel(new Drums());
             MuscopaDrums.AudioClipSettings = new AudioClipSettings()
             {
                 AudioClips = newSettings.DrumClips,

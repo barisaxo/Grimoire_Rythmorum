@@ -1,28 +1,24 @@
+using System;
 namespace Data.Two
 {
     public interface Metal : IItem
     {
-        static MetalEnum Enum { get; }
+        MetalEnum Enum { get; }
         int IItem.ID => Enum.Id;
         string IItem.Name => Enum.Name;
         string IItem.Description => Enum.Description;
+        float Modifier => Enum.Modifier;
     }
 
-    [System.Serializable]
-    public struct WroughtIron : Metal { public static MetalEnum Enum => MetalEnum.WroughtIron; }
+    [Serializable] public struct WroughtIron : Metal { public readonly MetalEnum Enum => MetalEnum.WroughtIron; }
+    [Serializable] public struct CastIron : Metal { public readonly MetalEnum Enum => MetalEnum.CastIron; }
+    [Serializable] public struct Bronze : Metal { public readonly MetalEnum Enum => MetalEnum.Bronze; }
+    [Serializable] public struct Patina : Metal { public readonly MetalEnum Enum => MetalEnum.Patina; }
 
-    [System.Serializable]
-    public struct CastIron : Metal { public static MetalEnum Enum => MetalEnum.CastIron; }
-
-    [System.Serializable]
-    public struct Bronze : Metal { public static MetalEnum Enum => MetalEnum.Bronze; }
-
-    [System.Serializable]
-    public struct Patina : Metal { public static MetalEnum Enum => MetalEnum.Patina; }
-
-    [System.Serializable]
+    [Serializable]
     public class MetalEnum : Enumeration
     {
+        public MetalEnum() : base(0, null) { }
         public MetalEnum(int id, string name) : base(id, name) { }
         public MetalEnum(int id, string name, string description, float modifier) : base(id, name)
         {
@@ -33,9 +29,21 @@ namespace Data.Two
         public readonly float Modifier;
         public readonly string Description;
 
-        public static MetalEnum WroughtIron = new(8, "WroughtIron", "Inexpensive but weak metal", 1f);
-        public static MetalEnum CastIron = new(9, "CastIron", "Moderately inexpensive, moderately strong metal", 1.5f);
-        public static MetalEnum Bronze = new(10, "Bronze", "Expensive, strong metal", 2.25f);
-        public static MetalEnum Patina = new(11, "Patina", "Very expensive, very strong metal", 3f);
+        public static MetalEnum WroughtIron = new(0, "WroughtIron", "Inexpensive but weak metal", 1f);
+        public static MetalEnum CastIron = new(1, "CastIron", "Moderately inexpensive, moderately strong metal", 1.5f);
+        public static MetalEnum Bronze = new(2, "Bronze", "Expensive, strong metal", 2.25f);
+        public static MetalEnum Patina = new(3, "Patina", "Very expensive, very strong metal", 3f);
+
+        internal static IItem ToItem(MetalEnum @enum)
+        {
+            return @enum switch
+            {
+                _ when @enum == WroughtIron => new WroughtIron(),
+                _ when @enum == CastIron => new CastIron(),
+                _ when @enum == Bronze => new Bronze(),
+                _ when @enum == Patina => new Patina(),
+                _ => throw new System.ArgumentOutOfRangeException(@enum.Name)
+            };
+        }
     }
 }
