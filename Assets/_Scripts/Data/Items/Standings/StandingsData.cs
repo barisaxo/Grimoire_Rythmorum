@@ -9,46 +9,102 @@ namespace Data.Two
         private Dictionary<Standing, int> Standings => _Standings ??= SetUpStandings();
         Dictionary<Standing, int> SetUpStandings()
         {
-            Dictionary<Standing, int> ship = new();
-            foreach (var item in Items) ship.TryAdd((Standing)item, item switch
+            Dictionary<Standing, int> standing = new();
+            foreach (var item in Items) standing.TryAdd((Standing)item, item switch
             {
-                IonianStanding => 7,
-                LydianStanding => 6,
-                MixolydianStanding => 5,
-                DorianStanding => 4,
-                AeolianStanding => 3,
-                PhrygianStanding => 2,
-                LocrianStanding => 1,
+                IonianStanding or LydianStanding => 5,
+                MixolydianStanding => 4,
+                DorianStanding or AeolianStanding => 3,
+                LocrianStanding or PhrygianStanding => 2,
                 ChromaticStanding => 0,
                 _ => throw new System.ArgumentOutOfRangeException(item.Name)
             });
 
-            return ship;
+            return standing;
         }
 
         public void Reset() => _Standings = SetUpStandings();
 
         public string GetDisplayLevel(IItem item) => Standings[(Standing)item] switch
         {
-            9 => "Cordial",
-            7 or 8 => "Civil",
-            4 or 5 or 6 => "Tolerant",
-            1 or 2 or 3 => "Confrontational",
+            10 => "Cordial",
+            9 or 8 => "Civil",
+            7 or 5 or 6 => "Tolerant",
+            4 or 2 or 3 => "Confrontational",
             _ => "Hostile",
         };
 
         public int GetLevel(IItem item) => Standings[(Standing)item];// Standings.GetValueOrDefault((Standing)item);
 
+        public int GetLevel(Sea.RegionEnum RegionalMode) =>
+            GetLevel(ModeToStanding(RegionalMode));
 
         public void AdjustLevel(IItem item, int i)
         {
+            foreach (var s in Standings) UnityEngine.Debug.Log(s.Value + " " + s.Key.Name);
+
             Standings[(Standing)item] =
                 Standings[(Standing)item] + i < 0 ? 0 :
                 Standings[(Standing)item] + i > 9 ? 9 :
                 Standings[(Standing)item] + i;
 
+            if (i > 0) AdjustGroup(1, (Standing)item);
+
+            foreach (var s in Standings) UnityEngine.Debug.Log("after: " + s.Value + " " + s.Key.Name);
+
+
             PersistentData.Save(this);
         }
+
+        void AdjustGroup(int add, Standing standing)
+        {
+            Standing[][] groups = new Standing[][]{
+                new Standing[]{ new IonianStanding(), new LydianStanding(), new MixolydianStanding()},
+                new Standing[]{ new DorianStanding(), new PhrygianStanding(), new AeolianStanding()},
+                new Standing[]{ new LocrianStanding(), new ChromaticStanding()}};
+
+            for (int i = 0; i < groups.Length; i++)
+            {
+                if (groups[i].Contains(standing))
+                {
+                    UnityEngine.Debug.Log(groups[i].Contains(standing) + " " + i + " " + standing);
+                    foreach (Standing s in groups[i])
+                    {
+                        Standings[s] =
+                            Standings[s] + add < 0 ? 0 :
+                            Standings[s] + add > 9 ? 9 :
+                            Standings[s] + add;
+                    }
+
+                    foreach (Standing s in groups[(i + 1) % groups.Length])
+                    {
+                        Standings[s] =
+                            Standings[s] - add < 0 ? 0 :
+                            Standings[s] - add > 9 ? 9 :
+                            Standings[s] - add;
+                    }
+
+                }
+            }
+
+        }
+
+        public void AdjustLevel(Sea.RegionEnum RegionalMode, int i) =>
+            AdjustLevel(ModeToStanding(RegionalMode), i);
+
+        public IItem ModeToStanding(Sea.RegionEnum mode) => mode switch
+        {
+            Sea.RegionEnum.Aeolian => new AeolianStanding(),
+            Sea.RegionEnum.Dorian => new DorianStanding(),
+            Sea.RegionEnum.Ionian => new IonianStanding(),
+            Sea.RegionEnum.Lydian => new LydianStanding(),
+            Sea.RegionEnum.Phrygian => new PhrygianStanding(),
+            Sea.RegionEnum.MixoLydian => new MixolydianStanding(),
+            Sea.RegionEnum.Locrian => new LocrianStanding(),
+            Sea.RegionEnum.Chromatic => new ChromaticStanding(),
+            _ => throw new System.Exception(mode.ToString()),
+        };
+
         // public void IncreaseLevel(IItem item)
         // {
         //     Standings[(Standing)item] = 1;

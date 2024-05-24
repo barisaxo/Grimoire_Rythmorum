@@ -7,19 +7,19 @@ namespace Sea
 {
     public class BountyShip : ISceneObject
     {
-        public BountyShip(State currentState, QuestData questData, PlayerShipData shipData)
+        public BountyShip(State currentState, QuestData questData, PlayerShipData shipData, Region region, Cell cell)
         {
             Debug.Log("NEW BOUNTY SHIP ");
             Ship = Assets.BountyShip;
             ShipStats = new(
-            new ShipStats.HullStats(new Schooner(), new Pine()),
-            new ShipStats.CannonStats(new Carronade(), new Bronze()),
-            new ShipStats.RiggingStats(new Hemp()),
-            numOfCannons: 32);
+                new ShipStats.HullStats(new Schooner(), new Pine()),
+                new ShipStats.CannonStats(new Carronade(), new Bronze()),
+                new ShipStats.RiggingStats(new Hemp())
+            );
 
             TF.SetParent(WorldMapScene.Io.TheSea.transform);
             Collidable = new NotCollidable(Ship.Hull.Col);
-            Interactable = new BountyInteraction(currentState, ShipStats, Ship.gameObject);
+            Interactable = new BountyInteraction(currentState, ShipStats, Ship.gameObject, region, cell);
             Triggerable = new NotTriggerable();
             UpdatePosition = new UpdateFishPosition();
             Telemeter = new FishTelemetry();
@@ -44,7 +44,7 @@ namespace Sea
             Questable = new Questable(questData, new Navigation());
         }
 
-        public Sloop Ship;
+        public SloopPrefab Ship;
         public ShipStats.ShipStats ShipStats;
         public Transform TF => Ship.transform;
         public GameObject GO => Ship.gameObject;

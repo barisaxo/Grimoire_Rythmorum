@@ -10,22 +10,23 @@ public class EndPuzzle_State : State
     readonly State SubsequentState;
     readonly IPuzzle Puzzle;
     readonly PuzzleType PuzzleType;
-    readonly StarChart StarChart;
+    // readonly IStarChart StarChart;
 
-    public EndPuzzle_State(bool winLose, State subsequentState, IPuzzle puzzle, PuzzleType puzzleType, StarChart item)
+    public EndPuzzle_State(bool winLose, State subsequentState, IPuzzle puzzle, PuzzleType puzzleType)
     {
         Won = winLose;
         SubsequentState = subsequentState;
         Puzzle = puzzle;
         PuzzleType = puzzleType;
-        StarChart = item;
+        // StarChart = item;
     }
+
 
     protected override void EngageState()
     {
         Vector2Int loc = Sea.WorldMapScene.Io.Ship.GlobalCoord + RandomLoc();
         string latLong = loc.GlobalCoordsToLatLongs(Sea.WorldMapScene.Io.Map.GlobalSize);
-        int patternsFound = (int)((float)(StarChart.ID + 1f) * 10f * (1f + UnityEngine.Random.value));
+        int patternsFound = (int)((float)(Puzzle.RewardsValue() + 1f) * 10f * (1f + UnityEngine.Random.value));
 
         if (Won)
         {
@@ -94,4 +95,21 @@ public class EndPuzzle_State : State
     // };
 
 
+}
+
+public static class PuzzleRewardsHelper
+{
+    public static float RewardsValue(this IPuzzle puzzle) => puzzle switch
+    {
+        NotePuzzle => 1,
+        StepsPuzzle => 1.5f,
+        IntervalPuzzle => 2,
+        TriadPuzzle => 3,
+        InvertedTriadPuzzle => 4.5f,
+        ScalePuzzle => 4,
+        ModePuzzle => 5,
+        SeventhChordPuzzle => 5.5f,
+        InvertedSeventhChordPuzzle => 6,
+        _ => throw new System.ArgumentException(puzzle.GetType().ToString())
+    };
 }

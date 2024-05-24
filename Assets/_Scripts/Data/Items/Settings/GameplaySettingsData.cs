@@ -39,13 +39,13 @@ namespace Data.Two
 
         public string GetDescription(IItem item)
         {
-            if (item is not GameplayOption) throw new System.Exception(item.GetType().ToString());
+            if (item is not IGameplayOption) throw new System.Exception(item.GetType().ToString());
             return item.Description;
         }
 
         public string GetDisplayLevel(IItem item)
         {
-            if (item is not GameplayOption) throw new System.Exception(item.GetType().ToString());
+            if (item is not IGameplayOption) throw new System.Exception(item.GetType().ToString());
             return item switch
             {
                 Transpose => CurrentKey.ToString(),
@@ -56,7 +56,7 @@ namespace Data.Two
 
         public int GetLevel(IItem item)
         {
-            if (item is not GameplayOption) throw new System.Exception(item.GetType().ToString());
+            if (item is not IGameplayOption) throw new System.Exception(item.GetType().ToString());
             return item switch
             {
                 Transpose => (int)CurrentKey,
@@ -67,7 +67,7 @@ namespace Data.Two
 
         public void AdjustLevel(IItem item, int i)
         {
-            if (item is not GameplayOption) throw new System.Exception(item.GetType().ToString());
+            if (item is not IGameplayOption) throw new System.Exception(item.GetType().ToString());
             switch (item)
             {
                 case Transpose: CurrentKey += i; break;
@@ -102,7 +102,7 @@ namespace Data.Two
 
         public void SetLevel(IItem item, int level)
         {
-            if (item is not GameplayOption) throw new System.Exception(item.GetType().ToString());
+            if (item is not IGameplayOption) throw new System.Exception(item.GetType().ToString());
             switch (item)
             {
                 case Transpose: CurrentKey = (KeyOf)level; break;

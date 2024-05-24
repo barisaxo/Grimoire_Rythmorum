@@ -83,9 +83,3 @@
 
 // }
 
-[System.Serializable]
-public enum PuzzleDifficulty { Free, Easy, Hard, Challenge }
-[System.Serializable]
-public enum PuzzleType { Aural, Theory }
-[System.Serializable]
-public enum AnswerData { Wrong, Skipped, Solved, Hinted }

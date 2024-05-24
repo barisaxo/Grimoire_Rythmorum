@@ -4,9 +4,9 @@ using Ships;
 
 namespace Sea
 {
-    public interface IMAShip //: Sea.IInteractable, Sea.ICollidable
+    public interface IShipPrefab
     {
-        public ShipStats.ShipStats ShipStats { get; }
+        // public ShipStats.ShipStats ShipStats { get; }
         public Hull _hull { get; }
         public Flag _flag { get; }
         public Rig _rig { get; }
@@ -14,7 +14,7 @@ namespace Sea
         public Sail[] _sails { get; }
         public Mast[] _masts { get; }
         public GameObject GO { get; }
-        public void RandomRig();
+        // public void RandomRig();
     }
 
 }

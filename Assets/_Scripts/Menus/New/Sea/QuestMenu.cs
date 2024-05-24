@@ -24,10 +24,16 @@ namespace Menus.Two
             // Debug.Log(QuestData.GetQuest(item));
             // Debug.Log(QuestData.GetQuest(item)?.QuestLocation);
             if (QuestData.GetQuest(item) is null) return item.Name + ": (none active)";
+
+            if (QuestData.GetQuest(item).Complete) return
+                item.Name + ": " +
+                "Claim bounty from a " +
+                ((Quests.BountyQuest)QuestData.GetQuest(item)).Standing.ToRegionalName() + " ship";
+
             return item.Name + ": " +
-                Data.GetDisplayLevel(item) + " " +
-                QuestData.GetQuest(item)?.QuestLocation
-                    .GlobalCoordsToLatLongs(Sea.WorldMapScene.Io.Map.GlobalSize);
+             Data.GetDisplayLevel(item) + " " +
+             QuestData.GetQuest(item)?.QuestLocation
+                 .GlobalCoordsToLatLongs(Sea.WorldMapScene.Io.Map.GlobalSize);
             // return item switch
             // {
             //     _ when item == QuestData.DataItem.StarChart =>

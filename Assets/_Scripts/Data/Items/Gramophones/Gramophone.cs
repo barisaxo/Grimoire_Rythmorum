@@ -1,6 +1,6 @@
 namespace Data.Two
 {
-    public interface Gramophone : IItem
+    public interface IGramophone : IItem
     {
         GramophoneEnum Enum { get; }
         int IItem.ID => Enum.Id;
@@ -8,11 +8,11 @@ namespace Data.Two
         string IItem.Description => Enum.Description;
     }
 
-    [System.Serializable] public readonly struct Gramo1 : Gramophone { public readonly GramophoneEnum Enum => GramophoneEnum.Gramo1; }
-    [System.Serializable] public readonly struct Gramo2 : Gramophone { public readonly GramophoneEnum Enum => GramophoneEnum.Gramo2; }
-    [System.Serializable] public readonly struct Gramo3 : Gramophone { public readonly GramophoneEnum Enum => GramophoneEnum.Gramo3; }
-    [System.Serializable] public readonly struct Gramo4 : Gramophone { public readonly GramophoneEnum Enum => GramophoneEnum.Gramo4; }
-    [System.Serializable] public readonly struct Gramo5 : Gramophone { public readonly GramophoneEnum Enum => GramophoneEnum.Gramo5; }
+    [System.Serializable] public readonly struct Gramo1 : IGramophone { public readonly GramophoneEnum Enum => GramophoneEnum.Gramo1; }
+    [System.Serializable] public readonly struct Gramo2 : IGramophone { public readonly GramophoneEnum Enum => GramophoneEnum.Gramo2; }
+    [System.Serializable] public readonly struct Gramo3 : IGramophone { public readonly GramophoneEnum Enum => GramophoneEnum.Gramo3; }
+    [System.Serializable] public readonly struct Gramo4 : IGramophone { public readonly GramophoneEnum Enum => GramophoneEnum.Gramo4; }
+    [System.Serializable] public readonly struct Gramo5 : IGramophone { public readonly GramophoneEnum Enum => GramophoneEnum.Gramo5; }
 
     [System.Serializable]
     public class GramophoneEnum : Enumeration

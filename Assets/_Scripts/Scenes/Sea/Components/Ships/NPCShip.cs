@@ -7,35 +7,35 @@ namespace Sea
     public class NPCShip
     {
         public ISceneObject SceneObject;
-        public IMAShip Ship;
+        public IShipPrefab ShipPrefab;
 
         public void InstantiateNewSceneObject(State state, Data.Two.StandingData standingData)
         {
-            RegionalMode = (MusicTheory.RegionalMode)Random.Range(0, 7);
-
             switch (ShipType)
             {
                 case NPCShipType.Trade:
+                    RegionalMode = (RegionEnum)Random.Range(0, 7);
                     TradeShip tradeShip = new(state, Hull, standingData, Standing);
                     SceneObject = tradeShip;
-                    Ship = tradeShip.Ship;
+                    ShipPrefab = tradeShip.Ship;
                     break;
 
                 case NPCShipType.Pirate:
+                    RegionalMode = RegionEnum.Chromatic;
                     PirateShip pirateShip = new(state, this, Hull);
                     SceneObject = pirateShip;
-                    Ship = pirateShip.Ship;
+                    ShipPrefab = pirateShip.Ship;
                     break;
 
                 case NPCShipType.Bounty:
                     BountyShipSO bountyShip = new(state, this, Hull);
                     SceneObject = bountyShip;
-                    Ship = bountyShip.Ship;
+                    ShipPrefab = bountyShip.Ship;
                     break;
 
                 default: throw new System.NotImplementedException();
             }
-            Ship.RandomRig();
+            // Ship.RandomRig();
         }
 
         public void DestroySceneObject()
@@ -56,7 +56,7 @@ namespace Sea
 
         public (float amp, float period, float offset) Sway;
         // public IMAShip ImAShip;
-        public ShipStats.ShipStats ShipStats => Ship.ShipStats;
+        public ShipStats.ShipStats ShipStats { get; private set; }
         // new(
         //     new ShipStats.HullStats(
         //         Data.Equipment.HullData.Frigate,
@@ -92,37 +92,38 @@ namespace Sea
         // public bool Hiding => HideTimer > 0;
         public float HideTimer;
 
-        public Data.Two.BoatHull Hull;
+        public Data.Two.IHull Hull;
         public Data.Two.Standing Standing => RegionalMode switch
         {
-            MusicTheory.RegionalMode.Aeolian => new Data.Two.AeolianStanding(),
-            MusicTheory.RegionalMode.Ionian => new Data.Two.IonianStanding(),
-            MusicTheory.RegionalMode.Lydian => new Data.Two.LydianStanding(),
-            MusicTheory.RegionalMode.Locrian => new Data.Two.LocrianStanding(),
-            MusicTheory.RegionalMode.MixoLydian => new Data.Two.MixolydianStanding(),
-            MusicTheory.RegionalMode.Dorian => new Data.Two.DorianStanding(),
-            MusicTheory.RegionalMode.Phrygian => new Data.Two.PhrygianStanding(),
+            RegionEnum.Aeolian => new Data.Two.AeolianStanding(),
+            RegionEnum.Ionian => new Data.Two.IonianStanding(),
+            RegionEnum.Lydian => new Data.Two.LydianStanding(),
+            RegionEnum.Locrian => new Data.Two.LocrianStanding(),
+            RegionEnum.MixoLydian => new Data.Two.MixolydianStanding(),
+            RegionEnum.Dorian => new Data.Two.DorianStanding(),
+            RegionEnum.Phrygian => new Data.Two.PhrygianStanding(),
             _ => throw new System.ArgumentOutOfRangeException(RegionalMode.GetColor().ToString()),
         };
 
-        public MusicTheory.RegionalMode RegionalMode;
+        public RegionEnum RegionalMode;
         public AudioClip RegionalSound => Assets.GetScaleChordClip(RegionalMode);
         public string Name => "[" + RegionalMode.ToString() + " " + ShipType + " ship]:\n";
         public Color FlagColor = Assets.RandomColor;
         public Sprite Flag => ShipType == NPCShipType.Trade ? RegionalMode switch
         {
-            MusicTheory.RegionalMode.Aeolian => Assets.AeolianFlag,
-            MusicTheory.RegionalMode.Dorian => Assets.DorianFlag,
-            MusicTheory.RegionalMode.Ionian => Assets.IonianFlag,
-            MusicTheory.RegionalMode.Lydian => Assets.LydianFlag,
-            MusicTheory.RegionalMode.Phrygian => Assets.PhrygianFlag,
-            MusicTheory.RegionalMode.MixoLydian => Assets.MixoLydianFlagFlag,
+            RegionEnum.Aeolian => Assets.AeolianFlag,
+            RegionEnum.Dorian => Assets.DorianFlag,
+            RegionEnum.Ionian => Assets.IonianFlag,
+            RegionEnum.Lydian => Assets.LydianFlag,
+            RegionEnum.Phrygian => Assets.PhrygianFlag,
+            RegionEnum.MixoLydian => Assets.MixoLydianFlagFlag,
             _ => Assets.LocrianFlag,
         } : Assets.PirateFlag;
 
-        public NPCShip(Vector2Int[] path, NPCShipType shipType, Data.Two.BoatHull hull, Vector2Int regionalCoordOffset)
+        public NPCShip(Vector2Int[] path, NPCShipType shipType, Data.Two.IHull hull, Vector2Int regionalCoordOffset, ShipStats.ShipStats shipStats)
         {
             ShipType = shipType;
+            ShipStats = shipStats;
             Hull = hull;
             PathDirection = Random.value < .5f;
             // PosDelta = start;
@@ -145,15 +146,20 @@ namespace Sea
 
     }
 
+    public enum RegionEnum { Ionian, Dorian, Phrygian, Lydian, MixoLydian, Aeolian, Locrian, Chromatic }
     public class TradeShip : ISceneObject
     {
-        public TradeShip(State state, Data.Two.BoatHull hull, Data.Two.StandingData standingData, Data.Two.Standing standing)
+        public TradeShip(State state, Data.Two.IHull hull, Data.Two.StandingData standingData, Data.Two.Standing standing)
         {
-            IMAShip obj = hull switch
+            IShipPrefab obj = hull switch
             {
                 Data.Two.Sloop => Assets.Sloop,
-                Data.Two.Schooner => Assets.Schooner2,
+                Data.Two.Brig => Assets.Brig,
+                Data.Two.Schooner => Assets.Schooner,
+                Data.Two.Cutter => Assets.Cutter,
+                // Data.Two.TopRig => Assets.TopRig,
                 Data.Two.Frigate => Assets.Frigate,
+                Data.Two.Barque => Assets.Barque,
                 _ => throw new System.ArgumentException(hull.Name)
             };
 
@@ -166,7 +172,7 @@ namespace Sea
             UpdatePosition = new UpdateNPCShipPosition();
         }
 
-        public IMAShip Ship { get; private set; }
+        public IShipPrefab Ship { get; private set; }
 
         public GameObject GO { get; private set; }
         public Transform Tf => GO.transform;
@@ -185,13 +191,16 @@ namespace Sea
 
     public class BountyShipSO : ISceneObject
     {
-        public BountyShipSO(State currentState, NPCShip ship, Data.Two.BoatHull hull)
+        public BountyShipSO(State currentState, NPCShip ship, Data.Two.IHull hull)
         {
-            IMAShip obj = hull switch
+            IShipPrefab obj = hull switch
             {
                 Data.Two.Sloop => Assets.Sloop,
-                Data.Two.Schooner => Assets.Schooner2,
+                Data.Two.Cutter => Assets.Cutter,
+                Data.Two.Schooner => Assets.Schooner,
+                Data.Two.Brig => Assets.Brig,
                 Data.Two.Frigate => Assets.Frigate,
+                Data.Two.Barque => Assets.Barque,
                 _ => throw new System.NotImplementedException(hull.Name)
             };
 
@@ -205,7 +214,7 @@ namespace Sea
             Telemeter = new ShipTelemetry();
         }
 
-        public IMAShip Ship { get; private set; }
+        public IShipPrefab Ship { get; private set; }
 
         public GameObject GO { get; private set; }
 
@@ -223,13 +232,16 @@ namespace Sea
 
     public class PirateShip : ISceneObject
     {
-        public PirateShip(State currentState, NPCShip ship, Data.Two.BoatHull hull)
+        public PirateShip(State currentState, NPCShip ship, Data.Two.IHull hull)
         {
-            IMAShip obj = hull switch
+            IShipPrefab obj = hull switch
             {
                 Data.Two.Sloop => Assets.Sloop,
-                Data.Two.Schooner => Assets.Schooner2,
+                Data.Two.Cutter => Assets.Cutter,
+                Data.Two.Schooner => Assets.Schooner,
+                Data.Two.Brig => Assets.Brig,
                 Data.Two.Frigate => Assets.Frigate,
+                Data.Two.Barque => Assets.Barque,
                 _ => throw new System.NotImplementedException(hull.Name)
             };
 
@@ -243,7 +255,7 @@ namespace Sea
             Telemeter = new ShipTelemetry();
         }
 
-        public IMAShip Ship { get; private set; }
+        public IShipPrefab Ship { get; private set; }
 
         public GameObject GO { get; private set; }
 
@@ -260,6 +272,7 @@ namespace Sea
     }
 
     public enum NPCShipType { Trade, Pirate, Bounty }
-    //todo privateer, exploration vessel, Whaling Ship, Fishing boat, Packet Ship
+    //to do? privateer, exploration vessel, Whaling Ship, Fishing boat, Packet Ship
+    //Probably not
 
 }

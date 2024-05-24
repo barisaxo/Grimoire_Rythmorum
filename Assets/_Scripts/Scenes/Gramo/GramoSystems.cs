@@ -90,23 +90,23 @@ public static class GramoSystems
 
     public static void DollyAnimation(this GramoScene scene, System.Action callback)
     {
-        scene.Gramo.transform.position = new Vector3(0, 0, 100);
+        scene.Gramo.transform.position = new Vector3(Cam.Io.Camera.transform.position.x, Cam.Io.Camera.transform.position.y, 100);
         MonoHelper.Io.StartCoroutine(Dolly());
 
         IEnumerator Dolly()
         {
-            float moveSpeed = 75f;
+            const float moveSpeed = 75f;
             yield return new WaitForEndOfFrame();
 
-            if (Z() < 0.1f)
+            if (Z() < 12.1f)
             {
-                scene.Gramo.transform.position = new Vector3(0, -.666f, 0);
+                scene.Gramo.transform.position = new Vector3(scene.Gramo.transform.position.x, scene.Gramo.transform.position.y, 12);
                 callback?.Invoke();
             }
 
             else
             {
-                scene.Gramo.transform.position = new Vector3(0, -.666f, Z());
+                scene.Gramo.transform.position = new Vector3(scene.Gramo.transform.position.x, scene.Gramo.transform.position.y, Z());
                 MonoHelper.Io.StartCoroutine(Dolly());
             }
 
@@ -229,10 +229,14 @@ public static class GramoSystems
     internal static void HighlightDial(this GramoScene scene)
     {
         Debug.Log(nameof(HighlightDial));
-        scene.Gramo.AnswerMesh1.material.color = scene.Gramo.AnswerMesh1 == scene.CurSelection ? Color.yellow : Color.white;
-        scene.Gramo.AnswerMesh2.material.color = scene.Gramo.AnswerMesh2 == scene.CurSelection ? Color.yellow : Color.white;
-        scene.Gramo.AnswerMesh3.material.color = scene.Gramo.AnswerMesh3 == scene.CurSelection ? Color.yellow : Color.white;
-        scene.Gramo.AnswerMesh4.material.color = scene.Gramo.AnswerMesh4 == scene.CurSelection ? Color.yellow : Color.white;
+        // scene.Gramo.Answer1L.material.color = scene.Gramo.AnswerMesh1 == scene.CurSelection ? Color.yellow : Color.white;
+        scene.Gramo.Answer2L.material.color = scene.Gramo.AnswerMesh2 == scene.CurSelection ? Color.yellow : Color.white;
+        scene.Gramo.Answer3L.material.color = scene.Gramo.AnswerMesh3 == scene.CurSelection ? Color.yellow : Color.white;
+        scene.Gramo.Answer4L.material.color = scene.Gramo.AnswerMesh4 == scene.CurSelection ? Color.yellow : Color.white;
+        // scene.Gramo.Answer1R.material.color = scene.Gramo.AnswerMesh1 == scene.CurSelection ? Color.yellow : Color.white;
+        scene.Gramo.Answer2R.material.color = scene.Gramo.AnswerMesh2 == scene.CurSelection ? Color.yellow : Color.white;
+        scene.Gramo.Answer3R.material.color = scene.Gramo.AnswerMesh3 == scene.CurSelection ? Color.yellow : Color.white;
+        scene.Gramo.Answer4R.material.color = scene.Gramo.AnswerMesh4 == scene.CurSelection ? Color.yellow : Color.white;
     }
 
 }

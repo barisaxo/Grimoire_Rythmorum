@@ -162,13 +162,22 @@ namespace Sea
             .AllowWordWrap(false)
             ;
 
-        private Card _sextantText;
-        public Card SextantText => _sextantText ??= Hud.CreateChild(nameof(SextantText), Hud.Canvas)
-            .SetTMPPosition(new Vector2(0, Cam.UIOrthoY - 1))
-            .SetTMPSize(new Vector2(3, 1))
-            .SetTextAlignment(TextAlignmentOptions.Center)
-            .SetFontScale(.55f, .55f)
-            .AutoSizeFont(true);
+        // private Card _sextantText;
+        // public Card SextantText => _sextantText ??= Hud.CreateChild(nameof(SextantText), Hud.Canvas)
+        //     .SetTMPPosition(new Vector2(0, Cam.UIOrthoY - 1))
+        //     .SetTMPSize(new Vector2(3, 1))
+        //     .SetTextAlignment(TextAlignmentOptions.Center)
+        //     .SetFontScale(.55f, .55f)
+        //     .AutoSizeFont(true);
+
+        private Card _rationsText;
+        public Card RationsText => _rationsText ??= Hud.CreateChild(nameof(RationsText), Hud.Canvas)
+            .SetTMPPosition(new Vector2(-Cam.UIOrthoX + 1, Cam.UIOrthoY - 1))
+            .AutoSizeTextContainer(true)
+            .SetTextAlignment(TextAlignmentOptions.Left)
+            .SetFontScale(.45f, .45f)
+            .AllowWordWrap(false)
+            ;
 
         private Card _islandCoordText;
         public Card IslandCoordText => _islandCoordText ??= Hud.CreateChild(nameof(IslandCoordText), Hud.Canvas)

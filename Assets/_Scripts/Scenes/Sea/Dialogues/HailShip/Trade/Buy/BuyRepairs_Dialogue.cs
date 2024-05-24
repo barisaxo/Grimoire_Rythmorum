@@ -11,7 +11,7 @@ public class BuyRepairs_Dialogue : Dialogue
 
     int StandingMod => Data.Two.Manager.Io.StandingData.GetLevel(Standing);
     int Gold => Manager.Io.Inventory.GetLevel(new Gold());
-    int Mats => Manager.Io.Inventory.GetLevel(new Materials());
+    int Mats => Manager.Io.Inventory.GetLevel(new MaterialStorage());
     int CurHP => Manager.Io.PlayerShip.GetLevel(new CurrentHitPoints());
     int MaxHP => Manager.Io.PlayerShip.GetLevel(new CurrentHitPoints());
 
@@ -84,21 +84,21 @@ public class BuyRepairs_Dialogue : Dialogue
     void RepairSmall()
     {
         Manager.Io.PlayerShip.AdjustLevel(new CurrentHitPoints(), smallAmount);
-        Manager.Io.Inventory.AdjustLevel(new Materials(), -smallAmount * matsPer);
+        Manager.Io.Inventory.AdjustLevel(new MaterialStorage(), -smallAmount * matsPer);
         Manager.Io.Inventory.AdjustLevel(new Gold(), -smallAmount * goldPer);
     }
 
     void RepairMedium()
     {
         Manager.Io.PlayerShip.AdjustLevel(new CurrentHitPoints(), medAmount);
-        Manager.Io.Inventory.AdjustLevel(new Materials(), -medAmount * matsPer);
+        Manager.Io.Inventory.AdjustLevel(new MaterialStorage(), -medAmount * matsPer);
         Manager.Io.Inventory.AdjustLevel(new Gold(), -medAmount * goldPer);
     }
 
     void RepairLarge()
     {
         Manager.Io.PlayerShip.AdjustLevel(new CurrentHitPoints(), largeAmount);
-        Manager.Io.Inventory.AdjustLevel(new Materials(), -largeAmount * matsPer);
+        Manager.Io.Inventory.AdjustLevel(new MaterialStorage(), -largeAmount * matsPer);
         Manager.Io.Inventory.AdjustLevel(new Gold(), -largeAmount * goldPer);
     }
 

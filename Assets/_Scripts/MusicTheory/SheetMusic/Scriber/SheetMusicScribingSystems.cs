@@ -372,6 +372,7 @@ namespace SheetMusic
 
         static void AssignTies(this MusicSheet ms)
         {
+            if (ms.Measures.Length == 1) return;
             Note[] notes = ms.Notes;
             for (int i = 0; i < notes.Length; i++)
             {

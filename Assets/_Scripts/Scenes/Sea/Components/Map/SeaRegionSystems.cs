@@ -42,10 +42,10 @@ public static class SeaRegionSystems
             for (int x = 0; x < size; x++)
                 for (int y = 0; y < size; y++)
                 {
-                    if (x > 3 && y > 3 && x < size - 3 && y < size - 3 &&
-                       (x < halfSize + 2 || x > halfSize - 2) &&
-                       (y < halfSize - 2 || y > halfSize + 2) &&
-                        Random.value > .95f)
+                    if (x > size - 6 && x < size && y > size - 6 && y < size &&
+                    //    (x < halfSize + 2 || x > halfSize - 2) &&
+                    //    (y < halfSize - 2 || y > halfSize + 2) &&
+                        Random.value > .85f)
                     {
                         cells.Add(new Cell(x, y)
                         {
@@ -92,37 +92,37 @@ public static class SeaRegionSystems
                     Type = CellType.Bottle
                 });
         }
-        void AddQuestItems()
-        {
-            foreach (var item in questData.Items)
-            {
-                if (questData.GetQuest(item) is not null)
-                {
-                    if ((questData.GetQuest(item)?.QuestLocation / WorldMapScene.Io.Map.RegionSize) == region.Coord)
-                    {
-                        Cell newCell = new(questData.GetQuest(item).QuestLocation.Smod(size))
-                        {
-                            Type = item switch
-                            {
-                                Data.Two.Navigation => CellType.Gramo,
-                                Data.Two.Bounty => CellType.Bounty,
-                                _ => throw new System.Exception(),
-                            }
-                        };
+        // void AddQuestItems()
+        // {
+        //     foreach (var item in questData.Items)
+        //     {
+        //         if (questData.GetQuest(item) is not null)
+        //         {
+        //             if ((questData.GetQuest(item)?.QuestLocation / WorldMapScene.Io.Map.RegionSize) == region.Coord)
+        //             {
+        //                 Cell newCell = new(questData.GetQuest(item).QuestLocation.Smod(size))
+        //                 {
+        //                     Type = item switch
+        //                     {
+        //                         Data.Two.Navigation => CellType.Gramo,
+        //                         Data.Two.Bounty => CellType.Bounty,
+        //                         _ => throw new System.Exception(),
+        //                     }
+        //                 };
 
-                        foreach (var cell in cells)
-                            if (cell.Type == newCell.Type)
-                            {
-                                Debug.Log("Preventing Duplicate " + cell.Type);
-                                return;
-                            }
+        //                 foreach (var cell in cells)
+        //                     if (cell.Type == newCell.Type)
+        //                     {
+        //                         Debug.Log("Preventing Duplicate " + cell.Type);
+        //                         return;
+        //                     }
 
-                        Debug.Log("Adding " + newCell.Type);
-                        cells.Add(newCell);
-                    }
-                }
-            }
-        }
+        //                 Debug.Log("Adding " + newCell.Type);
+        //                 cells.Add(newCell);
+        //             }
+        //         }
+        //     }
+        // }
     }
 
 
@@ -135,14 +135,15 @@ public static class SeaRegionSystems
 
 
 
-    public static NPCShip[] SetUpNPCs(this Region region)
+    public static NPCShip[] SetUpNPCs(this Region region, Data.Two.Manager dataManager)
     {
         NPCShip[] ships = new NPCShip[(int)(region.Resolution * .2f)];
 
         for (int i = 0; i < ships.Length; i++)
         {
             var path = region.PatrolPattern(i);
-            ships[i] = new(path, GetShipType(), GetHull(), region.Coord * region.Resolution) { };
+            Data.Two.IHull hull = GetHull();
+            ships[i] = new(path, GetShipType(), hull, region.Coord * region.Resolution, GetShipStats(hull)) { };
         }
 
         return ships;
@@ -156,18 +157,29 @@ public static class SeaRegionSystems
             };
         }
 
-        Data.Two.BoatHull GetHull()
+        ShipStats.ShipStats GetShipStats(Data.Two.IHull hull)
+        {
+            var stats = new ShipStats.ShipStats(
+                new ShipStats.HullStats(hull, Data.Two.WoodEnum.GetRandomWood()),
+                new ShipStats.CannonStats(Data.Two.CannonEnum.GetRandomCannon(), Data.Two.MetalEnum.GetRandomMetal()),
+                new ShipStats.RiggingStats(Data.Two.ClothEnum.GetRandomCloth())
+            );
+
+            return stats;
+        }
+
+        Data.Two.IHull GetHull()
         {
             // Debug.Log(region.Coord + " " + Mathf.Abs(region.Coord.x - (WorldMapScene.Io.Map.Size * .5f)) + " " + Mathf.Abs(region.Coord.y - (WorldMapScene.Io.Map.Size * .5f)) + " " + WorldMapScene.Io.Map.Size);
             return Mathf.Abs(Mathf.Abs(region.Coord.x - (WorldMapScene.Io.Map.RegionResolution * .5f)) + Mathf.Abs(region.Coord.y - (WorldMapScene.Io.Map.RegionResolution * .5f))) switch
             {
                 < 3 => new Data.Two.Sloop(),
-                3 => Random.value < .65f ? new Data.Two.Sloop() : new Data.Two.Schooner(),
-                4 => Random.value < .35f ? new Data.Two.Sloop() : new Data.Two.Schooner(),
-                5 => new Data.Two.Schooner(),
-                6 => Random.value < .65f ? new Data.Two.Schooner() : new Data.Two.Frigate(),
-                7 => Random.value < .35f ? new Data.Two.Schooner() : new Data.Two.Frigate(),
-                _ => new Data.Two.Frigate()
+                3 => Random.value < .65f ? new Data.Two.Sloop() : new Data.Two.Brig(),
+                4 => Random.value < .65f ? new Data.Two.Brig() : new Data.Two.Schooner(),
+                5 => Random.value < .65f ? new Data.Two.Schooner() : new Data.Two.Cutter(),
+                6 => Random.value < .65f ? new Data.Two.Cutter() : new Data.Two.Frigate(),
+                7 => Random.value < .65f ? new Data.Two.Frigate() : new Data.Two.Barque(),
+                _ => Random.value < .50f ? new Data.Two.Frigate() : new Data.Two.Barque(),
             };
         }
     }
@@ -192,13 +204,13 @@ public static class SeaRegionSystems
 
     public static Vector2Int[] Nodes(int i, int size) => i switch
     {
-        0 => new Vector2Int[4] { new(0, 0), new(size - 1, 0), new(size - 1, size - 1), new(0, size - 1) },
-        1 => new Vector2Int[4] { new(1, 1), new(size - 2, 1), new(size - 2, size - 2), new(1, size - 2) },
-        2 => new Vector2Int[4] { new(2, 2), new(size - 3, 2), new(size - 3, size - 2), new(3, size - 2) },
-        3 => new Vector2Int[4] { new(3, 3), new(size - 4, 3), new(size - 4, size - 3), new(4, size - 3) },
-        4 => new Vector2Int[4] { new(4, 4), new(size - 5, 4), new(size - 5, size - 4), new(5, size - 4) },
-        5 => new Vector2Int[4] { new(5, 5), new(size - 6, 5), new(size - 6, size - 6), new(6, size - 5) },
-        _ => new Vector2Int[4] { new(6, 6), new(size - 7, 6), new(size - 7, size - 7), new(7, size - 6) },
+        0 => new Vector2Int[4] { new(6, 6), new(size - 7, 6), new(size - 7, size - 7), new(6, size - 7) },
+        1 => new Vector2Int[4] { new(7, 7), new(size - 8, 7), new(size - 8, size - 8), new(7, size - 8) },
+        2 => new Vector2Int[4] { new(8, 8), new(size - 9, 8), new(size - 9, size - 9), new(8, size - 9) },
+        3 => new Vector2Int[4] { new(9, 9), new(size - 10, 9), new(size - 10, size - 10), new(9, size - 10) },
+        4 => new Vector2Int[4] { new(10, 10), new(size - 11, 10), new(size - 11, size - 11), new(10, size - 11) },
+        5 => new Vector2Int[4] { new(11, 11), new(size - 12, 11), new(size - 12, size - 12), new(11, size - 12) },
+        _ => new Vector2Int[4] { new(12, 12), new(size - 13, 12), new(size - 13, size - 13), new(12, size - 13) },
     };
 
     // public static Vector2Int RandA(int size) => new(0, Random.Range(size - 3, size));

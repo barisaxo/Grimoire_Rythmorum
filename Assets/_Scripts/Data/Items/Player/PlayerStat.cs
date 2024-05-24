@@ -28,7 +28,8 @@ namespace Data.Two
         public readonly static PlayerStatEnum Hit = new(8, "Batterie Hit");
         public readonly static PlayerStatEnum Miss = new(9, "Batterie Miss");
         public readonly static PlayerStatEnum PatternsFound = new(10, "Patterns Found");
-        public readonly static PlayerStatEnum PatternsAvailable = new(11, "Patterns Available");
+        public readonly static PlayerStatEnum PatternsSpent = new(11, "Patterns Spent");
+        public readonly static PlayerStatEnum PatternsAvailable = new(12, "Patterns Available");
 
         public static IItem ToItem(PlayerStatEnum @enum) => @enum switch
         {
@@ -43,6 +44,7 @@ namespace Data.Two
             _ when @enum == Hit => new Hit(),
             _ when @enum == Miss => new Miss(),
             _ when @enum == PatternsFound => new PatternsFound(),
+            _ when @enum == PatternsSpent => new PatternsSpent(),
             _ when @enum == PatternsAvailable => new PatternsAvailable(),
             _ => throw new System.ArgumentOutOfRangeException(@enum.Name)
         };
@@ -59,5 +61,6 @@ namespace Data.Two
     [Serializable] public readonly struct Hit : PlayerStat { public readonly PlayerStatEnum Enum => PlayerStatEnum.Hit; }
     [Serializable] public readonly struct Miss : PlayerStat { public readonly PlayerStatEnum Enum => PlayerStatEnum.Miss; }
     [Serializable] public readonly struct PatternsFound : PlayerStat { public readonly PlayerStatEnum Enum => PlayerStatEnum.PatternsFound; }
+    [Serializable] public readonly struct PatternsSpent : PlayerStat { public readonly PlayerStatEnum Enum => PlayerStatEnum.PatternsSpent; }
     [Serializable] public readonly struct PatternsAvailable : PlayerStat { public readonly PlayerStatEnum Enum => PlayerStatEnum.PatternsAvailable; }
 }

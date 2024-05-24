@@ -4,6 +4,9 @@ using System.Collections.Generic;
 
 namespace Sea
 {
+    /// <summary>
+    /// SceneObjects interact with the SeaSceneSystems
+    /// </summary>
     public interface ISceneObject
     {
         public GameObject GO { get; }
@@ -140,19 +143,19 @@ namespace Sea
     public interface IQuestable
     {
         public QuestData QuestData { get; }
-        public Quest Quest { get; }
+        public IQuest Quest { get; }
         public void QuestComplete();
     }
 
     public class Questable : IQuestable
     {
         public QuestData QuestData { get; }
-        public Quest Quest { get; }
+        public IQuest Quest { get; }
         public void QuestComplete()
         {
             QuestData.SetQuest(Quest, null);
         }
-        public Questable(QuestData data, Quest dataItem)
+        public Questable(QuestData data, IQuest dataItem)
         {
             QuestData = data;
             Quest = dataItem;
@@ -162,7 +165,7 @@ namespace Sea
     public class NotQuestable : IQuestable
     {
         public QuestData QuestData => null;
-        public Quest Quest => null;
+        public IQuest Quest => null;
         public void QuestComplete() { }
     }
 

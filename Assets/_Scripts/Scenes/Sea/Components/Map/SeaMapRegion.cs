@@ -13,17 +13,17 @@ namespace Sea
         public Sea.Maps.R R;
 
         private NPCShip[] _npcs;
-        public NPCShip[] NPCs => _npcs ??= this.SetUpNPCs();
+        public NPCShip[] NPCs => _npcs ??= this.SetUpNPCs(DataManager);
 
         private List<Cell> _cells;
-        public List<Cell> Cells => _cells ??= this.InitializeCells(QuestData);
-        readonly Data.Two.QuestData QuestData;
+        public List<Cell> Cells => _cells ??= this.InitializeCells(DataManager.Quests);
+        readonly Data.Two.Manager DataManager;
 
-        public Region(UnityEngine.Vector2Int region, int resolution, Data.Two.QuestData data, Sea.Maps.R r)
+        public Region(UnityEngine.Vector2Int region, int resolution, Data.Two.Manager dataManager, Sea.Maps.R r)
         {
             Resolution = resolution;
             Coord = region;
-            QuestData = data;
+            DataManager = dataManager;
             R = r;
         }
     }

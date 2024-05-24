@@ -21,10 +21,6 @@ namespace Data.Two
         public string GetDescription(IItem item);
         public int GetLevel(IItem item);
         public void AdjustLevel(IItem item, int level);
-        // public void IncreaseLevel(IItem item) => IncreaseLevel(item, 1);
-        // public void DecreaseLevel(IItem item) => IncreaseLevel(item, 1);
-        // public void IncreaseLevel(IItem item, int i);
-        // public void DecreaseLevel(IItem item, int i);
         public void SetLevel(IItem item, int level);
         public bool InventoryIsFull(int space);
         public void Reset();
@@ -72,7 +68,7 @@ namespace Data.Two
                 catch
                 {
                     stream.Close();
-                    Debug.Log("A loading error has ocurred!");
+                    Debug.Log("A loading error has ocurred with " + FileName);
                 }
             }
 

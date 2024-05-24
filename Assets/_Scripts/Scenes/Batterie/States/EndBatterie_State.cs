@@ -17,7 +17,7 @@ public class EndBatterie_State : State
     int rations = 0;
     // bool map;
 
-    int level => 1;
+    int level => (Scene.NMEShipStats.HullStats.Hull.ID * 4) + 1;
     // DataManager.GamePlay.CurrentLevel switch
     // {
     //     RegionalMode.Lydian => 2,
@@ -32,9 +32,9 @@ public class EndBatterie_State : State
         Scene.SelfDestruct();
         // Pack.BHUD.SelfDestruct();
 
-        // coins = (int)((level + 25f) * 5.55f * UnityEngine.Random.Range(.15f, 1) * (float)((100 - Result()) * .01f));
-        // mats = (int)(((level + 15f) * 2.55f) * UnityEngine.Random.Range(.15f, 1) * (float)((100 - Result()) * .01f));
-        // rations = (int)(1 + ((level + 5f) * UnityEngine.Random.Range(.5f, 1) * (float)((100 - Result()) * .01f)));
+        coins = (int)((level + 25f) * 5.55f * UnityEngine.Random.Range(.15f, 1) * (float)((100 - Result()) * .01f));
+        mats = (int)(((level + 15f) * 2.55f) * UnityEngine.Random.Range(.15f, 1) * (float)((100 - Result()) * .01f));
+        rations = (int)(1 + ((level + 5f) * UnityEngine.Random.Range(.5f, 1) * (float)((100 - Result()) * .01f)));
 
         // UnityEngine.GameObject.Destroy(Pack.NME);
         // UnityEngine.GameObject.Destroy(Pack.Ship);
@@ -45,8 +45,6 @@ public class EndBatterie_State : State
         UnityEngine.GameObject.Destroy(Scene.NMEFire);
         UnityEngine.GameObject.Destroy(Scene.ShipFire);
 
-        // map = FoundMap();
-
         callback();
         return;
 
@@ -56,17 +54,6 @@ public class EndBatterie_State : State
             else return Scene.Pack.TotalErrors;
         }
 
-        // bool FoundMap()
-        // {
-        //     return false;
-        //     // if (DataManager.CharacterData.Map) return false;
-        //     // if (DataManager.GamePlay.Batterie_Difficulty == 0) return true;
-
-        //     float chance = UnityEngine.Random.value;
-        //     float percent = ((float)(6 - (int)DataManager.GamePlay.Batterie_Difficulty));//TODO / (float)(Pack.SeaScene.NPC.Ships.Count + 1);
-        //     //Debug.Log(nameof(chance) + ": " + chance + ", " + nameof(percent) + ": " + percent + ", num of Pirate ships: " + (Board.PirateShipCount() + 1));
-        //     return (chance < percent);
-        // }
     }
 
     protected override void EngageState()

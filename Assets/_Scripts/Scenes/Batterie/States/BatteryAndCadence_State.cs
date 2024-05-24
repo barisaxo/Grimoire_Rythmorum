@@ -46,12 +46,11 @@ public class BatterieAndCadence_State : State
         Counter = 1;
         MonoHelper.OnUpdate += SpaceBar;
 
+        Cam.Io.Camera.transform.SetPositionAndRotation((UnityEngine.Vector3.up * 7),
+           Quaternion.Euler(new Vector3(-20f, 180, Cam.Io.Camera.transform.rotation.eulerAngles.z))
+        );
+
         Scene.Initialize();
-
-
-        Cam.Io.Camera.transform.SetPositionAndRotation(Cam.Io.Camera.transform.position + (UnityEngine.Vector3.up * 7),
-           Quaternion.Euler(new Vector3(-20f, Cam.Io.Camera.transform.rotation.eulerAngles.y + 180, Cam.Io.Camera.transform.rotation.eulerAngles.z))
-       );
 
 
         Scene.Pack.GetNewSettings(callback).StartCoroutine();
@@ -64,7 +63,6 @@ public class BatterieAndCadence_State : State
 
     protected override void DisengageState()
     {
-        Debug.Log((float)((float)score / (float)cap));
         Scene.Pack.Synchro.TickEvent -= Tick;
         Scene.Pack.Synchro.BeatEvent -= Click;
         MonoHelper.OnUpdate -= SpaceBar;

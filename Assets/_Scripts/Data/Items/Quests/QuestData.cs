@@ -7,23 +7,23 @@ namespace Data.Two
     [System.Serializable]
     public class QuestData : IData
     {
-        private Dictionary<Quest, IQuest> _quests;
-        private Dictionary<Quest, IQuest> Quests => _quests ??= SetUpQuests();
+        private Dictionary<IQuest, Quests.IQuest> _quests;
+        private Dictionary<IQuest, Quests.IQuest> Quests => _quests ??= SetUpQuests();
 
-        Dictionary<Quest, IQuest> SetUpQuests()
+        Dictionary<IQuest, Quests.IQuest> SetUpQuests()
         {
-            Dictionary<Quest, IQuest> quests = new();
-            foreach (var item in Items) quests.TryAdd((Quest)item, null);
+            Dictionary<IQuest, Quests.IQuest> quests = new();
+            foreach (var item in Items) quests.TryAdd((IQuest)item, null);
             return quests;
         }
 
         public void Reset() => _quests = SetUpQuests();
 
-        public string GetDisplayLevel(IItem item) => Quests[(Quest)item] is not null ?
-            "Active" : "None active";
+        public string GetDisplayLevel(IItem item) =>
+         Quests[(IQuest)item] is not null ? "Active" : "None active";
 
 
-        public int GetLevel(IItem item) => Quests[(Quest)item] is null ? 0 : 1;
+        public int GetLevel(IItem item) => Quests[(IQuest)item] is null ? 0 : 1;
 
         // public void IncreaseLevel(IItem item)
         // {
@@ -32,8 +32,8 @@ namespace Data.Two
         // }
         public void AdjustLevel(IItem item, int i)
         {
-            if (item is not Quest || i != 0) throw new System.Exception(item.Name + " " + i);
-            if (i == 0) Quests[(Quest)item] = null;
+            if (item is not IQuest || i != 0) throw new System.Exception(item.Name + " " + i);
+            if (i == 0) Quests[(IQuest)item] = null;
         }
 
         // public void DecreaseLevel(IItem item)
@@ -44,14 +44,14 @@ namespace Data.Two
         // }
         // public void DecreaseLevel(IItem item, int i) { }
 
-        public void SetQuest(IItem item, IQuest quest)
+        public void SetQuest(IItem item, Quests.IQuest quest)
         {
-            Quests[(Quest)item] = quest;
+            Quests[(IQuest)item] = quest;
             PersistentData.Save(this);
         }
 
-        public IQuest GetQuest(IItem item) =>
-            Quests[(Quest)item] is null ? null : Quests[(Quest)item];
+        public Quests.IQuest GetQuest(IItem item) =>
+            Quests[(IQuest)item] is null ? null : Quests[(IQuest)item];
 
 
         public void SetLevel(IItem item, int newVolumeLevel)

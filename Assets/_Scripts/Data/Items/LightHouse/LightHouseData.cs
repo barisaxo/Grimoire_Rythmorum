@@ -5,44 +5,31 @@ namespace Data.Two
     [System.Serializable]
     public class LighthouseData : IData
     {
-        private Dictionary<Lighthouse, int> _lighthouses;
-        private Dictionary<Lighthouse, int> Lighthouses => _lighthouses ??= SetUpLightHouses();
-        Dictionary<Lighthouse, int> SetUpLightHouses()
+        private Dictionary<Lighthouse, bool> _lighthouses;
+        private Dictionary<Lighthouse, bool> Lighthouses => _lighthouses ??= SetUpLightHouses();
+        Dictionary<Lighthouse, bool> SetUpLightHouses()
         {
-            Dictionary<Lighthouse, int> ship = new();
-            foreach (var item in Items) ship.TryAdd((Lighthouse)item, 0);
+            Dictionary<Lighthouse, bool> ship = new();
+            foreach (var item in Items) ship.TryAdd((Lighthouse)item, false);
             return ship;
         }
 
         public void Reset() => _lighthouses = SetUpLightHouses();
 
-        public string GetDisplayLevel(IItem item) => Lighthouses[(Lighthouse)item] == 1 ? "Active" : "Not active";
+        public string GetDisplayLevel(IItem item) => Lighthouses[(Lighthouse)item] ? "Active" : "Not active";
 
-        public int GetLevel(IItem item) => Lighthouses[(Lighthouse)item];// Lighthouses.GetValueOrDefault((Lighthouse)item);
+        public int GetLevel(IItem item) => Lighthouses[(Lighthouse)item] ? 1 : 0;
 
 
         public void AdjustLevel(IItem item, int i)
         {
-            Lighthouses[(Lighthouse)item] = i > 0 ? 1 : 0;
+            Lighthouses[(Lighthouse)item] = i > 0;
             PersistentData.Save(this);
         }
-        // public void IncreaseLevel(IItem item)
-        // {
-        //     Lighthouses[(Lighthouse)item] = 1;
-        //     PersistentData.Save(this);
-        // }
-        // public void IncreaseLevel(IItem item, int i) => IncreaseLevel(item);
-
-        // public void DecreaseLevel(IItem item)
-        // {
-        //     Lighthouses[(Lighthouse)item] = 0;
-        //     PersistentData.Save(this);
-        // }
-        // public void DecreaseLevel(IItem item, int i) => DecreaseLevel(item);
 
         public void SetLevel(IItem item, int count)
         {
-            Lighthouses[(Lighthouse)item] = count;
+            Lighthouses[(Lighthouse)item] = count > 0;
             PersistentData.Save(this);
         }
 

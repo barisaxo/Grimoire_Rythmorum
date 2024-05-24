@@ -2,7 +2,7 @@ using System;
 
 namespace Data.Two
 {
-    public interface Fish : IItem
+    public interface IFish : IItem
     {
         FishEnum Enum { get; }
         int IItem.ID => Enum.Id;
@@ -10,12 +10,12 @@ namespace Data.Two
         string IItem.Description => Enum.Description;
     }
 
-    [Serializable] public struct SailFish : Fish { public readonly FishEnum Enum => FishEnum.SailFish; }
-    [Serializable] public struct Tuna : Fish { public readonly FishEnum Enum => FishEnum.Tuna; }
-    [Serializable] public struct Carp : Fish { public readonly FishEnum Enum => FishEnum.Carp; }
-    [Serializable] public struct Halibut : Fish { public readonly FishEnum Enum => FishEnum.Halibut; }
-    [Serializable] public struct Sturgeon : Fish { public readonly FishEnum Enum => FishEnum.Sturgeon; }
-    [Serializable] public struct Shark : Fish { public readonly FishEnum Enum => FishEnum.Shark; }
+    [Serializable] public struct SailFish : IFish { public readonly FishEnum Enum => FishEnum.SailFish; }
+    [Serializable] public struct Tuna : IFish { public readonly FishEnum Enum => FishEnum.Tuna; }
+    [Serializable] public struct Carp : IFish { public readonly FishEnum Enum => FishEnum.Carp; }
+    [Serializable] public struct Halibut : IFish { public readonly FishEnum Enum => FishEnum.Halibut; }
+    [Serializable] public struct Sturgeon : IFish { public readonly FishEnum Enum => FishEnum.Sturgeon; }
+    [Serializable] public struct Shark : IFish { public readonly FishEnum Enum => FishEnum.Shark; }
 
     [Serializable]
     public class FishEnum : Enumeration

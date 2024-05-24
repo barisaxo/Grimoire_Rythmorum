@@ -4,13 +4,13 @@ namespace Data.Two
 {
     public class StarChartData : IData
     {
-        private Dictionary<StarChart, int> _datum;
-        private Dictionary<StarChart, int> Datum => _datum ??= SetUpDatum();
+        private Dictionary<IStarChart, int> _datum;
+        private Dictionary<IStarChart, int> Datum => _datum ??= SetUpDatum();
 
-        private Dictionary<StarChart, int> SetUpDatum()
+        private Dictionary<IStarChart, int> SetUpDatum()
         {
-            Dictionary<StarChart, int> datum = new();
-            foreach (IItem item in Items) datum.TryAdd(item as StarChart, 0);
+            Dictionary<IStarChart, int> datum = new();
+            foreach (IItem item in Items) datum.TryAdd(item as IStarChart, 0);
             return datum;
         }
 
@@ -33,21 +33,21 @@ namespace Data.Two
 
         public string GetDescription(IItem item)
         {
-            if (item is not StarChart) throw new System.Exception(item.GetType().ToString());
+            if (item is not IStarChart) throw new System.Exception(item.GetType().ToString());
             return item.Description;
         }
 
         public string GetDisplayLevel(IItem item)
         {
-            if (item is not StarChart) throw new System.Exception(item.GetType().ToString());
-            return Datum[(StarChart)item].ToString();
+            if (item is not IStarChart) throw new System.Exception(item.GetType().ToString());
+            return Datum[(IStarChart)item].ToString();
         }
 
 
         public int GetLevel(IItem item)
         {
-            if (item is not StarChart) throw new System.Exception(item.GetType().ToString());
-            return Datum[(StarChart)item];
+            if (item is not IStarChart) throw new System.Exception(item.GetType().ToString());
+            return Datum[(IStarChart)item];
         }
 
         // public void DecreaseLevel(IItem item)
@@ -73,17 +73,17 @@ namespace Data.Two
 
         public void AdjustLevel(IItem item, int i)
         {
-            if (item is not StarChart) throw new System.Exception(item.GetType().ToString());
-            Datum[(StarChart)item] =
-                Datum[(StarChart)item] + i > 999 ? 999 :
-                Datum[(StarChart)item] + i < 0 ? 0 :
-                Datum[(StarChart)item] + i;
+            if (item is not IStarChart) throw new System.Exception(item.GetType().ToString());
+            Datum[(IStarChart)item] =
+                Datum[(IStarChart)item] + i > 999 ? 999 :
+                Datum[(IStarChart)item] + i < 0 ? 0 :
+                Datum[(IStarChart)item] + i;
         }
 
         public void SetLevel(IItem item, int level)
         {
-            if (item is not StarChart) throw new System.Exception(item.GetType().ToString());
-            Datum[(StarChart)item] = level;
+            if (item is not IStarChart) throw new System.Exception(item.GetType().ToString());
+            Datum[(IStarChart)item] = level;
         }
 
         public bool InventoryIsFull(int i)

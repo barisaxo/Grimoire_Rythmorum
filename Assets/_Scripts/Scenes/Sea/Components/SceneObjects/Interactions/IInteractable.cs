@@ -85,7 +85,7 @@ namespace Sea
         public State CurrentState { get; }
 
         private State _subsequentState;
-        public State SubsequentState => _subsequentState ??= new SeaToItemPickUp_State(CurrentState, StarChartData, new Data.Two.Bottle(), Obj);
+        public State SubsequentState => _subsequentState ??= new SeaToItemPickUp_State(CurrentState, StarChartData, new Data.Two.StarChartStorage(), Obj);
         // StarChartsData.InventoryIsFull(ShipData.GetLevel(ShipData.DataItem.Bottle)) ?
         //     new DialogStart_State(new InventoryIsFull_Dialogue(CurrentState)) :
         //     new SeaToItemPickUp_State(CurrentState, StarChartsData, ShipData.DataItem.Bottle, Obj);
@@ -94,48 +94,52 @@ namespace Sea
 
     public class GramoInteraction : IInteractable
     {
-        public GramoInteraction(State currentState, GramophoneInventoryData gramoData, PlayerShipData shipData, ISceneObject obj)
+        public GramoInteraction(State currentState, InventoryData inventoryData, PlayerShipData shipData, ISceneObject obj)
         {
             CurrentState = currentState;
             Obj = obj;
-            GramoData = gramoData;
+            InventoryData = inventoryData;
             ShipData = shipData;
         }
 
-        readonly GramophoneInventoryData GramoData;
+        readonly InventoryData InventoryData;
         readonly PlayerShipData ShipData; private string _popupText;
         public string PopupText =>
-            // _popupText ??= GramoData.InventoryIsFull(ShipData.GetLevel(new Data.Two.Gramophone())) ?
-            // "(inventory full)" :
+            _popupText ??= ShipData.InventoryIsFull(ShipData.GetLevel(new GramophoneStorage())) ?
+            "(inventory full)" :
             "Pickup";
         readonly ISceneObject Obj;
         public State CurrentState { get; }
 
         private State _subsequentState;
         public State SubsequentState => _subsequentState ??=
-                // GramoData.InventoryIsFull(ShipData.GetLevel(ShipData.DataItem.Gramos)) ?
-                //     new DialogStart_State(new InventoryIsFull_Dialogue(CurrentState)) :
-                new SeaToItemPickUp_State(CurrentState, GramoData, new Gramos(), Obj);
+                ShipData.InventoryIsFull(ShipData.GetLevel(new GramophoneStorage())) ?
+                    new DialogStart_State(new InventoryIsFull_Dialogue(CurrentState)) :
+                new SeaToItemPickUp_State(CurrentState, InventoryData, new GramophoneStorage(), Obj);
 
     }
 
     public class BountyInteraction : IInteractable
     {
-        public BountyInteraction(State currentState, ShipStats.ShipStats nmeShipStats, GameObject nmeGO)
+        public BountyInteraction(State currentState, ShipStats.ShipStats nmeShipStats, GameObject nmeGO, Region region, Cell cell)
         {
             _currentState = currentState;
             // Standing = standing;
             Manager.Io.Quests.GetQuest(new Bounty()).Complete = true;
             NMEShipStats = nmeShipStats;
             NMEGO = nmeGO;
+            Cell = cell;
+            Region = region;
         }
+        readonly Region Region;
+        readonly Sea.Cell Cell;
         readonly GameObject NMEGO;
         readonly ShipStats.ShipStats NMEShipStats;
         // readonly Standing Standing;
         public WorldMapScene Scene => WorldMapScene.Io;
         private readonly State _currentState;
         public State CurrentState => _currentState;
-        public State SubsequentState => new SeaToBountyTransition_State(NMEShipStats, NMEGO);
+        public State SubsequentState => new SeaToBountyTransition_State(NMEShipStats, NMEGO, Region, Cell);
         public string PopupText => "Attack";
     }
 

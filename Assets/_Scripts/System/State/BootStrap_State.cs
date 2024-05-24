@@ -15,6 +15,12 @@ public class BootStrap_State : State
 
     protected override void PrepareState(Action callback)
     {
+        int x = 0;
+        for (int i = 1; i < 51; i++)
+        {
+            x += i * 10;
+        }
+        Debug.Log(x);
         _ = Cam.Io;
         AudioSettings.Reset(AudioSettings.GetConfiguration());
         callback();

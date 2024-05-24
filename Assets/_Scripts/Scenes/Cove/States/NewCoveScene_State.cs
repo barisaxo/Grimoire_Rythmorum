@@ -12,7 +12,6 @@ public class NewCoveScene_State : State
     protected override void PrepareState(Action callback)
     {
         Audio.BGMusic.PlayClip(Assets.BGMus2);
-
         Data.Two.Manager.Io.PlayerShip.SetLevel(new Data.Two.MaxHitPoints(),
             Data.Two.Manager.Io.PlayerShip.ShipStats.HullStrength);
 
@@ -38,7 +37,11 @@ public class NewCoveScene_State : State
         }
         base.PrepareState(callback);
     }
+    protected override void EngageState()
+    {
 
+        CoveScene.Io.HUD.HideTexts();
+    }
     protected override void DisengageState()
     {
         RStick.y = 0.01f;

@@ -50,9 +50,9 @@ public class BatterieScene
     //     // Tick = tick;
     //     BatterieAudio = Audio.AudioManager.Io.Batterie;
     // }
-
     public void Initialize()
     {
+
         Debug.Log(Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.MaxHitPoints()));
 
         // Sea.WorldMapScene.Io.Ship.ShipStats.HullStrength,

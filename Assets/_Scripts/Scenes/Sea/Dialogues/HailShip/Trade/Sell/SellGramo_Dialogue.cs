@@ -6,7 +6,7 @@ using Dialog;
 public class SellGramo_Dialogue : Dialogue
 {
     readonly Dialogue ReturnTo;
-    int Gramos => Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.Gramos());
+    int Gramos => Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.GramophoneStorage());
 
     public SellGramo_Dialogue(Dialogue returnTo, Speaker speaker)
     {
@@ -59,17 +59,17 @@ public class SellGramo_Dialogue : Dialogue
 
     void SellGramoSmall()
     {
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gramos(), -1);
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.GramophoneStorage(), -1);
         Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), 100);
     }
     void SellGramoMedium()
     {
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gramos(), -3);
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.GramophoneStorage(), -3);
         Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), 275);
     }
     void SellGramoLarge()
     {
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gramos(), -5);
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.GramophoneStorage(), -5);
         Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), 400);
     }
 

@@ -12,8 +12,25 @@ public class SeaScene_State : State
     Vector2 ShipVelocity = Vector2.zero;
     public CameraFollow CameraFollow;
 
-    bool up, down, left, right;
+    readonly bool up, down, left, right;
     float _timeSinceLastL = 2.5f;
+    float _distTraveled;
+    float DistTraveled
+    {
+        get => _distTraveled;
+        set
+        {
+            _distTraveled = value;
+            if (_distTraveled > 1000)
+            {
+                Debug.Log(_distTraveled);
+                DataManager.Inventory.AdjustLevel(new Ration(), -1);
+                if (DataManager.Inventory.GetLevel(new Ration()) < 1) Debug.Log("OUT OF RATIONS!!");
+                _distTraveled -= 1000;
+            }
+        }
+    }
+
     float TimeSinceLastL
     {
         get => _timeSinceLastL;
@@ -142,6 +159,7 @@ public class SeaScene_State : State
 
         // Debug.Log();
         ShipVelocity = Scene.UpdateMap(this, DataManager, ShipVelocity);
+        DistTraveled += Mathf.Abs(ShipVelocity.x) + Mathf.Abs(ShipVelocity.y);
         // if (TimeSinceLastL < 1.5f) { Scene.HUD.Hide(TimeSinceLastL); }
         // else { Scene.HUD.Show(); }
         Scene.HUD.Hide(TimeSinceLastL);
@@ -261,6 +279,8 @@ public class SeaScene_State : State
     void FixedTick()
     {
         Movement();
+
+        Scene.HUD.UpdateRations(DataManager.Inventory.GetLevel(new Ration()));
     }
 
 }

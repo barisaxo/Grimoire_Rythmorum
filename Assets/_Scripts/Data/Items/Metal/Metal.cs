@@ -1,19 +1,19 @@
 using System;
 namespace Data.Two
 {
-    public interface Metal : IItem
+    public interface IMetal : IItem
     {
         MetalEnum Enum { get; }
         int IItem.ID => Enum.Id;
-        string IItem.Name => Enum.Name;
+        string IItem.Name => Enum.Name.StartCase();
         string IItem.Description => Enum.Description;
         float Modifier => Enum.Modifier;
     }
 
-    [Serializable] public struct WroughtIron : Metal { public readonly MetalEnum Enum => MetalEnum.WroughtIron; }
-    [Serializable] public struct CastIron : Metal { public readonly MetalEnum Enum => MetalEnum.CastIron; }
-    [Serializable] public struct Bronze : Metal { public readonly MetalEnum Enum => MetalEnum.Bronze; }
-    [Serializable] public struct Patina : Metal { public readonly MetalEnum Enum => MetalEnum.Patina; }
+    [Serializable] public readonly struct WroughtIron : IMetal { public readonly MetalEnum Enum => MetalEnum.WroughtIron; }
+    [Serializable] public readonly struct CastIron : IMetal { public readonly MetalEnum Enum => MetalEnum.CastIron; }
+    [Serializable] public readonly struct Bronze : IMetal { public readonly MetalEnum Enum => MetalEnum.Bronze; }
+    [Serializable] public readonly struct Patina : IMetal { public readonly MetalEnum Enum => MetalEnum.Patina; }
 
     [Serializable]
     public class MetalEnum : Enumeration
@@ -29,10 +29,20 @@ namespace Data.Two
         public readonly float Modifier;
         public readonly string Description;
 
-        public static MetalEnum WroughtIron = new(0, "WroughtIron", "Inexpensive but weak metal", 1f);
-        public static MetalEnum CastIron = new(1, "CastIron", "Moderately inexpensive, moderately strong metal", 1.5f);
-        public static MetalEnum Bronze = new(2, "Bronze", "Expensive, strong metal", 2.25f);
-        public static MetalEnum Patina = new(3, "Patina", "Very expensive, very strong metal", 3f);
+        public static IMetal GetRandomMetal() => UnityEngine.Random.Range(0, 4) switch
+        {
+            0 => new WroughtIron(),
+            1 => new CastIron(),
+            2 => new Bronze(),
+            3 => new Patina(),
+
+            _ => throw new Exception()
+        };
+
+        public readonly static MetalEnum WroughtIron = new(0, "WroughtIron", "Inexpensive but weak metal", .8f);
+        public readonly static MetalEnum CastIron = new(1, "CastIron", "Moderately inexpensive, moderately strong metal", .9f);
+        public readonly static MetalEnum Bronze = new(2, "Bronze", "Expensive, strong metal", 1f);
+        public readonly static MetalEnum Patina = new(3, "Patina", "Very expensive, very strong metal", 1.1f);
 
         internal static IItem ToItem(MetalEnum @enum)
         {

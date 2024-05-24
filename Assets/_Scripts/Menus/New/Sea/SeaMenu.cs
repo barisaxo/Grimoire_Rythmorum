@@ -35,9 +35,10 @@ namespace Menus.Two
         private IMenu[] _subMenus;
         public IMenu[] SubMenus => _subMenus ??= new IMenu[] {
             new QuestsMenu(Manager.Quests),
-            new InventoryMenu(Manager.Inventory),
-            new StarChartsMenu(Manager.StarChart, Manager.Quests, ConsequentState, this),
-            new GramophoneMenu(Manager.Gramophones),
+            new InventoryMenu(Manager.Inventory, ConsequentState, this),
+            // new StarChartsMenu(Manager.StarChart, Manager.Quests, ConsequentState, this),
+            // new GramophoneMenu(Manager.Gramophones),
+            new StandingsMenu(Manager.StandingData),
             new LighthousesMenu(Manager.Lighthouse),
             new ShipStatMenu(Manager.PlayerShip),
             new PlayerStatsMenu(Manager.Player),

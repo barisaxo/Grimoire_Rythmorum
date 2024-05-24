@@ -38,7 +38,7 @@ namespace Sea
                 //      _ => FishData.DataItem.Shark,
                 //  }, 1),
                 (data.Player, new PatternsFound(), patterns),
-                 (data.Player, new PatternsAvailable(), patterns)});
+                 });//(data.Player, new PatternsAvailable(), patterns)
 
         }
 
@@ -53,7 +53,7 @@ namespace Sea
         public IUpdatePosition UpdatePosition { get; private set; }
         public IDescription Description { get; private set; }
         public IInstantiable Instantiator { get; private set; }
-        public Data.Two.Fish FishType;
+        public Data.Two.IFish FishType;
         public IInventoriable Inventoriable { get; private set; }
         public IQuestable Questable => new NotQuestable();
         public IDifficulty Difficulty { get; }
@@ -64,6 +64,6 @@ namespace Sea
         public GameObject GO { get; }
         public GameObject ToInstantiate { get; }
         public CapsuleCollider Col { get; }
-        public Data.Two.Fish FishType { get; }
+        public Data.Two.IFish FishType { get; }
     }
 }

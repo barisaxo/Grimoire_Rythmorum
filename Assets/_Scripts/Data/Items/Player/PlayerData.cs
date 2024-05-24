@@ -39,6 +39,8 @@ namespace Data.Two
 
         public string GetDisplayLevel(IItem item)
         {
+            if (item is not PlayerStat) throw new System.ArgumentException(item.Name);
+
             if (item is AuralFailed or AuralSolved)
             {
                 int total = GetLevel(new AuralFailed()) + GetLevel(new AuralSolved());
@@ -69,16 +71,20 @@ namespace Data.Two
                 if (total == 0) return "n/a";
                 return ((int)((float)(GetLevel(item) / (float)total) * 100)).ToString() + "%";
             }
-            else if (item is PatternsFound or PatternsAvailable)
+            else if (item is PatternsFound or PatternsAvailable or PatternsSpent)
             {
                 return "";
             }
             return "?";
         }
 
-        public int GetLevel(IItem item) => Datum[(PlayerStat)item];
+        public int GetLevel(IItem item)
+        {
+            if (item is not PlayerStat) throw new System.ArgumentException(item.Name);
 
-        // public void IncreaseLevel(IItem item) => IncreaseLevel(item, 1);
+            if (item is PatternsAvailable) return Datum[new PatternsFound()] - Datum[new PatternsSpent()];
+            else return Datum[(PlayerStat)item];
+        }
 
         public void AdjustLevel(IItem item, int i)
         {
@@ -94,15 +100,10 @@ namespace Data.Two
             else if (item is GramoFailed && GetLevel(item) > 999) DecreaseLevel(new GramoSolved(), i / 2);
             else if (item is Hit && GetLevel(item) > 9999) DecreaseLevel(new Miss(), i / 2);
             else if (item is Miss && GetLevel(item) > 9999) DecreaseLevel(new Hit(), i / 2);
+            else if (item is PatternsAvailable) { }
             else Datum[(PlayerStat)item] += i;
             PersistentData.Save(this);
         }
-
-        // public void DecreaseLevel(IItem item)
-        // {
-        //     Datum[(PlayerStat)item] -= Datum[(PlayerStat)item] > 0 ? 1 : 0;
-        //     PersistentData.Save(this);
-        // }
 
         public void DecreaseLevel(IItem item, int i)
         {
@@ -128,15 +129,15 @@ namespace Data.Two
         public static PlayerData GetData()
         {
             PlayerData data = new();
-            data.LoadLevel(new PatternsFound(), 1500);
-            data.LoadLevel(new PatternsAvailable(), 1500);
+            // data.LoadLevel(new PatternsFound(), 1500);
+            // data.LoadLevel(new PatternsAvailable(), 1500);
             if (data.PersistentData.TryLoadData() is not PlayerData loadData) return data;
             for (int i = 0; i < data.Items.Length; i++)
                 try { data.LoadLevel(data.Items[i], loadData.GetLevel(data.Items[i])); }
                 catch { }
             data.PersistentData.Save(data);
-            data.LoadLevel(new PatternsFound(), 1500);
-            data.LoadLevel(new PatternsAvailable(), 1500);
+            // data.LoadLevel(new PatternsFound(), 1500);
+            // data.LoadLevel(new PatternsAvailable(), 1500);
             return data;
         }
 

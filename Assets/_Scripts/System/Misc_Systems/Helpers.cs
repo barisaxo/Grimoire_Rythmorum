@@ -318,7 +318,7 @@ static class Helpers
 
         for (int i = 1; i < s.Length; i++)
         {
-            if (char.IsUpper(s[i])) temp += " " + s[i];
+            if (char.IsUpper(s[i]) && s[i - 1] != ' ') temp += " " + s[i];
             else if (s[i] == '_') temp += " ";
             else temp += s[i];
         }
@@ -335,7 +335,7 @@ static class Helpers
 
         for (int i = 1; i < s.Length; i++)
         {
-            if (char.IsUpper(s[i])) temp += " " + s[i];
+            if (char.IsUpper(s[i]) && s[i - 1] != ' ') temp += " " + s[i];
             else if (s[i] == '_') temp += " ";
             else temp += s[i].ToString().ToUpper();
         }

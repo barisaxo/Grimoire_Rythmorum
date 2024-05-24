@@ -11,7 +11,7 @@ public class BatterieIntermission_Dialogue : Dialogue
 
         Debug.Log("BatterieIntermission_Dialogue: " + scene.NMEShipStats.CannonStats.Cannon.Modifier + " " +
             scene.NMEShipStats.CannonStats.Metal.Modifier + " " +
-            +scene.NMEShipStats.NumOfCannons + " " +
+            scene.NMEShipStats.NumOfCannons + " " +
             scene.NMEShipStats.VolleyDamage + " Damage taken:!! " + damageTaken);
 
         if (Scene.Pack.Spammed) damageTaken *= 2;
@@ -71,11 +71,11 @@ public class BatterieIntermission_Dialogue : Dialogue
 
     Line _startLine;
 
-    Line Victory => new Line("We got 'em Cap! Blew 'em out of the water!",
-                    new EndBatterie_State(Scene, BatterieResultType.Won))
+    Line Victory =>
+        new Line("We got 'em Cap! Blew 'em out of the water!",
+            new EndBatterie_State(Scene, BatterieResultType.Won))
         .SetSpeaker(Speaker)
         ;
-
 
     Line Spammed => new Line("Cap, spamming like that only hurts us, cannons to back fired!\nWe've taken " + damageTaken + " damage", AttackAgain)
         .SetSpeaker(Speaker);

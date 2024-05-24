@@ -4,13 +4,13 @@ namespace Data.Two
 {
     public class FishInventoryData : IData
     {
-        private Dictionary<Fish, int> _datum;
-        private Dictionary<Fish, int> Datum => _datum ??= SetUpDatum();
+        private Dictionary<IFish, int> _datum;
+        private Dictionary<IFish, int> Datum => _datum ??= SetUpDatum();
 
-        private Dictionary<Fish, int> SetUpDatum()
+        private Dictionary<IFish, int> SetUpDatum()
         {
-            Dictionary<Fish, int> datum = new();
-            foreach (IItem item in Items) datum.TryAdd(item as Fish, 0);
+            Dictionary<IFish, int> datum = new();
+            foreach (IItem item in Items) datum.TryAdd(item as IFish, 0);
             return datum;
         }
 
@@ -33,30 +33,30 @@ namespace Data.Two
 
         public string GetDescription(IItem item)
         {
-            if (item is not Fish) throw new System.Exception(item.GetType().ToString());
+            if (item is not IFish) throw new System.Exception(item.GetType().ToString());
             return item.Description;
         }
 
         public string GetDisplayLevel(IItem item)
         {
-            if (item is not Fish) throw new System.Exception(item.GetType().ToString());
-            return Datum[(Fish)item].ToString();
+            if (item is not IFish) throw new System.Exception(item.GetType().ToString());
+            return Datum[(IFish)item].ToString();
         }
 
 
         public int GetLevel(IItem item)
         {
-            if (item is not Fish) throw new System.Exception(item.GetType().ToString());
-            return Datum[(Fish)item];
+            if (item is not IFish) throw new System.Exception(item.GetType().ToString());
+            return Datum[(IFish)item];
         }
 
         public void AdjustLevel(IItem item, int i)
         {
-            if (item is not Fish) throw new System.Exception(item.GetType().ToString());
-            Datum[(Fish)item] =
-                Datum[(Fish)item] + i > 999 ? 999 :
-                Datum[(Fish)item] + i < 0 ? 0 :
-                Datum[(Fish)item] + i;
+            if (item is not IFish) throw new System.Exception(item.GetType().ToString());
+            Datum[(IFish)item] =
+                Datum[(IFish)item] + i > 999 ? 999 :
+                Datum[(IFish)item] + i < 0 ? 0 :
+                Datum[(IFish)item] + i;
         }
 
         // public void DecreaseLevel(IItem item)
@@ -83,8 +83,8 @@ namespace Data.Two
 
         public void SetLevel(IItem item, int level)
         {
-            if (item is not Fish) throw new System.Exception(item.GetType().ToString());
-            Datum[(Fish)item] = level;
+            if (item is not IFish) throw new System.Exception(item.GetType().ToString());
+            Datum[(IFish)item] = level;
         }
 
         public bool InventoryIsFull(int i)

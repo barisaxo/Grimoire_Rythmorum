@@ -88,15 +88,16 @@ public partial class Assets
 
     #endregion MATERIALS
 
-    public static AudioClip GetScaleChordClip(MusicTheory.RegionalMode mode) => mode switch
+    public static AudioClip GetScaleChordClip(Sea.RegionEnum mode) => mode switch
     {
-        MusicTheory.RegionalMode.Aeolian => Resources.Load<AudioClip>("Audio/ScaleChords/Aeolian_Scale_Chord_2"),
-        MusicTheory.RegionalMode.Dorian => Resources.Load<AudioClip>("Audio/ScaleChords/Dorian_Scale_Chord_2"),
-        MusicTheory.RegionalMode.Lydian => Resources.Load<AudioClip>("Audio/ScaleChords/Lydian_Scale_Chord_2"),
-        MusicTheory.RegionalMode.Phrygian => Resources.Load<AudioClip>("Audio/ScaleChords/Phrygian_Scale_Chord_2"),
-        MusicTheory.RegionalMode.MixoLydian => Resources.Load<AudioClip>("Audio/ScaleChords/Mixolydian_Scale_Chord_2"),
-        MusicTheory.RegionalMode.Locrian => Resources.Load<AudioClip>("Audio/ScaleChords/Locrian_Scale_Chord_2"),
-        _ => Resources.Load<AudioClip>("Audio/ScaleChords/Ionian_Scale_Chord_2"),
+        Sea.RegionEnum.Aeolian => Resources.Load<AudioClip>("Audio/ScaleChords/Aeolian_Scale_Chord_2"),
+        Sea.RegionEnum.Dorian => Resources.Load<AudioClip>("Audio/ScaleChords/Dorian_Scale_Chord_2"),
+        Sea.RegionEnum.Lydian => Resources.Load<AudioClip>("Audio/ScaleChords/Lydian_Scale_Chord_2"),
+        Sea.RegionEnum.Phrygian => Resources.Load<AudioClip>("Audio/ScaleChords/Phrygian_Scale_Chord_2"),
+        Sea.RegionEnum.MixoLydian => Resources.Load<AudioClip>("Audio/ScaleChords/Mixolydian_Scale_Chord_2"),
+        Sea.RegionEnum.Locrian => Resources.Load<AudioClip>("Audio/ScaleChords/Locrian_Scale_Chord_2"),
+        Sea.RegionEnum.Ionian => Resources.Load<AudioClip>("Audio/ScaleChords/Ionian_Scale_Chord_2"),
+        _ => throw new System.NotImplementedException()
     };
 
     public static Color RandomColor => Random.Range(0, 12) switch
@@ -145,23 +146,31 @@ public partial class Assets
     #region SEA
 
     #region SHIPS
-    public static GameObject _schooner => Resources.Load<GameObject>("Prefabs/Sea/Ships/Schooner/Schooner");
-    public static GameObject Schooner => Object.Instantiate(_schooner);
+    // public static GameObject _schooner => Resources.Load<GameObject>("Prefabs/Sea/Ships/Schooner/Schooner");
+    // public static GameObject Schooner => Object.Instantiate(_schooner);
 
-    public static GameObject _outrigger => Resources.Load<GameObject>("Prefabs/Sea/Boats/catboat/outrigger");
-    public static GameObject Outrigger => Object.Instantiate(_outrigger);
+    // public static GameObject _outrigger => Resources.Load<GameObject>("Prefabs/Sea/Boats/catboat/outrigger");
+    // public static GameObject Outrigger => Object.Instantiate(_outrigger);
 
-    public static Sloop _sloop => Resources.Load<GameObject>("Prefabs/Sea/Ships/Sloop/Sloop").GetComponent<Sloop>();
-    public static Sloop Sloop => Object.Instantiate(_sloop);
+    public static SloopPrefab _sloop => Resources.Load<GameObject>("Prefabs/Sea/Ships/Sloop/Sloop").GetComponent<SloopPrefab>();
+    public static SloopPrefab Sloop => Object.Instantiate(_sloop);
+    public static CutterPrefab _cutter => Resources.Load<CutterPrefab>("Prefabs/Sea/Ships/Sloop/Cutter").GetComponent<CutterPrefab>();
+    public static CutterPrefab Cutter => Object.Instantiate(_cutter);
 
-    public static Frigate _frigate => Resources.Load<Frigate>("Prefabs/Sea/Ships/Frigate/Frigate");
-    public static Frigate Frigate => Object.Instantiate(_frigate);
+    public static SchoonerPrefab _schooner => Resources.Load<SchoonerPrefab>("Prefabs/Sea/Ships/Schooner/Schooner").GetComponent<SchoonerPrefab>();
+    public static SchoonerPrefab Schooner => Object.Instantiate(_schooner);
+    public static BrigPrefab _brig => Resources.Load<BrigPrefab>("Prefabs/Sea/Ships/Schooner/Brig").GetComponent<BrigPrefab>();
+    public static BrigPrefab Brig => Object.Instantiate(_brig);
+    public static TopRigPrefab _topRig => Resources.Load<TopRigPrefab>("Prefabs/Sea/Ships/Schooner/Brig").GetComponent<TopRigPrefab>();
+    public static TopRigPrefab TopRig => Object.Instantiate(_topRig);
 
-    public static Schooner _schooner2 => Resources.Load<Schooner>("Prefabs/Sea/Ships/Schooner/Schooner");
-    public static Schooner Schooner2 => Object.Instantiate(_schooner2);
+    public static FrigatePrefab _frigate => Resources.Load<FrigatePrefab>("Prefabs/Sea/Ships/Frigate/Frigate").GetComponent<FrigatePrefab>();
+    public static FrigatePrefab Frigate => Object.Instantiate(_frigate);
+    public static BarquePrefab _barque => Resources.Load<BarquePrefab>("Prefabs/Sea/Ships/Frigate/Barque").GetComponent<BarquePrefab>();
+    public static BarquePrefab Barque => Object.Instantiate(_barque);
 
-    public static Sloop _bountyShip => Resources.Load<Sloop>("Prefabs/Sea/Ships/BountyShip/BountyShip");
-    public static Sloop BountyShip => Object.Instantiate(_bountyShip);
+    public static SloopPrefab _bountyShip => Resources.Load<SloopPrefab>("Prefabs/Sea/Ships/BountyShip/BountyShip");
+    public static SloopPrefab BountyShip => Object.Instantiate(_bountyShip);
 
     public static GameObject _catBoat => Resources.Load<GameObject>("Prefabs/Sea/Boats/CatBoat2");
     public static GameObject CatBoat => Object.Instantiate(_catBoat);

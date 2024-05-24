@@ -24,8 +24,8 @@ namespace Menus.Two
 
         public IInputHandler Input => new MenuInputHandler()
         {
-            North = new ButtonInput(IncreaseItem),
-            West = new ButtonInput(DecreaseItem),
+            // North = new ButtonInput(IncreaseItem),
+            // West = new ButtonInput(DecreaseItem),
             Up = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Up, this)),
             Down = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Down, this)),
             // Right = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Right, this)),

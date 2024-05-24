@@ -4,13 +4,13 @@ namespace Data.Two
 {
     public class GramophoneInventoryData : IData
     {
-        private Dictionary<Gramophone, int> _datum;
-        private Dictionary<Gramophone, int> Datum => _datum ??= SetUpDatum();
+        private Dictionary<IGramophone, int> _datum;
+        private Dictionary<IGramophone, int> Datum => _datum ??= SetUpDatum();
 
-        private Dictionary<Gramophone, int> SetUpDatum()
+        private Dictionary<IGramophone, int> SetUpDatum()
         {
-            Dictionary<Gramophone, int> datum = new();
-            foreach (IItem item in Items) datum.TryAdd(item as Gramophone, 0);
+            Dictionary<IGramophone, int> datum = new();
+            foreach (IItem item in Items) datum.TryAdd(item as IGramophone, 0);
             return datum;
         }
 
@@ -33,29 +33,31 @@ namespace Data.Two
 
         public string GetDescription(IItem item)
         {
-            if (item is not Gramophone) throw new System.Exception(item.GetType().ToString());
+            if (item is not IGramophone) throw new System.Exception(item.GetType().ToString());
             return item.Description;
         }
         public int GetLevel(IItem item)
         {
-            if (item is not Gramophone) throw new System.Exception(item.GetType().ToString());
-            return Datum[(Gramophone)item];
+            return 1;
+            // if (item is not IGramophone) throw new System.Exception(item.GetType().ToString());
+            // return Datum[(IGramophone)item];
         }
 
 
         public string GetDisplayLevel(IItem item)
         {
-            if (item is not Gramophone) throw new System.Exception(item.GetType().ToString());
-            return Datum[(Gramophone)item].ToString();
+            return "";
+            // if (item is not IGramophone) throw new System.Exception(item.GetType().ToString());
+            // return Datum[(IGramophone)item].ToString();
         }
 
         public void AdjustLevel(IItem item, int i)
         {
-            if (item is not Gramophone) throw new System.Exception(item.GetType().ToString());
-            Datum[(Gramophone)item] =
-                Datum[(Gramophone)item] + i > 999 ? 999 :
-                Datum[(Gramophone)item] + i < 0 ? 0 :
-                Datum[(Gramophone)item] + i;
+            if (item is not IGramophone) throw new System.Exception(item.GetType().ToString());
+            Datum[(IGramophone)item] =
+                Datum[(IGramophone)item] + i > 999 ? 999 :
+                Datum[(IGramophone)item] + i < 0 ? 0 :
+                Datum[(IGramophone)item] + i;
         }
 
         // public void DecreaseLevel(IItem item)
@@ -81,8 +83,8 @@ namespace Data.Two
 
         public void SetLevel(IItem item, int level)
         {
-            if (item is not Gramophone) throw new System.Exception(item.GetType().ToString());
-            Datum[(Gramophone)item] = level;
+            if (item is not IGramophone) throw new System.Exception(item.GetType().ToString());
+            Datum[(IGramophone)item] = level;
         }
 
         public bool InventoryIsFull(int i)

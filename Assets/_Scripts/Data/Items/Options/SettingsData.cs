@@ -25,13 +25,13 @@ namespace Data.Two
 
         public string GetDescription(IItem item)
         {
-            if (item is not Wood) throw new System.Exception(item.GetType().ToString());
+            if (item is not IWood) throw new System.Exception(item.GetType().ToString());
             return item.Description;
         }
 
         public string GetDisplayLevel(IItem item)
         {
-            if (item is not Wood) throw new System.Exception(item.GetType().ToString());
+            if (item is not IWood) throw new System.Exception(item.GetType().ToString());
             return null;
         }
 

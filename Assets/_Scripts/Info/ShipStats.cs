@@ -12,75 +12,80 @@ namespace ShipStats
         public ICannonStats CannonStats;
         public IRiggingStats RiggingStats;
         public int NumOfCannons;
-
         public int Tonnage => (int)(HullStats.Hull.Modifier * RiggingStats.ClothType.Modifier * .1f);
         public int HullStrength => (int)(HullStats.Hull.Modifier * HullStats.Timber.Modifier);
         public int HitDamage => (int)(CannonStats.Cannon.Modifier * CannonStats.Metal.Modifier);
         public int VolleyDamage => (int)(CannonStats.Cannon.Modifier * CannonStats.Metal.Modifier * NumOfCannons);
 
-        public ShipStats(IHullStats hull, ICannonStats cannon, IRiggingStats rigging, int numOfCannons)
+        public ShipStats(IHullStats hull, ICannonStats cannon, IRiggingStats rigging)
         {
             HullStats = hull;
             CannonStats = cannon;
-            NumOfCannons = numOfCannons;
             RiggingStats = rigging;
+            NumOfCannons = hull.Hull switch
+            {
+                Sloop or Cutter => 16,
+                Schooner or Brig => 32,
+                Frigate or Barque => 64,
+                _ => throw new System.NotImplementedException(hull.Hull.Enum.Name)
+            };
             // Debug.Log(cannon.Cannon.Modifier + " " + cannon.Metal.Modifier + " " + numOfCannons);
         }
     }
 
     public interface ICannonStats
     {
-        public Data.Two.Cannon Cannon { get; }
-        public Data.Two.Metal Metal { get; }
+        public ICannon Cannon { get; }
+        public IMetal Metal { get; }
     }
 
     [System.Serializable]
     public class CannonStats : ICannonStats
     {
         public CannonStats(
-            Data.Two.Cannon cannon,
-            Data.Two.Metal metal)
+          ICannon cannon,
+          IMetal metal)
         {
             Cannon = cannon;
             Metal = metal;
         }
-        public Data.Two.Cannon Cannon { get; }
-        public Data.Two.Metal Metal { get; }
+        public ICannon Cannon { get; }
+        public IMetal Metal { get; }
     }
 
     public interface IHullStats
     {
-        public Data.Two.BoatHull Hull { get; }
-        public Data.Two.Wood Timber { get; }
+        public IHull Hull { get; }
+        public IWood Timber { get; }
     }
 
     [System.Serializable]
     public class HullStats : IHullStats
     {
         public HullStats(
-            Data.Two.BoatHull hull,
-            Wood timberType)
+            IHull hull,
+            IWood timberType)
         {
             Hull = hull;
             Timber = timberType;
         }
-        public Data.Two.BoatHull Hull { get; }
-        public Wood Timber { get; }
+        public IHull Hull { get; }
+        public IWood Timber { get; }
 
         // Hull IHullStats.HullData => throw new System.NotImplementedException();
     }
     public interface IRiggingStats
     {
-        public Data.Two.Cloth ClothType { get; }
+        public ICloth ClothType { get; }
     }
     [System.Serializable]
     public class RiggingStats : IRiggingStats
     {
-        public RiggingStats(Data.Two.Cloth clothType)
+        public RiggingStats(ICloth clothType)
         {
             ClothType = clothType;
         }
-        public Data.Two.Cloth ClothType { get; }
+        public ICloth ClothType { get; }
     }
 
 }

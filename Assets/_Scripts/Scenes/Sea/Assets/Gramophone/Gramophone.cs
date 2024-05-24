@@ -7,12 +7,12 @@ namespace Sea
 {
     public class Gramophone : ISceneObject
     {
-        public Gramophone(State currentState, GramophoneInventoryData gramoData, QuestData questData, PlayerShipData shipData, Sea.Maps.R region)
+        public Gramophone(State currentState, InventoryData inventoryData, QuestData questData, PlayerShipData shipData, Sea.Maps.R region)
         {
             Gramo = Assets.Gramo;
             TF.SetParent(WorldMapScene.Io.TheSea.transform);
             Collidable = new NotCollidable(Gramo.Col);
-            Interactable = new GramoInteraction(currentState, gramoData, shipData, this);
+            Interactable = new GramoInteraction(currentState, inventoryData, shipData, this);
             Triggerable = new NotTriggerable();
             UpdatePosition = new UpdateFishPosition();
             Telemeter = new FishTelemetry();
@@ -21,18 +21,10 @@ namespace Sea
                 scale: Vector3.one * .5f,
                 rot: new Vector3(0, Random.Range(0f, 360f), 0));
             Description = new SceneObjectDescription("Gramophone");
-            Inventoriable = new NotInventoriable();
-            // Inventoriable = new Inventoriable(
-            //     (gramoData,
-            //      region switch
-            //      {
-            //          MusicTheory.RegionalMode.Ionian or MusicTheory.RegionalMode.Dorian => GramophoneData.DataItem.Lvl1,
-            //          MusicTheory.RegionalMode.Lydian or MusicTheory.RegionalMode.MixoLydian => GramophoneData.DataItem.Lvl2,
-            //          MusicTheory.RegionalMode.Phrygian or MusicTheory.RegionalMode.Aeolian => GramophoneData.DataItem.Lvl3,
-            //          MusicTheory.RegionalMode.Locrian => GramophoneData.DataItem.Lvl4,
-            //          _ => GramophoneData.DataItem.Lvl5,
-            //      },
-            //     1));
+            Inventoriable = new Inventoriable(
+                (inventoryData,
+                new Data.Two.Gramophone(),
+                1));
 
             Questable = new Questable(questData, new Navigation());
         }

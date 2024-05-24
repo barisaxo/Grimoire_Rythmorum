@@ -1,7 +1,7 @@
 using System;
 namespace Data.Two
 {
-    public interface GameplayOption : IItem
+    public interface IGameplayOption : IItem
     {
         GameplayEnum Enum { get; }
         int IItem.ID => Enum.Id;
@@ -9,9 +9,9 @@ namespace Data.Two
         string IItem.Description => Enum.Description;
     }
 
-    [Serializable] public struct Latency : GameplayOption { public readonly GameplayEnum Enum => GameplayEnum.Latency; }
-    [Serializable] public struct Transpose : GameplayOption { public readonly GameplayEnum Enum => GameplayEnum.Transpose; }
-    [Serializable] public struct Tuning : GameplayOption { public readonly GameplayEnum Enum => GameplayEnum.Tuning; }
+    [Serializable] public struct Latency : IGameplayOption { public readonly GameplayEnum Enum => GameplayEnum.Latency; }
+    [Serializable] public struct Transpose : IGameplayOption { public readonly GameplayEnum Enum => GameplayEnum.Transpose; }
+    [Serializable] public struct Tuning : IGameplayOption { public readonly GameplayEnum Enum => GameplayEnum.Tuning; }
 
     [Serializable]
     public class GameplayEnum : Enumeration

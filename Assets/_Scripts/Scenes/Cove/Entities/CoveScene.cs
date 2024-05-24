@@ -15,7 +15,16 @@ public class CoveScene
         _ = WestLight;
         _ = EastLight;
         // _ = SkillOrb;
-        _ = Ship;
+        _ = Sloop;
+        _ = Cutter;
+        _ = Brig;
+        _ = Schooner;
+        _ = Frigate;
+        _ = Barque;
+        _ = Gramo;
+        _ = Bottle;
+        _ = Fish;
+        _ = HUD;
         PatternViewer.Init();
     }
 
@@ -29,12 +38,16 @@ public class CoveScene
 
     public void SelfDestruct()
     {
+        HUD.SelfDestruct();
         RockTheBoat.SelfDestruct();
         if (Parent) Object.Destroy(Parent.gameObject);
         Instance.Destruct();
         PatternViewer.SelfDestruct();
     }
     #endregion INSTANCE
+
+    private Cove.HUD _hud;
+    public Cove.HUD HUD => _hud ??= new();
 
     private PatternViewer _patternViewer;
     public PatternViewer PatternViewer => _patternViewer ??= new();
@@ -50,6 +63,7 @@ public class CoveScene
 
     private Light _nlight;
     public Light NorthLight => _nlight ? _nlight : _nlight = SetUpNLight();
+
     private Light _slight;
     public Light SouthLight => _slight ? _slight : _slight = SetUpSLight();
 
@@ -62,31 +76,85 @@ public class CoveScene
     private Light _light;
     public Light Light => _light ? _light : _light = SetUpLight();
 
-    private GameObject _ship;
-    public GameObject Ship => _ship ? _ship : _ship = SetUpShip();
+    private GameObject _sloop;
+    public GameObject Sloop => _sloop ? _sloop : _sloop = SetUpSloop();
+
+    private GameObject _cutter;
+    public GameObject Cutter => _cutter ? _cutter : _cutter = SetUpCutter();
+
+
+    private GameObject _schooner;
+    public GameObject Schooner => _schooner ? _schooner : _schooner = SetUpSchooner();
+
+    private GameObject _brig;
+    public GameObject Brig => _brig ? _brig : _brig = SetUpBrig();
+
+    private GameObject _frigate;
+    public GameObject Frigate => _frigate ? _frigate : _frigate = SetUpFrigate();
+
+    private GameObject _barque;
+    public GameObject Barque => _barque ? _barque : _barque = SetUpBarque();
 
     private GameObject _skillSheet;
     public GameObject SkillSheet => _skillSheet ? _skillSheet : _skillSheet = SetUpSkillSheet();
+
+    private GameObject _fish;
+    public GameObject Fish => _fish ? _fish : _fish = SetUpFish();
+
+    private GameObject SetUpFish()
+    {
+        var go = Assets.SailFishPrefab.gameObject;
+        go.transform.SetParent(Parent);
+        go.transform.SetLocalPositionAndRotation(new Vector3(26.5f, 1.6f, 15), Quaternion.Euler(0, 90, 0));
+        go.transform.localScale = Vector3.one;
+        return go;
+    }
+
+    private GameObject _bottle;
+    public GameObject Bottle => _bottle ? _bottle : _bottle = SetUpBottle();
+
+    private GameObject SetUpBottle()
+    {
+        var go = Assets.Bottle.gameObject;
+        go.transform.SetParent(Parent);
+        go.transform.SetLocalPositionAndRotation(new Vector3(26.5f, 1.6f, 19), Quaternion.Euler(0, 90, 0));
+        go.transform.localScale = Vector3.one;
+        return go;
+    }
+
+    private GameObject _gramo;
+    public GameObject Gramo => _gramo ? _gramo : _gramo = SetUpGramo();
+
+    private GameObject SetUpGramo()
+    {
+        var go = Assets.Gramo.gameObject;
+        go.transform.SetParent(Parent);
+        go.transform.SetLocalPositionAndRotation(new Vector3(26.5f, 1.6f, 23), Quaternion.Euler(0, 90, 0));
+        go.transform.localScale = Vector3.one;
+        return go;
+    }
+
     // private GameObject _skillOrb;
     // public GameObject SkillOrb => _skillOrb ? _skillOrb : _skillOrb = SetUpSkillOrb();
 
-    private GameObject SetUpSkillOrb()
-    {
-        throw new System.NotImplementedException();
-    }
+    // private GameObject SetUpSkillOrb()
+    // {
+    //     throw new System.NotImplementedException();
+    // }
 
-    public RockTheBoat RockTheBoat;
+    private RockTheBoat _rockTheBoat;
+    public RockTheBoat RockTheBoat => _rockTheBoat ??= new();
 
 
     private Light SetUpLight()
     {
-        GameObject go = new GameObject(nameof(Light));
+        GameObject go = new(nameof(Light));
         go.transform.SetParent(Parent);
-        go.transform.rotation = Quaternion.Euler(new Vector3(66, 0, 0));
+        go.transform.rotation = Quaternion.Euler(new Vector3(76, 0, 0));
         Light light = go.AddComponent<Light>();
         light.type = LightType.Directional;
         light.color = new Color(.9f, .9f, .8f);
-        light.intensity = .45f;
+        light.intensity = .35f;
         return light;
     }
 
@@ -97,7 +165,7 @@ public class CoveScene
         l.gameObject.transform.position = new Vector3(24, 5, 17);
         l.gameObject.transform.Rotate(new Vector3(25, 90, 0));
         l.type = LightType.Spot;
-        l.spotAngle = 110;
+        l.spotAngle = 140;
         l.color = new Color(.95f, .85f, .35f);
         l.intensity = 3;
         l.shadows = LightShadows.Soft;
@@ -113,7 +181,7 @@ public class CoveScene
         l.gameObject.transform.position = new Vector3(9, 5, 17);
         l.gameObject.transform.Rotate(new Vector3(25, -90, 0));
         l.type = LightType.Spot;
-        l.spotAngle = 110;
+        l.spotAngle = 140;
         l.color = new Color(.5f, .95f, .75f);
         l.intensity = 3;
         l.shadows = LightShadows.Soft;
@@ -129,7 +197,7 @@ public class CoveScene
         l.gameObject.transform.position = new Vector3(17, 5, 9);
         l.gameObject.transform.Rotate(new Vector3(25, 180, 0));
         l.type = LightType.Spot;
-        l.spotAngle = 110;
+        l.spotAngle = 140;
         l.color = new Color(.65f, .65f, .95f);
         l.intensity = 3;
         l.shadows = LightShadows.Soft;
@@ -145,7 +213,7 @@ public class CoveScene
         l.gameObject.transform.position = new Vector3(17, 5, 24);
         l.gameObject.transform.Rotate(new Vector3(25, 0, 0));
         l.type = LightType.Spot;
-        l.spotAngle = 110;
+        l.spotAngle = 140;
         l.color = new Color(.95f, .5f, .75f);
         l.intensity = 3;
         l.shadows = LightShadows.Soft;
@@ -154,21 +222,84 @@ public class CoveScene
         return l;
     }
 
-    private GameObject SetUpShip()
+    private GameObject SetUpSloop()
     {
         var go = Assets.Sloop.gameObject;
         go.transform.SetParent(Parent);
-        go.transform.SetLocalPositionAndRotation(new Vector3(6.5f, 1.6f, 17), Quaternion.Euler(0, 90, 0));
+        go.transform.SetLocalPositionAndRotation(new Vector3(6.5f, 1.6f, 25), Quaternion.Euler(0, 90, 0));
         CapsuleCollider c = go.GetComponentInChildren<CapsuleCollider>();
         c.isTrigger = false;
-        // BoxCollider bc = go.AddComponent<BoxCollider>();
-        // bc.size = new Vector3(.4f, 1, 1.5f);
-        go.transform.localScale = Vector3.one * 2f;
-        RockTheBoat = new();
+        go.transform.localScale *= .6f;
         RockTheBoat.AddBoat(go.transform, (.08f, 1, 0));
         RockTheBoat.Rocking = true;
         return go;
     }
+
+    private GameObject SetUpCutter()
+    {
+        var go = Assets.Cutter.gameObject;
+        go.transform.SetParent(Parent);
+        go.transform.SetLocalPositionAndRotation(new Vector3(6.5f, 1.6f, 22), Quaternion.Euler(0, 90, 0));
+        CapsuleCollider c = go.GetComponentInChildren<CapsuleCollider>();
+        c.isTrigger = false;
+        go.transform.localScale *= .6f;
+        RockTheBoat.AddBoat(go.transform, (.08f, 1, 0));
+        RockTheBoat.Rocking = true;
+        return go;
+    }
+
+    private GameObject SetUpSchooner()
+    {
+        var go = Assets.Schooner.gameObject;
+        go.transform.SetParent(Parent);
+        go.transform.SetLocalPositionAndRotation(new Vector3(6.5f, 1.6f, 19), Quaternion.Euler(0, 90, 0));
+        CapsuleCollider c = go.GetComponentInChildren<CapsuleCollider>();
+        c.isTrigger = false;
+        go.transform.localScale *= .6f;
+        RockTheBoat.AddBoat(go.transform, (.08f, 1, 0));
+        RockTheBoat.Rocking = true;
+        return go;
+    }
+
+    private GameObject SetUpBrig()
+    {
+        var go = Assets.Brig.gameObject;
+        go.transform.SetParent(Parent);
+        go.transform.SetLocalPositionAndRotation(new Vector3(6.5f, 1.6f, 16), Quaternion.Euler(0, 90, 0));
+        CapsuleCollider c = go.GetComponentInChildren<CapsuleCollider>();
+        c.isTrigger = false;
+        go.transform.localScale *= .6f;
+        RockTheBoat.AddBoat(go.transform, (.08f, 1, 0));
+        RockTheBoat.Rocking = true;
+        return go;
+    }
+
+    private GameObject SetUpFrigate()
+    {
+        var go = Assets.Frigate.gameObject;
+        go.transform.SetParent(Parent);
+        go.transform.SetLocalPositionAndRotation(new Vector3(6.5f, 1.6f, 13), Quaternion.Euler(0, 90, 0));
+        CapsuleCollider c = go.GetComponentInChildren<CapsuleCollider>();
+        c.isTrigger = false;
+        go.transform.localScale *= .6f;
+        RockTheBoat.AddBoat(go.transform, (.08f, 1, 0));
+        RockTheBoat.Rocking = true;
+        return go;
+    }
+
+    private GameObject SetUpBarque()
+    {
+        var go = Assets.Barque.gameObject;
+        go.transform.SetParent(Parent);
+        go.transform.SetLocalPositionAndRotation(new Vector3(6.5f, 1.6f, 10), Quaternion.Euler(0, 90, 0));
+        CapsuleCollider c = go.GetComponentInChildren<CapsuleCollider>();
+        c.isTrigger = false;
+        go.transform.localScale *= .6f;
+        RockTheBoat.AddBoat(go.transform, (.08f, 1, 0));
+        RockTheBoat.Rocking = true;
+        return go;
+    }
+
 
     private GameObject SetUpSkillSheet()
     {

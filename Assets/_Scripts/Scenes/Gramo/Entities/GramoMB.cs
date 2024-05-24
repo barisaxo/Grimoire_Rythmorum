@@ -9,13 +9,13 @@ public class GramoMB : MonoBehaviour
     public MeshRenderer AnswerMesh3;
     public MeshRenderer AnswerMesh4;
 
-    public GameObject Answer1R;
-    public GameObject Answer2R;
-    public GameObject Answer3R;
-    public GameObject Answer4R;
+    public MeshRenderer Answer1R;
+    public MeshRenderer Answer2R;
+    public MeshRenderer Answer3R;
+    public MeshRenderer Answer4R;
 
-    public GameObject Answer1L;
-    public GameObject Answer2L;
-    public GameObject Answer3L;
-    public GameObject Answer4L;
+    public MeshRenderer Answer1L;
+    public MeshRenderer Answer2L;
+    public MeshRenderer Answer3L;
+    public MeshRenderer Answer4L;
 }

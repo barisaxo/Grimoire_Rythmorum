@@ -7,24 +7,30 @@ using Sea;
 public class BountyBatterie_State : State
 {
 
-    public BountyBatterie_State(ShipStats.ShipStats NMEShipStats, GameObject nmeGO, PlayerShip playerShip)
+    public BountyBatterie_State(ShipStats.ShipStats NMEShipStats, GameObject nmeGO, PlayerShip playerShip, Quests.BountyQuest quest)
     {
+        Quest = quest;
         Fade = true;
-        var specs = new RhythmSpecs()
-        {
-            Time = RandomTimeSignature.Get(),
-            NumberOfMeasures = 4,
-            SubDivisionTier = MusicTheory.Rhythms.SubDivisionTier.D1Only,
-            HasTies = UnityEngine.Random.value > .5f,
-            HasRests = UnityEngine.Random.value > .5f,
-            HasTriplets = false,
-            Tempo = 90
-        };
+        // var specs = new RhythmSpecs()
+        // {
+        //     Time = RandomTimeSignature.Get(),
+        //     NumberOfMeasures = 4,
+        //     SubDivisionTier = MusicTheory.Rhythms.SubDivisionTier.D1Only,
+        //     HasTies = UnityEngine.Random.value > .5f,
+        //     HasRests = UnityEngine.Random.value > .5f,
+        //     HasTriplets = false,
+        //     Tempo = 90
+        // };
         RhythmSpecs rhythmSpecs = new RhythmSpecs().SetTime(RandomTimeSignature.Get());
+        rhythmSpecs.SetTempo(90)
+            .SetRests(UnityEngine.Random.value < .5f)
+            .SetTies(UnityEngine.Random.value < .5f);
+
         BatteriePack pack = new(rhythmSpecs);
         Scene = new(NMEShipStats, nmeGO, playerShip, Tick, pack, "Bounty");
     }
 
+    Quests.BountyQuest Quest;
     BatterieScene Scene;
     bool cadenceStarted = false;
     public int Counter { get; private set; }
@@ -35,7 +41,7 @@ public class BountyBatterie_State : State
     protected override void PrepareState(Action callback)
     {
         Cam.Io.Camera.transform.SetPositionAndRotation(Cam.Io.Camera.transform.position + (UnityEngine.Vector3.up * 7),
-            Quaternion.Euler(new Vector3(-20f, Cam.Io.Camera.transform.rotation.eulerAngles.y + 180, Cam.Io.Camera.transform.rotation.eulerAngles.z))
+            Quaternion.Euler(new Vector3(-20f, 180, Cam.Io.Camera.transform.rotation.eulerAngles.z))
         );
 
         Counter = 1;
@@ -120,7 +126,7 @@ public class BountyBatterie_State : State
             // FadeToState(PuzzleSelector.WeightedRandomPuzzleState(Data.TheoryPuzzleData));
             // Scene.NMEHealth.cur -= Scene.Pack.GoodHits * DataManager.ShipData.ShipStats.DamagePotential;
 
-            SetState(new DialogStart_State(new BatterieIntermission_Dialogue(Scene)));
+            SetState(new DialogStart_State(new BountyIntermission_Dialogue(Scene, Quest)));
         }
     }
 
@@ -197,10 +203,6 @@ public class BountyBatterie_State : State
 
         }
 
-        // if (Input.GetKeyDown(KeyCode.Tab))
-        // {
-        //     SetState(new Batterie_State(Specs));
-        // }
     }
 
     protected override void GPInput(GamePadButton gpb)
@@ -236,38 +238,6 @@ public class BountyBatterie_State : State
                 Scene.Pack.Analyzer.InputDownAction(); break;
         }
     }
-
-    // private void HandleHit(Batterie.Hit hit)
-    // {
-    //     cap++;
-    //     switch (hit)
-    //     {
-    //         case Hit.Hit:
-    //             score++;
-    //             Pack.GoodHits++;
-    //             Audio.Batterie.Hit();
-    //             Pack.ShipFire.Play();
-    //             break;
-    //         case Hit.Miss:
-    //             score--;
-    //             Pack.MissedHits++;
-    //             Audio.Batterie.Miss();
-    //             break;
-    //         case Hit.BadHit:
-    //             score--;
-    //             Pack.ErroneousAttacks++;
-    //             Audio.Batterie.MissStick();
-    //             Pack.NMEFire.Play();
-    //             break;
-    //         case Hit.Break:
-    //             break;
-    //     }
-    // }
-
-    //RegionalMode GetShipRegion()
-    //{
-    //    return Board.TargetTile.ShipType.ToRegion();
-    //}
 
     public static Genre RandomGenre() => (Genre)UnityEngine.Random.Range(0, Count());
     public static int Count() => Enum.GetNames(typeof(Genre)).Length;

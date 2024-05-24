@@ -7,7 +7,7 @@ namespace Sea
 {
     public class Border : ISceneObject
     {
-        public Border(MusicTheory.RegionalMode region)
+        public Border(Sea.RegionEnum region)
         {
             GO = new GameObject(nameof(Border));
             SpriteRenderer sr = GO.AddComponent<SpriteRenderer>();

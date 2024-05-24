@@ -5,13 +5,13 @@ namespace Data.Two
     [System.Serializable]
     public class SkillData : IData
     {
-        private Dictionary<Skill, int> _datum;
-        private Dictionary<Skill, int> Datum => _datum ??= SetUpDatum();
+        private Dictionary<ISkill, int> _datum;
+        private Dictionary<ISkill, int> Datum => _datum ??= SetUpDatum();
 
-        private Dictionary<Skill, int> SetUpDatum()
+        private Dictionary<ISkill, int> SetUpDatum()
         {
-            Dictionary<Skill, int> datum = new();
-            foreach (IItem item in Items) datum.TryAdd(item as Skill, 0);
+            Dictionary<ISkill, int> datum = new();
+            foreach (IItem item in Items) datum.TryAdd(item as ISkill, 0);
             return datum;
         }
 
@@ -32,67 +32,53 @@ namespace Data.Two
                 }
             }
         }
-        public float GetBonusRatio(IItem item) => 1 + (.01f * Datum[(Skill)item] * ((Skill)item).Per);
+        public float GetBonusRatio(IItem item) => 1 + (.01f * Datum[(ISkill)item] * ((ISkill)item).Per);
 
         public int GetSkillCost(IItem item)
         {
-            if (item is not Skill) throw new System.Exception(item.GetType().ToString());
-            return ((Skill)item).Cost * (Datum[(Skill)item] + 1);
+            if (item is not ISkill) throw new System.Exception(item.GetType().ToString());
+            return ((ISkill)item).Cost * (Datum[(ISkill)item] + 1);
         }
 
         public string GetDescription(IItem item)
         {
-            if (item is not Skill) throw new System.Exception(item.GetType().ToString());
+            if (item is not ISkill) throw new System.Exception(item.GetType().ToString());
             return item.Description;
         }
 
         public string GetDisplayLevel(IItem item)
         {
-            if (item is not Skill) throw new System.Exception(item.GetType().ToString());
-            return Datum[(Skill)item].ToString();
+            if (item is not ISkill) throw new System.Exception(item.GetType().ToString());
+            return Datum[(ISkill)item].ToString();
         }
-
 
         public int GetLevel(IItem item)
         {
-            if (item is not Skill) throw new System.Exception(item.GetType().ToString());
-            return Datum[(Skill)item];
+            if (item is not ISkill) throw new System.Exception(item.GetType().ToString());
+            return Datum[(ISkill)item];
         }
-
-        // public void DecreaseLevel(IItem item, int i)
-        // {
-        //     if (item is not Skill) throw new System.Exception(item.GetType().ToString());
-        //     Datum[(Skill)item] = Datum[(Skill)item] - i < 0 ? 0 : Datum[(Skill)item] - i;
-        //     PersistentData.Save(this);
-        // }
-        // public void IncreaseLevel(IItem item, int i)
-        // {
-        //     if (item is not Skill) throw new System.Exception(item.GetType().ToString());
-        //     Datum[(Skill)item] += Datum[(Skill)item] + i > ((Skill)item).MaxLevel ? 0 : i;
-        //     PersistentData.Save(this);
-        // }
 
         public void AdjustLevel(IItem item, int i)
         {
-            if (item is not Skill) throw new System.Exception(item.GetType().ToString());
-            Datum[(Skill)item] =
-                Datum[(Skill)item] + i > ((Skill)item).MaxLevel ? ((Skill)item).MaxLevel :
-                Datum[(Skill)item] + i < 0 ? 0 :
-                Datum[(Skill)item] + i;
+            if (item is not ISkill) throw new System.Exception(item.GetType().ToString());
+            Datum[(ISkill)item] =
+                Datum[(ISkill)item] + i > ((ISkill)item).MaxLevel ? ((ISkill)item).MaxLevel :
+                Datum[(ISkill)item] + i < 0 ? 0 :
+                Datum[(ISkill)item] + i;
             PersistentData.Save(this);
         }
 
         public void SetLevel(IItem item, int level)
         {
-            if (item is not Skill) throw new System.Exception(item.GetType().ToString());
-            Datum[(Skill)item] = level;
+            if (item is not ISkill) throw new System.Exception(item.GetType().ToString());
+            Datum[(ISkill)item] = level;
             PersistentData.Save(this);
         }
 
         private void LoadLevel(IItem item, int level)
         {
-            if (item is not Skill) throw new System.Exception(item.GetType().ToString());
-            Datum[(Skill)item] = level;
+            if (item is not ISkill) throw new System.Exception(item.GetType().ToString());
+            Datum[(ISkill)item] = level;
         }
 
         public bool InventoryIsFull(int space) => false;

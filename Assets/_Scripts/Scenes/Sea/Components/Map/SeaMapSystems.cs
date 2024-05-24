@@ -115,15 +115,15 @@ public static class SeaMapSystems
            (globalCoord.x > (globalMapSize * .5f) ? "ºE" : "ºW");
     }
 
-    public static Color GetColor(this MusicTheory.RegionalMode regionalMode) => regionalMode switch
+    public static Color GetColor(this RegionEnum regionalMode) => regionalMode switch
     {
-        MusicTheory.RegionalMode.Aeolian => Color.red,
-        MusicTheory.RegionalMode.Dorian => Color.yellow,
-        MusicTheory.RegionalMode.MixoLydian => Color.blue,
-        MusicTheory.RegionalMode.Lydian => Color.cyan,
-        MusicTheory.RegionalMode.Phrygian => Color.magenta,
-        MusicTheory.RegionalMode.Ionian => Color.green,
-        MusicTheory.RegionalMode.Locrian => Color.white,
+        RegionEnum.Aeolian => Color.red,
+        RegionEnum.Dorian => Color.yellow,
+        RegionEnum.MixoLydian => Color.blue,
+        RegionEnum.Lydian => Color.cyan,
+        RegionEnum.Phrygian => Color.magenta,
+        RegionEnum.Ionian => Color.green,
+        RegionEnum.Locrian => Color.white,
         _ => Color.black,
     };
 

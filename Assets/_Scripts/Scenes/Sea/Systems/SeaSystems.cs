@@ -149,7 +149,8 @@ public static class SeaSystems
                 cell.InstantiateNewSceneObject(
                     currentState,
                     data,
-                    scene.RegionFromOffsetGlobalCoord(offsetGlobalCoord).R));
+                    scene.RegionFromOffsetGlobalCoord(offsetGlobalCoord),
+                    cell));
         }
         if (cell.SceneObject is not null)
         {

@@ -12,6 +12,6 @@ namespace Sea
         [SerializeField] private CapsuleCollider _col;
         public CapsuleCollider Col => _col;
 
-        public Data.Two.Fish FishType => new SailFish();
+        public Data.Two.IFish FishType => new SailFish();
     }
 }

@@ -23,11 +23,29 @@ public class SeaToBatteryTransition_State : State
 
     protected override void EngageState()
     {
+        UnityEngine.Debug.Log(Sea.WorldMapScene.Io.NearestNPC.RegionalMode + " " + DataManager.StandingData.GetLevel(Sea.WorldMapScene.Io.NearestNPC.RegionalMode));
+        DataManager.StandingData.AdjustLevel(Sea.WorldMapScene.Io.NearestNPC.RegionalMode, -1);
+        UnityEngine.Debug.Log(Sea.WorldMapScene.Io.NearestNPC.RegionalMode + " " + DataManager.StandingData.GetLevel(Sea.WorldMapScene.Io.NearestNPC.RegionalMode));
         var _RhythmSpecs = new RhythmSpecs()
         {
             Time = new FourFour(),
-            NumberOfMeasures = 4,
-            SubDivisionTier = SubDivisionTier.D1Only,
+            NumberOfMeasures = DataManager.PlayerShip.ShipStats.NumOfCannons switch
+            {
+                4 => 1,
+                8 => 2,
+                _ => 4,
+            },
+            SubDivisionTier = DataManager.PlayerShip.ShipStats.NumOfCannons switch
+            {
+                4 => SubDivisionTier.BeatOnly,
+                8 => SubDivisionTier.BeatOnly,
+                16 => SubDivisionTier.BeatOnly,
+                24 => SubDivisionTier.BeatAndD1,
+                32 => SubDivisionTier.D1Only,
+                48 => SubDivisionTier.D1AndD2,
+                64 => SubDivisionTier.D2Only,
+                _ => throw new Exception("What is going on here? " + DataManager.PlayerShip.ShipStats.NumOfCannons)
+            },
             HasTies = UnityEngine.Random.value > .5f,
             HasRests = UnityEngine.Random.value > .5f,
             HasTriplets = false,
@@ -35,10 +53,5 @@ public class SeaToBatteryTransition_State : State
         };
 
         SetState(new BatterieAndCadence_State(_RhythmSpecs) { Fade = true });
-        // new CameraPan_State(
-        // subsequentState: new BatterieAndCadence_State(_RhythmSpecs),
-        // pan: new UnityEngine.Vector3(-20f, Cam.Io.Camera.transform.rotation.eulerAngles.y + 180, Cam.Io.Camera.transform.rotation.eulerAngles.z),
-        // strafe: Cam.Io.Camera.transform.position + (UnityEngine.Vector3.up * 7),
-        // speed: 5));
     }
 }

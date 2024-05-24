@@ -1,7 +1,7 @@
 using System;
 namespace Data.Two
 {
-    public interface Volume : IItem
+    public interface IVolume : IItem
     {
         VolumeEnum Enum { get; }
         int IItem.ID => Enum.Id;
@@ -9,13 +9,13 @@ namespace Data.Two
         string IItem.Description => Enum.Description;
     }
 
-    [Serializable] public struct BGMusic : Volume { public readonly VolumeEnum Enum => VolumeEnum.BGMusic; }
-    [Serializable] public struct SoundFX : Volume { public readonly VolumeEnum Enum => VolumeEnum.SoundFX; }
-    [Serializable] public struct Click : Volume { public readonly VolumeEnum Enum => VolumeEnum.Click; }
-    [Serializable] public struct BatterieVolume : Volume { public readonly VolumeEnum Enum => VolumeEnum.Batterie; }
-    [Serializable] public struct Chords : Volume { public readonly VolumeEnum Enum => VolumeEnum.Chords; }
-    [Serializable] public struct Bass : Volume { public readonly VolumeEnum Enum => VolumeEnum.Bass; }
-    [Serializable] public struct Drums : Volume { public readonly VolumeEnum Enum => VolumeEnum.Drums; }
+    [Serializable] public struct BGMusic : IVolume { public readonly VolumeEnum Enum => VolumeEnum.BGMusic; }
+    [Serializable] public struct SoundFX : IVolume { public readonly VolumeEnum Enum => VolumeEnum.SoundFX; }
+    [Serializable] public struct Click : IVolume { public readonly VolumeEnum Enum => VolumeEnum.Click; }
+    [Serializable] public struct BatterieVolume : IVolume { public readonly VolumeEnum Enum => VolumeEnum.Batterie; }
+    [Serializable] public struct Chords : IVolume { public readonly VolumeEnum Enum => VolumeEnum.Chords; }
+    [Serializable] public struct Bass : IVolume { public readonly VolumeEnum Enum => VolumeEnum.Bass; }
+    [Serializable] public struct Drums : IVolume { public readonly VolumeEnum Enum => VolumeEnum.Drums; }
 
     [Serializable]
     public class VolumeEnum : Enumeration

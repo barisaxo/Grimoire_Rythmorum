@@ -1,7 +1,7 @@
 using System;
 namespace Data.Two
 {
-    public interface StarChart : IItem
+    public interface IStarChart : IItem
     {
         StarChartEnum Enum { get; }
         int IItem.ID => Enum.Id;
@@ -9,26 +9,26 @@ namespace Data.Two
         string IItem.Description => Enum.Description;
     }
 
-    [Serializable] public struct NotesT : StarChart { public readonly StarChartEnum Enum => StarChartEnum.NotesT; }
-    [Serializable] public struct NotesA : StarChart { public readonly StarChartEnum Enum => StarChartEnum.NotesA; }
-    [Serializable] public struct StepsT : StarChart { public readonly StarChartEnum Enum => StarChartEnum.StepsT; }
-    [Serializable] public struct StepsA : StarChart { public readonly StarChartEnum Enum => StarChartEnum.StepsA; }
-    [Serializable] public struct ScalesT : StarChart { public readonly StarChartEnum Enum => StarChartEnum.ScalesT; }
-    [Serializable] public struct ScalesA : StarChart { public readonly StarChartEnum Enum => StarChartEnum.ScalesA; }
-    [Serializable] public struct IntervalsT : StarChart { public readonly StarChartEnum Enum => StarChartEnum.IntervalsT; }
-    [Serializable] public struct IntervalsA : StarChart { public readonly StarChartEnum Enum => StarChartEnum.IntervalsA; }
-    [Serializable] public struct TriadsT : StarChart { public readonly StarChartEnum Enum => StarChartEnum.TriadsT; }
-    [Serializable] public struct TriadsA : StarChart { public readonly StarChartEnum Enum => StarChartEnum.TriadsA; }
-    [Serializable] public struct InversionsT : StarChart { public readonly StarChartEnum Enum => StarChartEnum.InversionsT; }
-    [Serializable] public struct InversionsA : StarChart { public readonly StarChartEnum Enum => StarChartEnum.InversionsA; }
-    [Serializable] public struct InvertedTriadsT : StarChart { public readonly StarChartEnum Enum => StarChartEnum.InvertedTriadsT; }
-    [Serializable] public struct InvertedTriadsA : StarChart { public readonly StarChartEnum Enum => StarChartEnum.InvertedTriadsA; }
-    [Serializable] public struct SeventhChordsT : StarChart { public readonly StarChartEnum Enum => StarChartEnum.SeventhChordsT; }
-    [Serializable] public struct SeventhChordsA : StarChart { public readonly StarChartEnum Enum => StarChartEnum.SeventhChordsA; }
-    [Serializable] public struct ModesT : StarChart { public readonly StarChartEnum Enum => StarChartEnum.ModesT; }
-    [Serializable] public struct ModesA : StarChart { public readonly StarChartEnum Enum => StarChartEnum.ModesA; }
-    [Serializable] public struct Inverted7thChordsT : StarChart { public readonly StarChartEnum Enum => StarChartEnum.Inverted7thChordsT; }
-    [Serializable] public struct Inverted7thChordsA : StarChart { public readonly StarChartEnum Enum => StarChartEnum.Inverted7thChordsA; }
+    [Serializable] public struct NotesT : IStarChart { public readonly StarChartEnum Enum => StarChartEnum.NotesT; }
+    [Serializable] public struct NotesA : IStarChart { public readonly StarChartEnum Enum => StarChartEnum.NotesA; }
+    [Serializable] public struct StepsT : IStarChart { public readonly StarChartEnum Enum => StarChartEnum.StepsT; }
+    [Serializable] public struct StepsA : IStarChart { public readonly StarChartEnum Enum => StarChartEnum.StepsA; }
+    [Serializable] public struct ScalesT : IStarChart { public readonly StarChartEnum Enum => StarChartEnum.ScalesT; }
+    [Serializable] public struct ScalesA : IStarChart { public readonly StarChartEnum Enum => StarChartEnum.ScalesA; }
+    [Serializable] public struct IntervalsT : IStarChart { public readonly StarChartEnum Enum => StarChartEnum.IntervalsT; }
+    [Serializable] public struct IntervalsA : IStarChart { public readonly StarChartEnum Enum => StarChartEnum.IntervalsA; }
+    [Serializable] public struct TriadsT : IStarChart { public readonly StarChartEnum Enum => StarChartEnum.TriadsT; }
+    [Serializable] public struct TriadsA : IStarChart { public readonly StarChartEnum Enum => StarChartEnum.TriadsA; }
+    [Serializable] public struct InversionsT : IStarChart { public readonly StarChartEnum Enum => StarChartEnum.InversionsT; }
+    [Serializable] public struct InversionsA : IStarChart { public readonly StarChartEnum Enum => StarChartEnum.InversionsA; }
+    [Serializable] public struct InvertedTriadsT : IStarChart { public readonly StarChartEnum Enum => StarChartEnum.InvertedTriadsT; }
+    [Serializable] public struct InvertedTriadsA : IStarChart { public readonly StarChartEnum Enum => StarChartEnum.InvertedTriadsA; }
+    [Serializable] public struct SeventhChordsT : IStarChart { public readonly StarChartEnum Enum => StarChartEnum.SeventhChordsT; }
+    [Serializable] public struct SeventhChordsA : IStarChart { public readonly StarChartEnum Enum => StarChartEnum.SeventhChordsA; }
+    [Serializable] public struct ModesT : IStarChart { public readonly StarChartEnum Enum => StarChartEnum.ModesT; }
+    [Serializable] public struct ModesA : IStarChart { public readonly StarChartEnum Enum => StarChartEnum.ModesA; }
+    [Serializable] public struct Inverted7thChordsT : IStarChart { public readonly StarChartEnum Enum => StarChartEnum.Inverted7thChordsT; }
+    [Serializable] public struct Inverted7thChordsA : IStarChart { public readonly StarChartEnum Enum => StarChartEnum.Inverted7thChordsA; }
 
     [Serializable]
     public class StarChartEnum : Enumeration

@@ -94,7 +94,7 @@ public class SeaInspection_State : State
                 SubsequentState,
                 Cam.StoredCamRot,
                 Cam.StoredCamPos,
-                4.5f
+                7.5f
             ));
     }
 
@@ -117,10 +117,32 @@ public class SeaInspection_State : State
         string s = string.Empty;
         s += npc.RegionalMode + " " + npc.ShipType + " Ship";
         s += "\n" + DataManager.StandingData.GetDisplayLevel(npc.Standing) + " Standings";
-        s += "\nRigging: " + npc.Ship._rig.name.StartCase();
+        s += "\nRigging: " + npc.ShipPrefab._rig.name.StartCase();
         s += "\nHull Strength: " + npc.ShipStats.HullStrength;
-        s += "\nNumber of Cannons: " + npc.ShipStats.NumOfCannons;
+        s += "\nArmament: " + npc.ShipStats.NumOfCannons + " " + npc.ShipStats.CannonStats.Metal.Name.StartCase() + " " + npc.ShipStats.CannonStats.Cannon.Name +
+                " Cannon" + (npc.ShipStats.NumOfCannons > 1 ? "s" : "");//+ npc.ShipStats.NumOfCannons;
         s += "\nDamage Potential: " + npc.ShipStats.VolleyDamage;
+        s += "\nThreat Level: " + ThreatLevel(npc);
         return s;
     }
+
+    string ThreatLevel(NPCShip npc)
+    {
+        float threat = (float)((float)npc.ShipStats.VolleyDamage / (float)DataManager.PlayerShip.GetLevel(new Data.Two.Damage()));
+        threat += (float)((float)npc.ShipStats.HullStrength / (float)DataManager.PlayerShip.GetLevel(new Data.Two.CurrentHitPoints()));
+        int t = (int)(threat * 50f);
+        return threat switch
+        {
+            < .75f => t + ", Very Low",
+            < 1f => t + ", Low",
+            < 1.5f => t + ", Moderate",
+            < 2f => t + ", High",
+            < 2.5f => t + ", Very High",
+            >= 2.5f => t + ", Extreme",
+            _ => throw new Exception()
+        };
+
+
+    }
+
 }

@@ -60,7 +60,7 @@ namespace Sea
 
         public Vector3Int restoreMapLoc;
         private WorldMap _map;
-        public WorldMap Map => _map ??= new(Data.Two.Manager.Io.Quests);
+        public WorldMap Map => _map ??= new(Data.Two.Manager.Io);
 
         public HUD _hud;
         public HUD HUD => _hud ??= new(Data.Two.Manager.Io.PlayerShip);
@@ -73,7 +73,6 @@ namespace Sea
         public List<ISceneObject> SceneObjects = new();
         public List<NPCShip> NPCShips = new();
         public Region[] LocalRegions = new Region[] { };
-
     }
 
 }

@@ -78,6 +78,17 @@ public static class SeaHUDSystems
         ;
     }
 
+    public static void UpdateRations(this HUD hud, int rations)
+    {
+        hud.RationsText.SetTextString("Rations: " + rations)
+            .SetTextColor((float)((float)rations / (float)Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.FishStorage())) switch
+            {
+                < .2f => Color.red,
+                < .35f => new Color(1, .5f, 0),
+                _ => Color.white
+            });
+    }
+
     public static void BlipRegionUpdate(this HUD hud, MusicTheory.RegionalMode region)
     {
         if (region == (MusicTheory.RegionalMode)(-1))

@@ -37,17 +37,7 @@ namespace Menus.Two
             Down = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Down, this)),
         };
 
-        // private void IncreaseItem()
-        // {
-        //     Data.IncreaseLevel(Selection.Item);
-        //     Selection.Card.SetTextString(DisplayData(Selection.Item));
-        // }
-
-        // private void DecreaseItem()
-        // {
-        //     Data.DecreaseLevel(Selection.Item);
-        //     Selection.Card.SetTextString(DisplayData(Selection.Item));
-        // }
+        public IMenuScene Scene => null;
 
         public State ConsequentState =>
         Data.GetLevel(Selection.Item) > 0 ?
@@ -59,10 +49,8 @@ namespace Menus.Two
         State GetPuzzleState => new Puzzle_State(
             GetPuzzle(),
             GetPuzzleType(),
-            SubsequentState,
-            (StarChart)Selection.Item);
-
-        public IMenuScene Scene => null;
+            SubsequentState
+            );
 
         IPuzzle GetPuzzle() => Selection.Item switch
         {

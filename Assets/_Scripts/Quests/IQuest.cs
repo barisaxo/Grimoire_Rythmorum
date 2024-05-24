@@ -11,7 +11,6 @@ namespace Quests
         public bool Complete { get; set; }
         public IInventoriable Reward { get; }
         public Vector2Int QuestLocation { get; }
-        // public Vector2Int ReturnLocation { get; }
         public string Description { get; }
     }
 
@@ -30,7 +29,6 @@ namespace Quests
         public bool Complete { get; set; }
         public string LatLong;
         public string Description => "Navigate to " + LatLong;
-
         public IInventoriable Reward { get; }
 
         private (int x, int y) _questLocation = (0, 0);

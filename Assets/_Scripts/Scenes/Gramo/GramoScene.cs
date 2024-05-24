@@ -14,16 +14,20 @@ public class GramoScene
         GetNewSettings(null).StartCoroutine();
 
         AnswerSheet = MuscopaSettings.Cadence.DiatonicToHarmonicFunctionCadence();
+
+        foreach (var c in AnswerSheet)
+            Debug.Log(c);
+
         CurAnswers = new HarmonicFunction[4]{
             AnswerSheet[0],
             HarmonicFunction.Secondary,
             HarmonicFunction.Secondary,
             HarmonicFunction.Secondary};
 
+        Debug.Log(CurAnswers[0].ToString());
         CurSelection = Gramo.AnswerMesh1;
-        // this.SetAnswer(cadence[0]);
-        Gramo.AnswerMesh1.material = this.NewAnswerMat(Gramo.AnswerMesh1);
-        CurSelection = Gramo.AnswerMesh2;
+        // Gramo.AnswerMesh1.material = this.NewAnswerMat(Gramo.AnswerMesh1);
+        this.SpinLeft(Gramo.AnswerMesh1).StartCoroutine();
 
         MuscopaAudio.PlayNewMuscopaPuzzleMusic();
     }
@@ -33,9 +37,10 @@ public class GramoScene
         Object.Destroy(Gramo.gameObject);
         Object.Destroy(Light.gameObject);
         _confirmButton?.SelfDestruct();
+        MuscopaAudio.StopTheCadence();
     }
 
-    MuscopaAudio MuscopaAudio;
+    public MuscopaAudio MuscopaAudio;
     public MuscopaSettings MuscopaSettings;
     public MeshRenderer CurSelection;
 

@@ -61,5 +61,8 @@ namespace Data.Two
 
         private StandingData _standingData;
         public StandingData StandingData => _standingData ??= new StandingData();
+
+        private ShipStatsData _shipStatsData;
+        public ShipStatsData ShipStats => _shipStatsData ??= ShipStatsData.GetData();
     }
 }

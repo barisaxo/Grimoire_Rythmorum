@@ -33,7 +33,7 @@ public class PatternViewer
     }
 
 
-    private int Patterns => Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.PatternsFound());
+    private int Patterns => Data.Two.Manager.Io.Player.GetLevel(new Data.Two.PatternsFound());
 
     private Card _patternIDText;
     public Card PatternIDText => _patternIDText ??= new Card(nameof(PatternIDText), null)
@@ -111,6 +111,7 @@ public class PatternViewer
 
     public void Init()
     {
+        Debug.Log("No Of Patterns: " + Patterns);
         _ = Parent;
         _ = PatternIDText;
         //Cam.orthographicSize = ogBoardSize;

@@ -10,7 +10,7 @@ public class Buy_Dialogue : Dialogue
 
     int StandingMod => Data.Two.Manager.Io.StandingData.GetLevel(Standing);
     int Gold => Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.Gold());
-    int Mats => Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.Materials());
+    int Mats => Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.MaterialStorage());
     int CurHP => Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.CurrentHitPoints());
     int MaxHP => Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.CurrentHitPoints());
     float StandingsModifier => 1f + (float)(1f - (float)((float)StandingMod) / 9f);

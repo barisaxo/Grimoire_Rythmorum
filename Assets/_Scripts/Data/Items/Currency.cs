@@ -1,6 +1,6 @@
 namespace Data.Two
 {
-    public interface Currency : IItem
+    public interface ICurrency : IItem
     {
         CurrencyEnum Enum { get; }
         int IItem.ID => Enum.Id;
@@ -8,10 +8,11 @@ namespace Data.Two
         string IItem.Description => null;
     }
 
-    [System.Serializable] public readonly struct Gold : Currency { public readonly CurrencyEnum Enum => CurrencyEnum.Gold; }
-    // [System.Serializable] public struct Pattern : Currency { public readonly CurrencyEnum Enum => CurrencyEnum.Pattern; }
-    [System.Serializable] public readonly struct Material : Currency { public readonly CurrencyEnum Enum => CurrencyEnum.Material; }
-    [System.Serializable] public readonly struct Ration : Currency { public readonly CurrencyEnum Enum => CurrencyEnum.Ration; }
+    [System.Serializable] public readonly struct Gold : ICurrency { public readonly CurrencyEnum Enum => CurrencyEnum.Gold; }
+    [System.Serializable] public readonly struct Material : ICurrency { public readonly CurrencyEnum Enum => CurrencyEnum.Material; }
+    [System.Serializable] public readonly struct Ration : ICurrency { public readonly CurrencyEnum Enum => CurrencyEnum.Ration; }
+    [System.Serializable] public readonly struct StarChart : ICurrency { public readonly CurrencyEnum Enum => CurrencyEnum.StarChart; }
+    [System.Serializable] public readonly struct Gramophone : ICurrency { public readonly CurrencyEnum Enum => CurrencyEnum.Gramophone; }
 
     [System.Serializable]
     public class CurrencyEnum : Enumeration
@@ -22,17 +23,19 @@ namespace Data.Two
         public readonly static CurrencyEnum Gold = new(0, "Gold");
         public readonly static CurrencyEnum Material = new(1, "Materials");
         public readonly static CurrencyEnum Ration = new(2, "Rations");
-        // public static CurrencyEnum Pattern = new(3, "Pattern");
+        public readonly static CurrencyEnum StarChart = new(3, "Star Chart");
+        public readonly static CurrencyEnum Gramophone = new(4, "Gramophone");
 
-        internal static IItem ToItem(WoodEnum i)
+        internal static IItem ToItem(WoodEnum @enum)
         {
-            return i switch
+            return @enum switch
             {
-                _ when i == Gold => new Gold(),
-                // _ when i == Pattern => new Pattern(),
-                _ when i == Material => new Material(),
-                _ when i == Ration => new Ration(),
-                _ => throw new System.ArgumentOutOfRangeException(i.Name)
+                _ when @enum == Gold => new Gold(),
+                _ when @enum == Material => new Material(),
+                _ when @enum == Ration => new Ration(),
+                _ when @enum == StarChart => new StarChart(),
+                _ when @enum == Gramophone => new Gramophone(),
+                _ => throw new System.ArgumentOutOfRangeException(@enum.Name)
             };
         }
     }

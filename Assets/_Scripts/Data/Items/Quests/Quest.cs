@@ -1,7 +1,7 @@
 using System;
 namespace Data.Two
 {
-    public interface Quest : IItem
+    public interface IQuest : IItem
     {
         QuestEnum Enum { get; }
         int IItem.ID => Enum.Id;
@@ -9,8 +9,8 @@ namespace Data.Two
         string IItem.Description => Enum.Description;
     }
 
-    [Serializable] public readonly struct Navigation : Quest { public readonly QuestEnum Enum => QuestEnum.Navigation; }
-    [Serializable] public readonly struct Bounty : Quest { public readonly QuestEnum Enum => QuestEnum.Bounty; }
+    [Serializable] public readonly struct Navigation : IQuest { public readonly QuestEnum Enum => QuestEnum.Navigation; }
+    [Serializable] public readonly struct Bounty : IQuest { public readonly QuestEnum Enum => QuestEnum.Bounty; }
 
     [Serializable]
     public class QuestEnum : Enumeration

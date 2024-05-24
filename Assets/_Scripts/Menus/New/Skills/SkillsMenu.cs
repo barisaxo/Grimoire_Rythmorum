@@ -34,10 +34,10 @@ namespace Menus.Two
         {
             get
             {
-                return ((Skill)Selection.Item).Description +
-                    "\n" + ((Skill)Selection.Item).Per + "% bonus per level." +
-                    "\nCurrent Level: " + Data.GetLevel(Selection.Item) + " / " + ((Skill)Selection.Item).MaxLevel +
-                    "\nCurrent Bonus: " + (int)(Data.GetLevel(Selection.Item) * ((Skill)Selection.Item).Per) + "%" +
+                return ((ISkill)Selection.Item).Description +
+                    "\n" + ((ISkill)Selection.Item).Per + "% bonus per level." +
+                    "\nCurrent Level: " + Data.GetLevel(Selection.Item) + " / " + ((ISkill)Selection.Item).MaxLevel +
+                    "\nCurrent Bonus: " + (int)(Data.GetLevel(Selection.Item) * ((ISkill)Selection.Item).Per) + "%" +
                     "\nCost: " + ((SkillData)Data).GetSkillCost(Selection.Item) + " patterns." +
                     "\n(" + PlayerData.GetLevel(new PatternsAvailable()) + " patterns available)"
                      ;
@@ -62,12 +62,10 @@ namespace Menus.Two
         {
             if (((SkillData)Data).GetSkillCost(Selection.Item) >
                 PlayerData.GetLevel(new PatternsAvailable()) &&
-                Data.GetLevel(Selection.Item) < ((Skill)Selection.Item).MaxLevel)
+                Data.GetLevel(Selection.Item) < ((ISkill)Selection.Item).MaxLevel)
                 return;
 
-            PlayerData.SetLevel(
-                new PatternsAvailable(),
-                PlayerData.GetLevel(new PatternsAvailable()) -
+            PlayerData.AdjustLevel(new PatternsSpent(), +
                 ((SkillData)Data).GetSkillCost(Selection.Item));
 
             Data.AdjustLevel(Selection.Item, 1);
@@ -77,11 +75,6 @@ namespace Menus.Two
             // Selection.Card.SetTextString(DisplayData(Selection.Item));
         }
 
-        private void DecreaseItem()
-        {
-            // Data.DecreaseLevel(Selection.Item);
-            // Selection.Card.SetTextString(DisplayData(Selection.Item));
-        }
 
         public State ConsequentState { get; private set; }
         public IMenuScene Scene => null;

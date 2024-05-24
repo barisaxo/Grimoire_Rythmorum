@@ -6,8 +6,13 @@ namespace Menus.Two
 {
     public class GramophoneMenu : IMenu
     {
-        public GramophoneMenu(GramophoneInventoryData data) { Data = data; }
+        public GramophoneMenu(GramophoneInventoryData data, State subsequentState)
+        {
+            Data = data;
+            SubsequentState = subsequentState;
+        }
 
+        readonly State SubsequentState;
         public IData Data { get; }
         public MenuItem Selection { get; set; }
         public MenuItem[] MenuItems { get; set; }
@@ -30,17 +35,17 @@ namespace Menus.Two
 
         private void IncreaseItem()
         {
-            Data.AdjustLevel(Selection.Item, 1);
+            // Data.AdjustLevel(Selection.Item, 1);
             Selection.Card.SetTextString(DisplayData(Selection.Item));
         }
 
         private void DecreaseItem()
         {
-            Data.AdjustLevel(Selection.Item, -1);
+            // Data.AdjustLevel(Selection.Item, -1);
             Selection.Card.SetTextString(DisplayData(Selection.Item));
         }
 
-        public State ConsequentState => new NewGramoPuzzle_State();
+        public State ConsequentState => new NewGramoPuzzle_State(SubsequentState, true);
         public IMenuScene Scene => null;
     }
 }

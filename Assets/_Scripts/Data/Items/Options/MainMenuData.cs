@@ -53,14 +53,6 @@ namespace Data.Two
             return null;
         }
 
-        // public void DecreaseLevel(IItem item)
-        // {
-        //     // if (item is not MainOption) throw new System.Exception(item.GetType().ToString());
-        //     // Datum[(MainOption)item] = -1 < 0 ? 0 : Datum[(MainOption)item] - 1;
-        //     // PersistentData.Save(this);
-        // }
-        // public void DecreaseLevel(IItem item, int i) { }
-
         public int GetLevel(IItem item)
         {
             // if (item is not MainOption) throw new System.Exception(item.GetType().ToString());
@@ -68,12 +60,6 @@ namespace Data.Two
             return 0;
         }
 
-        // public void IncreaseLevel(IItem item)
-        // {
-        //     // if (item is not MainOption) throw new System.Exception(item.GetType().ToString());
-        //     // Datum[(MainOption)item] = +1 > 999 ? 999 : Datum[(MainOption)item] + 1;
-        //     // PersistentData.Save(this);
-        // }
         public void AdjustLevel(IItem item, int i) { }
 
         public void SetLevel(IItem item, int level)
@@ -83,20 +69,9 @@ namespace Data.Two
             // PersistentData.Save(this);
         }
 
-        // private void LoadLevel(IItem item, int level)
-        // {
-        //     // if (item is not MainOption) throw new System.Exception(item.GetType().ToString());
-        //     // Datum[(MainOption)item] = level;
-        // }
-
         public bool InventoryIsFull(int space) => false;
 
-        public void Reset()
-        {
-            // _datum = SetUpDatum();
-            // PersistentData.Save(this);
-        }
-
+        public void Reset() { }
 
         public IPersistentData PersistentData { get; } = new NotPersistentData();
     }

@@ -2,7 +2,7 @@
 using System;
 namespace Data.Two
 {
-    public interface Wood : IItem
+    public interface IWood : IItem
     {
         WoodEnum Enum { get; }
         int IItem.ID => Enum.Id;
@@ -25,12 +25,21 @@ namespace Data.Two
         public readonly float Modifier;
         public readonly string Description;
 
-        public static WoodEnum Pine = new(0, "Pine", "Inexpensive but soft timber", 1f);
-        public static WoodEnum Fir = new(1, "Fir", "Moderately inexpensive, moderately hard timber", 1.5f);
-        public static WoodEnum Oak = new(2, "Oak", "Expensive, hard timber", 2.25f);
-        public static WoodEnum Teak = new(3, "Teak", "Very expensive, very hard timber", 3f);
+        public readonly static WoodEnum Pine = new(0, "Pine", "Inexpensive but soft timber", 1f);
+        public readonly static WoodEnum Fir = new(1, "Fir", "Moderately inexpensive, moderately hard timber", 1.15f);
+        public readonly static WoodEnum Oak = new(2, "Oak", "Expensive, hard timber", 1.25f);
+        public readonly static WoodEnum Teak = new(3, "Teak", "Very expensive, very hard timber", 1.35f);
 
-        internal static Wood ToItem(WoodEnum @enum)
+        public static IWood GetRandomWood() => UnityEngine.Random.Range(0, 4) switch
+        {
+            0 => new Pine(),
+            1 => new Fir(),
+            2 => new Oak(),
+            3 => new Teak(),
+            _ => throw new ArgumentOutOfRangeException()
+        };
+
+        internal static IWood ToItem(WoodEnum @enum)
         {
             return @enum switch
             {
@@ -43,8 +52,8 @@ namespace Data.Two
         }
     }
 
-    [Serializable] public struct Pine : Wood { public readonly WoodEnum Enum => WoodEnum.Pine; }
-    [Serializable] public struct Fir : Wood { public readonly WoodEnum Enum => WoodEnum.Fir; }
-    [Serializable] public struct Oak : Wood { public readonly WoodEnum Enum => WoodEnum.Oak; }
-    [Serializable] public struct Teak : Wood { public readonly WoodEnum Enum => WoodEnum.Teak; }
+    [Serializable] public readonly struct Pine : IWood { public readonly WoodEnum Enum => WoodEnum.Pine; }
+    [Serializable] public readonly struct Fir : IWood { public readonly WoodEnum Enum => WoodEnum.Fir; }
+    [Serializable] public readonly struct Oak : IWood { public readonly WoodEnum Enum => WoodEnum.Oak; }
+    [Serializable] public readonly struct Teak : IWood { public readonly WoodEnum Enum => WoodEnum.Teak; }
 }

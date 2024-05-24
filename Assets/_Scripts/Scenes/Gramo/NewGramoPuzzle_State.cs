@@ -5,10 +5,15 @@ using UnityEngine;
 
 public class NewGramoPuzzle_State : State
 {
-    public NewGramoPuzzle_State()
+    readonly State SubsequentState;
+    readonly bool IsPractice;
+    public NewGramoPuzzle_State(State subsequentState, bool isPractice)
     {
         Fade = true;
+        SubsequentState = subsequentState;
+        IsPractice = isPractice;
     }
+
     protected override void PrepareState(Action callback)
     {
         Cam.Io.Camera.transform.SetPositionAndRotation(Vector3.up * 15, Quaternion.identity);
@@ -16,6 +21,6 @@ public class NewGramoPuzzle_State : State
     }
     protected override void EngageState()
     {
-        SetState(new Gramo_State());
+        SetState(IsPractice ? new GramoPractice_State(SubsequentState) : new Gramo_State(SubsequentState));
     }
 }

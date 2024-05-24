@@ -5,19 +5,19 @@ namespace Data.Two
     [System.Serializable]
     public class VolumeData : IData
     {
-        private Dictionary<Volume, int> _datum;
-        private Dictionary<Volume, int> Datum => _datum ??= SetUpDatum();
+        private Dictionary<IVolume, int> _datum;
+        private Dictionary<IVolume, int> Datum => _datum ??= SetUpDatum();
 
-        private Dictionary<Volume, int> SetUpDatum()
+        private Dictionary<IVolume, int> SetUpDatum()
         {
-            Dictionary<Volume, int> datum = new();
+            Dictionary<IVolume, int> datum = new();
             for (int i = 0; i < Items.Length; i++)
-                if (Items[i] is BGMusic) datum.TryAdd((Volume)Items[i], 35);
-                else if (Items[i] is Drums) datum.TryAdd((Volume)Items[i], 75);
-                else if (Items[i] is Chords) datum.TryAdd((Volume)Items[i], 95);
-                else if (Items[i] is Bass) datum.TryAdd((Volume)Items[i], 95);
-                else if (Items[i] is SoundFX) datum.TryAdd((Volume)Items[i], 95);
-                else datum.TryAdd((Volume)Items[i], 20);
+                if (Items[i] is BGMusic) datum.TryAdd((IVolume)Items[i], 35);
+                else if (Items[i] is Drums) datum.TryAdd((IVolume)Items[i], 75);
+                else if (Items[i] is Chords) datum.TryAdd((IVolume)Items[i], 95);
+                else if (Items[i] is Bass) datum.TryAdd((IVolume)Items[i], 95);
+                else if (Items[i] is SoundFX) datum.TryAdd((IVolume)Items[i], 95);
+                else datum.TryAdd((IVolume)Items[i], 20);
 
             return datum;
         }
@@ -41,14 +41,14 @@ namespace Data.Two
 
         public string GetDescription(IItem item)
         {
-            if (item is not Volume) throw new System.Exception(item.GetType().ToString());
+            if (item is not IVolume) throw new System.Exception(item.GetType().ToString());
             return item.Description;
         }
 
         public string GetDisplayLevel(IItem item)
         {
-            if (item is not Volume) throw new System.Exception(item.GetType().ToString());
-            return Datum[(Volume)item].ToString();
+            if (item is not IVolume) throw new System.Exception(item.GetType().ToString());
+            return Datum[(IVolume)item].ToString();
         }
 
         // public void DecreaseLevel(IItem item)
@@ -64,17 +64,17 @@ namespace Data.Two
 
         public int GetLevel(IItem item)
         {
-            if (item is not Volume) throw new System.Exception(item.GetType().ToString());
-            return Datum[(Volume)item];
+            if (item is not IVolume) throw new System.Exception(item.GetType().ToString());
+            return Datum[(IVolume)item];
         }
 
         public void AdjustLevel(IItem item, int i)
         {
-            if (item is not Volume) throw new System.Exception(item.GetType().ToString());
-            Datum[(Volume)item] =
-                Datum[(Volume)item] + i > 100 ? 100 :
-                Datum[(Volume)item] + i < 0 ? 0 :
-                Datum[(Volume)item] + i;
+            if (item is not IVolume) throw new System.Exception(item.GetType().ToString());
+            Datum[(IVolume)item] =
+                Datum[(IVolume)item] + i > 100 ? 100 :
+                Datum[(IVolume)item] + i < 0 ? 0 :
+                Datum[(IVolume)item] + i;
             PersistentData.Save(this);
         }
 
@@ -90,15 +90,15 @@ namespace Data.Two
 
         public void SetLevel(IItem item, int level)
         {
-            if (item is not Volume) throw new System.Exception(item.GetType().ToString());
-            Datum[(Volume)item] = level;
+            if (item is not IVolume) throw new System.Exception(item.GetType().ToString());
+            Datum[(IVolume)item] = level;
             PersistentData.Save(this);
         }
         private void LoadLevel(IItem item, int level)
         {
-            if (item is not Volume) throw new System.Exception(item.GetType().ToString());
-            Datum[(Volume)item] = level;
-            while (Datum[(Volume)item] % 5 != 0) Datum[(Volume)item]++;
+            if (item is not IVolume) throw new System.Exception(item.GetType().ToString());
+            Datum[(IVolume)item] = level;
+            while (Datum[(IVolume)item] % 5 != 0) Datum[(IVolume)item]++;
         }
 
         public bool InventoryIsFull(int space) => false;
