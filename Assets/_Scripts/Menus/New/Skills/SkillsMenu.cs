@@ -34,13 +34,19 @@ namespace Menus.Two
         {
             get
             {
+                Mathf.Max(1, 1);
                 return ((ISkill)Selection.Item).Description +
                     "\n" + ((ISkill)Selection.Item).Per + "% bonus per level." +
                     "\nCurrent Level: " + Data.GetLevel(Selection.Item) + " / " + ((ISkill)Selection.Item).MaxLevel +
                     "\nCurrent Bonus: " + (int)(Data.GetLevel(Selection.Item) * ((ISkill)Selection.Item).Per) + "%" +
-                    "\nCost: " + ((SkillData)Data).GetSkillCost(Selection.Item) + " patterns." +
-                    "\n(" + PlayerData.GetLevel(new PatternsAvailable()) + " patterns available)"
+
+                    //Next level:
+                    //Next bonus:
+
+                    "\n\nCost: " + ((SkillData)Data).GetSkillCost(Selection.Item) + " patterns." +
+                    "\n\n(" + PlayerData.GetLevel(new PatternsAvailable()) + " patterns available)"
                      ;
+
             }
         }
 
@@ -77,8 +83,33 @@ namespace Menus.Two
 
 
         public State ConsequentState { get; private set; }
-        public IMenuScene Scene => null;
+        public IMenuScene Scene { get; set; } = new SkillMenuScene();
 
 
+    }
+
+    public class SkillMenuScene : IMenuScene
+    {
+        public void Initialize()
+        {
+            South.SetTextString("Back").SetImageColor(Color.white);
+            North.SetTextString("Increase").SetImageColor(Color.white);
+            ((IMenuScene)this).SetCardPos1(South);
+            ((IMenuScene)this).SetCardPos2(North);
+        }
+
+        public void SelfDestruct()
+        {
+            Hud?.SelfDestruct();
+            Resources.UnloadUnusedAssets();
+        }
+
+        public Transform TF => null;
+
+        public Card Hud { get; set; }
+        public Card North { get; set; }
+        public Card East { get; set; }
+        public Card South { get; set; }
+        public Card West { get; set; }
     }
 }

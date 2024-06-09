@@ -9,7 +9,7 @@ namespace Sea
     {
         public Bottle(State state, Manager data)
         {
-            Difficulty = new StarChartDifficultySetter(data);
+            // Difficulty = new StarChartDifficultySetter(data);
             GO = (BottlePrefab = Assets.Bottle).gameObject;
             GO.transform.SetParent(WorldMapScene.Io.TheSea.transform);
             Collidable = new NotCollidable(BottlePrefab.Col);
@@ -23,10 +23,10 @@ namespace Sea
                 Vector3.one * .5f,
                 new Vector3(35, Random.Range(0, 360), 0));
 
-            Interactable = new BottleInteraction(state, data.StarChart, data.PlayerShip, this);
+            Interactable = new BottleInteraction(state, data.StarChart, data.ActiveShip, this);
 
             Inventoriable = new Inventoriable(
-                (data.StarChart, Difficulty.DifficultyLevel, 1));
+                (data.Inventory, new StarChart(), 1));
         }
 
         public BottleWithScrollPrefab BottlePrefab;

@@ -7,10 +7,10 @@ using UnityEngine;
 
 public class NewBatterie_State : State
 {
-    private NewBatterie_State(BatteriePack pack)
-    {
-        Pack = pack;
-    }
+    // private NewBatterie_State(BatteriePack pack)
+    // {
+    //     Pack = pack;
+    // }
     private NewBatterie_State() { }
 
     BatteriePack Pack;

@@ -178,6 +178,8 @@ public partial class Assets
     public static ParticleSystem _cannonFire => Resources.Load<GameObject>("Prefabs/Sea/CannonFire").GetComponent<ParticleSystem>();
     public static ParticleSystem CannonFire => Object.Instantiate(_cannonFire);
 
+    // public static GameObject _cannon => Resources.Load<GameObject>("Prefabs/Sea/Cannon");
+    public static GameObject Cannon => GameObject.CreatePrimitive(PrimitiveType.Cube);// Object.Instantiate(_cannon);
 
     #endregion SHIPS
 

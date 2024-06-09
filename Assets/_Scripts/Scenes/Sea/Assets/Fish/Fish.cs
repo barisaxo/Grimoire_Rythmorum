@@ -14,7 +14,7 @@ namespace Sea
             FishType = IMAFish.FishType;
             TF.SetParent(WorldMapScene.Io.TheSea.transform);
             Collidable = new NotCollidable(IMAFish.Col);
-            Interactable = new FishingInteraction(currentState, data.Fish, data.PlayerShip, this);
+            Interactable = new FishingInteraction(currentState, data.Fish, data.ActiveShip, this);
             Triggerable = new NotTriggerable();
             UpdatePosition = new UpdateFishPosition();
             Telemeter = new FishTelemetry();

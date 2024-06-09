@@ -49,6 +49,15 @@ namespace Data.Two
             _ => throw new InvalidOperationException(),
         };
 
+        internal static ICannon ToItem(int id) => id switch
+        {
+            0 => new Mynion(),
+            1 => new Saker(),
+            2 => new Culverin(),
+            3 => new DemiCannon(),
+            4 => new Carronade(),
+            _ => throw new InvalidOperationException(),
+        };
     }
 
     public interface IHull : IItem

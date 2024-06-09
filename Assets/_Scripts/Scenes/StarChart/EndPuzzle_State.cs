@@ -38,11 +38,10 @@ public class EndPuzzle_State : State
 
             Sea.WorldMapScene.Io.Map.AddToMap(Manager.Io.Quests.GetQuest(new Navigation()).QuestLocation, Sea.CellType.Gramo);
 
-            Manager.Io.Player.SetLevel(new PatternsAvailable(),
-                Manager.Io.Player.GetLevel(new PatternsAvailable()) + patternsFound);
+            Manager.Io.Player.AdjustLevel(new PatternsAvailable(), patternsFound);
 
-            Manager.Io.Player.SetLevel(new PatternsFound(),
-                Manager.Io.Player.GetLevel(new PatternsFound()) + patternsFound);
+            // Manager.Io.Player.SetLevel(new PatternsFound(),
+            //     Manager.Io.Player.GetLevel(new PatternsFound()) + patternsFound);
 
             Manager.Io.Player.AdjustLevel(PuzzleType == PuzzleType.Aural ?
                 new AuralSolved() : new TheorySolved(), 1);

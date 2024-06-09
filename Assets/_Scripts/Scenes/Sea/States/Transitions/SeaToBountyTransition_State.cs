@@ -15,6 +15,7 @@ public class SeaToBountyTransition_State : State
         Cell = cell;
         Region = region;
         Quest = DataManager.Quests.GetQuest(new Data.Two.Bounty()) as Quests.BountyQuest;
+
     }
 
     readonly Quests.BountyQuest Quest;

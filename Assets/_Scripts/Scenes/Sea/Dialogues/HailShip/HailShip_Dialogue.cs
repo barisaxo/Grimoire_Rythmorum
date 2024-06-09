@@ -16,11 +16,12 @@ public class HailShip_Dialogue : Dialogue
         return base.Initiate();
     }
 
-    string Hail_LineText => UnityEngine.Random.Range(0, 4) switch
+    int StandingLevel => Data.Two.Manager.Io.StandingData.GetLevel(Standing);
+    string Hail_LineText => StandingLevel switch
     {
-        0 => "Ahoy! We're on a tight schedule.",
-        1 => "The weather favors us this day.",
-        2 => "You seem trust worthy enough...",
+        10 or 9 or 8 => "The weather favors us this day.",
+        6 or 5 or 7 => "Ahoy! We're on a tight schedule.",
+        4 or 3 => "You seem trust worthy enough...",
         _ => "We'll work with you this once, just don't try anything..."
     };
 

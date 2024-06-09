@@ -8,7 +8,7 @@ namespace Menus.Two
 {
     public class ShipStatMenu : IMenu
     {
-        public ShipStatMenu(PlayerShipData data) { Data = data; }
+        public ShipStatMenu(ActiveShipData data) { Data = data; }
 
         public IData Data { get; }
         public MenuItem Selection { get; set; }

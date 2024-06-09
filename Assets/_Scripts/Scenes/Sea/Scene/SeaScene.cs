@@ -63,7 +63,7 @@ namespace Sea
         public WorldMap Map => _map ??= new(Data.Two.Manager.Io);
 
         public HUD _hud;
-        public HUD HUD => _hud ??= new(Data.Two.Manager.Io.PlayerShip);
+        public HUD HUD => _hud ??= new(Data.Two.Manager.Io.ActiveShip);
 
         public PlayerShip Ship;
         public RockTheBoat RockTheBoat = new();

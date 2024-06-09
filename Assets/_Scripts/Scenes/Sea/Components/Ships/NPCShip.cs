@@ -102,7 +102,8 @@ namespace Sea
             RegionEnum.MixoLydian => new Data.Two.MixolydianStanding(),
             RegionEnum.Dorian => new Data.Two.DorianStanding(),
             RegionEnum.Phrygian => new Data.Two.PhrygianStanding(),
-            _ => throw new System.ArgumentOutOfRangeException(RegionalMode.GetColor().ToString()),
+            RegionEnum.Chromatic => new Data.Two.ChromaticStanding(),
+            _ => throw new System.ArgumentOutOfRangeException(RegionalMode.ToString()),
         };
 
         public RegionEnum RegionalMode;

@@ -45,10 +45,10 @@ namespace Sea
                 CellType.Fish => new Fish(currentState, data),
                 CellType.Lighthouse => new Lighthouse(WorldMapScene.Io.Ship.Region, data.Lighthouse, currentState),
                 CellType.Bottle => new Bottle(currentState, data),
-                CellType.Gramo => new Gramophone(currentState, data.Inventory, data.Quests, data.PlayerShip, region.R),
+                CellType.Gramo => new Gramophone(currentState, data.Inventory, data.Quests, data.ActiveShip, region.R),
                 // CellType.Border => new Border(region),
                 CellType.OpenSea => null,
-                CellType.Bounty => new BountyShip(currentState, data.Quests, data.PlayerShip, region, cell),
+                CellType.Bounty => new BountyShip(currentState, data.Quests, data.ActiveShip, region, cell),
 
                 _ => throw new System.NotImplementedException(Type.ToString())
             };

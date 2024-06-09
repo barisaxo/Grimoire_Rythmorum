@@ -54,6 +54,17 @@ public class BatteriePack
     public int MissedHolds;
     public int TotalErrors => ErroneousAttacks + MissedRests + MissedHits + MissedHolds;
     public bool Spammed => ErroneousAttacks > GoodHits + GoodHolds + GoodRests + MissedRests + MissedHits + MissedHolds;
+    public bool HasCritThisBattery = false;
+    public bool Crit
+    {
+        get
+        {
+            bool c = TotalErrors <= Data.Two.Manager.Io.Skill.GetLevel(new Data.Two.PerfectTiming()) + 1;
+            if (c) HasCritThisBattery = true;
+            return c;
+        }
+    }
+
 
     public MusicSheet MusicSheet;
     public Synchronizer Synchro;

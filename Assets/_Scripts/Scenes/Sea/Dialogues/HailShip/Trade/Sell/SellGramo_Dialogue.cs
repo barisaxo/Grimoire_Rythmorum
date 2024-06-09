@@ -8,10 +8,11 @@ public class SellGramo_Dialogue : Dialogue
     readonly Dialogue ReturnTo;
     int Gramos => Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.GramophoneStorage());
 
-    public SellGramo_Dialogue(Dialogue returnTo, Speaker speaker)
+    public SellGramo_Dialogue(Dialogue returnTo, Speaker speaker, Data.Two.Standing standingData)
     {
         ReturnTo = returnTo;
         Speaker = speaker;
+        Standing = standingData;
     }
 
     public override Dialogue Initiate()
@@ -20,9 +21,24 @@ public class SellGramo_Dialogue : Dialogue
         return base.Initiate();
     }
 
-    readonly string GramoLarge_RepText = "5 [400 gold]";
-    readonly string GramoMedium_RepText = "3 [275 gold]";
-    readonly string GramoSmall_RepText = "1 [100 gold]";
+    readonly Data.Two.Standing Standing;
+
+
+    int StandingLevel => Data.Two.Manager.Io.StandingData.GetLevel(Standing);
+    readonly int Mats = Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.Material());
+    float StandingsModifier => 2f - (float)(1f - (float)((float)StandingLevel) / 9f);
+
+    static readonly int largeAmount = 10000;
+    static readonly int medAmount = 6450;
+    static readonly int smallAmount = 2500;
+
+    int largeGold => (int)(largeAmount * StandingsModifier);
+    int medGold => (int)(medAmount * StandingsModifier);
+    int smallGold => (int)(smallAmount * StandingsModifier);
+
+    readonly string GramoLarge_RepText = "5 [" + largeAmount + " gold]";
+    readonly string GramoMedium_RepText = "3 [" + medAmount + " gold]";
+    readonly string GramoSmall_RepText = "1 [" + smallAmount + " gold]";
     readonly string Gramo_LineText = "How many gramophones do you want to sell?";
 
     Line _gramoLine;
@@ -60,17 +76,17 @@ public class SellGramo_Dialogue : Dialogue
     void SellGramoSmall()
     {
         Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.GramophoneStorage(), -1);
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), 100);
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), smallAmount);
     }
     void SellGramoMedium()
     {
         Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.GramophoneStorage(), -3);
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), 275);
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), medAmount);
     }
     void SellGramoLarge()
     {
         Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.GramophoneStorage(), -5);
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), 400);
+        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), largeAmount);
     }
 
     readonly string TradeComplete_LineText = "Good deal! Until next time!";

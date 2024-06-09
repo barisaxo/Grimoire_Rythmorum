@@ -34,15 +34,11 @@ public sealed class Swells
                 new Vector3(tile.GO.transform.position.x, yPos, tile.GO.transform.position.z);
 
             float v = 2.5f * yPos;
-            // tile.Mesh.material.color = new Color(
-
             tile.SR.color = new Color(
                      Scene.Board.SeaColor.r + v,
                      Scene.Board.SeaColor.g + v,
                      Scene.Board.SeaColor.b + v,
                      .25f + v);
-
-
 
             if (tile.GO.transform.position.x < Scene.Board.HalfSize + .25f &&
                 tile.GO.transform.position.x > Scene.Board.HalfSize - .25f &&

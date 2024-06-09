@@ -25,7 +25,7 @@ namespace Data.Two
         public readonly float Modifier;
         public readonly string Description;
 
-        public readonly static WoodEnum Pine = new(0, "Pine", "Inexpensive but soft timber", 1f);
+        public readonly static WoodEnum Pine = new(0, "Pine", "Inexpensive, soft timber", 1f);
         public readonly static WoodEnum Fir = new(1, "Fir", "Moderately inexpensive, moderately hard timber", 1.15f);
         public readonly static WoodEnum Oak = new(2, "Oak", "Expensive, hard timber", 1.25f);
         public readonly static WoodEnum Teak = new(3, "Teak", "Very expensive, very hard timber", 1.35f);
@@ -50,6 +50,15 @@ namespace Data.Two
                 _ => throw new System.ArgumentOutOfRangeException(@enum.Name)
             };
         }
+
+        internal static IWood ToItem(int id) => id switch
+        {
+            0 => new Pine(),
+            1 => new Fir(),
+            2 => new Oak(),
+            3 => new Teak(),
+            _ => throw new ArgumentOutOfRangeException()
+        };
     }
 
     [Serializable] public readonly struct Pine : IWood { public readonly WoodEnum Enum => WoodEnum.Pine; }

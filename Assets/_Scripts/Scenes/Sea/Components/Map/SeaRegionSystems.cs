@@ -70,7 +70,7 @@ public static class SeaRegionSystems
                         (numOfFish < 3 && x + y > numOfFish * 8 && Random.value > .9f))
                     {
                         foreach (Cell cell in cells) if (cell.Coord.x == x && cell.Coord.y == y) continue;
-                        int ii = Random.Range(1, 5);
+                        int ii = Random.Range(1, 4);
                         for (int i = 0; i < ii; i++)
                         {
                             numOfFish++;
@@ -162,7 +162,7 @@ public static class SeaRegionSystems
             var stats = new ShipStats.ShipStats(
                 new ShipStats.HullStats(hull, Data.Two.WoodEnum.GetRandomWood()),
                 new ShipStats.CannonStats(Data.Two.CannonEnum.GetRandomCannon(), Data.Two.MetalEnum.GetRandomMetal()),
-                new ShipStats.RiggingStats(Data.Two.ClothEnum.GetRandomCloth())
+                new ShipStats.RiggingStats((Data.Two.ICloth)Data.Two.ClothEnum.GetRandomCloth())
             );
 
             return stats;

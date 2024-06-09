@@ -6,7 +6,6 @@ public class MainMenuScene : IMenuScene
 {
     public void Initialize()
     {
-
         _ = LightHouse;
         _ = CatBoat;
         RockTheBoat.AddBoat(CatBoat.transform, (.08f, 1, 0));
@@ -16,6 +15,7 @@ public class MainMenuScene : IMenuScene
 
     public void SelfDestruct()
     {
+        Hud?.SelfDestruct();
         RockTheBoat.Rocking = false;
         MonoHelper.OnUpdate -= RotateLightHouse;
         Object.Destroy(_parent.gameObject);
@@ -92,6 +92,12 @@ public class MainMenuScene : IMenuScene
         LightRotY += Time.deltaTime * 25;
         LightHouse.transform.rotation = Quaternion.Euler(0, LightRotY, 0);
     }
+
+    public Card Hud { get; set; }
+    public Card North { get; set; }
+    public Card East { get; set; }
+    public Card South { get; set; }
+    public Card West { get; set; }
 }
 
 

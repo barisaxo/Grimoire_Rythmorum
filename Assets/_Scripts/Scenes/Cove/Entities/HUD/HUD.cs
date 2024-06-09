@@ -5,11 +5,11 @@ using TMPro;
 
 namespace Cove
 {
-    public class HUD
+    public class ButtonHUD
     {
         #region  INSTANCE
 
-        public HUD()
+        public ButtonHUD()
         {
             _ = North;
             _ = East;
@@ -92,6 +92,23 @@ namespace Cove
             West.SetImageColor(Color.clear).SetTextString("");
             East.SetImageColor(Color.clear).SetTextString("");
             South.SetImageColor(Color.clear).SetTextString("");
+        }
+
+        public void SetCardPos1(Card card)
+        {
+            card.SetPositionAll(Cam.UIOrthoX - 1.5f, -Cam.UIOrthoY + 1.15f);
+        }
+        public void SetCardPos2(Card card)
+        {
+            card.SetPositionAll(Cam.UIOrthoX - 1.5f, -Cam.UIOrthoY + 2.15f);
+        }
+        public void SetCardPos3(Card card)
+        {
+            card.SetPositionAll(Cam.UIOrthoX - 1.5f, -Cam.UIOrthoY + 3.15f);
+        }
+        public void SetCardPos4(Card card)
+        {
+            card.SetPositionAll(Cam.UIOrthoX - 1.5f, -Cam.UIOrthoY + 4.15f);
         }
     }
 }

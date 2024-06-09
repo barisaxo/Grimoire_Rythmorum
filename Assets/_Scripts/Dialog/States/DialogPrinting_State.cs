@@ -47,9 +47,12 @@ public class DialogPrinting_State : State
 
     protected override void EngageState()
     {
-
         if (Dialog.CurrentLine.VideoClip != null) Dialog.VideoPlayer.Play();
-        if (Dialog.Dialogue.PlayTypingSounds) Audio.SFX.PlayClip(Assets.TypingClicks);
+        if (Dialog.Dialogue.PlayTypingSounds)
+        {
+            Audio.SFX.PlayClip(Assets.TypingClicks, true);
+            Audio.SFX.RandomizeClipPlaybackPosition();
+        }
         Dialog.NPCIcon(Dialog.CurrentLine);
         Dialog.PrintDialog(FinishedPrinting);
     }
@@ -75,7 +78,7 @@ public class DialogPrinting_State : State
             SetState(new EndDialog_State(
                 Dialog,
                 Dialog.CurrentLine.NextState,
-                Dialog.CurrentLine.FadeOut,
+                // Dialog.CurrentLine.FadeOut,
                 Dialog.CurrentLine.PanCamera,
                 Dialog.CurrentLine.CameraPan,
                 Dialog.CurrentLine.CameraStrafe,

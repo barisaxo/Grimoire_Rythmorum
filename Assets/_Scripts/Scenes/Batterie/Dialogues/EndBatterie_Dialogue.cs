@@ -2,21 +2,20 @@ using Dialog;
 
 public class EndBatterie_Dialogue : Dialogue
 {
-    readonly int _gold, _rations, _mats;
-    readonly bool _map;
+    readonly int _gold, _rations, _mats, _patterns;
     readonly BatterieResultType Result;
 
     public EndBatterie_Dialogue(
         int gold,
         int mats,
         int rations,
-        bool map,
+        int patterns,
         BatterieResultType result)
     {
         _gold = gold;
         _mats = mats;
         _rations = rations;
-        _map = map;
+        _patterns = patterns;
         Result = result;
         Speaker = Speaker.Pino;
     }
@@ -34,8 +33,7 @@ public class EndBatterie_Dialogue : Dialogue
             case BatterieResultType.Fled: FirstLine = FledLine; break;
 
             case BatterieResultType.Won:
-                if (_map) { FirstLine = WonWithMap; }
-                else { FirstLine = WonWithOutMap; }
+                FirstLine = Won;
                 break;
 
             case BatterieResultType.Spam: FirstLine = CheatLine; break;
@@ -44,15 +42,7 @@ public class EndBatterie_Dialogue : Dialogue
         return base.Initiate();
     }
 
-    Line WonWithMap => new Line(Found + Gold + Mats + Rations + Map, MapLine)
-        .SetSpeaker(Speaker)
-        ;
-
-    Line MapLine => new Line(GhostShip, new SeaScene_State())
-        .SetSpeaker(Speaker)
-        ;
-
-    Line WonWithOutMap => new Line(Found + Gold + Mats + Rations, new SeaScene_State())
+    Line Won => new Line(Found + Gold + Mats + Rations + Patterns, new SeaScene_State())
         .SetSpeaker(Speaker)
         ;
 
@@ -64,11 +54,11 @@ public class EndBatterie_Dialogue : Dialogue
         .SetSpeaker(Speaker)
         ;
 
-    Line NMESurrendered => new Line(Found + Gold + Mats + Rations, new SeaScene_State())
+    Line NMESurrendered => new Line(Found + Gold + Mats + Rations + Patterns, new SeaScene_State())
         .SetSpeaker(Speaker)
         ;
 
-    Line SurrenderedToNME => new Line(Lost + Gold + Mats + Rations, new SeaScene_State())
+    Line SurrenderedToNME => new Line(Lost + Gold + Mats + RationsEnd, new SeaScene_State())
         .SetSpeaker(Speaker)
         ;
 
@@ -80,15 +70,12 @@ public class EndBatterie_Dialogue : Dialogue
         .SetSpeaker(Speaker)
         ;
 
-
-    // string Damage => "Our ship took " + _damage + " damage.\n";
     string Lost => "We lost ";
     string Found => "We found ";
     string Gold => _gold + " gold, ";
-    string Mats => _mats + " materials, and ";
-    string Rations => _rations + " rations.\n";
-    string Map => "We found the map of Cromatica!";
-    string GhostShip => "Great find Cap'n! This map tells us where the ghost ship known as Cromatica makes berth.\n" +
-            "We need both the map and the sextant to find the Cromatica.";
+    string Mats => _mats + " materials, ";
+    string Rations => _rations + " rations, and ";
+    string RationsEnd => _rations + " rations.\n";
+    string Patterns => _patterns + " patterns.\n";
 }
 

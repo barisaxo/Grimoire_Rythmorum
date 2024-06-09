@@ -7,32 +7,38 @@ public class BatterieIntermission_Dialogue : Dialogue
     {
         Scene = scene;
         Speaker = Speaker.Pino;
-        damageTaken = Scene.NMEShipStats.VolleyDamage;
+        damageTaken = (int)(Scene.NMEShipStats.VolleyDamage * Random.Range(.8f, 1f));
 
-        Debug.Log("BatterieIntermission_Dialogue: " + scene.NMEShipStats.CannonStats.Cannon.Modifier + " " +
-            scene.NMEShipStats.CannonStats.Metal.Modifier + " " +
-            scene.NMEShipStats.NumOfCannons + " " +
-            scene.NMEShipStats.VolleyDamage + " Damage taken:!! " + damageTaken);
+        if (Scene.Pack.Spammed) { damageTaken *= 2; Scene.DamageDealt /= 2; }
 
-        if (Scene.Pack.Spammed) damageTaken *= 2;
+        else if (Scene.Pack.Crit)
+        {
+            damageTaken = (int)((float)damageTaken * (float)(1f / Data.Two.Manager.Io.Skill.GetBonusRatio(new Data.Two.CriticalVolley())));
+            Scene.DamageDealt = (int)((float)Scene.DamageDealt + ((float)Scene.DamageDealt * (float)Data.Two.Manager.Io.Skill.GetBonusRatio(new Data.Two.CriticalVolley())));
+        }
+
+        Scene.BatterieHUD.PlayerCurrent -= damageTaken;
+        Data.Two.Manager.Io.ActiveShip.AdjustLevel(new Data.Two.CurrentHitPoints(), -damageTaken);
+        Scene.BatterieHUD.NMECurrent = Scene.NMEHealth.cur -= Scene.DamageDealt;
     }
     readonly int damageTaken;
     readonly BatterieScene Scene;
 
     public override Dialogue Initiate()
     {
+        if (Scene.Pack.Crit) { }
         if (Scene.NMEHealth.cur < (float)(Scene.NMEHealth.max * .3f) &&
             Random.value > .65f)
         {
             _startLine = NMEAttemptingFlee;
             Scene.Escaping = true;
         }
-        else if (Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.CurrentHitPoints()) < (float)(Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.MaxHitPoints()) * .3f))
+        else if (Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.CurrentHitPoints()) < (float)(Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.MaxHitPoints()) * .3f))
         {
             _startLine = LowPlayerHealth;
         }
         else if (Scene.NMEHealth.cur < (float)(Scene.NMEHealth.max * .21f) &&
-                (Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.CurrentHitPoints()) > (float)(Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.MaxHitPoints()) * .5f)))
+                (Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.CurrentHitPoints()) > (float)(Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.MaxHitPoints()) * .5f)))
         {
             _startLine = NMESurrender;
         }
@@ -60,7 +66,7 @@ public class BatterieIntermission_Dialogue : Dialogue
         {
             FirstLine = Spammed;
         }
-        if (Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.CurrentHitPoints()) < 1)
+        if (Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.CurrentHitPoints()) < 1)
         {
             Debug.Log("YOU LOSE");
 
@@ -80,7 +86,15 @@ public class BatterieIntermission_Dialogue : Dialogue
     Line Spammed => new Line("Cap, spamming like that only hurts us, cannons to back fired!\nWe've taken " + damageTaken + " damage", AttackAgain)
         .SetSpeaker(Speaker);
 
-    Line DamageReport => new Line("Damage report Cap!\nWe've taken " + damageTaken + " damage", _startLine)
+    Line DamageReport => new Line(
+            "Damage report Cap!" +
+                (Scene.Pack.Crit ? "\nCritical Volley! Great execution!" : "") +
+                "\nWe dealt " +
+                Scene.DamageDealt +
+                " damage to the enemy, and have taken " +
+                damageTaken +
+                " damage to our hull.",
+            _startLine)
         .SetSpeaker(Speaker);
 
     Line LowPlayerHealth => new Line("We're in bad shape, we can't take much more!")

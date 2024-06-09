@@ -40,7 +40,7 @@ namespace Menus.Two
             // new GramophoneMenu(Manager.Gramophones),
             new StandingsMenu(Manager.StandingData),
             new LighthousesMenu(Manager.Lighthouse),
-            new ShipStatMenu(Manager.PlayerShip),
+            new ShipStatMenu(Manager.ActiveShip),
             new PlayerStatsMenu(Manager.Player),
         };
 
@@ -50,6 +50,7 @@ namespace Menus.Two
         {
             R1 = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Right, this)),
             L1 = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Left, this)),
+            South = new ButtonInput(() => { })
         };
 
         public string DisplayData(IItem item)

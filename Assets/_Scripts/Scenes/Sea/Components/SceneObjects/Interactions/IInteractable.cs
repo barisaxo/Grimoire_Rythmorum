@@ -66,7 +66,7 @@ namespace Sea
 
     public class BottleInteraction : IInteractable
     {
-        public BottleInteraction(State currentState, StarChartData starChartsData, PlayerShipData shipData, ISceneObject obj)
+        public BottleInteraction(State currentState, StarChartData starChartsData, ActiveShipData shipData, ISceneObject obj)
         {
             CurrentState = currentState;
             Obj = obj;
@@ -75,7 +75,7 @@ namespace Sea
         }
 
         readonly StarChartData StarChartData;
-        readonly PlayerShipData ShipData;
+        readonly ActiveShipData ShipData;
         private string _popupText;
         public string PopupText =>
             // _popupText ??= StarChartsData.InventoryIsFull(ShipData.GetLevel(ShipData.DataItem.Bottle)) ?
@@ -94,7 +94,7 @@ namespace Sea
 
     public class GramoInteraction : IInteractable
     {
-        public GramoInteraction(State currentState, InventoryData inventoryData, PlayerShipData shipData, ISceneObject obj)
+        public GramoInteraction(State currentState, InventoryData inventoryData, ActiveShipData shipData, ISceneObject obj)
         {
             CurrentState = currentState;
             Obj = obj;
@@ -103,7 +103,7 @@ namespace Sea
         }
 
         readonly InventoryData InventoryData;
-        readonly PlayerShipData ShipData; private string _popupText;
+        readonly ActiveShipData ShipData; private string _popupText;
         public string PopupText =>
             _popupText ??= ShipData.InventoryIsFull(ShipData.GetLevel(new GramophoneStorage())) ?
             "(inventory full)" :
@@ -125,7 +125,6 @@ namespace Sea
         {
             _currentState = currentState;
             // Standing = standing;
-            Manager.Io.Quests.GetQuest(new Bounty()).Complete = true;
             NMEShipStats = nmeShipStats;
             NMEGO = nmeGO;
             Cell = cell;
@@ -163,7 +162,7 @@ namespace Sea
 
     public class FishingInteraction : IInteractable
     {
-        public FishingInteraction(State currentState, FishInventoryData fishData, PlayerShipData shipData, ISceneObject obj)
+        public FishingInteraction(State currentState, FishInventoryData fishData, ActiveShipData shipData, ISceneObject obj)
         {
             CurrentState = currentState;
             Obj = obj;
@@ -172,7 +171,7 @@ namespace Sea
         }
 
         readonly FishInventoryData FishData;
-        readonly PlayerShipData ShipData;
+        readonly ActiveShipData ShipData;
         public State CurrentState { get; }
         readonly ISceneObject Obj;
         private State _subsequentState;

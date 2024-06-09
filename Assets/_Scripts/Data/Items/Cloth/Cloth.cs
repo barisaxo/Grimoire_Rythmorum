@@ -29,21 +29,14 @@ namespace Data.Two
         public readonly float Modifier;
         public readonly string Description;
 
-        public readonly static ClothEnum Hemp = new(0, "Hemp", "Inexpensive but heavy sailcloth", 1);
+        public readonly static ClothEnum Hemp = new(0, "Hemp", "Inexpensive, heavy sailcloth", 1);
         public readonly static ClothEnum Cotton = new(1, "Cotton", "Moderately inexpensive, moderately light sailcloth", 1.5f);
         public readonly static ClothEnum Linen = new(2, "Linen", "Expensive, light sailcloth", 2.25f);
         public readonly static ClothEnum Silk = new(3, "Silk", "Very expensive, very light sailcloth", 3f);
 
-        public static ICloth GetRandomCloth() => UnityEngine.Random.Range(0, 4) switch
-        {
-            0 => new Hemp(),
-            1 => new Cotton(),
-            2 => new Linen(),
-            3 => new Silk(),
-            _ => throw new Exception()
-        };
+        internal static ICloth GetRandomCloth() => ToItem(UnityEngine.Random.Range(0, 4));
 
-        internal static IItem ToItem(ClothEnum @enum)
+        internal static ICloth ToItem(ClothEnum @enum)
         {
             return @enum switch
             {
@@ -54,5 +47,14 @@ namespace Data.Two
                 _ => throw new ArgumentOutOfRangeException(@enum.Name)
             };
         }
+
+        internal static ICloth ToItem(int id) => id switch
+        {
+            0 => new Hemp(),
+            1 => new Cotton(),
+            2 => new Linen(),
+            3 => new Silk(),
+            _ => throw new Exception()
+        };
     }
 }

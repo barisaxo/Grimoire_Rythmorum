@@ -32,3 +32,27 @@ public class CoveToMenuTransition_State : State
                 5));
     }
 }
+public class CoveToAnglingTransition_State : State
+{
+    readonly State SubsequentState;
+
+    public CoveToAnglingTransition_State(State subsequentState)
+    {
+        SubsequentState = subsequentState;
+    }
+
+    protected override void EngageState()
+    {
+        Audio.BGMusic.Pause();
+        Audio.Ambience.Pause();
+
+        CoveScene.Io.RockTheBoat.Rocking = false;
+
+        SetState(new CameraPan_State(
+            subsequentState: SubsequentState,
+            pan: new Vector3(-50, Cam.Io.Camera.transform.rotation.eulerAngles.y,
+                        Cam.Io.Camera.transform.rotation.eulerAngles.z),
+            strafe: Cam.Io.Camera.transform.position,
+            speed: 5));
+    }
+}

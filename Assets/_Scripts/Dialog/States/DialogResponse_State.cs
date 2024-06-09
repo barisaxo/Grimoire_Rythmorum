@@ -70,7 +70,7 @@ public class DialogResponse_State : State
             SetState(new EndDialog_State(
                 Dialog,
                 r.NextState,
-                r.FadeOut,
+                // r.FadeOut,
                 r.PanCamera,
                 r.CameraPan,
                 r.CameraStrafe,

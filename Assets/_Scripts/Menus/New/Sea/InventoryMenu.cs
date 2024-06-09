@@ -30,13 +30,34 @@ namespace Menus.Two
 
         public IInputHandler Input => new MenuInputHandler()
         {
-            Up = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Up, this)),
-            Down = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Down, this)),
+            Up = new ButtonInput(() =>
+            {
+                Selection = Layout.ScrollMenuItems(Dir.Up, this);
+                ShowHideEast();
+            }),
+
+            Down = new ButtonInput(() =>
+            {
+                Selection = Layout.ScrollMenuItems(Dir.Down, this);
+                ShowHideEast();
+            }),
+
+            South = new ButtonInput(() =>
+            {
+                ConsequentState = SubsequentState;
+            }),
+
+            East = new ButtonInput(() =>
+            {
+                ConsequentState = GetState;
+            })
         };
 
-        public IMenuScene Scene => null;
+        public IMenuScene Scene { get; } = new InventoryMenuScene();
 
-        public State ConsequentState
+        public State ConsequentState { get; set; }
+
+        State GetState
         {
             get
             {
@@ -67,6 +88,14 @@ namespace Menus.Two
             }
         }
 
+        void ShowHideEast()
+        {
+            if (Selection.Item is Gramophone or StarChart && (Data.GetLevel(Selection.Item) > 0))
+                Scene.East.SetImageColor(Color.white).SetTextColor(Color.white);
+            else
+                Scene.East.SetImageColor(Color.clear).SetTextColor(Color.clear);
+        }
+
         IPuzzle GetPuzzle(IStarChart starChart) => starChart switch
         {
             NotesT or NotesA => new NotePuzzle(),
@@ -91,5 +120,34 @@ namespace Menus.Two
 
             _ => PuzzleType.Aural,
         };
+
+
+        public class InventoryMenuScene : IMenuScene
+        {
+            // public InventoryMenuScene() { Initialize(); }
+
+            public void Initialize()
+            {
+                South.SetTextString("Back").SetImageColor(Color.white);
+                East.SetTextString("Solve").SetImageColor(Color.clear).SetTextColor(Color.clear);
+                ((IMenuScene)this).SetCardPos1(South);
+                ((IMenuScene)this).SetCardPos2(East);
+            }
+
+            public void SelfDestruct()
+            {
+                Debug.Log(nameof(SelfDestruct));
+                Hud?.SelfDestruct();
+                Resources.UnloadUnusedAssets();
+            }
+
+            public Transform TF => null;
+
+            public Card Hud { get; set; }
+            public Card North { get; set; }
+            public Card East { get; set; }
+            public Card South { get; set; }
+            public Card West { get; set; }
+        }
     }
 }

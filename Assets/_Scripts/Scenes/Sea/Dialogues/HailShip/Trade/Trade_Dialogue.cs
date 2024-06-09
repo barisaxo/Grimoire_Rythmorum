@@ -35,9 +35,10 @@ public class Trade_Dialogue : Dialogue
     Response[] TradeResponses => _tradeResponses ??= new Response[]{
         BuyResponse,
         SellResponse,
-        // WagerResponse,
+        // SolveResponse,
         BackResponse
     };
+
 
     Response _buyResponse;
     Response BuyResponse => _buyResponse ??= new Response("Buy", new Buy_Dialogue(this, Speaker, Standing));
@@ -45,8 +46,8 @@ public class Trade_Dialogue : Dialogue
     Response _sellResponse;
     Response SellResponse => _sellResponse ??= new Response("Sell", new Sell_Dialogue(this, Speaker, Standing));
 
-    Response _wagerResponse;
-    Response WagerResponse => _wagerResponse ??= new Response("Wager", new MuscopaWager_Dialogue(this, Speaker));
+    // Response _solveResponse;
+    // Response SolveResponse => _solveResponse ??= new Response("Solve", new SolveMuscopa_Dialogue(this, Speaker));
 
     Response _backResponse;
     Response BackResponse => _backResponse ??= new Response("Never mind", ReturnTo);

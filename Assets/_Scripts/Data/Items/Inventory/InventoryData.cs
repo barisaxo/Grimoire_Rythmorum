@@ -15,10 +15,10 @@ namespace Data.Two
             {
                 datum.TryAdd((ICurrency)Items[i], Items[i] switch
                 {
-                    Gold => 500,
-                    Material => 200,
-                    Ration => 10,
-                    StarChart => 1,
+                    Gold => (int)((Manager.Io.ActiveShip.ShipStats.HullStats.Hull.ID + 1) * 1000 * Manager.Io.Skill.GetBonusRatio(new Preparation()) * (Manager.Io.ActiveShip.ShipStats.HullStats.Hull.ID + 1)),
+                    Material => (int)(Manager.Io.ActiveShip.GetLevel(new MaterialStorage()) * .15f * Manager.Io.Skill.GetBonusRatio(new Preparation()) * (Manager.Io.ActiveShip.ShipStats.HullStats.Hull.ID + 1)),
+                    Ration => (int)(Manager.Io.ActiveShip.GetLevel(new RationStorage()) * Manager.Io.Skill.GetBonusRatio(new Preparation()) * (Manager.Io.ActiveShip.ShipStats.HullStats.Hull.ID + 1)),
+                    StarChart => (int)(1.5f * Manager.Io.Skill.GetBonusRatio(new Preparation())) - 1 < 0 ? 0 : (int)(1f * Manager.Io.Skill.GetBonusRatio(new Preparation())) - 1,
                     Gramophone => 0,
                     _ => throw new System.ArgumentException(Items[i].Name)
                 });
@@ -41,27 +41,6 @@ namespace Data.Two
             Datum[(ICurrency)item] = Datum[(ICurrency)item] + i < 0 ? 0 : Datum[(ICurrency)item] + i;
         }
 
-        // public void IncreaseLevel(IItem item)
-        // {
-        //     if (item is not Currency) throw new ArgumentException(item.Name);
-        //     Datum[(Currency)item]++;
-        // }
-        // public void IncreaseLevel(IItem item, int i)
-        // {
-        //     if (item is not Currency) throw new ArgumentException(item.Name);
-        //     Datum[(Currency)item] += i;
-        // }
-        // public void DecreaseLevel(IItem item)
-        // {
-        //     if (item is not Currency) throw new ArgumentException(item.Name);
-        //     Datum[(Currency)item]--;
-        // }
-        // public void DecreaseLevel(IItem item, int i)
-        // {
-        //     if (item is not Currency) throw new ArgumentException(item.Name);
-        //     Datum[(Currency)item] -= i;
-        // }
-
         private IItem[] _items;
         public IItem[] Items => _items ??= new IItem[]{
             new Gold(),
@@ -81,4 +60,5 @@ namespace Data.Two
         public IPersistentData PersistentData { get; } = new NotPersistentData();
 
     }
+
 }

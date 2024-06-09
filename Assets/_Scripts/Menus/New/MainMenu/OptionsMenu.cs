@@ -43,6 +43,7 @@ namespace Menus.Two
         {
             R1 = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Right, this)),
             L1 = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Left, this)),
+            South = new ButtonInput(() => { }),
         };
 
         public string GetDescription { get => Selection.Item.Description; }

@@ -10,9 +10,9 @@ public class Buy_Dialogue : Dialogue
 
     int StandingMod => Data.Two.Manager.Io.StandingData.GetLevel(Standing);
     int Gold => Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.Gold());
-    int Mats => Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.MaterialStorage());
-    int CurHP => Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.CurrentHitPoints());
-    int MaxHP => Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.CurrentHitPoints());
+    int Mats => Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.Material());
+    int CurHP => Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.CurrentHitPoints());
+    int MaxHP => Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.MaxHitPoints());
     float StandingsModifier => 1f + (float)(1f - (float)((float)StandingMod) / 9f);
 
     int smallAmount => (int)(MaxHP * .15f);
@@ -32,7 +32,7 @@ public class Buy_Dialogue : Dialogue
         return base.Initiate();
     }
 
-    readonly string Repair_RepText = "Buy Repairs";
+    readonly string BuyStarChart_RepText = "Buy Star Charts";
     readonly string BuyMat_RepText = "Buy Materials";
     readonly string BuyRations_RepText = "Buy Rations";
 
@@ -41,8 +41,12 @@ public class Buy_Dialogue : Dialogue
         .SetSpeaker(Speaker)
         ;
 
-    Response _buyRepairs_response;
-    Response BuyRepairs_Response => _buyRepairs_response ??= new Response(Repair_RepText, new BuyRepairs_Dialogue(this, Speaker, Standing));
+    // Response _buyRepairs_response;
+    // Response BuyRepairs_Response => _buyRepairs_response ??= new Response(Repair_RepText, new BuyRepairs_Dialogue(this, Speaker, Standing));
+
+
+    Response _buyStarChart_response;
+    Response BuyStarChart_Response => _buyStarChart_response ??= new Response(BuyStarChart_RepText, new BuyStarChart_Dialogue(this, Speaker, Standing));
 
     Response _buyMaterials_response;
     Response BuyMaterials_Response => _buyMaterials_response ??= new Response(BuyMat_RepText, new BuyMaterials_Dialogue(this, Speaker, Standing));
@@ -56,9 +60,9 @@ public class Buy_Dialogue : Dialogue
     {
         List<Response> responses = new();
 
+        if (!(Gold < (5000f * StandingsModifier))) { responses.Add(BuyStarChart_Response); }
         if (!(Gold < (1000f * StandingsModifier))) { responses.Add(BuyMaterials_Response); }
         if (!(Gold < (500f * StandingsModifier))) { responses.Add(BuyRations_Response); }
-        if (buyRepairs) { responses.Add(BuyRepairs_Response); }
         if (Gold < (500f * StandingsModifier) && !buyRepairs) responses.Add(CantResponse);
         else responses.Add(BackResponse);
         return responses.ToArray();

@@ -21,7 +21,7 @@ public class SeaToInspection_State : State
                 new SeaInspection_State(SubsequentState),
                 SeaInspection_State.CameraRot,
                 SeaInspection_State.CameraPos,
-                7.5f
+                9.5f
             ));
     }
 }

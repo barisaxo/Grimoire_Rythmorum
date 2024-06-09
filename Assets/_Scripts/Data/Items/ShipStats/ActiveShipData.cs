@@ -4,24 +4,27 @@ using System.Collections.Generic;
 namespace Data.Two
 {
     [System.Serializable]
-    public class PlayerShipData : IData
+    public class ActiveShipData : IData
     {
-        private Dictionary<IPlayerShipStat, int> _ship;
-        private Dictionary<IPlayerShipStat, int> Ship => _ship ??= SetUpShip();
+        private Dictionary<IPlayerShipStat, int> _stats;
+        private Dictionary<IPlayerShipStat, int> Stats => _stats ??= SetUpStats();
 
-        private ShipStats.ShipStats _shipStats;
-        public ShipStats.ShipStats ShipStats => _shipStats ??= new(
-            new ShipStats.HullStats(new Sloop(), new Pine()),
-            new ShipStats.CannonStats(new Mynion(), new WroughtIron()),
-            new ShipStats.RiggingStats(new Hemp())
-        );
+        public ShipStats.ShipStats ShipStats => Manager.Io.ShipStats.ActiveShip;
 
-        public void Reset() => _ship = SetUpShip();
+        // private ShipStats.ShipStats _shipStats;
+        // public ShipStats.ShipStats ShipStats => _shipStats ??= new(
+        //     new ShipStats.HullStats(new Sloop(), new Pine()),
+        //     new ShipStats.CannonStats(new Mynion(), new WroughtIron()),
+        //     new ShipStats.RiggingStats(new Hemp())
+        // );
 
-        Dictionary<IPlayerShipStat, int> SetUpShip()
+        public void Reset() => _stats = SetUpStats();
+
+        Dictionary<IPlayerShipStat, int> SetUpStats()
         {
             Dictionary<IPlayerShipStat, int> ship = new();
             foreach (var item in Items) ship.Add((IPlayerShipStat)item, 1);
+            ship[new CurrentHitPoints()] = ship[new MaxHitPoints()];
             return ship;
         }
 
@@ -33,7 +36,7 @@ namespace Data.Two
                     (int)(ShipStats.RiggingStats.ClothType.Modifier * ShipStats.HullStats.Hull.Modifier * .05f) +
                     " Tons Of Storage.",
 
-                FishStorage =>
+                RationStorage =>
                     (int)(ShipStats.RiggingStats.ClothType.Modifier * ShipStats.HullStats.Hull.Modifier * .05f) +
                     " Tons Of Storage.",
 
@@ -70,11 +73,11 @@ namespace Data.Two
             return item switch
             {
                 MaterialStorage => (int)(ShipStats.RiggingStats.ClothType.Modifier * ShipStats.HullStats.Hull.Modifier * .05f),
-                FishStorage => (int)(ShipStats.RiggingStats.ClothType.Modifier * ShipStats.HullStats.Hull.Modifier * .05f),
+                RationStorage => (int)(ShipStats.RiggingStats.ClothType.Modifier * ShipStats.HullStats.Hull.Modifier * .05f),
                 StarChart => (int)(ShipStats.RiggingStats.ClothType.Modifier * ShipStats.HullStats.Hull.Modifier * .01f),
                 GramophoneStorage => (int)(ShipStats.RiggingStats.ClothType.Modifier * ShipStats.HullStats.Hull.Modifier * .01f),
                 MaxHitPoints => (int)(ShipStats.HullStats.Hull.Modifier * ShipStats.HullStats.Timber.Modifier),
-                CurrentHitPoints => (int)(ShipStats.HullStats.Hull.Modifier * ShipStats.HullStats.Timber.Modifier),
+                CurrentHitPoints => Stats[(IPlayerShipStat)item],
                 Armament => ShipStats.NumOfCannons,
                 Damage => (int)(ShipStats.CannonStats.Cannon.Modifier * ShipStats.CannonStats.Metal.Modifier * ShipStats.NumOfCannons),
                 Hulls => (int)(ShipStats.HullStats.Hull.Modifier),
@@ -85,16 +88,16 @@ namespace Data.Two
 
         public void AdjustLevel(IItem item, int i)
         {
-            Ship[(IPlayerShipStat)item] =
-                Ship[(IPlayerShipStat)item] + i < 0 ? 0 :
-                Ship[(IPlayerShipStat)item] + i;
-            PersistentData.Save(this);
+            if (item is not IPlayerShipStat) throw new System.Exception(item.Name);
+            Stats[(IPlayerShipStat)item] =
+                Stats[(IPlayerShipStat)item] + i < 0 ? 0 :
+                Stats[(IPlayerShipStat)item] + i;
         }
 
         public void SetLevel(IItem item, int i)
         {
             if (item is not IPlayerShipStat) throw new System.ArgumentException(item.Name);
-            Ship[(IPlayerShipStat)item] = i;
+            Stats[(IPlayerShipStat)item] = i;
             PersistentData.Save(this);
         }
 
@@ -116,24 +119,22 @@ namespace Data.Two
         }
         public bool InventoryIsFull(int Space) => false;
 
-        private PlayerShipData() { }
-
-        public static PlayerShipData GetData()
-        {
-            PlayerShipData data = new();
-            if (data.PersistentData.TryLoadData() is not PlayerShipData loadData) return data;
-            for (int i = 0; i < data.Items.Length; i++)
-                try { data.SetLevel(data.Items[i], loadData.GetLevel(data.Items[i])); }
-                catch { }
-            return data;
-        }
+        // public static ActiveShipData GetData()
+        // {
+        //     ActiveShipData data = new();
+        //     if (data.PersistentData.TryLoadData() is not ActiveShipData loadData) return data;
+        //     for (int i = 0; i < data.Items.Length; i++)
+        //         try { data.SetLevel(data.Items[i], loadData.GetLevel(data.Items[i])); }
+        //         catch { }
+        //     return data;
+        // }
 
         string IData.GetDescription(IItem item)
         {
             return null;
         }
 
-        public IPersistentData PersistentData { get; } = new SaveData("PlayerShip.Data");
+        public IPersistentData PersistentData { get; } = new NotPersistentData();// new SaveData("PlayerShip.Data");
     }
 
     public interface IPlayerShipStat : IItem
@@ -145,7 +146,7 @@ namespace Data.Two
     }
 
     [System.Serializable] public readonly struct MaterialStorage : IPlayerShipStat { public readonly PlayerShipStatEnum Enum => PlayerShipStatEnum.MaterialStorage; }
-    [System.Serializable] public readonly struct FishStorage : IPlayerShipStat { public readonly PlayerShipStatEnum Enum => PlayerShipStatEnum.FishStorage; }
+    [System.Serializable] public readonly struct RationStorage : IPlayerShipStat { public readonly PlayerShipStatEnum Enum => PlayerShipStatEnum.RationStorage; }
     [System.Serializable] public readonly struct StarChartStorage : IPlayerShipStat { public readonly PlayerShipStatEnum Enum => PlayerShipStatEnum.StarChartStorage; }
     [System.Serializable] public readonly struct GramophoneStorage : IPlayerShipStat { public readonly PlayerShipStatEnum Enum => PlayerShipStatEnum.GramophoneStorage; }
     [System.Serializable] public readonly struct Sails : IPlayerShipStat { public readonly PlayerShipStatEnum Enum => PlayerShipStatEnum.Sails; }
@@ -168,7 +169,7 @@ namespace Data.Two
         public readonly string Description;
 
         public readonly static PlayerShipStatEnum MaterialStorage = new(0, "Materials");
-        public readonly static PlayerShipStatEnum FishStorage = new(1, "Fish");
+        public readonly static PlayerShipStatEnum RationStorage = new(1, "Rations");
         public readonly static PlayerShipStatEnum StarChartStorage = new(2, "Star Charts");
         public readonly static PlayerShipStatEnum GramophoneStorage = new(3, "Gramophones");
         public readonly static PlayerShipStatEnum Sails = new(4, "Rigging");
@@ -183,7 +184,7 @@ namespace Data.Two
             return @enum switch
             {
                 _ when @enum == MaterialStorage => new MaterialStorage(),
-                _ when @enum == FishStorage => new FishStorage(),
+                _ when @enum == RationStorage => new RationStorage(),
                 _ when @enum == StarChartStorage => new StarChartStorage(),
                 _ when @enum == GramophoneStorage => new GramophoneStorage(),
                 _ when @enum == Sails => new Sails(),

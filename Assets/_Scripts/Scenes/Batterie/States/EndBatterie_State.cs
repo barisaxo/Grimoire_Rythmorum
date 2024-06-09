@@ -15,6 +15,7 @@ public class EndBatterie_State : State
     int coins = 0;
     int mats = 0;
     int rations = 0;
+    int patterns = 0;
     // bool map;
 
     int level => (Scene.NMEShipStats.HullStats.Hull.ID * 4) + 1;
@@ -29,21 +30,21 @@ public class EndBatterie_State : State
 
     protected override void PrepareState(Action callback)
     {
-        Scene.SelfDestruct();
-        // Pack.BHUD.SelfDestruct();
-
-        coins = (int)((level + 25f) * 5.55f * UnityEngine.Random.Range(.15f, 1) * (float)((100 - Result()) * .01f));
-        mats = (int)(((level + 15f) * 2.55f) * UnityEngine.Random.Range(.15f, 1) * (float)((100 - Result()) * .01f));
+        coins = (int)((level + 35f) * 5.55f * UnityEngine.Random.Range(.35f, 1) * (float)((100 - Result()) * .01f));
+        mats = (int)((level + 25f) * 2.55f * UnityEngine.Random.Range(.35f, 1) * (float)((100 - Result()) * .01f));
         rations = (int)(1 + ((level + 5f) * UnityEngine.Random.Range(.5f, 1) * (float)((100 - Result()) * .01f)));
+        patterns = (int)((Scene.NMEShipStats.HullStrength + Scene.NMEShipStats.VolleyDamage) *
+                        (Scene.Pack.HasCritThisBattery ? .45f : .25f));
+        Results();
 
-        // UnityEngine.GameObject.Destroy(Pack.NME);
-        // UnityEngine.GameObject.Destroy(Pack.Ship);
         Sea.WorldMapScene.Io.Ship.GO.transform.SetPositionAndRotation(
             Sea.WorldMapScene.Io.Ship.SeaPos,
             Sea.WorldMapScene.Io.Ship.SeaRot
         );
+
         UnityEngine.GameObject.Destroy(Scene.NMEFire);
         UnityEngine.GameObject.Destroy(Scene.ShipFire);
+        Scene.SelfDestruct();
 
         callback();
         return;
@@ -56,7 +57,7 @@ public class EndBatterie_State : State
 
     }
 
-    protected override void EngageState()
+    void Results()
     {
         // Board.BoardHUD.UpdatePlayerHealth(Data.CharacterData);
         // SetState(new SeaSceneTest_State());
@@ -67,11 +68,12 @@ public class EndBatterie_State : State
                 Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Material(), mats /= 2);
                 Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Ration(), rations /= 2);
                 Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), coins /= 2);
+                DataManager.Player.AdjustLevel(new Data.Two.PatternsFound(), patterns);
                 SetState(
                     new CameraPan_State(
                         new NPCSailAway_State(
                             new DialogStart_State(new EndBatterie_Dialogue(
-                                coins, mats, rations, false, BatterieResultType.NMESurrender))),
+                                coins, mats, rations, patterns, BatterieResultType.NMESurrender))),
                         Cam.StoredCamRot,
                         Cam.StoredCamPos,
                         3));
@@ -85,7 +87,7 @@ public class EndBatterie_State : State
                     new CameraPan_State(
                         new NPCSailAway_State(
                             new DialogStart_State(new EndBatterie_Dialogue(
-                                coins, mats, rations, false, BatterieResultType.Surrender))),
+                                coins, mats, rations, 0, BatterieResultType.Surrender))),
                         Cam.StoredCamRot,
                         Cam.StoredCamPos,
                         3));
@@ -96,7 +98,7 @@ public class EndBatterie_State : State
                     new CameraPan_State(
                         new NPCSailAway_State(
                             new DialogStart_State(new EndBatterie_Dialogue(
-                                0, 0, 0, false, BatterieResultType.Spam))),
+                                0, 0, 0, 0, BatterieResultType.Spam))),
                         Cam.StoredCamRot,
                         Cam.StoredCamPos,
                         3));
@@ -107,7 +109,7 @@ public class EndBatterie_State : State
                     new MoveNPCOffScreen_State(
                         new CameraPan_State(
                             new DialogStart_State(new EndBatterie_Dialogue(
-                                0, 0, 0, false, BatterieResultType.Fled)),
+                                0, 0, 0, 0, BatterieResultType.Fled)),
                             Cam.StoredCamRot,
                             Cam.StoredCamPos,
                             3)));
@@ -119,7 +121,7 @@ public class EndBatterie_State : State
                     new CameraPan_State(
                         new NPCSailAway_State(
                             new DialogStart_State(new EndBatterie_Dialogue(
-                                0, 0, 0, false, BatterieResultType.NMEscaped))),
+                                0, 0, 0, 0, BatterieResultType.NMEscaped))),
                         Cam.StoredCamRot,
                         Cam.StoredCamPos,
                         3));
@@ -129,7 +131,7 @@ public class EndBatterie_State : State
                 SetState(
                     new CameraPan_State(
                         new DialogStart_State(
-                            new EndBatterie_Dialogue(0, 0, 0, false, BatterieResultType.NMEscaped)),
+                            new EndBatterie_Dialogue(0, 0, 0, 0, BatterieResultType.NMEscaped)),
                         Cam.StoredCamRot,
                         Cam.StoredCamPos,
                         3));
@@ -141,12 +143,13 @@ public class EndBatterie_State : State
                 Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Material(), mats);
                 Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Ration(), rations);
                 Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), coins);
+                DataManager.Player.AdjustLevel(new Data.Two.PatternsFound(), patterns);
 
                 SetState(
                     new MoveNPCOffScreen_State(
                         new CameraPan_State(
                             new DialogStart_State(new EndBatterie_Dialogue(
-                                coins, mats, rations, false, BatterieResultType.Won)),
+                                coins, mats, rations, patterns, BatterieResultType.Won)),
                             Cam.StoredCamRot,
                             Cam.StoredCamPos,
                             3)));

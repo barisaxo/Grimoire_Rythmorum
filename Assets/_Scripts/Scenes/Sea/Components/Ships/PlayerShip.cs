@@ -54,7 +54,7 @@ public class PlayerShip
     private readonly int RegionSize;
     private readonly int GlobalSize;
 
-    public ShipStats.ShipStats ShipStats = Data.Two.Manager.Io.PlayerShip.ShipStats;
+    public ShipStats.ShipStats ShipStats = Data.Two.Manager.Io.ActiveShip.ShipStats;
 
     //  TO DO get actual data
     //     new(

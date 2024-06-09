@@ -3,24 +3,15 @@ using UnityEngine;
 
 public class BootStrap_State : State
 {
-    private BootStrap_State() { Fader.Screen.color = Color.black; }
+    private BootStrap_State() { }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    private static void AutoInitialize()
-    {
-        _ = new FPSDisplay();
-        BootStrap_State state = new();
-        state.SetState(new BootStrap_State() { Fade = true });
-    }
+    private static void AutoInitialize() =>
+        new BootStrap_State().SetState(new BootStrap_State() { Fade = true });
 
     protected override void PrepareState(Action callback)
     {
-        int x = 0;
-        for (int i = 1; i < 51; i++)
-        {
-            x += i * 10;
-        }
-        Debug.Log(x);
+        _ = new FPSDisplay();
         _ = Cam.Io;
         AudioSettings.Reset(AudioSettings.GetConfiguration());
         callback();
@@ -30,13 +21,6 @@ public class BootStrap_State : State
     {
         SetState(new MenuState(new Menus.Two.MainMenu(Data.Two.Manager.Io, Audio)));
     }
-
-    protected override void DisengageState()
-    {
-        Fader.SelfDestruct();
-    }
-
-    readonly ScreenFader Fader = new();
 }
 
 public class ThrowState : State
@@ -46,3 +30,4 @@ public class ThrowState : State
         throw new System.NotImplementedException();
     }
 }
+

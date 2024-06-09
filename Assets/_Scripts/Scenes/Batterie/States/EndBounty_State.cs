@@ -9,6 +9,7 @@ public class EndBounty_State : State
         Scene = scene;
         Scene.Pack.SetResultType(result);
         Quest = quest;
+        Quest.Complete = true;
     }
     readonly BatterieScene Scene;
     readonly Quests.BountyQuest Quest;

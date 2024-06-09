@@ -7,7 +7,7 @@ namespace Sea
 {
     public class Gramophone : ISceneObject
     {
-        public Gramophone(State currentState, InventoryData inventoryData, QuestData questData, PlayerShipData shipData, Sea.Maps.R region)
+        public Gramophone(State currentState, InventoryData inventoryData, QuestData questData, ActiveShipData shipData, Sea.Maps.R region)
         {
             Gramo = Assets.Gramo;
             TF.SetParent(WorldMapScene.Io.TheSea.transform);

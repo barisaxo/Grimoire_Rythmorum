@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Data.Two;
+using TMPro;
+
 namespace Menus.Two
 {
     public class GramophoneMenu : IMenu
@@ -27,8 +29,12 @@ namespace Menus.Two
 
         public IInputHandler Input => new MenuInputHandler()
         {
-            North = new ButtonInput(IncreaseItem),
-            West = new ButtonInput(DecreaseItem),
+
+            // North = new ButtonInput(IncreaseItem),
+            // West = new ButtonInput(DecreaseItem),
+
+            East = new ButtonInput(Confirm),
+            South = new ButtonInput(Back),
             Up = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Up, this)),
             Down = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Down, this)),
         };
@@ -45,7 +51,37 @@ namespace Menus.Two
             Selection.Card.SetTextString(DisplayData(Selection.Item));
         }
 
-        public State ConsequentState => new NewGramoPuzzle_State(SubsequentState, true);
-        public IMenuScene Scene => null;
+        private void Back() { ConsequentState = SubsequentState; }
+        private void Confirm() { ConsequentState = new NewGramoPuzzle_State(SubsequentState, true); }
+
+        public State ConsequentState { get; set; }
+        public IMenuScene Scene { get; } = new PracticeMenuScene();
+    }
+
+    public class PracticeMenuScene : IMenuScene
+    {
+        public void Initialize()
+        {
+            South.SetTextString("Back").SetImageColor(Color.white);
+            East.SetTextString("Confirm").SetImageColor(Color.white);
+            West.SetImageColor(Color.white).SetTextString("Tutorial");
+            ((IMenuScene)this).SetCardPos1(South);
+            ((IMenuScene)this).SetCardPos2(West);
+            ((IMenuScene)this).SetCardPos3(East);
+        }
+
+        public void SelfDestruct()
+        {
+            Hud?.SelfDestruct();
+            Resources.UnloadUnusedAssets();
+        }
+
+        public Transform TF => null;
+
+        public Card Hud { get; set; }
+        public Card North { get; set; }
+        public Card East { get; set; }
+        public Card South { get; set; }
+        public Card West { get; set; }
     }
 }

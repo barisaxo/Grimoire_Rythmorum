@@ -45,7 +45,7 @@ namespace Data.Two
 
             Standings[(Standing)item] =
                 Standings[(Standing)item] + i < 0 ? 0 :
-                Standings[(Standing)item] + i > 9 ? 9 :
+                Standings[(Standing)item] + i > 10 ? 10 :
                 Standings[(Standing)item] + i;
 
             if (i > 0) AdjustGroup(1, (Standing)item);

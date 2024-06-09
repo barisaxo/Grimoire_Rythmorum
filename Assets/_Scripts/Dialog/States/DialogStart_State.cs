@@ -20,6 +20,7 @@ public class DialogStart_State : State
 
     protected override void PrepareState(Action callback)
     {
+        Fade = false;
         Audio.BGMusic.Pause();
 
         Dialog = new(_dialogue.Initiate());

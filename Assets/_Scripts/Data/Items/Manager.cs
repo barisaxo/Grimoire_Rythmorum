@@ -38,8 +38,8 @@ namespace Data.Two
         private LighthouseData _lighthouse;
         public LighthouseData Lighthouse => _lighthouse ??= new();
 
-        private PlayerShipData _playerShip;
-        public PlayerShipData PlayerShip => _playerShip ??= PlayerShipData.GetData();
+        private ActiveShipData _activeShip;
+        public ActiveShipData ActiveShip => _activeShip ??= new();
 
         private FishInventoryData _fish;
         public FishInventoryData Fish => _fish ??= new();
@@ -64,5 +64,8 @@ namespace Data.Two
 
         private ShipStatsData _shipStatsData;
         public ShipStatsData ShipStats => _shipStatsData ??= ShipStatsData.GetData();
+
+        private ShipUpgradeData _shipUpgradeData;
+        public ShipUpgradeData ShipUpgradeData => _shipUpgradeData ??= new ShipUpgradeData(ShipStats.ActiveShip);
     }
 }

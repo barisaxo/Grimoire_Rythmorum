@@ -10,6 +10,12 @@ public class BuyRations_Dialogue : Dialogue
 
     int StandingMod => Data.Two.Manager.Io.StandingData.GetLevel(Standing);
     int Coins => Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.Gold());
+    int rationsCapacity => Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.RationStorage());
+
+    float availableRationsSpace =>
+        (float)Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.Ration()) /
+        (float)Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.RationStorage());
+
     float StandingsModifier => 1f + (float)(1f - (float)((float)StandingMod) / 9f);
 
     int largeGold => (int)(largeRation * 35f * StandingsModifier);
@@ -17,9 +23,9 @@ public class BuyRations_Dialogue : Dialogue
     int smallGold => (int)(smallRation * 50f * StandingsModifier);
 
 
-    int largeRation => 100;
-    int medRation => 50;
-    int smallRation => 10;
+    int largeRation => (int)((float)rationsCapacity * .5f);
+    int medRation => (int)((float)rationsCapacity * .25f);
+    int smallRation => (int)((float)rationsCapacity * .15f);
 
 
     public BuyRations_Dialogue(Dialogue returnTo, Speaker speaker, Data.Two.Standing standing)
@@ -65,9 +71,9 @@ public class BuyRations_Dialogue : Dialogue
     {
         List<Response> responses = new();
 
-        if (!(Coins < largeGold)) { responses.Add(RationsLarge_Response); }
-        if (!(Coins < medGold)) { responses.Add(RationsMedium_Response); }
-        if (!(Coins < smallGold)) { responses.Add(RationsSmall_Response); }
+        if (!(Coins < largeGold) && availableRationsSpace < .75f) { responses.Add(RationsLarge_Response); }
+        if (!(Coins < medGold) && availableRationsSpace < .85f) { responses.Add(RationsMedium_Response); }
+        if (!(Coins < smallGold) && availableRationsSpace < 1f) { responses.Add(RationsSmall_Response); }
         responses.Add(BackResponse);
 
         return responses.ToArray();

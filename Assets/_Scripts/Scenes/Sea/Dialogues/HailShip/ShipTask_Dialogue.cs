@@ -18,11 +18,12 @@ public class ShipTask_Dialogue : Dialogue
         return this;
     }
 
-    string Leave_LineText => UnityEngine.Random.Range(0, 4) switch
+    int StandingLevel => Data.Two.Manager.Io.StandingData.GetLevel(Standing);
+    string Leave_LineText => StandingLevel switch
     {
-        0 => "Safe journey!",
-        1 => "Until next time!",
-        2 => "Keep an eye out for pirates, they can look just like trade ships.",
+        10 or 9 or 8 => "Safe journey!",
+        7 or 6 or 5 => "Until next time!",
+        4 or 3 => "Keep an eye out for pirates, they can look just like trade ships.",
         _ => "Then why did you... I... We have work to do!"
     };
 
@@ -47,7 +48,7 @@ public class ShipTask_Dialogue : Dialogue
     Response Trade_Response => _trade_response ??= new Response("Trade goods", new Trade_Dialogue(this, Speaker, Standing));
 
     Response _repairResponse;
-    Response RepairResponse => _repairResponse ??= new Response("Repair ship", new BuyRepairs_Dialogue(this, Speaker, Standing));
+    Response RepairResponse => _repairResponse ??= new Response("Services", new Services_Dialogue(this, Speaker, Standing));
 
     Response _bountyResponse;
     Response BountyResponse => _bountyResponse ??= new Response("Bounties", new Bounty_Dialogue(this, Speaker, Standing));

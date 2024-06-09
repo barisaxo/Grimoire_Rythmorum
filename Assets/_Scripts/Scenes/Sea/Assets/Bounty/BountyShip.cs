@@ -7,7 +7,7 @@ namespace Sea
 {
     public class BountyShip : ISceneObject
     {
-        public BountyShip(State currentState, QuestData questData, PlayerShipData shipData, Region region, Cell cell)
+        public BountyShip(State currentState, QuestData questData, ActiveShipData shipData, Region region, Cell cell)
         {
             Debug.Log("NEW BOUNTY SHIP ");
             Ship = Assets.BountyShip;

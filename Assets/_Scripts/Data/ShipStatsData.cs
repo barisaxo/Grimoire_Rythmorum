@@ -10,6 +10,7 @@ namespace Data.Two
         private Dictionary<IHull, ShipStats.ShipStats> _ship;
         private Dictionary<IHull, ShipStats.ShipStats> Ship => _ship ??= SetUpShip();
 
+        public ShipStats.ShipStats ActiveShip;
 
         public void Reset() => _ship = SetUpShip();
 
@@ -17,12 +18,12 @@ namespace Data.Two
         {
             Dictionary<IHull, ShipStats.ShipStats> ship = new();
 
-            ship.TryAdd(new Sloop(), new ShipStats.ShipStats(new HullStats(new Sloop(), new Pine()), new CannonStats(new Mynion(), new WroughtIron()), new RiggingStats(new Hemp())));
-            ship.TryAdd(new Cutter(), new ShipStats.ShipStats(new HullStats(new Sloop(), new Pine()), new CannonStats(new Mynion(), new WroughtIron()), new RiggingStats(new Hemp())));
-            ship.TryAdd(new Schooner(), new ShipStats.ShipStats(new HullStats(new Sloop(), new Pine()), new CannonStats(new Mynion(), new WroughtIron()), new RiggingStats(new Hemp())));
-            ship.TryAdd(new Brig(), new ShipStats.ShipStats(new HullStats(new Sloop(), new Pine()), new CannonStats(new Mynion(), new WroughtIron()), new RiggingStats(new Hemp())));
-            ship.TryAdd(new Frigate(), new ShipStats.ShipStats(new HullStats(new Sloop(), new Pine()), new CannonStats(new Mynion(), new WroughtIron()), new RiggingStats(new Hemp())));
-            ship.TryAdd(new Barque(), new ShipStats.ShipStats(new HullStats(new Sloop(), new Pine()), new CannonStats(new Mynion(), new WroughtIron()), new RiggingStats(new Hemp())));
+            ship.TryAdd(new Sloop(), new ShipStats.ShipStats(new HullStats(new Sloop(), new Pine()), new CannonStats(new Mynion(), new Bronze()), new RiggingStats(new Hemp())));
+            ship.TryAdd(new Cutter(), new ShipStats.ShipStats(new HullStats(new Sloop(), new Pine()), new CannonStats(new Mynion(), new Bronze()), new RiggingStats(new Hemp())));
+            ship.TryAdd(new Schooner(), new ShipStats.ShipStats(new HullStats(new Sloop(), new Pine()), new CannonStats(new Mynion(), new Bronze()), new RiggingStats(new Hemp())));
+            ship.TryAdd(new Brig(), new ShipStats.ShipStats(new HullStats(new Sloop(), new Pine()), new CannonStats(new Mynion(), new Bronze()), new RiggingStats(new Hemp())));
+            ship.TryAdd(new Frigate(), new ShipStats.ShipStats(new HullStats(new Sloop(), new Pine()), new CannonStats(new Mynion(), new Bronze()), new RiggingStats(new Hemp())));
+            ship.TryAdd(new Barque(), new ShipStats.ShipStats(new HullStats(new Sloop(), new Pine()), new CannonStats(new Mynion(), new Bronze()), new RiggingStats(new Hemp())));
 
             return ship;
         }
@@ -51,10 +52,11 @@ namespace Data.Two
             throw new System.ArgumentException(item.Name + " " + i);
         }
 
-        public void AdjustLevel(IItem item, ShipStats.ShipStats stats)
+        public void AdjustItem(IItem item, ShipStats.ShipStats stats)
         {
             if (item is not IHull) throw new System.ArgumentException(item.Name);
             Ship[(IHull)item] = stats;
+            UnityEngine.Debug.Log("Saving " + PersistentData.FileName);
             PersistentData.Save(this);
         }
 
@@ -62,7 +64,8 @@ namespace Data.Two
         {
             if (item is not IHull) throw new System.ArgumentException(item.Name);
         }
-        public void SetLevel(IItem item, ShipStats.ShipStats stats)
+
+        public void SetItem(IItem item, ShipStats.ShipStats stats)
         {
             if (item is not IHull) throw new System.ArgumentException(item.Name);
             Ship[(IHull)item] = stats;
@@ -95,8 +98,16 @@ namespace Data.Two
             ShipStatsData data = new();
             if (data.PersistentData.TryLoadData() is not ShipStatsData loadData) return data;
             for (int i = 0; i < data.Items.Length; i++)
-                try { data.SetLevel(data.Items[i], loadData.GetLevel(data.Items[i])); }
-                catch { }
+                try { data.SetItem(data.Items[i], loadData.GetItem(data.Items[i])); }
+                catch
+                {
+                    UnityEngine.Debug.Log(
+                        nameof(ShipUpgradeData) + " " +
+                        data.Items[i].Name + " had a problem loading: " +
+                        loadData.GetItem(data.Items[i]) + " " +
+                        data.Items[i].Name
+                        );
+                }
             return data;
         }
 
@@ -107,6 +118,5 @@ namespace Data.Two
 
         public IPersistentData PersistentData { get; } = new SaveData("ShipStats.Data");
     }
-
 
 }

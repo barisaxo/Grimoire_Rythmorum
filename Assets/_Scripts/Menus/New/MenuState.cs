@@ -11,21 +11,28 @@ public class MenuState : State
     {
         Header = header;
         Sub = Header.CurrentSub;
+        Header?.Scene?.HideTexts();
+        Sub?.Scene?.HideTexts();
     }
 
     public MenuState(IMenu sub)
     {
         Sub = sub;
+        Sub?.Scene?.HideTexts();
     }
 
     protected override void PrepareState(Action callback)
     {
         Header?.SetUpMenuCards();
-        Header?.Scene?.Initialize();
         Sub?.SetUpDescription();
         Sub?.SetUpMenuCards();
-        Sub?.Scene?.Initialize();
         base.PrepareState(callback);
+    }
+
+    protected override void EngageState()
+    {
+        Header?.Scene?.Initialize();
+        Sub?.Scene?.Initialize();
     }
 
     protected override void DisengageState()
@@ -79,6 +86,8 @@ public class MenuState : State
         Sub = Header?.CurrentSub;
         Sub?.SetUpDescription();
         Sub?.SetUpMenuCards();
+        Sub?.Scene?.HideTexts();
+        Sub?.Scene?.Initialize();
     }
 
     // protected override void GPInput(GamePadButton gpb)
@@ -88,8 +97,13 @@ public class MenuState : State
 
     protected override void EastPressed()
     {
+        if (Sub?.Input?.East is null && Header?.Input?.East is null) return;
+
         Sub?.Input?.East?.Action();
-        SetState(Sub?.ConsequentState);
+        if (Sub?.ConsequentState is not null) { SetState(Sub.ConsequentState); return; }
+
+        Header?.Input?.East?.Action();
+        if (Header?.ConsequentState is not null) SetState(Header.ConsequentState);
     }
 
     protected override void NorthPressed() => Sub?.Input?.North?.Action();
@@ -97,8 +111,13 @@ public class MenuState : State
 
     protected override void SouthPressed()
     {
+        if (Sub?.Input?.South is null && Header?.Input?.South is null) return;
+
         Sub?.Input?.South?.Action();
-        SetState(Header?.ConsequentState);
+        if (Sub?.ConsequentState is not null) { SetState(Sub.ConsequentState); return; }
+
+        Header?.Input?.South?.Action();
+        if (Header?.ConsequentState is not null) SetState(Header.ConsequentState);
     }
 
 

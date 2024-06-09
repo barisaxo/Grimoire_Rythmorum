@@ -27,6 +27,7 @@ namespace Menus.Two
         {
             Up = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Up, this)),
             Down = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Down, this)),
+            East = new ButtonInput(() => { }),
         };
 
         public string GetDescription { get => null; }
@@ -40,7 +41,7 @@ namespace Menus.Two
 
         public State ConsequentState => Selection.Item switch
         {
-            Continue => new NewCoveScene_State(),
+            Continue => new DialogStart_State(new InstantiateDialogue()) { Fade = true },
             // _ when Selection == MainMenuData.DataItem.NewGame => new NewCoveScene_State(),
             Options =>
                 new MenuState(

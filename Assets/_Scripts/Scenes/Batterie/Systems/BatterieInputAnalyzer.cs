@@ -151,7 +151,7 @@ namespace Batterie
                     (realTime > restWindows[0].start + StartTime + LatencyOffset))
                 {
                     score--;
-                    FeedBack("REST! " + realTime + " " + (restWindows[0].end + StartTime + LatencyOffset));
+                    // FeedBack("REST! " + realTime + " " + (restWindows[0].end + StartTime + LatencyOffset));
                     restWindows.RemoveAt(0);
                     Hit?.Invoke(Batterie.Hit.BadHit);
                 }
@@ -167,7 +167,7 @@ namespace Batterie
                 (realTime < holdWindows[0].end + StartTime + LatencyOffset))
             {
                 score--;
-                Debug.Log("HOLD! " + realTime + " " + (holdWindows[0].end + StartTime + LatencyOffset));
+                // Debug.Log("HOLD! " + realTime + " " + (holdWindows[0].end + StartTime + LatencyOffset));
                 holdWindows.RemoveAt(0);
                 Hit?.Invoke(Batterie.Hit.BadHold);
                 return;
@@ -175,7 +175,7 @@ namespace Batterie
             if (realTime > holdWindows[0].end + StartTime + LatencyOffset)
             {
                 score++;
-                Debug.Log("Good Hold " + realTime + " " + (holdWindows[0].end + StartTime + LatencyOffset));
+                // Debug.Log("Good Hold " + realTime + " " + (holdWindows[0].end + StartTime + LatencyOffset));
                 holdWindows.RemoveAt(0);
             }
         }
@@ -232,7 +232,7 @@ namespace Batterie
             if (realTime > attackWindows[0].end + StartTime + LatencyOffset)
             {
                 score--;
-                Debug.Log("Missed: " + realTime + ", " + (attackWindows[0].start + StartTime) + " " + (attackWindows[0].end + StartTime));
+                // Debug.Log("Missed: " + realTime + ", " + (attackWindows[0].start + StartTime) + " " + (attackWindows[0].end + StartTime));
                 FeedBack("MISS!");
                 attackWindows.RemoveAt(0);
                 Hit?.Invoke(Batterie.Hit.Miss);

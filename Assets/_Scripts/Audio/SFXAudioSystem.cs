@@ -16,15 +16,20 @@ public sealed class SoundFXAudioSystem : AudioSystem
         AudioSources[0].Play();
     }
 
-    public void PlayClip(AudioClip ac)
+    public void PlayClip(AudioClip ac, bool loop)
     {
         AudioSources[1].clip = ac;
         AudioSources[1].Play();
-        AudioSources[1].loop = false;
+        AudioSources[1].loop = loop;
     }
 
     public void StopClip()
     {
         AudioSources[1].Stop();
+    }
+
+    public void RandomizeClipPlaybackPosition()
+    {
+        AudioSources[1].time = Random.Range(0f, AudioSources[1].clip.length);
     }
 }

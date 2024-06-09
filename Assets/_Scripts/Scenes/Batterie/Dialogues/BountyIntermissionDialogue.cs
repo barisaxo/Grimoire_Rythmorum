@@ -29,12 +29,12 @@ public class BountyIntermission_Dialogue : Dialogue
             _startLine = NMEAttemptingFlee;
             Scene.Escaping = true;
         }
-        else if (Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.CurrentHitPoints()) < (float)(Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.MaxHitPoints()) * .3f))
+        else if (Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.CurrentHitPoints()) < (float)(Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.MaxHitPoints()) * .3f))
         {
             _startLine = LowPlayerHealth;
         }
         else if (Scene.NMEHealth.cur < (float)(Scene.NMEHealth.max * .21f) &&
-                (Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.CurrentHitPoints()) > (float)(Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.MaxHitPoints()) * .5f)))
+                (Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.CurrentHitPoints()) > (float)(Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.MaxHitPoints()) * .5f)))
         {
             _startLine = NMESurrender;
         }
@@ -62,7 +62,7 @@ public class BountyIntermission_Dialogue : Dialogue
         {
             FirstLine = Spammed;
         }
-        if (Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.CurrentHitPoints()) < 1)
+        if (Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.CurrentHitPoints()) < 1)
         {
             Debug.Log("YOU LOSE");
 

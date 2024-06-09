@@ -17,11 +17,11 @@ public class BatterieAndCadence_State : State
 
     public BatterieAndCadence_State(RhythmSpecs specs)
     {
-        Debug.Log(Sea.WorldMapScene.Io.NearestNPC.Name + " " +
-            Sea.WorldMapScene.Io.NearestNPC.ShipStats.CannonStats.Cannon.Modifier + " " +
-            Sea.WorldMapScene.Io.NearestNPC.ShipStats.CannonStats.Metal.Modifier + " " +
-            Sea.WorldMapScene.Io.NearestNPC.ShipStats.NumOfCannons + " " +
-            Sea.WorldMapScene.Io.NearestNPC.ShipStats.VolleyDamage);
+        // Debug.Log(Sea.WorldMapScene.Io.NearestNPC.Name + " " +
+        //     Sea.WorldMapScene.Io.NearestNPC.ShipStats.CannonStats.Cannon.Modifier + " " +
+        //     Sea.WorldMapScene.Io.NearestNPC.ShipStats.CannonStats.Metal.Modifier + " " +
+        //     Sea.WorldMapScene.Io.NearestNPC.ShipStats.NumOfCannons + " " +
+        //     Sea.WorldMapScene.Io.NearestNPC.ShipStats.VolleyDamage);
 
         Scene =
             new BatterieScene(
@@ -72,22 +72,6 @@ public class BatterieAndCadence_State : State
         Audio.Batterie.Stop();
         Scene.Pack.MuscopaAudio.StopTheCadence();
         Scene.Pack.MusicSheet.SelfDestruct();
-
-        Scene.BatterieHUD.PlayerCurrent -= Scene.NMEShipStats.VolleyDamage;
-        // Debug.Log(DataManager.Io.CharData.GetLevel(Data.Player.CharacterData.DataItem.CurrentHP));
-        Data.Two.Manager.Io.PlayerShip.SetLevel(
-            new Data.Two.CurrentHitPoints(),
-            Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.CurrentHitPoints()) - Scene.NMEShipStats.VolleyDamage);
-
-        if (Scene.Pack.Spammed)
-        {
-            Data.Two.Manager.Io.PlayerShip.SetLevel(
-                new Data.Two.CurrentHitPoints(),
-                Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.CurrentHitPoints()) - Scene.NMEShipStats.VolleyDamage);
-
-            Scene.BatterieHUD.NMECurrent = Scene.BatterieHUD.NMEMax;
-        }
-
     }
 
 
@@ -197,7 +181,6 @@ public class BatterieAndCadence_State : State
         else if (Input.GetKeyUp(KeyCode.Space))
         {
             Scene.Pack.Analyzer.InputUpAction();
-
         }
 
         // if (Input.GetKeyDown(KeyCode.Tab))

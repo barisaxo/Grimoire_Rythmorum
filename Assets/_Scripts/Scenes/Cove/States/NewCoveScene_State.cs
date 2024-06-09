@@ -12,11 +12,6 @@ public class NewCoveScene_State : State
     protected override void PrepareState(Action callback)
     {
         Audio.BGMusic.PlayClip(Assets.BGMus2);
-        Data.Two.Manager.Io.PlayerShip.SetLevel(new Data.Two.MaxHitPoints(),
-            Data.Two.Manager.Io.PlayerShip.ShipStats.HullStrength);
-
-        Data.Two.Manager.Io.PlayerShip.SetLevel(new Data.Two.CurrentHitPoints(),
-            Data.Two.Manager.Io.PlayerShip.ShipStats.HullStrength);
 
         Cam.Io.Camera.transform.SetPositionAndRotation(
             CoveScene.Io.Player.GO.transform.position,
@@ -39,7 +34,6 @@ public class NewCoveScene_State : State
     }
     protected override void EngageState()
     {
-
         CoveScene.Io.HUD.HideTexts();
     }
     protected override void DisengageState()

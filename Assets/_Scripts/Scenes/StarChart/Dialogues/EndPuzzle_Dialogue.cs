@@ -70,3 +70,26 @@ public class EndGramo_Dialogue : Dialogue
     string Practice_String => "That's great work!\nThe more you practice here the better you'll be at sea!";
 }
 
+public class EndStarChartPractice_Dialogue : Dialogue
+{
+    readonly bool _won;
+
+    public EndStarChartPractice_Dialogue(bool won, State subsequentState)
+    {
+        SubsequentState = subsequentState;
+        _won = won;
+        FirstLine = _won ? RecapLineWon : RecapLineLost;
+    }
+
+    readonly State SubsequentState;
+
+    Line RecapLineWon => new(Won_String, SubsequentState);
+
+    Line RecapLineLost => new(Lost_String, SubsequentState);
+
+    string Won_String => "That's great work!\nThe more you practice here the better you'll be at sea!";
+
+    string Lost_String => "No worries! Keep practicing, you'll get better in no time!";
+
+
+}

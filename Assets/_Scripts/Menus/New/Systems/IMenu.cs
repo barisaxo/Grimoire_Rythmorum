@@ -22,6 +22,7 @@ namespace Menus.Two
             for (int i = 0; i < MenuItems.Length; i++)
                 MenuItems[i].Card?.SelfDestruct();
             Description?.SelfDestruct();
+            Scene?.Hud?.SelfDestruct();
             Scene?.SelfDestruct();
             Resources.UnloadUnusedAssets();
         }
@@ -63,8 +64,8 @@ namespace Menus.Two
                 .SetTMPPosition(Layout.GetDescPosition())
                 .AutoSizeFont(true)
                 .SetTextAlignment(Layout.DescTextAlignment)
-                .AllowWordWrap(true)
-                .SetFontScale(.6f, .6f);
+                .AllowWordWrap(false)
+                .SetFontScale(.5f, .5f);
         }
     }
 
@@ -112,6 +113,7 @@ namespace Menus.Two
         public readonly override bool Equals(object obj) =>
             Item != null && obj is MenuItem e &&
             e.Item != null && Item.ID == e.Item.ID;
+
         public readonly override int GetHashCode() => HashCode.Combine(Item.ID);
     }
 }

@@ -87,8 +87,8 @@ public class SeaScene_State : State
     {
         Scene.HUD.Enable();
         Scene.HUD.UpdateHealthBar(
-            DataManager.PlayerShip.GetLevel(new CurrentHitPoints()),
-            DataManager.PlayerShip.GetLevel(new MaxHitPoints()));
+            DataManager.ActiveShip.GetLevel(new CurrentHitPoints()),
+            DataManager.ActiveShip.GetLevel(new MaxHitPoints()));
         Scene.HUD.Hud.GO.SetActive(true);
         // Scene.HUD.Show();
         Scene.HUD.Hide(-1);
@@ -96,7 +96,7 @@ public class SeaScene_State : State
         Scene.Ship.AttackPopup.GO.SetActive(false);
         Scene.MiniMap.Card.GO.SetActive(true);
 
-        MonoHelper.OnUpdate += Tick;
+        // MonoHelper.OnUpdate += Tick;
         MonoHelper.OnFixedUpdate += FixedTick;
     }
 
@@ -111,7 +111,7 @@ public class SeaScene_State : State
         Cam.StoredCamPos = Cam.Io.Camera.transform.position;
         CameraFollow.SelfDestruct();
 
-        MonoHelper.OnUpdate -= Tick;
+        // MonoHelper.OnUpdate -= Tick;
         MonoHelper.OnFixedUpdate -= FixedTick;
     }
 
@@ -168,9 +168,9 @@ public class SeaScene_State : State
 
     protected override void NorthPressed()
     {
-        Debug.Log("North pressed;");
-        _ = Scene.NearestNPC;
-        // + " Scene.NearestNPC is not null: " +
+        // _ = Scene.NearestNPC;
+        // Debug.Log("North pressed;"
+        //         + " Scene.NearestNPC is not null: " +
         //         (Scene.NearestNPC is not null) +
         //         ", Scene.NearestNPC.SceneObject.Interactable is not NoInteraction: " +
         //         (Scene.NearestNPC.SceneObject.Interactable is not NoInteraction));
@@ -261,25 +261,29 @@ public class SeaScene_State : State
 
     void Tick()
     {
-        Scene.MiniMap.BlinkMiniMap(Scene.Ship.RegionCoord, (int)Scene.Map.RegionResolution);
 
-        Scene.HUD.SetCompassRotation(Scene.Ship.RotY);
 
-        CheckDirectionalInput();
-
-        Scene.HUD.UpdateCoords(Scene.Ship.GlobalCoord.GlobalCoordsToLatLongs(Scene.Map.GlobalSize));
-
-        if ((Scene.NearestNPC = Scene.CheckNMETriggers()) is not null)
-        {
-            Scene.NearestNPC.HideTimer = Scene.NearestNPC.HideTime;
-            SetState(Scene.NearestNPC.SceneObject.Triggerable.SubsequentState);
-        }
     }
 
     void FixedTick()
     {
+        if ((Scene.NearestNPC = Scene.CheckNMETriggers()) is not null)
+        {
+            Scene.NearestNPC.HideTimer = Scene.NearestNPC.HideTime;
+            SetState(Scene.NearestNPC.SceneObject.Triggerable.SubsequentState);
+            return;
+        }
+
+        CheckDirectionalInput();
+
         Movement();
 
+
+        Scene.MiniMap.BlinkMiniMap(Scene.Ship.RegionCoord, (int)Scene.Map.RegionResolution);
+
+        Scene.HUD.SetCompassRotation(Scene.Ship.RotY);
+
+        Scene.HUD.UpdateCoords(Scene.Ship.GlobalCoord.GlobalCoordsToLatLongs(Scene.Map.GlobalSize));
         Scene.HUD.UpdateRations(DataManager.Inventory.GetLevel(new Ration()));
     }
 

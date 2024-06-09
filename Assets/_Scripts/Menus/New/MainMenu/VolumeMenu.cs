@@ -5,7 +5,12 @@ namespace Menus.Two
 {
     public class VolumeMenu : IMenu
     {
-        public VolumeMenu(VolumeData vd, Audio.AudioManager am) { Data = vd; AM = am; }
+        public VolumeMenu(VolumeData vd, Audio.AudioManager am)//, State subsequentState)
+        {
+            Data = vd;
+            AM = am;
+            // ConsequentState = subsequentState;
+        }
 
         readonly Audio.AudioManager AM;
         public IData Data { get; }
@@ -29,6 +34,7 @@ namespace Menus.Two
             Down = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Down, this)),
             Right = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Right, this)),
             Left = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Left, this)),
+            // East = new ButtonInput(() => { })
         };
 
         private void IncreaseItem()

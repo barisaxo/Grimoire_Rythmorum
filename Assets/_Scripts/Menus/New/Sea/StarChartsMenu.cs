@@ -1,24 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Data.Two;
 
 namespace Menus.Two
 {
     public class StarChartsMenu : IMenu
     {
-        public StarChartsMenu(StarChartData data, QuestData questData, State subsequentState, IHeaderMenu menu)//
+        public StarChartsMenu(StarChartData data, State subsequentState)
         {
             Data = data;
-            QuestData = questData;
             SubsequentState = subsequentState;
-            Menu = menu;
         }
 
-        readonly IHeaderMenu Menu;
         readonly State SubsequentState;
         public IData Data { get; }
-        readonly QuestData QuestData;
         public MenuItem Selection { get; set; }
         public MenuItem[] MenuItems { get; set; }
         public Card Description { get; set; }
@@ -35,22 +28,20 @@ namespace Menus.Two
         {
             Up = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Up, this)),
             Down = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Down, this)),
+            East = new ButtonInput(() => ConsequentState = GetNewPuzzle),
+            South = new ButtonInput(() => ConsequentState = SubsequentState),
         };
 
-        public IMenuScene Scene => null;
+        public IMenuScene Scene { get; } = new PracticeMenuScene();
 
-        public State ConsequentState =>
-        Data.GetLevel(Selection.Item) > 0 ?
-        QuestData.GetLevel(new Navigation()) == 1 ?
-            new DialogStart_State(new OverrideQuest_Dialogue(GetPuzzleState, new MenuState(Menu as IHeaderMenu))) :
-            GetPuzzleState :
-            null;
+        public State ConsequentState { get; set; }
 
-        State GetPuzzleState => new Puzzle_State(
-            GetPuzzle(),
-            GetPuzzleType(),
-            SubsequentState
-            );
+
+        State GetNewPuzzle => new StarChartPractice_State(
+             GetPuzzle(),
+             GetPuzzleType(),
+             SubsequentState
+             );
 
         IPuzzle GetPuzzle() => Selection.Item switch
         {

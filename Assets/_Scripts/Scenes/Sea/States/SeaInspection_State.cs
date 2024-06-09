@@ -94,7 +94,7 @@ public class SeaInspection_State : State
                 SubsequentState,
                 Cam.StoredCamRot,
                 Cam.StoredCamPos,
-                7.5f
+                9.5f
             ));
     }
 
@@ -128,8 +128,8 @@ public class SeaInspection_State : State
 
     string ThreatLevel(NPCShip npc)
     {
-        float threat = (float)((float)npc.ShipStats.VolleyDamage / (float)DataManager.PlayerShip.GetLevel(new Data.Two.Damage()));
-        threat += (float)((float)npc.ShipStats.HullStrength / (float)DataManager.PlayerShip.GetLevel(new Data.Two.CurrentHitPoints()));
+        float threat = (float)((float)npc.ShipStats.VolleyDamage / (float)DataManager.ActiveShip.GetLevel(new Data.Two.Damage()));
+        threat += (float)((float)npc.ShipStats.HullStrength / (float)DataManager.ActiveShip.GetLevel(new Data.Two.CurrentHitPoints()));
         int t = (int)(threat * 50f);
         return threat switch
         {

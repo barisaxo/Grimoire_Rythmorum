@@ -25,6 +25,7 @@ public class CoveScene
         _ = Bottle;
         _ = Fish;
         _ = HUD;
+        _ = Cannon;
         PatternViewer.Init();
     }
 
@@ -46,8 +47,8 @@ public class CoveScene
     }
     #endregion INSTANCE
 
-    private Cove.HUD _hud;
-    public Cove.HUD HUD => _hud ??= new();
+    private Cove.ButtonHUD _hud;
+    public Cove.ButtonHUD HUD => _hud ??= new();
 
     private PatternViewer _patternViewer;
     public PatternViewer PatternViewer => _patternViewer ??= new();
@@ -98,6 +99,18 @@ public class CoveScene
     private GameObject _skillSheet;
     public GameObject SkillSheet => _skillSheet ? _skillSheet : _skillSheet = SetUpSkillSheet();
 
+    private GameObject _cannon;
+    public GameObject Cannon => _cannon ? _cannon : _cannon = SetUpCannon();
+
+    private GameObject SetUpCannon()
+    {
+        var go = Assets.Cannon;
+        go.transform.SetParent(Parent);
+        go.transform.SetLocalPositionAndRotation(new Vector3(26.5f, 1.6f, 14), Quaternion.Euler(0, 90, 0));
+        go.transform.localScale = Vector3.one;
+        return go;
+    }
+
     private GameObject _fish;
     public GameObject Fish => _fish ? _fish : _fish = SetUpFish();
 
@@ -105,7 +118,7 @@ public class CoveScene
     {
         var go = Assets.SailFishPrefab.gameObject;
         go.transform.SetParent(Parent);
-        go.transform.SetLocalPositionAndRotation(new Vector3(26.5f, 1.6f, 15), Quaternion.Euler(0, 90, 0));
+        go.transform.SetLocalPositionAndRotation(new Vector3(26.5f, 1.6f, 17), Quaternion.Euler(0, 90, 0));
         go.transform.localScale = Vector3.one;
         return go;
     }
@@ -117,7 +130,7 @@ public class CoveScene
     {
         var go = Assets.Bottle.gameObject;
         go.transform.SetParent(Parent);
-        go.transform.SetLocalPositionAndRotation(new Vector3(26.5f, 1.6f, 19), Quaternion.Euler(0, 90, 0));
+        go.transform.SetLocalPositionAndRotation(new Vector3(26.5f, 1.6f, 20), Quaternion.Euler(0, 90, 0));
         go.transform.localScale = Vector3.one;
         return go;
     }
