@@ -1,14 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using Dialog;
-using Data.Two;
+using Data;
 
 public class BuyRepairs_Dialogue : Dialogue
 {
     readonly Dialogue ReturnTo;
     readonly Standing Standing;
 
-    int StandingMod => Data.Two.Manager.Io.StandingData.GetLevel(Standing);
+    int StandingMod => Data.Manager.Io.StandingData.GetLevel(Standing);
     int Gold => Manager.Io.Inventory.GetLevel(new Gold());
     int Mats => Manager.Io.Inventory.GetLevel(new Material());
     int CurHP => Manager.Io.ActiveShip.GetLevel(new CurrentHitPoints());

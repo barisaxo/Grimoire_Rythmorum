@@ -1,6 +1,6 @@
 
 using System;
-namespace Data.Two
+namespace Data
 {
     [System.Serializable]
     public class SeaMenuData : IData

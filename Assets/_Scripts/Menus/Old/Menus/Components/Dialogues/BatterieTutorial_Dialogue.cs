@@ -6,7 +6,7 @@ public class BatterieTutorial_Dialogue : Dialogue
     private static string[] Batterie => new[]
     {
         "Batterie is a rhythm challenge emulating both the batterie of a drum line, and the battery of a ships cannons.",
-        "The goal is to sight-read rhythms from sheet music, and perform these rhythms by tapping.",
+        "The goal is to sight-read and perform rhythms from sheet music.",
         "The key to this reading rhythms is understanding Rhythm Cells. Just like there are only 12 notes in music, there are only 12 rhythmic shapes. Really!",
         "By combining these 12 shapes with ties and rests, we can create any rhythm!",
         "There are two main types of these 12 shapes, those with 4 counts, and those with 3 counts, sometimes called triplets.",

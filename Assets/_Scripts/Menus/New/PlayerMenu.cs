@@ -1,7 +1,7 @@
 
-using Data.Two;
+using Data;
 
-namespace Menus.Two
+namespace Menus
 {
     public class PlayerStatsMenu : IMenu
     {

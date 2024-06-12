@@ -52,14 +52,15 @@ public class BatterieScene
     // }
     public void Initialize()
     {
-        Debug.Log(Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.MaxHitPoints()));
+        Debug.Log(Data.Manager.Io.ActiveShip.GetLevel(new Data.MaxHitPoints()));
 
         // Sea.WorldMapScene.Io.Ship.ShipStats.HullStrength,
         BatterieHUD ??= new BatterieHUD(
-            Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.MaxHitPoints()),
-            Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.CurrentHitPoints()),
+            Data.Manager.Io.ActiveShip.GetLevel(new Data.MaxHitPoints()),
+            Data.Manager.Io.ActiveShip.GetLevel(new Data.CurrentHitPoints()),
             (int)NMEShipStats.HullStrength,
             NMEName);
+
         Debug.Log("(int)NPCShip.ShipStats.HullStrength: " + NMEShipStats.HullStats.Hull.Description);
         _ = Background;
         _ = Ship;
@@ -69,7 +70,7 @@ public class BatterieScene
         BatterieFeedback.UpdateLoop();
         CountOffFeedBack.UpdateLoop();
 
-        DamageDealt = Data.Two.Manager.Io.ActiveShip.ShipStats.VolleyDamage;
+        DamageDealt = Data.Manager.Io.ActiveShip.ShipStats.VolleyDamage;
         // Cam.Io.Camera.transform.SetPositionAndRotation(
         //     new UnityEngine.Vector3(Cam.Io.Camera.transform.position.x, 15, Cam.Io.Camera.transform.position.z),
         //     Quaternion.identity);
@@ -156,18 +157,18 @@ public class BatterieScene
                 Pack.GoodHits++;
                 BatterieAudio.Hit();
                 ShipFire.Play();
-                // BatterieHUD.NMECurrent = NMEHealth.cur -= Data.Two.Manager.Io.ActiveShip.ShipStats.HitDamage;
-                // UnityEngine.Debug.Log("Damage: " + Data.Two.Manager.Io.ActiveShip.ShipStats.HitDamage);
+                // BatterieHUD.NMECurrent = NMEHealth.cur -= Data.Manager.Io.ActiveShip.ShipStats.HitDamage;
+                // UnityEngine.Debug.Log("Damage: " + Data.Manager.Io.ActiveShip.ShipStats.HitDamage);
                 break;
             case Hit.Miss:
                 // score--;
-                DamageDealt -= Data.Two.Manager.Io.ActiveShip.ShipStats.HitDamage;
+                DamageDealt -= Data.Manager.Io.ActiveShip.ShipStats.HitDamage;
                 Pack.MissedHits++;
                 BatterieAudio.Miss();
                 break;
             case Hit.BadHit:
                 // score--;
-                DamageDealt -= Data.Two.Manager.Io.ActiveShip.ShipStats.HitDamage;
+                DamageDealt -= Data.Manager.Io.ActiveShip.ShipStats.HitDamage;
                 Pack.ErroneousAttacks++;
                 Audio.AudioManager.Io.Batterie.MissStick();
                 // NMEFire.Play();

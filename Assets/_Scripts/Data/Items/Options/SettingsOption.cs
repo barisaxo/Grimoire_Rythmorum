@@ -1,5 +1,5 @@
 
-namespace Data.Two
+namespace Data
 {
     public interface SettingsOption : IItem
     {

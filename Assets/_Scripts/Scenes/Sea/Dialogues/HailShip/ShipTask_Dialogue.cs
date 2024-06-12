@@ -4,9 +4,9 @@ using MusicTheory.Arithmetic;
 public class ShipTask_Dialogue : Dialogue
 {
     readonly string OneTask_LineText = "We've got time for one task, so what will it be?";
-    readonly Data.Two.Standing Standing;
+    readonly Data.Standing Standing;
 
-    public ShipTask_Dialogue(Speaker speaker, Data.Two.Standing standing)
+    public ShipTask_Dialogue(Speaker speaker, Data.Standing standing)
     {
         Speaker = speaker;
         Standing = standing;
@@ -18,7 +18,7 @@ public class ShipTask_Dialogue : Dialogue
         return this;
     }
 
-    int StandingLevel => Data.Two.Manager.Io.StandingData.GetLevel(Standing);
+    int StandingLevel => Data.Manager.Io.StandingData.GetLevel(Standing);
     string Leave_LineText => StandingLevel switch
     {
         10 or 9 or 8 => "Safe journey!",

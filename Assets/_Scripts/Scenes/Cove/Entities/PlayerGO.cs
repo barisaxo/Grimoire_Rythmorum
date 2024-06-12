@@ -22,11 +22,11 @@ public class Player
 
     private Card _bark;
     public Card Bark => _bark ??= new Card(nameof(Bark), GO.transform)
-        .SetFontScale(1.3f, 1.3f)
+        .SetFontScale(.5f, .5f)
         .SetTextString("...")
         .SetOutlineColor(Color.black)
         .SetOutlineWidth(.15f)
-        .AutoSizeFont(true)
+        .AutoSizeFont(false)
         .AllowWordWrap(false)
         .SetTMPPosition(1, 1);
 
@@ -43,8 +43,9 @@ public class Player
         go.transform.localScale = Vector3.one * .8f;
 
         MeshRenderer mr = go.GetComponent<MeshRenderer>();
-        //mr.material.SetFloat("_Glossiness", 0);
-        //mr.material = Assets.PlayerMat;
+        mr.material.SetFloat("_Glossiness", 0);
+        mr.material.color = Color.black;
+        // mr.material = Assets.PlayerMat;
 
         rb = go.AddComponent<Rigidbody>();
         RB.useGravity = false;

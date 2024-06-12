@@ -67,75 +67,115 @@ public class EndBounty_State : State
             case BatterieResultType.NMESurrender:
                 DataManager.StandingData.AdjustLevel(Quest.Standing, 1);
 
-                Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Material(), mats /= 2);
-                Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Ration(), rations /= 2);
-                Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), coins /= 2);
+                Data.Manager.Io.Inventory.AdjustLevel(new Data.Material(), mats /= 2);
+                Data.Manager.Io.Inventory.AdjustLevel(new Data.Ration(), rations /= 2);
+                Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), coins /= 2);
 
                 SetState(
-                    new CameraPan_State(
-                        new NPCSailAway_State(
-                            new DialogStart_State(new EndBounty_Dialogue(
-                                coins, mats, rations, BatterieResultType.NMESurrender))),
-                        Cam.StoredCamRot,
-                        Cam.StoredCamPos,
-                        3));
+                  new MoveNPCOffScreen_State(
+                      new CameraPan_State(
+                          new DialogStart_State(new EndBounty_Dialogue(
+                              coins, mats, rations, BatterieResultType.Won)),
+                          Cam.StoredCamRot,
+                          Cam.StoredCamPos,
+                          3)));
+                // SetState(
+                //     new CameraPan_State(
+                //         new NPCSailAway_State(
+                //             new DialogStart_State(new EndBounty_Dialogue(
+                //                 coins, mats, rations, BatterieResultType.NMESurrender))),
+                //         Cam.StoredCamRot,
+                //         Cam.StoredCamPos,
+                //         3));
                 return;
 
             case BatterieResultType.Surrender:
                 DataManager.StandingData.AdjustLevel(Quest.Standing, -1);
 
-                Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Material(), mats /= -2);
-                Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Ration(), rations /= -2);
-                Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), coins /= -2);
+                Data.Manager.Io.Inventory.AdjustLevel(new Data.Material(), mats /= -2);
+                Data.Manager.Io.Inventory.AdjustLevel(new Data.Ration(), rations /= -2);
+                Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), coins /= -2);
 
                 SetState(
-                    new CameraPan_State(
-                        new NPCSailAway_State(
-                            new DialogStart_State(new EndBounty_Dialogue(
-                                coins, mats, rations, BatterieResultType.Surrender))),
-                        Cam.StoredCamRot,
-                        Cam.StoredCamPos,
-                        3));
+                  new MoveNPCOffScreen_State(
+                      new CameraPan_State(
+                          new DialogStart_State(new EndBounty_Dialogue(
+                              coins, mats, rations, BatterieResultType.Won)),
+                          Cam.StoredCamRot,
+                          Cam.StoredCamPos,
+                          3)));
+                // SetState(
+                //     new CameraPan_State(
+                //         new NPCSailAway_State(
+                //             new DialogStart_State(new EndBounty_Dialogue(
+                //                 coins, mats, rations, BatterieResultType.Surrender))),
+                //         Cam.StoredCamRot,
+                //         Cam.StoredCamPos,
+                //         3));
                 return;
 
             case BatterieResultType.Spam:
                 DataManager.StandingData.AdjustLevel(Quest.Standing, -1);
 
                 SetState(
-                    new CameraPan_State(
-                        new NPCSailAway_State(
-                            new DialogStart_State(new EndBounty_Dialogue(
-                                0, 0, 0, BatterieResultType.Spam))),
-                        Cam.StoredCamRot,
-                        Cam.StoredCamPos,
-                        3));
+                  new MoveNPCOffScreen_State(
+                      new CameraPan_State(
+                          new DialogStart_State(new EndBounty_Dialogue(
+                              coins, mats, rations, BatterieResultType.Won)),
+                          Cam.StoredCamRot,
+                          Cam.StoredCamPos,
+                          3)));
+                // SetState(
+                //     new CameraPan_State(
+                //         new NPCSailAway_State(
+                //             new DialogStart_State(new EndBounty_Dialogue(
+                //                 0, 0, 0, BatterieResultType.Spam))),
+                //         Cam.StoredCamRot,
+                //         Cam.StoredCamPos,
+                //         3));
                 return;
 
             case BatterieResultType.Fled:
                 DataManager.StandingData.AdjustLevel(Quest.Standing, -1);
 
                 SetState(
-                    new MoveNPCOffScreen_State(
-                        new CameraPan_State(
-                            new DialogStart_State(new EndBounty_Dialogue(
-                                0, 0, 0, BatterieResultType.Fled)),
-                            Cam.StoredCamRot,
-                            Cam.StoredCamPos,
-                            3)));
+                  new MoveNPCOffScreen_State(
+                      new CameraPan_State(
+                          new DialogStart_State(new EndBounty_Dialogue(
+                              coins, mats, rations, BatterieResultType.Won)),
+                          Cam.StoredCamRot,
+                          Cam.StoredCamPos,
+                          3)));
+
+                // SetState(
+                //     new MoveNPCOffScreen_State(
+                //         new CameraPan_State(
+                //             new DialogStart_State(new EndBounty_Dialogue(
+                //                 0, 0, 0, BatterieResultType.Fled)),
+                //             Cam.StoredCamRot,
+                //             Cam.StoredCamPos,
+                //             3)));
 
                 return;
 
             case BatterieResultType.NMEscaped:
                 DataManager.StandingData.AdjustLevel(Quest.Standing, -1);
-
                 SetState(
-                    new CameraPan_State(
-                        new NPCSailAway_State(
-                            new DialogStart_State(new EndBounty_Dialogue(
-                                0, 0, 0, BatterieResultType.NMEscaped))),
-                        Cam.StoredCamRot,
-                        Cam.StoredCamPos,
-                        3));
+                  new MoveNPCOffScreen_State(
+                      new CameraPan_State(
+                          new DialogStart_State(new EndBounty_Dialogue(
+                              coins, mats, rations, BatterieResultType.Won)),
+                          Cam.StoredCamRot,
+                          Cam.StoredCamPos,
+                          3)));
+                // SetState(
+                //     new CameraPan_State(
+                //         new NPCSailAway_State(
+                //             new DialogStart_State(new EndBounty_Dialogue(
+                //                 0, 0, 0, BatterieResultType.NMEscaped))),
+                //         Cam.StoredCamRot,
+                //         Cam.StoredCamPos,
+                //         3));
                 return;
 
             case BatterieResultType.Lost:
@@ -153,9 +193,9 @@ public class EndBounty_State : State
             case BatterieResultType.Won:
                 DataManager.StandingData.AdjustLevel(Quest.Standing, 1);
 
-                Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Material(), mats);
-                Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Ration(), rations);
-                Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), coins);
+                Data.Manager.Io.Inventory.AdjustLevel(new Data.Material(), mats);
+                Data.Manager.Io.Inventory.AdjustLevel(new Data.Ration(), rations);
+                Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), coins);
 
                 SetState(
                     new MoveNPCOffScreen_State(

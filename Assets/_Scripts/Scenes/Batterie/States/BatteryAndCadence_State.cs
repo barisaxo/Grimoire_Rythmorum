@@ -17,12 +17,6 @@ public class BatterieAndCadence_State : State
 
     public BatterieAndCadence_State(RhythmSpecs specs)
     {
-        // Debug.Log(Sea.WorldMapScene.Io.NearestNPC.Name + " " +
-        //     Sea.WorldMapScene.Io.NearestNPC.ShipStats.CannonStats.Cannon.Modifier + " " +
-        //     Sea.WorldMapScene.Io.NearestNPC.ShipStats.CannonStats.Metal.Modifier + " " +
-        //     Sea.WorldMapScene.Io.NearestNPC.ShipStats.NumOfCannons + " " +
-        //     Sea.WorldMapScene.Io.NearestNPC.ShipStats.VolleyDamage);
-
         Scene =
             new BatterieScene(
               Sea.WorldMapScene.Io.NearestNPC.ShipStats,
@@ -33,18 +27,20 @@ public class BatterieAndCadence_State : State
               nmeName: Sea.WorldMapScene.Io.NearestNPC.Name
         );
     }
-    // public BatteriePack Pack;
+
     readonly BatterieScene Scene;
     bool cadenceStarted = false;
     public int Counter { get; private set; }
     bool CountingOff = true;
     bool Playing = false;
-    int score, cap;
+
+    // public static Genre RandomGenre() => (Genre)UnityEngine.Random.Range(0, Count());
+    // public static int Count() => Enum.GetNames(typeof(Genre)).Length;
 
     protected override void PrepareState(Action callback)
     {
         Counter = 1;
-        MonoHelper.OnUpdate += SpaceBar;
+        // MonoHelper.OnUpdate += SpaceBar;
 
         Cam.Io.Camera.transform.SetPositionAndRotation((UnityEngine.Vector3.up * 7),
            Quaternion.Euler(new Vector3(-20f, 180, Cam.Io.Camera.transform.rotation.eulerAngles.z))
@@ -64,8 +60,8 @@ public class BatterieAndCadence_State : State
     protected override void DisengageState()
     {
         Scene.Pack.Synchro.TickEvent -= Tick;
-        Scene.Pack.Synchro.BeatEvent -= Click;
-        MonoHelper.OnUpdate -= SpaceBar;
+        // Scene.Pack.Synchro.BeatEvent -= Click;
+        // MonoHelper.OnUpdate -= SpaceBar;
 
         Scene.BatterieFeedback.SelfDestruct();
         Scene.CountOffFeedBack.SelfDestruct();
@@ -84,7 +80,7 @@ public class BatterieAndCadence_State : State
             {
                 MonoHelper.OnUpdate += Scene.Pack.Analyzer.Tick;
                 Scene.Pack.Analyzer.Start();
-                Scene.Pack.Synchro.BeatEvent += Click;
+                // Scene.Pack.Synchro.BeatEvent += Click;
                 CountingOff = false; Playing = true; Counter = 0;
                 // Audio.Batterie.Miss();
             }
@@ -153,41 +149,7 @@ public class BatterieAndCadence_State : State
         }
     }
 
-    void Click()
-    {
-        //Audio.Batterie.PlayClick();
-    }
 
-    protected override void Clicked(MouseAction action, Vector3 mousePos)
-    {
-        switch (action)
-        {
-            case MouseAction.LUp:
-                Scene.Pack.Analyzer.InputUpAction();
-                break;
-
-            case MouseAction.LDown:
-                Scene.Pack.Analyzer.InputDownAction();
-                break;
-        }
-    }
-
-    protected void SpaceBar()
-    {
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            Scene.Pack.Analyzer.InputDownAction();
-        }
-        else if (Input.GetKeyUp(KeyCode.Space))
-        {
-            Scene.Pack.Analyzer.InputUpAction();
-        }
-
-        // if (Input.GetKeyDown(KeyCode.Tab))
-        // {
-        //     SetState(new Batterie_State(Specs));
-        // }
-    }
 
     protected override void GPInput(GamePadButton gpb)
     {
@@ -222,7 +184,41 @@ public class BatterieAndCadence_State : State
                 Scene.Pack.Analyzer.InputDownAction(); break;
         }
     }
+    // void Click()
+    // {
+    //     //Audio.Batterie.PlayClick();
+    // }
 
+    // protected override void Clicked(MouseAction action, Vector3 mousePos)
+    // {
+    //     switch (action)
+    //     {
+    //         case MouseAction.LUp:
+    //             Scene.Pack.Analyzer.InputUpAction();
+    //             break;
+
+    //         case MouseAction.LDown:
+    //             Scene.Pack.Analyzer.InputDownAction();
+    //             break;
+    //     }
+    // }
+
+    // protected void SpaceBar()
+    // {
+    //     if (Input.GetKeyDown(KeyCode.Space))
+    //     {
+    //         Scene.Pack.Analyzer.InputDownAction();
+    //     }
+    //     else if (Input.GetKeyUp(KeyCode.Space))
+    //     {
+    //         Scene.Pack.Analyzer.InputUpAction();
+    //     }
+
+    //     // if (Input.GetKeyDown(KeyCode.Tab))
+    //     // {
+    //     //     SetState(new Batterie_State(Specs));
+    //     // }
+    // }
     // private void HandleHit(Batterie.Hit hit)
     // {
     //     cap++;
@@ -254,8 +250,5 @@ public class BatterieAndCadence_State : State
     //{
     //    return Board.TargetTile.ShipType.ToRegion();
     //}
-
-    public static Genre RandomGenre() => (Genre)UnityEngine.Random.Range(0, Count());
-    public static int Count() => Enum.GetNames(typeof(Genre)).Length;
 
 }

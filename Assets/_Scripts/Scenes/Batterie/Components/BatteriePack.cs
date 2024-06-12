@@ -28,7 +28,7 @@ public class BatteriePack
         {
             RhythmSpecs = _rhythmSpecs
         };
-        MuscopaAudio = new(Data.Two.Manager.Io.Volume);
+        MuscopaAudio = new(Data.Manager.Io.Volume);
         MusicSheet.RhythmSpecs.Time.GenerateRhythmCells(MusicSheet);
         MusicSheet.GetNotes();
         MusicSheet.DrawRhythms();
@@ -59,7 +59,7 @@ public class BatteriePack
     {
         get
         {
-            bool c = TotalErrors <= Data.Two.Manager.Io.Skill.GetLevel(new Data.Two.PerfectTiming()) + 1;
+            bool c = TotalErrors <= Data.Manager.Io.Skill.GetLevel(new Data.PerfectTiming()) + 1;
             if (c) HasCritThisBattery = true;
             return c;
         }

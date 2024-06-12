@@ -7,6 +7,7 @@ public class InstantiateDialogue : Dialogue
 {
     override public Dialogue Initiate()
     {
+        Data.Manager.Io.MiscData.SetValue(new Data.FirstInstantiateDialogue(), true);
         var lines = new Line[intro.Length];
         lines[^1] = new Line(intro[^1], new NewCoveScene_State() { Fade = true });
         for (int i = lines.Length - 2; i > -1; i--) lines[i] = new Line(intro[i], lines[i + 1]);

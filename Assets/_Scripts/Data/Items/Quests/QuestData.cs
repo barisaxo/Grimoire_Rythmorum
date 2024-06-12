@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Quests;
 
-namespace Data.Two
+namespace Data
 {
     [System.Serializable]
     public class QuestData : IData

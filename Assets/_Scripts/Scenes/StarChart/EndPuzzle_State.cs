@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Data.Two;
+using Data;
 using Quests;
 
 public class EndPuzzle_State : State

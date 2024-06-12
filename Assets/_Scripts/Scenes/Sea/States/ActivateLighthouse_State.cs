@@ -1,5 +1,5 @@
 using System;
-using Data.Two;
+using Data;
 namespace Sea
 {
     public class ActivateLighthouse_State : State

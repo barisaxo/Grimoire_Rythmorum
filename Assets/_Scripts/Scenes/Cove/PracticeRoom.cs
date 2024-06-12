@@ -77,6 +77,11 @@ public class PracticeRoom
             foreach (Vector2 v in floorTiles)
             {
                 GameObject t = GameObject.CreatePrimitive(PrimitiveType.Cube);
+
+                MeshRenderer mr = t.GetComponent<MeshRenderer>();
+                mr.material.SetFloat("_Glossiness", 0);
+                mr.material.color = new Color(.4f, .4f, .3f);
+
                 t.name = "Tile: " + v.x + ", " + v.y;
                 t.transform.localScale = Vector3.one * Random.Range(1f, 1.15f);
                 // t.transform.SetPositionAndRotation(
@@ -96,6 +101,10 @@ public class PracticeRoom
                 t.name = "WallTile: " + v.x + ", " + v.y;
                 t.transform.localScale = new Vector3(1, 2.5f, 1) * Random.Range(1.15f, 1.666f);
                 t.transform.position = new Vector3(v.x, 0, v.y);
+                MeshRenderer mr = t.GetComponent<MeshRenderer>();
+                mr.material.SetFloat("_Glossiness", 0);
+                mr.material.color = new Color(.4f, .4f, .3f);
+
                 // t.transform.SetPositionAndRotation(
                 //     new Vector3(v.x, Random.value * .08f, v.y),
                 //     Quaternion.Euler(new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f))));

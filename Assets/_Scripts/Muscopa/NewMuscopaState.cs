@@ -17,7 +17,7 @@ public class NewMuscopaState : State
         //Muscopa = new();
         //MHUD = new();
         //MHUD.Parent.gameObject.SetActive(false);
-        MuscopaAudio = new(Data.Two.Manager.Io.Volume);
+        MuscopaAudio = new(Data.Manager.Io.Volume);
         MuscopaSettings = NewSettings(CadenceDifficulty.ALL, MusicTheory.Musica.RandomMode(), RandomGenre());
 
         GetNewSettings(callback).StartCoroutine();
@@ -97,6 +97,28 @@ public class NewMuscopaState : State
     public static Genre RandomGenre() => (Genre)UnityEngine.Random.Range(0, Count());
     public static int Count() => Enum.GetNames(typeof(Genre)).Length;
 
-
 }
 
+
+public enum BatterieDifficulty
+{
+    LVL1,
+    LVL2,
+    LVL3,
+    LVL4,
+    LVL5
+}
+
+public enum CadenceDifficulty
+{
+    I_II_V,
+    I_IV_V_VI,
+    ALL /* LVL4, LVL5, LVL6 */
+}
+
+public enum Difficulty
+{
+    Easy,
+    Medium,
+    Hard
+}

@@ -81,7 +81,7 @@ public static class SeaHUDSystems
     public static void UpdateRations(this HUD hud, int rations)
     {
         hud.RationsText.SetTextString("Rations: " + rations)
-            .SetTextColor((float)((float)rations / (float)Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.RationStorage())) switch
+            .SetTextColor((float)((float)rations / (float)Data.Manager.Io.ActiveShip.GetLevel(new Data.RationStorage())) switch
             {
                 < .2f => Color.red,
                 < .35f => new Color(1, .5f, 0),

@@ -29,12 +29,12 @@ public class BountyIntermission_Dialogue : Dialogue
             _startLine = NMEAttemptingFlee;
             Scene.Escaping = true;
         }
-        else if (Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.CurrentHitPoints()) < (float)(Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.MaxHitPoints()) * .3f))
+        else if (Data.Manager.Io.ActiveShip.GetLevel(new Data.CurrentHitPoints()) < (float)(Data.Manager.Io.ActiveShip.GetLevel(new Data.MaxHitPoints()) * .3f))
         {
             _startLine = LowPlayerHealth;
         }
         else if (Scene.NMEHealth.cur < (float)(Scene.NMEHealth.max * .21f) &&
-                (Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.CurrentHitPoints()) > (float)(Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.MaxHitPoints()) * .5f)))
+                (Data.Manager.Io.ActiveShip.GetLevel(new Data.CurrentHitPoints()) > (float)(Data.Manager.Io.ActiveShip.GetLevel(new Data.MaxHitPoints()) * .5f)))
         {
             _startLine = NMESurrender;
         }
@@ -62,7 +62,7 @@ public class BountyIntermission_Dialogue : Dialogue
         {
             FirstLine = Spammed;
         }
-        if (Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.CurrentHitPoints()) < 1)
+        if (Data.Manager.Io.ActiveShip.GetLevel(new Data.CurrentHitPoints()) < 1)
         {
             Debug.Log("YOU LOSE");
 
@@ -145,5 +145,5 @@ public class BountyIntermission_Dialogue : Dialogue
     Response LetThemGo => new("Let them go.", new EndBounty_State(Scene, BatterieResultType.NMEscaped, Quest));
 
     Line GameOver => new("Sorry Cap. Looks like where going down with the ship.",
-        new MenuState(new Menus.Two.MainMenu(Data.Two.Manager.Io, Audio.AudioManager.Io)));
+        new MenuState(new Menus.MainMenu(Data.Manager.Io, Audio.AudioManager.Io)));
 }

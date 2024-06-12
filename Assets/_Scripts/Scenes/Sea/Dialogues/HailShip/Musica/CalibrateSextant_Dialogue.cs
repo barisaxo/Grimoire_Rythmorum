@@ -39,6 +39,6 @@ public class CalibrateSextant_Dialogue : Dialogue
 
     void CalibrateSextant()
     {
-        // Data.Two.Manager.Io.CharacterData.Sextant = true;
+        // Data.Manager.Io.CharacterData.Sextant = true;
     }
 }

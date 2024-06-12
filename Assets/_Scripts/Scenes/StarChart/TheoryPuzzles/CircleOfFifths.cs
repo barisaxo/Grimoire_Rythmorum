@@ -48,14 +48,14 @@ public class CircleOfFifths
         .SetTextString("I")
         .SetTMPPosition(StarPos(0))
         .SetTextAlignment(TMPro.TextAlignmentOptions.Center)
-        .TMPClickable()
+        //.TMPClickable()
         ;
 
     public Card bII => _bii ??= Parent.CreateChild(nameof(bII), Parent.Canvas.transform, Parent.Canvas)
         .SetTextString("bII")
         .SetTMPPosition(StarPos(1))
         .SetTextAlignment(TMPro.TextAlignmentOptions.Center)
-        .TMPClickable()
+       //.TMPClickable()
        ;
 
 
@@ -63,69 +63,69 @@ public class CircleOfFifths
         .SetTextString("II")
         .SetTMPPosition(StarPos(2))
         .SetTextAlignment(TMPro.TextAlignmentOptions.Center)
-        .TMPClickable()
+       //.TMPClickable()
        ;
 
     public Card bIII => _biii ??= Parent.CreateChild(nameof(bIII), Parent.Canvas.transform, Parent.Canvas)
         .SetTextString("bIII")
         .SetTMPPosition(StarPos(3))
         .SetTextAlignment(TMPro.TextAlignmentOptions.Center)
-        .TMPClickable()
+        //.TMPClickable()
         ;
     public Card III => _iii ??= Parent.CreateChild(nameof(III), Parent.Canvas.transform, Parent.Canvas)
         .SetTextString("III")
         .SetTMPPosition(StarPos(4))
         .SetTextAlignment(TMPro.TextAlignmentOptions.Center)
-        .TMPClickable()
+        //.TMPClickable()
         ;
 
     public Card IV => _iv ??= Parent.CreateChild(nameof(IV), Parent.Canvas.transform, Parent.Canvas)
         .SetTextString("IV")
         .SetTMPPosition(StarPos(5))
         .SetTextAlignment(TMPro.TextAlignmentOptions.Center)
-        .TMPClickable()
+        //.TMPClickable()
         ;
 
     public Card bV => _bv ??= Parent.CreateChild(nameof(bV), Parent.Canvas.transform, Parent.Canvas)
         .SetTextString("bV")
         .SetTMPPosition(StarPos(6))
         .SetTextAlignment(TMPro.TextAlignmentOptions.Center)
-        .TMPClickable()
+        //.TMPClickable()
         ;
 
     public Card V => _v ??= Parent.CreateChild(nameof(V), Parent.Canvas.transform, Parent.Canvas)
         .SetTextString("V")
         .SetTMPPosition(StarPos(7))
         .SetTextAlignment(TMPro.TextAlignmentOptions.Center)
-        .TMPClickable()
+        //.TMPClickable()
         ;
 
     public Card bVI => _bvi ??= Parent.CreateChild(nameof(bVI), Parent.Canvas.transform, Parent.Canvas)
         .SetTextString("bVI")
         .SetTMPPosition(StarPos(8))
         .SetTextAlignment(TMPro.TextAlignmentOptions.Center)
-        .TMPClickable()
+        //.TMPClickable()
         ;
 
     public Card VI => _vi ??= Parent.CreateChild(nameof(VI), Parent.Canvas.transform, Parent.Canvas)
         .SetTextString("VI")
         .SetTMPPosition(StarPos(9))
         .SetTextAlignment(TMPro.TextAlignmentOptions.Center)
-        .TMPClickable()
+        //.TMPClickable()
         ;
 
     public Card bVII => _bvii ??= Parent.CreateChild(nameof(bVII), Parent.Canvas.transform, Parent.Canvas)
         .SetTextString("bVII")
         .SetTMPPosition(StarPos(10))
         .SetTextAlignment(TMPro.TextAlignmentOptions.Center)
-        .TMPClickable()
+        //.TMPClickable()
         ;
 
     public Card VII => _vii ??= Parent.CreateChild(nameof(VII), Parent.Canvas.transform, Parent.Canvas)
         .SetTextString("VII")
         .SetTMPPosition(StarPos(11))
         .SetTextAlignment(TMPro.TextAlignmentOptions.Center)
-        .TMPClickable()
+        //.TMPClickable()
         ;
 
     public Vector2 StarPos(float i)

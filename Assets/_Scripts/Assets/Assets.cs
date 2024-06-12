@@ -1,5 +1,6 @@
 using UnityEngine;
 using Ships;
+using UnityEngine.Video;
 
 public partial class Assets
 {
@@ -264,4 +265,18 @@ public partial class Assets
     #endregion SEA
 
 
+
+    #region VIDEO
+    public static VideoClip RhythmCellW => Resources.Load<VideoClip>("Video/RhythmCells/Quarter/4/W");
+    public static VideoClip RhythmCellHH => Resources.Load<VideoClip>("Video/RhythmCells/Quarter/4/HH");
+    public static VideoClip RhythmCellQQQQ => Resources.Load<VideoClip>("Video/RhythmCells/Quarter/4/QQQQ");
+    public static VideoClip RhythmCellHQQ => Resources.Load<VideoClip>("Video/RhythmCells/Quarter/4/HQQ");
+    public static VideoClip RhythmCellQQH => Resources.Load<VideoClip>("Video/RhythmCells/Quarter/4/QQH");
+    public static VideoClip RhythmCellQHQ => Resources.Load<VideoClip>("Video/RhythmCells/Quarter/4/QHQ");
+    public static VideoClip RhythmCellDHQ => Resources.Load<VideoClip>("Video/RhythmCells/Quarter/4/DHQ");
+    public static VideoClip RhythmCellQDH => Resources.Load<VideoClip>("Video/RhythmCells/Quarter/4/QDH");
+    public static VideoClip RhythmCellHrH => Resources.Load<VideoClip>("Video/RhythmCells/Quarter/4/HrH");
+    public static VideoClip RhythmCellQrQQrQ => Resources.Load<VideoClip>("Video/RhythmCells/QrQQrQ");
+    public static VideoClip RhythmCellTie => Resources.Load<VideoClip>("Video/RhythmCells/tie");
+    #endregion VIDEO
 }

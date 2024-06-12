@@ -6,10 +6,10 @@ using Dialog;
 public class SellRations_Dialogue : Dialogue
 {
     readonly Dialogue ReturnTo;
-    readonly Data.Two.Standing Standing;
+    readonly Data.Standing Standing;
 
-    int StandingLevel => Data.Two.Manager.Io.StandingData.GetLevel(Standing);
-    readonly int Rations = Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.Ration());
+    int StandingLevel => Data.Manager.Io.StandingData.GetLevel(Standing);
+    readonly int Rations = Data.Manager.Io.Inventory.GetLevel(new Data.Ration());
     float StandingsModifier => 2f - (float)(1f - (float)((float)StandingLevel) / 9f);
 
     int largeGold => (int)(largeRation * 17.5f * StandingsModifier);
@@ -20,7 +20,7 @@ public class SellRations_Dialogue : Dialogue
     int medRation => 25;
     int smallRation => 5;
 
-    public SellRations_Dialogue(Dialogue returnTo, Speaker speaker, Data.Two.Standing standing)
+    public SellRations_Dialogue(Dialogue returnTo, Speaker speaker, Data.Standing standing)
     {
         ReturnTo = returnTo;
         Speaker = speaker;
@@ -80,20 +80,20 @@ public class SellRations_Dialogue : Dialogue
 
     void SellRationsSmall()
     {
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Ration(), -smallRation);
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), smallGold);
+        Data.Manager.Io.Inventory.AdjustLevel(new Data.Ration(), -smallRation);
+        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), smallGold);
     }
 
     void SellRationsMedium()
     {
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Ration(), -medRation);
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), medGold);
+        Data.Manager.Io.Inventory.AdjustLevel(new Data.Ration(), -medRation);
+        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), medGold);
     }
 
     void SellRationsLarge()
     {
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Ration(), -largeRation);
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), largeGold);
+        Data.Manager.Io.Inventory.AdjustLevel(new Data.Ration(), -largeRation);
+        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), largeGold);
     }
 
 }

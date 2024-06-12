@@ -5,7 +5,7 @@ using Dialog;
 
 public class Sell_Dialogue : Dialogue
 {
-    public Sell_Dialogue(Dialogue returnTo, Speaker speaker, Data.Two.Standing standing)
+    public Sell_Dialogue(Dialogue returnTo, Speaker speaker, Data.Standing standing)
     {
         ReturnTo = returnTo;
         Speaker = speaker;
@@ -18,13 +18,14 @@ public class Sell_Dialogue : Dialogue
         return base.Initiate();
     }
 
-    readonly Data.Two.Standing Standing;
+    readonly Data.Standing Standing;
     readonly Dialogue ReturnTo;
 
-    // int Gramos => Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.Gramos());
+    // int Gramos => Data.Manager.Io.Inventory.GetLevel(new Data.Gramos());
     // int Maps => DataManager.Io.CharacterData.Maps;
-    readonly int Mats = Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.Material());
-    readonly int Rations = Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.Ration());
+    readonly int Mats = Data.Manager.Io.Inventory.GetLevel(new Data.Material());
+    readonly int Rations = Data.Manager.Io.Inventory.GetLevel(new Data.Ration());
+    readonly int Gramos = Data.Manager.Io.Inventory.GetLevel(new Data.Gramophone());
 
     readonly string SellGramo_RepText = "Sell Gramophones";
     readonly string SellMat_RepText = "Sell Materials";
@@ -37,8 +38,8 @@ public class Sell_Dialogue : Dialogue
         .SetSpeaker(Speaker)
         ;
 
-    // Response _SellGramo_response;
-    // Response SellGramo_Response => _SellGramo_response ??= new Response(SellGramo_RepText, new SellGramo_Dialogue(this, Speaker));
+    Response _SellGramo_response;
+    Response SellGramo_Response => _SellGramo_response ??= new Response(SellGramo_RepText, new SellGramo_Dialogue(this, Speaker, Standing));
 
     Response _SellMaterials_response;
     Response SellMaterials_Response => _SellMaterials_response ??= new Response(SellMat_RepText, new SellMaterials_Dialogue(this, Speaker, Standing));
@@ -58,7 +59,7 @@ public class Sell_Dialogue : Dialogue
         if (!(Mats < 5)) { responses.Add(SellMaterials_Response); }
         if (!(Rations < 25)) { responses.Add(SellRations_Response); }
         // if (!(Maps < 1)) { responses.Add(SellMaps_Response); }
-        // if (!(Gramos < 1)) { responses.Add(SellGramo_Response); }
+        if (!(Gramos < 1)) { responses.Add(SellGramo_Response); }
 
         if (responses.Count == 0) responses.Add(CantResponse);
         else responses.Add(BackResponse);

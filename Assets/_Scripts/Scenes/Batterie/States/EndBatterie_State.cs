@@ -65,10 +65,10 @@ public class EndBatterie_State : State
         switch (Scene.Pack.ResultType)
         {
             case BatterieResultType.NMESurrender:
-                Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Material(), mats /= 2);
-                Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Ration(), rations /= 2);
-                Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), coins /= 2);
-                DataManager.Player.AdjustLevel(new Data.Two.PatternsFound(), patterns);
+                Data.Manager.Io.Inventory.AdjustLevel(new Data.Material(), mats /= 2);
+                Data.Manager.Io.Inventory.AdjustLevel(new Data.Ration(), rations /= 2);
+                Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), coins /= 2);
+                DataManager.Player.AdjustLevel(new Data.PatternsFound(), patterns);
                 SetState(
                     new CameraPan_State(
                         new NPCSailAway_State(
@@ -80,9 +80,9 @@ public class EndBatterie_State : State
                 return;
 
             case BatterieResultType.Surrender:
-                Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Material(), mats /= -2);
-                Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Ration(), rations /= -2);
-                Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), coins /= -2);
+                Data.Manager.Io.Inventory.AdjustLevel(new Data.Material(), mats /= -2);
+                Data.Manager.Io.Inventory.AdjustLevel(new Data.Ration(), rations /= -2);
+                Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), coins /= -2);
                 SetState(
                     new CameraPan_State(
                         new NPCSailAway_State(
@@ -128,22 +128,16 @@ public class EndBatterie_State : State
                 return;
 
             case BatterieResultType.Lost://TODO
-                SetState(
-                    new CameraPan_State(
-                        new DialogStart_State(
-                            new EndBatterie_Dialogue(0, 0, 0, 0, BatterieResultType.NMEscaped)),
-                        Cam.StoredCamRot,
-                        Cam.StoredCamPos,
-                        3));
+                SetState(new MenuState(new Menus.MainMenu(Data.Manager.Io, Audio))); ;
 
                 return;
 
             case BatterieResultType.Won:
                 //  DataManager.CharacterData.Map = map;
-                Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Material(), mats);
-                Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Ration(), rations);
-                Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), coins);
-                DataManager.Player.AdjustLevel(new Data.Two.PatternsFound(), patterns);
+                Data.Manager.Io.Inventory.AdjustLevel(new Data.Material(), mats);
+                Data.Manager.Io.Inventory.AdjustLevel(new Data.Ration(), rations);
+                Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), coins);
+                DataManager.Player.AdjustLevel(new Data.PatternsFound(), patterns);
 
                 SetState(
                     new MoveNPCOffScreen_State(

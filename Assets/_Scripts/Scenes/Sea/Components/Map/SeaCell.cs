@@ -35,7 +35,7 @@ namespace Sea
         public GameObject GO => SceneObject?.GO;
         // public float RotY;
 
-        public ISceneObject InstantiateNewSceneObject(State currentState, Data.Two.Manager data, Region region, Cell cell)
+        public ISceneObject InstantiateNewSceneObject(State currentState, Data.Manager data, Region region, Cell cell)
         {
             // Debug.Log("Instantiating new scene object: " + Type.ToString() + " " + Coord);
             return SceneObject = Type switch

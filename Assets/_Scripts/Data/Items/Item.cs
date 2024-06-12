@@ -5,7 +5,7 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
 
-namespace Data.Two
+namespace Data
 {
     public interface IItem
     {

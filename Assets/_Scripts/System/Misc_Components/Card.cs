@@ -95,6 +95,11 @@ public class Card
             Canvas SetUpCanvas()
             {
                 Canvas canvas = new GameObject(Name + nameof(Canvas)).AddComponent<Canvas>();
+                if (GO == null)
+                {
+                    GO = new GameObject(Name);
+                    GO.transform.SetParent(Parent, false);
+                }
                 canvas.transform.SetParent(GO.transform, false);
                 canvas.renderMode = RenderMode.ScreenSpaceOverlay;
                 canvas.sortingOrder = 0;

@@ -42,9 +42,10 @@ namespace Dialog
                     .SetImageSprite(GetSprite(filoI))
                     .SetImageSize(Vector2.one * .6f)
                     .OffsetImagePosition(Vector2.right)
-                    .ImageClickable()
+                    // .ImageClickable()
                     .SetCanvasSortingOrder(5)
-                    .TMPClickable();
+                    // .TMPClickable()
+                    ;
             }
 
             _responseCards = textCards;

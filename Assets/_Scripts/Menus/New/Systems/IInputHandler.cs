@@ -1,6 +1,6 @@
 using System;
 
-namespace Menus.Two
+namespace Menus
 {
     public interface IInputHandler
     {

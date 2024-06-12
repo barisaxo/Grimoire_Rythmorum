@@ -1,5 +1,5 @@
 using System;
-namespace Data.Two
+namespace Data
 {
     public interface ISkill : IItem
     {

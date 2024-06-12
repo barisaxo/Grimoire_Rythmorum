@@ -1,8 +1,8 @@
 
 
-using Data.Two;
+using Data;
 
-namespace Menus.Two
+namespace Menus
 {
     public class MainMenu : IMenu
     {
@@ -41,8 +41,10 @@ namespace Menus.Two
 
         public State ConsequentState => Selection.Item switch
         {
-            Continue => new DialogStart_State(new InstantiateDialogue()) { Fade = true },
-            // _ when Selection == MainMenuData.DataItem.NewGame => new NewCoveScene_State(),
+            Continue => Manager.Io.MiscData.Get(new FirstInstantiateDialogue()) ?
+                new NewCoveScene_State() :
+                new DialogStart_State(new InstantiateDialogue()) { Fade = true },
+
             Options =>
                 new MenuState(
                 new OptionsMenu(Manager, AudioManager,

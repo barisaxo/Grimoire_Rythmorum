@@ -6,28 +6,27 @@ using Dialog;
 public class BuyMaterials_Dialogue : Dialogue
 {
     readonly Dialogue ReturnTo;
-    readonly Data.Two.Standing Standing;
-    int StandingMod => Data.Two.Manager.Io.StandingData.GetLevel(Standing);
-    int Gold => Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.Gold());
+    readonly Data.Standing Standing;
+    int StandingMod => Data.Manager.Io.StandingData.GetLevel(Standing);
+    int Gold => Data.Manager.Io.Inventory.GetLevel(new Data.Gold());
 
-    int matsCapacity => Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.MaterialStorage());
+    int matsCapacity => Data.Manager.Io.ActiveShip.GetLevel(new Data.MaterialStorage());
 
-    float availableMatsSpace =>
-        (float)Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.Material()) /
-        matsCapacity;
+    float availableMatsSpace => 1f - ((float)Data.Manager.Io.Inventory.GetLevel(new Data.Material()) / matsCapacity);
 
     float StandingsModifier => 1f + (float)(1f - (float)((float)StandingMod) / 9f);
+
 
     int largeGold => (int)(largeMat * 15f * StandingsModifier);
     int medGold => (int)(medMat * 17.5f * StandingsModifier);
     int smallGold => (int)(smallMat * 20f * StandingsModifier);
 
-    int largeMat => (int)((float)matsCapacity * .5f);
-    int medMat => (int)((float)matsCapacity * .25f);
-    int smallMat => (int)((float)matsCapacity * .15f);
+    int largeMat => (int)((float)matsCapacity * .25f);
+    int medMat => (int)((float)matsCapacity * .15f);
+    int smallMat => (int)((float)matsCapacity * .1f);
 
 
-    public BuyMaterials_Dialogue(Dialogue returnTo, Speaker speaker, Data.Two.Standing standing)
+    public BuyMaterials_Dialogue(Dialogue returnTo, Speaker speaker, Data.Standing standing)
     {
         ReturnTo = returnTo;
         Speaker = speaker;
@@ -71,9 +70,9 @@ public class BuyMaterials_Dialogue : Dialogue
     {
         List<Response> responses = new();
 
-        if (!(Gold < largeGold) && availableMatsSpace < .75f) { responses.Add(MaterialsLarge_Response); }
-        if (!(Gold < medGold) && availableMatsSpace < .85f) { responses.Add(MaterialsMedium_Response); }
-        if (!(Gold < smallGold) && availableMatsSpace < 1f) { responses.Add(MaterialsSmall_Response); }
+        if (!(Gold < largeGold) && availableMatsSpace >= .25f) { responses.Add(MaterialsLarge_Response); }
+        if (!(Gold < medGold) && availableMatsSpace >= .15f) { responses.Add(MaterialsMedium_Response); }
+        if (!(Gold < smallGold) && availableMatsSpace >= .10f) { responses.Add(MaterialsSmall_Response); }
         responses.Add(BackResponse);
 
         return responses.ToArray();
@@ -81,18 +80,18 @@ public class BuyMaterials_Dialogue : Dialogue
 
     void BuyMaterialsSmall()
     {
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Material(), smallMat);
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), -smallGold);
+        Data.Manager.Io.Inventory.AdjustLevel(new Data.Material(), smallMat);
+        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), -smallGold);
     }
     void BuyMaterialsMedium()
     {
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Material(), medMat);
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), -medGold);
+        Data.Manager.Io.Inventory.AdjustLevel(new Data.Material(), medMat);
+        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), -medGold);
     }
     void BuyMaterialsLarge()
     {
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Material(), largeMat);
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), -largeGold);
+        Data.Manager.Io.Inventory.AdjustLevel(new Data.Material(), largeMat);
+        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), -largeGold);
     }
 
     readonly string TradeComplete_LineText = "Good deal! Until next time!";

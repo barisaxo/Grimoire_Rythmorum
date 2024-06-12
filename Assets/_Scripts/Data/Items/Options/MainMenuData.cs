@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Data.Two
+namespace Data
 {
     [System.Serializable]
     public class MainMenuData : IData

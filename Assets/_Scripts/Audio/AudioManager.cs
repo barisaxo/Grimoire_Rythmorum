@@ -1,5 +1,5 @@
 
-using Data.Two;
+using Data;
 
 namespace Audio
 {
@@ -19,7 +19,7 @@ namespace Audio
         public KeyboardAudioSystem KBAudio => _kba ??= new KeyboardAudioSystem(VolumeData);
 
 
-        private static VolumeData VolumeData => Data.Two.Manager.Io.Volume;
+        private static VolumeData VolumeData => Data.Manager.Io.Volume;
 
 
         private AudioParserB _audioParser = new();

@@ -6,15 +6,15 @@ using Dialog;
 public class BuyRations_Dialogue : Dialogue
 {
     readonly Dialogue ReturnTo;
-    readonly Data.Two.Standing Standing;
+    readonly Data.Standing Standing;
 
-    int StandingMod => Data.Two.Manager.Io.StandingData.GetLevel(Standing);
-    int Coins => Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.Gold());
-    int rationsCapacity => Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.RationStorage());
+    int StandingMod => Data.Manager.Io.StandingData.GetLevel(Standing);
+    int Coins => Data.Manager.Io.Inventory.GetLevel(new Data.Gold());
+    int rationsCapacity => Data.Manager.Io.ActiveShip.GetLevel(new Data.RationStorage());
 
-    float availableRationsSpace =>
-        (float)Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.Ration()) /
-        (float)Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.RationStorage());
+    float availableRationsSpace => 1f -
+        ((float)Data.Manager.Io.Inventory.GetLevel(new Data.Ration()) /
+        (float)rationsCapacity);
 
     float StandingsModifier => 1f + (float)(1f - (float)((float)StandingMod) / 9f);
 
@@ -28,7 +28,7 @@ public class BuyRations_Dialogue : Dialogue
     int smallRation => (int)((float)rationsCapacity * .15f);
 
 
-    public BuyRations_Dialogue(Dialogue returnTo, Speaker speaker, Data.Two.Standing standing)
+    public BuyRations_Dialogue(Dialogue returnTo, Speaker speaker, Data.Standing standing)
     {
         ReturnTo = returnTo;
         Speaker = speaker;
@@ -73,7 +73,7 @@ public class BuyRations_Dialogue : Dialogue
 
         if (!(Coins < largeGold) && availableRationsSpace < .75f) { responses.Add(RationsLarge_Response); }
         if (!(Coins < medGold) && availableRationsSpace < .85f) { responses.Add(RationsMedium_Response); }
-        if (!(Coins < smallGold) && availableRationsSpace < 1f) { responses.Add(RationsSmall_Response); }
+        if (!(Coins < smallGold) && availableRationsSpace < 9f) { responses.Add(RationsSmall_Response); }
         responses.Add(BackResponse);
 
         return responses.ToArray();
@@ -90,18 +90,18 @@ public class BuyRations_Dialogue : Dialogue
 
     void BuyRationsSmall()
     {
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Ration(), smallRation);
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), -smallGold);
+        Data.Manager.Io.Inventory.AdjustLevel(new Data.Ration(), smallRation);
+        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), -smallGold);
     }
     void BuyRationsMedium()
     {
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Ration(), medRation);
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), -medGold);
+        Data.Manager.Io.Inventory.AdjustLevel(new Data.Ration(), medRation);
+        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), -medGold);
     }
     void BuyRationsLarge()
     {
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Ration(), largeRation);
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), -largeGold);
+        Data.Manager.Io.Inventory.AdjustLevel(new Data.Ration(), largeRation);
+        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), -largeGold);
     }
 
 }

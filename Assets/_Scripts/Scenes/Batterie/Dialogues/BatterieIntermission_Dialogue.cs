@@ -13,12 +13,12 @@ public class BatterieIntermission_Dialogue : Dialogue
 
         else if (Scene.Pack.Crit)
         {
-            damageTaken = (int)((float)damageTaken * (float)(1f / Data.Two.Manager.Io.Skill.GetBonusRatio(new Data.Two.CriticalVolley())));
-            Scene.DamageDealt = (int)((float)Scene.DamageDealt + ((float)Scene.DamageDealt * (float)Data.Two.Manager.Io.Skill.GetBonusRatio(new Data.Two.CriticalVolley())));
+            damageTaken = (int)((float)damageTaken * (float)(1f / Data.Manager.Io.Skill.GetBonusRatio(new Data.CriticalVolley())));
+            Scene.DamageDealt = (int)((float)Scene.DamageDealt + ((float)Scene.DamageDealt * (float)Data.Manager.Io.Skill.GetBonusRatio(new Data.CriticalVolley())));
         }
 
         Scene.BatterieHUD.PlayerCurrent -= damageTaken;
-        Data.Two.Manager.Io.ActiveShip.AdjustLevel(new Data.Two.CurrentHitPoints(), -damageTaken);
+        Data.Manager.Io.ActiveShip.AdjustLevel(new Data.CurrentHitPoints(), -damageTaken);
         Scene.BatterieHUD.NMECurrent = Scene.NMEHealth.cur -= Scene.DamageDealt;
     }
     readonly int damageTaken;
@@ -33,12 +33,12 @@ public class BatterieIntermission_Dialogue : Dialogue
             _startLine = NMEAttemptingFlee;
             Scene.Escaping = true;
         }
-        else if (Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.CurrentHitPoints()) < (float)(Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.MaxHitPoints()) * .3f))
+        else if (Data.Manager.Io.ActiveShip.GetLevel(new Data.CurrentHitPoints()) < (float)(Data.Manager.Io.ActiveShip.GetLevel(new Data.MaxHitPoints()) * .3f))
         {
             _startLine = LowPlayerHealth;
         }
         else if (Scene.NMEHealth.cur < (float)(Scene.NMEHealth.max * .21f) &&
-                (Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.CurrentHitPoints()) > (float)(Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.MaxHitPoints()) * .5f)))
+                (Data.Manager.Io.ActiveShip.GetLevel(new Data.CurrentHitPoints()) > (float)(Data.Manager.Io.ActiveShip.GetLevel(new Data.MaxHitPoints()) * .5f)))
         {
             _startLine = NMESurrender;
         }
@@ -66,7 +66,7 @@ public class BatterieIntermission_Dialogue : Dialogue
         {
             FirstLine = Spammed;
         }
-        if (Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.CurrentHitPoints()) < 1)
+        if (Data.Manager.Io.ActiveShip.GetLevel(new Data.CurrentHitPoints()) < 1)
         {
             Debug.Log("YOU LOSE");
 
@@ -156,6 +156,6 @@ public class BatterieIntermission_Dialogue : Dialogue
     Response AcceptSurrender => new("Accept their surrender", new EndBatterie_State(Scene, BatterieResultType.NMESurrender));
     Response LetThemGo => new("Let them go.", new EndBatterie_State(Scene, BatterieResultType.NMEscaped));
 
-    Line GameOver => new("Sorry Cap. Looks like where going down with the ship.",
-        new MenuState(new Menus.Two.MainMenu(Data.Two.Manager.Io, Audio.AudioManager.Io)));
+    Line GameOver => new("This is it Cap. Looks like where going down with the ship.", new BatteryToGameOverTransition_State(Scene));
+
 }

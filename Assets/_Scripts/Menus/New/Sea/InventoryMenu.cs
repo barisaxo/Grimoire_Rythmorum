@@ -1,9 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Data.Two;
+using Data;
 
-namespace Menus.Two
+namespace Menus
 {
     public class InventoryMenu : IMenu
     {

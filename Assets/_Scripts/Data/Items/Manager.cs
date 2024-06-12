@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace Data.Two
+namespace Data
 {
     public class Manager
     {
@@ -67,5 +67,8 @@ namespace Data.Two
 
         private ShipUpgradeData _shipUpgradeData;
         public ShipUpgradeData ShipUpgradeData => _shipUpgradeData ??= new ShipUpgradeData(ShipStats.ActiveShip);
+
+        private MiscData _miscData;
+        public MiscData MiscData => _miscData ??= MiscData.GetData();
     }
 }

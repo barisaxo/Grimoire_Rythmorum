@@ -1,6 +1,6 @@
 using UnityEngine;
 using Audio;
-using Data.Two;
+using Data;
 
 namespace Muscopa
 {

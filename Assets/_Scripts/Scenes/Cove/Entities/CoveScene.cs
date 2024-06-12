@@ -161,14 +161,26 @@ public class CoveScene
 
     private Light SetUpLight()
     {
-        GameObject go = new(nameof(Light));
-        go.transform.SetParent(Parent);
-        go.transform.rotation = Quaternion.Euler(new Vector3(76, 0, 0));
-        Light light = go.AddComponent<Light>();
-        light.type = LightType.Directional;
-        light.color = new Color(.9f, .9f, .8f);
-        light.intensity = .35f;
-        return light;
+        // GameObject go = new(nameof(Light));
+        // go.transform.SetParent(Parent);
+        // go.transform.rotation = Quaternion.Euler(new Vector3(76, 0, 0));
+        // Light light = go.AddComponent<Light>();
+        // light.type = LightType.Directional;
+        // light.shadows = LightShadows.None;
+        // light.color = new Color(.9f, .9f, .8f);
+        // light.intensity = .35f;
+
+
+        Light l = new GameObject(nameof(Light)).AddComponent<Light>();
+        l.transform.SetParent(Parent);
+        l.type = LightType.Directional;
+        l.color = new(.9f, .8f, .65f);
+        l.shadows = LightShadows.None;
+        l.transform.SetPositionAndRotation(Cam.Io.Camera.transform.position, Cam.Io.Camera.transform.rotation);
+        l.transform.Rotate(new Vector3(45, 0, 0));
+        l.intensity = .35f;
+
+        return l;
     }
 
     private Light SetUpWLight()
@@ -200,6 +212,7 @@ public class CoveScene
         l.shadows = LightShadows.Soft;
         // l.lightmapBakeType = LightmapBakeType.Baked;
         l.range = 20;
+
         return l;
     }
 

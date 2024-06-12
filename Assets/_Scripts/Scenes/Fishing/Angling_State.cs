@@ -31,7 +31,7 @@ public class Angling_State : State
 
     protected override void PrepareState(Action callback)
     {
-        Difficulty = (int)(60 * (1 / Data.Two.Manager.Io.Skill.GetBonusRatio(new Data.Two.PulsePerception())));
+        Difficulty = (int)(60 * (1 / Data.Manager.Io.Skill.GetBonusRatio(new Data.PulsePerception())));
         Debug.Log(Difficulty);
         SetUpFishingReel();
         Specs = new RhythmSpecs()
@@ -308,7 +308,7 @@ public class AnglingPractice_State : State
 
     protected override void PrepareState(Action callback)
     {
-        Difficulty = (int)(60 * (1 / Data.Two.Manager.Io.Skill.GetBonusRatio(new Data.Two.PulsePerception())));
+        Difficulty = (int)(60 * (1 / Data.Manager.Io.Skill.GetBonusRatio(new Data.PulsePerception())));
         Debug.Log(Difficulty);
         SetUpFishingReel();
         Specs = new RhythmSpecs()

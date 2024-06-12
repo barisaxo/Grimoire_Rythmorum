@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Data.Two
+namespace Data
 {
     [System.Serializable]
     public class PlayerData : IData
@@ -101,6 +101,7 @@ namespace Data.Two
             else if (item is Hit && GetLevel(item) > 9999) DecreaseLevel(new Miss(), i / 2);
             else if (item is Miss && GetLevel(item) > 9999) DecreaseLevel(new Hit(), i / 2);
             else if (item is PatternsAvailable) { }
+
             else Datum[(PlayerStat)item] += i;
             PersistentData.Save(this);
         }

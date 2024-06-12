@@ -1,7 +1,7 @@
 using System.Collections;
 using Audio;
 using UnityEngine;
-using Data.Two;
+using Data;
 
 public sealed class BGMusic_AudioSystem : AudioSystem
 {

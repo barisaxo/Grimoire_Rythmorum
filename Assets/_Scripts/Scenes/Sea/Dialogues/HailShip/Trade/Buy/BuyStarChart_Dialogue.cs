@@ -1,5 +1,5 @@
 using Dialog;
-using Data.Two;
+using Data;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,11 +14,17 @@ internal class BuyStarChart_Dialogue : Dialogue
     }
 
     readonly Dialogue ReturnTo;
-    readonly Data.Two.Standing Standing;
+    readonly Data.Standing Standing;
 
-    int StandingMod => Data.Two.Manager.Io.StandingData.GetLevel(Standing);
-    int Coins => Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.Gold());
+    int StandingMod => Data.Manager.Io.StandingData.GetLevel(Standing);
+    int Coins => Data.Manager.Io.Inventory.GetLevel(new Data.Gold());
     float StandingsModifier => 1f + (float)(1f - (float)((float)StandingMod) / 9f);
+
+
+    int starChartCapacity => Data.Manager.Io.ActiveShip.GetLevel(new Data.StarChartStorage());
+
+    float availableStarChartSpace => 1f - ((float)Data.Manager.Io.Inventory.GetLevel(new Data.StarChart()) / starChartCapacity);
+
 
     int largeGold => (int)(largeStarChart * 700f * StandingsModifier);
     int medGold => (int)(medStarChart * 850f * StandingsModifier);
@@ -65,9 +71,10 @@ internal class BuyStarChart_Dialogue : Dialogue
     {
         List<Response> responses = new();
 
-        if (!(Coins < largeGold)) { responses.Add(StarChartsLarge_Response); }
-        if (!(Coins < medGold)) { responses.Add(StarChartsMedium_Response); }
-        if (!(Coins < smallGold)) { responses.Add(StarChartsSmall_Response); }
+        if (!(Coins < largeGold) && availableStarChartSpace >= 10) { responses.Add(StarChartsLarge_Response); }
+        if (!(Coins < medGold) && availableStarChartSpace >= 5) { responses.Add(StarChartsMedium_Response); }
+        if (!(Coins < smallGold) && availableStarChartSpace >= 1) { responses.Add(StarChartsSmall_Response); }
+
         responses.Add(BackResponse);
 
         return responses.ToArray();
@@ -84,18 +91,18 @@ internal class BuyStarChart_Dialogue : Dialogue
 
     void BuyStarChartsSmall()
     {
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.StarChart(), smallStarChart);
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), -smallGold);
+        Data.Manager.Io.Inventory.AdjustLevel(new Data.StarChart(), smallStarChart);
+        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), -smallGold);
     }
     void BuyStarChartsMedium()
     {
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.StarChart(), medStarChart);
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), -medGold);
+        Data.Manager.Io.Inventory.AdjustLevel(new Data.StarChart(), medStarChart);
+        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), -medGold);
     }
     void BuyStarChartsLarge()
     {
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.StarChart(), largeStarChart);
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), -largeGold);
+        Data.Manager.Io.Inventory.AdjustLevel(new Data.StarChart(), largeStarChart);
+        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), -largeGold);
     }
 
 }

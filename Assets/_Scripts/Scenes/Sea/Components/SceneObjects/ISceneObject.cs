@@ -1,5 +1,5 @@
 using UnityEngine;
-using Data.Two;
+using Data;
 using System.Collections.Generic;
 
 namespace Sea

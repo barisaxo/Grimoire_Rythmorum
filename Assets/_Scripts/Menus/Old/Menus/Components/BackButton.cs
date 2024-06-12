@@ -14,8 +14,8 @@ public class BackButton
     }
 
     public Card Button => _button ??= new Card(nameof(BackButton), Parent)
-        .TMPClickable()
-        .ImageClickable()
+        // .TMPClickable()
+        // .ImageClickable()
         .SetTextString("Back")
         .SetImageSize(Vector2.one * .6f)
         .SetTMPSize(new Vector2(1f, 1f))

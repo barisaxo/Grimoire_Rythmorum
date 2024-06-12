@@ -1,4 +1,4 @@
-namespace Data.Two
+namespace Data
 {
     public interface ICurrency : IItem
     {
@@ -22,7 +22,7 @@ namespace Data.Two
 
         public readonly static CurrencyEnum Gold = new(0, "Gold");
         public readonly static CurrencyEnum Material = new(1, "Materials");
-        public readonly static CurrencyEnum Ration = new(2, "Rations");
+        public readonly static CurrencyEnum Ration = new(2, "Ration");
         public readonly static CurrencyEnum StarChart = new(3, "Star Chart");
         public readonly static CurrencyEnum Gramophone = new(4, "Gramophone");
 

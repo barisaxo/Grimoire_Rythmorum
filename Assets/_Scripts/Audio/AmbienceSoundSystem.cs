@@ -1,7 +1,7 @@
 using Audio;
 using UnityEngine;
 using System.Collections;
-using Data.Two;
+using Data;
 
 public sealed class AmbienceAudioSystem : AudioSystem
 {

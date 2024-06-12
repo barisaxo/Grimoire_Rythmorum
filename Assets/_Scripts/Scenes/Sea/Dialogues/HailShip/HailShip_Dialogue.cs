@@ -3,8 +3,8 @@ using Dialog;
 
 public class HailShip_Dialogue : Dialogue
 {
-    readonly Data.Two.Standing Standing;
-    public HailShip_Dialogue(Speaker speaker, Data.Two.Standing standing)
+    readonly Data.Standing Standing;
+    public HailShip_Dialogue(Speaker speaker, Data.Standing standing)
     {
         Speaker = speaker;
         Standing = standing;
@@ -16,7 +16,7 @@ public class HailShip_Dialogue : Dialogue
         return base.Initiate();
     }
 
-    int StandingLevel => Data.Two.Manager.Io.StandingData.GetLevel(Standing);
+    int StandingLevel => Data.Manager.Io.StandingData.GetLevel(Standing);
     string Hail_LineText => StandingLevel switch
     {
         10 or 9 or 8 => "The weather favors us this day.",

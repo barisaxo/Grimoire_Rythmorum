@@ -14,7 +14,7 @@ public class SeaToBountyTransition_State : State
         NMEGO = nmeGO;
         Cell = cell;
         Region = region;
-        Quest = DataManager.Quests.GetQuest(new Data.Two.Bounty()) as Quests.BountyQuest;
+        Quest = DataManager.Quests.GetQuest(new Data.Bounty()) as Quests.BountyQuest;
 
     }
 

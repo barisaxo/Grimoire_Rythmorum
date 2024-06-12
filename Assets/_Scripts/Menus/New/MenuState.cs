@@ -1,6 +1,6 @@
 using System;
-using Data.Two;
-using Menus.Two;
+using Data;
+using Menus;
 
 public class MenuState : State
 {

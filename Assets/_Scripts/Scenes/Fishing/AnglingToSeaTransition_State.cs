@@ -2,7 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Data.Two;
+using Data;
 
 public class AnglingToSeaTransition_State : State
 {

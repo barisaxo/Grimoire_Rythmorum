@@ -1,6 +1,6 @@
 ﻿using Audio;
 using UnityEngine;
-using Data.Two;
+using Data;
 public sealed class KeyboardAudioSystem : AudioSystem
 {
     private int _audioSourceIndex = 0;

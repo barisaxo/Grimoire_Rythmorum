@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Data.Two
+namespace Data
 {
     public class FishInventoryData : IData
     {

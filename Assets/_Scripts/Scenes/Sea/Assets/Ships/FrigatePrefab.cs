@@ -33,13 +33,13 @@ public class FrigatePrefab : MonoBehaviour, Sea.IShipPrefab
     // private ShipStats.ShipStats _shipStats;
     // public ShipStats.ShipStats ShipStats => _shipStats ??= new(
     //     new ShipStats.HullStats(
-    //         new Data.Two.Frigate(),
-    //         new Data.Two.Oak()),
+    //         new Data.Frigate(),
+    //         new Data.Oak()),
 
     //     new ShipStats.CannonStats(
-    //         new Data.Two.Culverin(),
-    //        new Data.Two.CastIron()),
-    //     new ShipStats.RiggingStats(new Data.Two.Hemp()),
+    //         new Data.Culverin(),
+    //        new Data.CastIron()),
+    //     new ShipStats.RiggingStats(new Data.Hemp()),
     //     minCannons: MinCannons,
     //     maxCannons: MaxCannons,
     //     numOfCannons: NumOfCannons

@@ -17,9 +17,9 @@ namespace Sea
 
         private List<Cell> _cells;
         public List<Cell> Cells => _cells ??= this.InitializeCells(DataManager.Quests);
-        readonly Data.Two.Manager DataManager;
+        readonly Data.Manager DataManager;
 
-        public Region(UnityEngine.Vector2Int region, int resolution, Data.Two.Manager dataManager, Sea.Maps.R r)
+        public Region(UnityEngine.Vector2Int region, int resolution, Data.Manager dataManager, Sea.Maps.R r)
         {
             Resolution = resolution;
             Coord = region;

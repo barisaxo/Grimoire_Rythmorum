@@ -37,13 +37,13 @@ public class SloopPrefab : MonoBehaviour, Sea.IShipPrefab
     // private ShipStats.ShipStats _shipStats;
     // public ShipStats.ShipStats ShipStats => _shipStats ??= new(
     //     new ShipStats.HullStats(
-    //         new Data.Two.Sloop(),
-    //         new Data.Two.Pine()),
+    //         new Data.Sloop(),
+    //         new Data.Pine()),
 
     //     new ShipStats.CannonStats(
-    //         new Data.Two.Mynion(),
-    //         new Data.Two.CastIron()),
-    //         new ShipStats.RiggingStats(new Data.Two.Hemp()),
+    //         new Data.Mynion(),
+    //         new Data.CastIron()),
+    //         new ShipStats.RiggingStats(new Data.Hemp()),
     //         numOfCannons: NumOfCannons
     // );
 

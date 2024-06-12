@@ -4,10 +4,10 @@ using System.Collections.Generic;
 public class Services_Dialogue : Dialogue
 {
     readonly Dialogue ReturnTo;
-    readonly Data.Two.Standing Standing;
+    readonly Data.Standing Standing;
 
-    int StandingMod => Data.Two.Manager.Io.StandingData.GetLevel(Standing);
-    public Services_Dialogue(Dialogue returnTo, Speaker speaker, Data.Two.Standing standing)
+    int StandingMod => Data.Manager.Io.StandingData.GetLevel(Standing);
+    public Services_Dialogue(Dialogue returnTo, Speaker speaker, Data.Standing standing)
     {
         ReturnTo = returnTo;
         Speaker = speaker;
@@ -28,7 +28,7 @@ public class Services_Dialogue : Dialogue
         _ => "Our merchants are expecting us soon... I suppose we can help, for a price."
     };
 
-    int Coins => Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.Gold());
+    int Coins => Data.Manager.Io.Inventory.GetLevel(new Data.Gold());
     float StandingsModifier => 1f + (float)(1f - (float)((float)StandingMod) / 9f);
 
     // int largeGold => (int)(largeStarChart * 700f * StandingsModifier);
@@ -36,10 +36,10 @@ public class Services_Dialogue : Dialogue
     // int smallGold => (int)(smallStarChart * 1000f * StandingsModifier);
 
 
-    int Gold => Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.Gold());
-    int Mats => Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.Material());
-    int CurHP => Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.CurrentHitPoints());
-    int MaxHP => Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.MaxHitPoints());
+    int Gold => Data.Manager.Io.Inventory.GetLevel(new Data.Gold());
+    int Mats => Data.Manager.Io.Inventory.GetLevel(new Data.Material());
+    int CurHP => Data.Manager.Io.ActiveShip.GetLevel(new Data.CurrentHitPoints());
+    int MaxHP => Data.Manager.Io.ActiveShip.GetLevel(new Data.MaxHitPoints());
 
 
     int costStarChart => (int)(700f * StandingsModifier);
@@ -73,12 +73,12 @@ public class Services_Dialogue : Dialogue
         List<Response> responses = new();
 
         if (!(Coins < costStarChart &&
-            Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.StarChart()) > 0))
+            Data.Manager.Io.Inventory.GetLevel(new Data.StarChart()) > 0))
         {
             responses.Add(StarChartResponse);
         }
         if (!(Coins < costGramo) &&
-            Data.Two.Manager.Io.Inventory.GetLevel(new Data.Two.Gramophone()) > 0)
+            Data.Manager.Io.Inventory.GetLevel(new Data.Gramophone()) > 0)
         {
             responses.Add(GramoResponse);
         }
@@ -90,17 +90,17 @@ public class Services_Dialogue : Dialogue
 
     void DecipherStarChart()
     {
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.StarChart(), -1);
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), -costStarChart);
+        Data.Manager.Io.Inventory.AdjustLevel(new Data.StarChart(), -1);
+        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), -costStarChart);
 
 
-        Data.Two.Manager.Io.Quests.SetQuest(new Data.Two.Navigation(),
+        Data.Manager.Io.Quests.SetQuest(new Data.Navigation(),
                new Quests.NavigationQuest(
-                   new Sea.Inventoriable((Data.Two.Manager.Io.Gramophones, new Data.Two.Gramo1(), 1)),//TODO make sliding scale difficulty
+                   new Sea.Inventoriable((Data.Manager.Io.Gramophones, new Data.Gramo1(), 1)),//TODO make sliding scale difficulty
                    RandomLoc,
                    LatLong));
 
-        Sea.WorldMapScene.Io.Map.AddToMap(Data.Two.Manager.Io.Quests.GetQuest(new Data.Two.Navigation()).QuestLocation, Sea.CellType.Gramo);
+        Sea.WorldMapScene.Io.Map.AddToMap(Data.Manager.Io.Quests.GetQuest(new Data.Navigation()).QuestLocation, Sea.CellType.Gramo);
 
 
 
@@ -110,13 +110,13 @@ public class Services_Dialogue : Dialogue
 
     void UnlockGramo()
     {
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gramophone(), -1);
-        Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), -costGramo);
+        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gramophone(), -1);
+        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), -costGramo);
     }
     // void BuyStarChartsLarge()
     // {
-    //     Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.StarChart(), largeStarChart);
-    //     Data.Two.Manager.Io.Inventory.AdjustLevel(new Data.Two.Gold(), -largeGold);
+    //     Data.Manager.Io.Inventory.AdjustLevel(new Data.StarChart(), largeStarChart);
+    //     Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), -largeGold);
     // }
 
 
@@ -131,8 +131,8 @@ public class Services_Dialogue : Dialogue
 
     Response _starChartResponse;
     Response StarChartResponse => _starChartResponse ??= new Response("Decipher Star Chart, -" + costStarChart + " gold",
-        Data.Two.Manager.Io.Quests.GetQuest(new Data.Two.Navigation()) is null ? StarChartLocLine : ConfirmStarChart)
-        .SetPlayerAction(Data.Two.Manager.Io.Quests.GetQuest(new Data.Two.Navigation()) is null ? DecipherStarChart : () => { });//, new NavigateStarChart_Dialogue(this, Speaker, Standing));
+        Data.Manager.Io.Quests.GetQuest(new Data.Navigation()) is null ? StarChartLocLine : ConfirmStarChart)
+        .SetPlayerAction(Data.Manager.Io.Quests.GetQuest(new Data.Navigation()) is null ? DecipherStarChart : () => { });//, new NavigateStarChart_Dialogue(this, Speaker, Standing));
 
     Line _starChartLocLine;
     Line StarChartLocLine => _starChartLocLine ??= new Line("The Star Chart points to these coordinates: " + LatLong + ".\n[A new navigation quest is available]", TradeComplete_Line);

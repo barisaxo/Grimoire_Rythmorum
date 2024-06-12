@@ -54,17 +54,17 @@ public class PlayerShip
     private readonly int RegionSize;
     private readonly int GlobalSize;
 
-    public ShipStats.ShipStats ShipStats = Data.Two.Manager.Io.ActiveShip.ShipStats;
+    public ShipStats.ShipStats ShipStats = Data.Manager.Io.ActiveShip.ShipStats;
 
     //  TO DO get actual data
     //     new(
     //         new ShipStats.HullStats(
-    //             new Data.Two.Schooner(),
-    //            new Data.Two.Oak()),
+    //             new Data.Schooner(),
+    //            new Data.Oak()),
     //         new ShipStats.CannonStats(
-    //           new Data.Two.Culverin(),
-    //            new Data.Two.CastIron()),
-    //         new ShipStats.RiggingStats(new Data.Two.Hemp()),
+    //           new Data.Culverin(),
+    //            new Data.CastIron()),
+    //         new ShipStats.RiggingStats(new Data.Hemp()),
     //         numOfCannons: 32
     //    );
 

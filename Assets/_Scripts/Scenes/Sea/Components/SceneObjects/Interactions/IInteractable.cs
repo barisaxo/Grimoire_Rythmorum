@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Data.Two;
+using Data;
 
 namespace Sea
 {
@@ -85,7 +85,7 @@ namespace Sea
         public State CurrentState { get; }
 
         private State _subsequentState;
-        public State SubsequentState => _subsequentState ??= new SeaToItemPickUp_State(CurrentState, StarChartData, new Data.Two.StarChartStorage(), Obj);
+        public State SubsequentState => _subsequentState ??= new SeaToItemPickUp_State(CurrentState, StarChartData, new Data.StarChartStorage(), Obj);
         // StarChartsData.InventoryIsFull(ShipData.GetLevel(ShipData.DataItem.Bottle)) ?
         //     new DialogStart_State(new InventoryIsFull_Dialogue(CurrentState)) :
         //     new SeaToItemPickUp_State(CurrentState, StarChartsData, ShipData.DataItem.Bottle, Obj);

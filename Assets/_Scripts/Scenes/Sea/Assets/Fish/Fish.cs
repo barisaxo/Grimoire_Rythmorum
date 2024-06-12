@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Data.Two;
+using Data;
 
 namespace Sea
 {
@@ -53,7 +53,7 @@ namespace Sea
         public IUpdatePosition UpdatePosition { get; private set; }
         public IDescription Description { get; private set; }
         public IInstantiable Instantiator { get; private set; }
-        public Data.Two.IFish FishType;
+        public Data.IFish FishType;
         public IInventoriable Inventoriable { get; private set; }
         public IQuestable Questable => new NotQuestable();
         public IDifficulty Difficulty { get; }
@@ -64,6 +64,6 @@ namespace Sea
         public GameObject GO { get; }
         public GameObject ToInstantiate { get; }
         public CapsuleCollider Col { get; }
-        public Data.Two.IFish FishType { get; }
+        public Data.IFish FishType { get; }
     }
 }

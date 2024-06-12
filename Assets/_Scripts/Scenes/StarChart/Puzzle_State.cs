@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 using MusicTheory.Rhythms;
-using Data.Two;
+using Data;
 
 public class Puzzle_State : State
 {
@@ -348,7 +348,7 @@ public class Puzzle_State : State
         // .ScaleImageSizeToTMP(1.2f)
         // .SetImagePosition(new Vector2(Cam.UIOrthoX - 1, -Cam.UIOrthoY + 2))
         // .SetImageColor(new Color(.7f, .7f, .7f, .4f))
-        .ImageClickable()
+        //.ImageClickable()
         .AllowWordWrap(false)
         .SetTMPRectPivot(1, .5f)
         // .SetImageToUILayer()
@@ -371,7 +371,7 @@ public class Puzzle_State : State
         .SetTMPRectPivot(1, .5f)
         // .SetImagePosition(new Vector2(Cam.UIOrthoX - 1, -Cam.UIOrthoY + 1))
         // .SetImageColor(new Color(.7f, .7f, .7f, .4f))
-        .ImageClickable()
+        //.ImageClickable()
         .AllowWordWrap(false)
         // .ScaleImageSizeToTMP(1.2f)
         // .SetImageRectPivot(1 - (1f - (1f / 1.2f)) * .5f, .5f)
@@ -402,7 +402,7 @@ public class Puzzle_State : State
         .AutoSizeTextContainer(true)
         // .ScaleImageSizeToTMP(1.2f)
         // .SetImagePosition(new Vector2(0, -Cam.UIOrthoY + 2f))
-        .ImageClickable()
+        //.ImageClickable()
         .AllowWordWrap(false)
         .SetImageSprite(Assets.SouthButton)
         .SetImageSize(Vector2.one * .6f)
@@ -420,7 +420,7 @@ public class Puzzle_State : State
         // .ScaleImageSizeToTMP(1.2f)
         // .SetImagePosition(new Vector2(0, Cam.UIOrthoY - 1.75f))
         // .SetImageColor(new Color(.7f, .7f, .7f, .4f))
-        .ImageClickable()
+        //.ImageClickable()
         .AllowWordWrap(false)
         // .SetImageToUILayer()
         .SetImageSprite(Assets.WestButton)
@@ -439,7 +439,7 @@ public class Puzzle_State : State
         // .ScaleImageSizeToTMP(1.2f)
         // .SetImagePosition(new Vector2(-Cam.UIOrthoX + 1, -Cam.UIOrthoY + 1))
         // .SetImageColor(new Color(.7f, .7f, .7f, .4f))
-        .ImageClickable()
+        //.ImageClickable()
         .AllowWordWrap(false)
         .SetTMPRectPivot(0, .5f)
         // .SetImageToUILayer()
@@ -465,7 +465,7 @@ public class Puzzle_State : State
         .ScaleImageSizeToTMP(1.2f)
         .SetImagePosition(new Vector2(-Cam.UIOrthoX + 1, -Cam.UIOrthoY + 1))
         .SetImageColor(new Color(.8f, .8f, .8f, .4f))
-        .ImageClickable()
+        //.ImageClickable()
         .AllowWordWrap(false)
         .SetImageToUILayer();
  
@@ -480,7 +480,7 @@ public class Puzzle_State : State
         .SetTextAlignment(TMPro.TextAlignmentOptions.Center)
         .SetImagePosition(new Vector2(-Cam.UIOrthoX + 1, -Cam.UIOrthoY + 1))
         .SetImageColor(new Color(.8f, .8f, .8f, .4f))
-        .ImageClickable()
+        //.ImageClickable()
         .AllowWordWrap(false)
         .ScaleImageSizeToTMP(1.2f)
         .SetImageToUILayer();
@@ -774,7 +774,7 @@ public class StarChartPractice_State : State
         // .ScaleImageSizeToTMP(1.2f)
         // .SetImagePosition(new Vector2(Cam.UIOrthoX - 1, -Cam.UIOrthoY + 2))
         // .SetImageColor(new Color(.7f, .7f, .7f, .4f))
-        .ImageClickable()
+        //.ImageClickable()
         .AllowWordWrap(false)
         .SetTMPRectPivot(1, .5f)
         // .SetImageToUILayer()
@@ -797,7 +797,7 @@ public class StarChartPractice_State : State
         .SetTMPRectPivot(1, .5f)
         // .SetImagePosition(new Vector2(Cam.UIOrthoX - 1, -Cam.UIOrthoY + 1))
         // .SetImageColor(new Color(.7f, .7f, .7f, .4f))
-        .ImageClickable()
+        //.ImageClickable()
         .AllowWordWrap(false)
         // .ScaleImageSizeToTMP(1.2f)
         // .SetImageRectPivot(1 - (1f - (1f / 1.2f)) * .5f, .5f)
@@ -828,7 +828,7 @@ public class StarChartPractice_State : State
         .AutoSizeTextContainer(true)
         // .ScaleImageSizeToTMP(1.2f)
         // .SetImagePosition(new Vector2(0, -Cam.UIOrthoY + 2f))
-        .ImageClickable()
+        //.ImageClickable()
         .AllowWordWrap(false)
         .SetImageSprite(Assets.SouthButton)
         .SetImageSize(Vector2.one * .6f)
@@ -846,7 +846,7 @@ public class StarChartPractice_State : State
         // .ScaleImageSizeToTMP(1.2f)
         // .SetImagePosition(new Vector2(0, Cam.UIOrthoY - 1.75f))
         // .SetImageColor(new Color(.7f, .7f, .7f, .4f))
-        .ImageClickable()
+        //.ImageClickable()
         .AllowWordWrap(false)
         // .SetImageToUILayer()
         .SetImageSprite(Assets.WestButton)
@@ -865,7 +865,7 @@ public class StarChartPractice_State : State
         // .ScaleImageSizeToTMP(1.2f)
         // .SetImagePosition(new Vector2(-Cam.UIOrthoX + 1, -Cam.UIOrthoY + 1))
         // .SetImageColor(new Color(.7f, .7f, .7f, .4f))
-        .ImageClickable()
+        //.ImageClickable()
         .AllowWordWrap(false)
         .SetTMPRectPivot(0, .5f)
         // .SetImageToUILayer()

@@ -7,7 +7,7 @@ public abstract class State
 {
     #region REFERENCES
 
-    protected Data.Two.Manager DataManager => Data.Two.Manager.Io;
+    protected Data.Manager DataManager => Data.Manager.Io;
     protected AudioManager Audio => AudioManager.Io;
 
     #endregion REFERENCES

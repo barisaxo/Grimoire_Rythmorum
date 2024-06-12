@@ -1,8 +1,8 @@
 using UnityEngine;
 using System;
-using Data.Two;
+using Data;
 
-namespace Menus.Two
+namespace Menus
 {
     public interface IMenu
     {
@@ -47,7 +47,7 @@ namespace Menus.Two
                        .AllowWordWrap(false)
                        .SetTMPRectPivot(Layout.ItemTMPRectPivot)
                        .SetFontScale(.6f, .6f)
-                       .TMPClickable()
+                    //    .TMPClickable()
                 };
             }
 

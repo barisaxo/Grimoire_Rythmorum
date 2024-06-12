@@ -10,7 +10,7 @@ public class GramoScene
         _ = Light;
 
         MuscopaSettings = NewSettings(CadenceDifficulty.ALL, Genre.Stax);
-        MuscopaAudio = new(Data.Two.Manager.Io.Volume);
+        MuscopaAudio = new(Data.Manager.Io.Volume);
         GetNewSettings(null).StartCoroutine();
 
         AnswerSheet = MuscopaSettings.Cadence.DiatonicToHarmonicFunctionCadence();

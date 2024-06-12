@@ -51,7 +51,7 @@
 //     Response[] SextantChallenge_Response => _sextantChallenge_Response ??= GetSextantReplies();
 //     Response[] GetSextantReplies()
 //     {
-//         if (Data.Two.Manager.Io.PlayerShip.GetLevel(new Data.Two.Gold()) >= 500)
+//         if (Data.Manager.Io.PlayerShip.GetLevel(new Data.Gold()) >= 500)
 //         {
 //             return new Response[3] {
 //             new Response("Buy (-500 gold)").SetGoToLine(Purchased_Line).SetPlayerAction(BuySextant),
@@ -73,7 +73,7 @@
 
 //     private void BuySextant()
 //     {
-//         // Data.Two.Manager.Io.PlayerShip.DecreaseLevel(new Data.Two.Gold(), 500);
+//         // Data.Manager.Io.PlayerShip.DecreaseLevel(new Data.Gold(), 500);
 //         // DataManager.Io.CharacterData.Sextant = true;
 //         //Board.TryInstantiateCromatica(Data.CharacterData, Data.GameplayData);
 //     }

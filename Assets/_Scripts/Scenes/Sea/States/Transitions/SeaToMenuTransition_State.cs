@@ -1,6 +1,6 @@
 using System;
 using Sea;
-using Menus.Two;
+using Menus;
 
 public class SeaToMenuTransition_State : State
 {

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Menus.Two;
+using Menus;
 
 public class CoveToMenuTransition_State : State
 {
@@ -12,6 +12,7 @@ public class CoveToMenuTransition_State : State
     {
         SubMenu = menu;
     }
+
     public CoveToMenuTransition_State(IHeaderMenu menu)
     {
         HeaderMenu = menu;

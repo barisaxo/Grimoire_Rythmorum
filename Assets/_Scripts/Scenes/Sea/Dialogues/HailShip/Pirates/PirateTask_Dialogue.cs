@@ -6,10 +6,10 @@ using Dialog;
 public class PirateTask_Dialogue : Dialogue
 {
     public Dialogue ReturnTo;
-    bool pending => Data.Two.Manager.Io.Quests.GetLevel(new Data.Two.Bounty()) == 1;
-    readonly Data.Two.Standing Standing;
+    bool pending => Data.Manager.Io.Quests.GetLevel(new Data.Bounty()) == 1;
+    readonly Data.Standing Standing;
 
-    public PirateTask_Dialogue(Dialogue returnTo, Speaker speaker, Data.Two.Standing standing)
+    public PirateTask_Dialogue(Dialogue returnTo, Speaker speaker, Data.Standing standing)
     {
         ReturnTo = returnTo;
         Speaker = speaker;

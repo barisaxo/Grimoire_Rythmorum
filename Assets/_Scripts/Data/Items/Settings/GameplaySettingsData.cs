@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using MusicTheory;
 
-namespace Data.Two
+namespace Data
 {
     [System.Serializable]
     public class GameplayData : IData

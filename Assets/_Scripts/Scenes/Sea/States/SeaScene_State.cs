@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using Sea;
 using Sea.Maps;
-using Data.Two;
+using Data;
 
 public class SeaScene_State : State
 {
@@ -204,7 +204,7 @@ public class SeaScene_State : State
     protected override void StartPressed()
     {
         SetState(new SeaToNewMenuTransition_State(
-        new Menus.Two.SeaMenu(
+        new Menus.SeaMenu(
                Manager.Io,
                this
                    // new CameraPan_State(
@@ -228,7 +228,7 @@ public class SeaScene_State : State
     protected override void SelectPressed()
     {
         SetState(new SeaToNewMenuTransition_State(
-         new Menus.Two.OptionsMenu(
+         new Menus.OptionsMenu(
                 Manager.Io,
                 Audio,
                 this
@@ -285,6 +285,8 @@ public class SeaScene_State : State
 
         Scene.HUD.UpdateCoords(Scene.Ship.GlobalCoord.GlobalCoordsToLatLongs(Scene.Map.GlobalSize));
         Scene.HUD.UpdateRations(DataManager.Inventory.GetLevel(new Ration()));
+
+        if (DataManager.Inventory.GetLevel(new Ration()) == 0) SetState(new SeaToGameOverTransition_State());//todo Dialogue
     }
 
 }

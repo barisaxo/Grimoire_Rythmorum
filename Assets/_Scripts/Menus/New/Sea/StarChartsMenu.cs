@@ -1,6 +1,6 @@
-using Data.Two;
+using Data;
 
-namespace Menus.Two
+namespace Menus
 {
     public class StarChartsMenu : IMenu
     {
@@ -19,7 +19,7 @@ namespace Menus.Two
 
         public string DisplayData(IItem item)
         {
-            return item.Name + ": " + Data.GetDisplayLevel(item);
+            return item.Name;//+ ": " + Data.GetDisplayLevel(item);
         }
 
         public string GetDescription { get => Selection.Item.Description; }
@@ -68,4 +68,5 @@ namespace Menus.Two
             _ => PuzzleType.Aural,
         };
     }
+
 }

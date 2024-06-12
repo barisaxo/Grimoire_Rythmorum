@@ -30,14 +30,32 @@ public class FoundItem_Dialogue : Dialogue
 
         var lines = new Line[Rewards.Rewards.Length];
 
-        lines[^1] = new Line((Rewards.Rewards[^1].Amount == 1 ? "A " : Rewards.Rewards[^1].Amount + " ")
-             + Rewards.Rewards[^1].DataItem.Name + (Rewards.Rewards[^1].Amount > 1 ? "s have" : " has") +
-             " been added to your inventory.", SubsequentState);
+        if (Rewards.Rewards[^1].DataItem is Data.PatternsFound)
+        {
+            lines[^1] = new Line("You gained " + Rewards.Rewards[^1].Amount + " Pattern"
+                     + (Rewards.Rewards[^1].Amount > 1 ? "s." : "."), SubsequentState);
+        }
+        else
+        {
+            lines[^1] = new Line((Rewards.Rewards[^1].Amount == 1 ? "A " : Rewards.Rewards[^1].Amount + " ")
+                 + Rewards.Rewards[^1].DataItem.Name + (Rewards.Rewards[^1].Amount > 1 ? "s have" : " has") +
+                 " been added to your inventory.", SubsequentState);
+        }
 
         for (var i = lines.Length - 2; i > -1; i--)
-            lines[i] = new Line((Rewards.Rewards[i].Amount == 1 ? "A " : Rewards.Rewards[i].Amount + " ")
-             + Rewards.Rewards[i].DataItem.Name + (Rewards.Rewards[i].Amount > 1 ? "s have" : " has") +
-             " been added to your inventory.", lines[i + 1]);
+        {
+            if (Rewards.Rewards[i].DataItem is Data.PatternsFound)
+            {
+                lines[^1] = new Line("You gained " + Rewards.Rewards[i].Amount + " Pattern"
+                         + (Rewards.Rewards[i].Amount > 1 ? "s." : "."), lines[i + 1]);
+            }
+            else
+            {
+                lines[i] = new Line((Rewards.Rewards[i].Amount == 1 ? "A " : Rewards.Rewards[i].Amount + " ")
+                 + Rewards.Rewards[i].DataItem.Name + (Rewards.Rewards[i].Amount > 1 ? "s have" : " has") +
+                 " been added to your inventory.", lines[i + 1]);
+            }
+        }
 
         return lines[0];
     }

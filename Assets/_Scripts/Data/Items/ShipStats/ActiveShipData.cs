@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Data.Two
+namespace Data
 {
     [System.Serializable]
     public class ActiveShipData : IData
@@ -32,21 +32,13 @@ namespace Data.Two
         {
             return item switch
             {
-                MaterialStorage =>
-                    (int)(ShipStats.RiggingStats.ClothType.Modifier * ShipStats.HullStats.Hull.Modifier * .05f) +
-                    " Tons Of Storage.",
+                MaterialStorage => GetLevel(item) + " Tons Of Storage.",
 
-                RationStorage =>
-                    (int)(ShipStats.RiggingStats.ClothType.Modifier * ShipStats.HullStats.Hull.Modifier * .05f) +
-                    " Tons Of Storage.",
+                RationStorage => GetLevel(item) + " Tons Of Storage.",
 
-                StarChartStorage =>
-                    (int)(ShipStats.RiggingStats.ClothType.Modifier * ShipStats.HullStats.Hull.Modifier * .01f) +
-                    " Storage Spaces.",
+                StarChartStorage => GetLevel(item) + " Storage Spaces.",
 
-                GramophoneStorage =>
-                    (int)(ShipStats.RiggingStats.ClothType.Modifier * ShipStats.HullStats.Hull.Modifier * .01f) +
-                    " Storage Spaces.",
+                GramophoneStorage => GetLevel(item) + " Storage Spaces.",
 
                 CurrentHitPoints => GetLevel(item).ToString(),
 
@@ -57,8 +49,7 @@ namespace Data.Two
                     ShipStats.NumOfCannons + " " + ShipStats.CannonStats.Metal.Name.StartCase() + " " + ShipStats.CannonStats.Cannon.Name +
                     " Cannon" + (ShipStats.NumOfCannons > 1 ? "s" : ""),
 
-                Damage =>
-                    ((int)(ShipStats.CannonStats.Cannon.Modifier * ShipStats.CannonStats.Metal.Modifier * ShipStats.NumOfCannons)).ToString(),
+                Damage => GetLevel(item).ToString(),
 
                 Hulls => ShipStats.HullStats.Hull.Name,
 
@@ -72,9 +63,9 @@ namespace Data.Two
         {
             return item switch
             {
-                MaterialStorage => (int)(ShipStats.RiggingStats.ClothType.Modifier * ShipStats.HullStats.Hull.Modifier * .05f),
+                MaterialStorage => (int)(ShipStats.RiggingStats.ClothType.Modifier * ShipStats.HullStats.Hull.Modifier * .5f),
                 RationStorage => (int)(ShipStats.RiggingStats.ClothType.Modifier * ShipStats.HullStats.Hull.Modifier * .05f),
-                StarChart => (int)(ShipStats.RiggingStats.ClothType.Modifier * ShipStats.HullStats.Hull.Modifier * .01f),
+                StarChartStorage => (int)(ShipStats.RiggingStats.ClothType.Modifier * ShipStats.HullStats.Hull.Modifier * .01f),
                 GramophoneStorage => (int)(ShipStats.RiggingStats.ClothType.Modifier * ShipStats.HullStats.Hull.Modifier * .01f),
                 MaxHitPoints => (int)(ShipStats.HullStats.Hull.Modifier * ShipStats.HullStats.Timber.Modifier),
                 CurrentHitPoints => Stats[(IPlayerShipStat)item],
@@ -89,6 +80,7 @@ namespace Data.Two
         public void AdjustLevel(IItem item, int i)
         {
             if (item is not IPlayerShipStat) throw new System.Exception(item.Name);
+
             Stats[(IPlayerShipStat)item] =
                 Stats[(IPlayerShipStat)item] + i < 0 ? 0 :
                 Stats[(IPlayerShipStat)item] + i;

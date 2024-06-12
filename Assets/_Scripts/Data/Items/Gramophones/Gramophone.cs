@@ -1,4 +1,4 @@
-namespace Data.Two
+namespace Data
 {
     public interface IGramophone : IItem
     {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Menus.Two
+namespace Menus
 {
     public interface IMenuLayout
     {

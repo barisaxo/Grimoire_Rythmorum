@@ -34,14 +34,14 @@ namespace Ships
         // private ShipStats.ShipStats _shipStats;
         // public ShipStats.ShipStats ShipStats => _shipStats ??= new(
         //     new ShipStats.HullStats(
-        //         new Data.Two.Schooner(),
-        //         new Data.Two.Fir()),
+        //         new Data.Schooner(),
+        //         new Data.Fir()),
 
         //     new ShipStats.CannonStats(
-        //        new Data.Two.Saker(),
-        //         new Data.Two.CastIron()),
+        //        new Data.Saker(),
+        //         new Data.CastIron()),
         //         new ShipStats.RiggingStats(
-        //         new Data.Two.Hemp()),
+        //         new Data.Hemp()),
         //         numOfCannons: NumOfCannons
         // );
 

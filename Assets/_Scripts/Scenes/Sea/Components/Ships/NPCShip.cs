@@ -9,7 +9,7 @@ namespace Sea
         public ISceneObject SceneObject;
         public IShipPrefab ShipPrefab;
 
-        public void InstantiateNewSceneObject(State state, Data.Two.StandingData standingData)
+        public void InstantiateNewSceneObject(State state, Data.StandingData standingData)
         {
             switch (ShipType)
             {
@@ -92,17 +92,17 @@ namespace Sea
         // public bool Hiding => HideTimer > 0;
         public float HideTimer;
 
-        public Data.Two.IHull Hull;
-        public Data.Two.Standing Standing => RegionalMode switch
+        public Data.IHull Hull;
+        public Data.Standing Standing => RegionalMode switch
         {
-            RegionEnum.Aeolian => new Data.Two.AeolianStanding(),
-            RegionEnum.Ionian => new Data.Two.IonianStanding(),
-            RegionEnum.Lydian => new Data.Two.LydianStanding(),
-            RegionEnum.Locrian => new Data.Two.LocrianStanding(),
-            RegionEnum.MixoLydian => new Data.Two.MixolydianStanding(),
-            RegionEnum.Dorian => new Data.Two.DorianStanding(),
-            RegionEnum.Phrygian => new Data.Two.PhrygianStanding(),
-            RegionEnum.Chromatic => new Data.Two.ChromaticStanding(),
+            RegionEnum.Aeolian => new Data.AeolianStanding(),
+            RegionEnum.Ionian => new Data.IonianStanding(),
+            RegionEnum.Lydian => new Data.LydianStanding(),
+            RegionEnum.Locrian => new Data.LocrianStanding(),
+            RegionEnum.MixoLydian => new Data.MixolydianStanding(),
+            RegionEnum.Dorian => new Data.DorianStanding(),
+            RegionEnum.Phrygian => new Data.PhrygianStanding(),
+            RegionEnum.Chromatic => new Data.ChromaticStanding(),
             _ => throw new System.ArgumentOutOfRangeException(RegionalMode.ToString()),
         };
 
@@ -121,7 +121,7 @@ namespace Sea
             _ => Assets.LocrianFlag,
         } : Assets.PirateFlag;
 
-        public NPCShip(Vector2Int[] path, NPCShipType shipType, Data.Two.IHull hull, Vector2Int regionalCoordOffset, ShipStats.ShipStats shipStats)
+        public NPCShip(Vector2Int[] path, NPCShipType shipType, Data.IHull hull, Vector2Int regionalCoordOffset, ShipStats.ShipStats shipStats)
         {
             ShipType = shipType;
             ShipStats = shipStats;
@@ -150,17 +150,17 @@ namespace Sea
     public enum RegionEnum { Ionian, Dorian, Phrygian, Lydian, MixoLydian, Aeolian, Locrian, Chromatic }
     public class TradeShip : ISceneObject
     {
-        public TradeShip(State state, Data.Two.IHull hull, Data.Two.StandingData standingData, Data.Two.Standing standing)
+        public TradeShip(State state, Data.IHull hull, Data.StandingData standingData, Data.Standing standing)
         {
             IShipPrefab obj = hull switch
             {
-                Data.Two.Sloop => Assets.Sloop,
-                Data.Two.Brig => Assets.Brig,
-                Data.Two.Schooner => Assets.Schooner,
-                Data.Two.Cutter => Assets.Cutter,
-                // Data.Two.TopRig => Assets.TopRig,
-                Data.Two.Frigate => Assets.Frigate,
-                Data.Two.Barque => Assets.Barque,
+                Data.Sloop => Assets.Sloop,
+                Data.Brig => Assets.Brig,
+                Data.Schooner => Assets.Schooner,
+                Data.Cutter => Assets.Cutter,
+                // Data.TopRig => Assets.TopRig,
+                Data.Frigate => Assets.Frigate,
+                Data.Barque => Assets.Barque,
                 _ => throw new System.ArgumentException(hull.Name)
             };
 
@@ -192,16 +192,16 @@ namespace Sea
 
     public class BountyShipSO : ISceneObject
     {
-        public BountyShipSO(State currentState, NPCShip ship, Data.Two.IHull hull)
+        public BountyShipSO(State currentState, NPCShip ship, Data.IHull hull)
         {
             IShipPrefab obj = hull switch
             {
-                Data.Two.Sloop => Assets.Sloop,
-                Data.Two.Cutter => Assets.Cutter,
-                Data.Two.Schooner => Assets.Schooner,
-                Data.Two.Brig => Assets.Brig,
-                Data.Two.Frigate => Assets.Frigate,
-                Data.Two.Barque => Assets.Barque,
+                Data.Sloop => Assets.Sloop,
+                Data.Cutter => Assets.Cutter,
+                Data.Schooner => Assets.Schooner,
+                Data.Brig => Assets.Brig,
+                Data.Frigate => Assets.Frigate,
+                Data.Barque => Assets.Barque,
                 _ => throw new System.NotImplementedException(hull.Name)
             };
 
@@ -233,16 +233,16 @@ namespace Sea
 
     public class PirateShip : ISceneObject
     {
-        public PirateShip(State currentState, NPCShip ship, Data.Two.IHull hull)
+        public PirateShip(State currentState, NPCShip ship, Data.IHull hull)
         {
             IShipPrefab obj = hull switch
             {
-                Data.Two.Sloop => Assets.Sloop,
-                Data.Two.Cutter => Assets.Cutter,
-                Data.Two.Schooner => Assets.Schooner,
-                Data.Two.Brig => Assets.Brig,
-                Data.Two.Frigate => Assets.Frigate,
-                Data.Two.Barque => Assets.Barque,
+                Data.Sloop => Assets.Sloop,
+                Data.Cutter => Assets.Cutter,
+                Data.Schooner => Assets.Schooner,
+                Data.Brig => Assets.Brig,
+                Data.Frigate => Assets.Frigate,
+                Data.Barque => Assets.Barque,
                 _ => throw new System.NotImplementedException(hull.Name)
             };
 

@@ -72,15 +72,15 @@ public class BountyBatterie_State : State
 
         Scene.BatterieHUD.PlayerCurrent -= Scene.NMEShipStats.VolleyDamage;
         // Debug.Log(DataManager.Io.CharData.GetLevel(Data.Player.CharacterData.DataItem.CurrentHP));
-        Data.Two.Manager.Io.ActiveShip.SetLevel(
-            new Data.Two.CurrentHitPoints(),
-            Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.CurrentHitPoints()) - Scene.NMEShipStats.VolleyDamage);
+        Data.Manager.Io.ActiveShip.SetLevel(
+            new Data.CurrentHitPoints(),
+            Data.Manager.Io.ActiveShip.GetLevel(new Data.CurrentHitPoints()) - Scene.NMEShipStats.VolleyDamage);
 
         if (Scene.Pack.Spammed)
         {
-            Data.Two.Manager.Io.ActiveShip.SetLevel(
-                new Data.Two.CurrentHitPoints(),
-                Data.Two.Manager.Io.ActiveShip.GetLevel(new Data.Two.CurrentHitPoints()) - Scene.NMEShipStats.VolleyDamage);
+            Data.Manager.Io.ActiveShip.SetLevel(
+                new Data.CurrentHitPoints(),
+                Data.Manager.Io.ActiveShip.GetLevel(new Data.CurrentHitPoints()) - Scene.NMEShipStats.VolleyDamage);
 
             Scene.BatterieHUD.NMECurrent = Scene.BatterieHUD.NMEMax;
         }

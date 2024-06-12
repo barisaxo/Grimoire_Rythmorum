@@ -17,9 +17,9 @@ public class CoveScene_State : State
 
     protected override void EngageState()
     {
-        Data.Two.Manager.Io.Lighthouse.Reset();
+        Data.Manager.Io.Lighthouse.Reset();
 
-        DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Data.Two.Sloop());
+        DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Data.Sloop());
 
         if (!Audio.BGMusic.AudioSources[0].isPlaying)
             Audio.BGMusic.Resume();
@@ -27,11 +27,11 @@ public class CoveScene_State : State
 
     protected override void DisengageState()
     {
-        Data.Two.Manager.Io.ActiveShip.SetLevel(new Data.Two.MaxHitPoints(),
-            Data.Two.Manager.Io.ActiveShip.ShipStats.HullStrength);
+        Data.Manager.Io.ActiveShip.SetLevel(new Data.MaxHitPoints(),
+            Data.Manager.Io.ActiveShip.ShipStats.HullStrength);
 
-        Data.Two.Manager.Io.ActiveShip.SetLevel(new Data.Two.CurrentHitPoints(),
-            Data.Two.Manager.Io.ActiveShip.ShipStats.HullStrength);
+        Data.Manager.Io.ActiveShip.SetLevel(new Data.CurrentHitPoints(),
+            Data.Manager.Io.ActiveShip.ShipStats.HullStrength);
 
         Cam.StoredCamRot = Cam.Io.Camera.transform.rotation.eulerAngles;
         Cam.StoredCamPos = Cam.Io.Camera.transform.position;
@@ -74,35 +74,35 @@ public class CoveScene_State : State
         }
         else if (NearObject(Cove.Cutter.transform))
         {
-            if (!ShipUnlocked(new Data.Two.Sloop())) { Cove.Player.Bark.SetTextString("(locked)"); return; }
+            if (!ShipUnlocked(new Data.Sloop())) { Cove.Player.Bark.SetTextString("(locked)"); return; }
             Cove.HUD.North.SetImageColor(Color.white).SetTextString("View Upgrades");
             Cove.HUD.East.SetImageColor(Color.white).SetTextString("Set Sail");
             return;
         }
         else if (NearObject(Cove.Schooner.transform))
         {
-            if (!ShipUnlocked(new Data.Two.Cutter())) { Cove.Player.Bark.SetTextString("(locked)"); return; }
+            if (!ShipUnlocked(new Data.Cutter())) { Cove.Player.Bark.SetTextString("(locked)"); return; }
             Cove.HUD.North.SetImageColor(Color.white).SetTextString("View Upgrades");
             Cove.HUD.East.SetImageColor(Color.white).SetTextString("Set Sail");
             return;
         }
         else if (NearObject(Cove.Brig.transform))
         {
-            if (!ShipUnlocked(new Data.Two.Schooner())) { Cove.Player.Bark.SetTextString("(locked)"); return; }
+            if (!ShipUnlocked(new Data.Schooner())) { Cove.Player.Bark.SetTextString("(locked)"); return; }
             Cove.HUD.North.SetImageColor(Color.white).SetTextString("View Upgrades");
             Cove.HUD.East.SetImageColor(Color.white).SetTextString("Set Sail");
             return;
         }
         else if (NearObject(Cove.Frigate.transform))
         {
-            if (!ShipUnlocked(new Data.Two.Brig())) { Cove.Player.Bark.SetTextString("(locked)"); return; }
+            if (!ShipUnlocked(new Data.Brig())) { Cove.Player.Bark.SetTextString("(locked)"); return; }
             Cove.HUD.North.SetImageColor(Color.white).SetTextString("View Upgrades");
             Cove.HUD.East.SetImageColor(Color.white).SetTextString("Set Sail");
             return;
         }
         else if (NearObject(Cove.Barque.transform))
         {
-            if (!ShipUnlocked(new Data.Two.Frigate())) { Cove.Player.Bark.SetTextString("(locked)"); return; }
+            if (!ShipUnlocked(new Data.Frigate())) { Cove.Player.Bark.SetTextString("(locked)"); return; }
             Cove.HUD.North.SetImageColor(Color.white).SetTextString("View Upgrades");
             Cove.HUD.East.SetImageColor(Color.white).SetTextString("Set Sail");
             return;
@@ -134,33 +134,33 @@ public class CoveScene_State : State
         Cove.HUD.HideTexts();
         if (NearObject(Cove.Sloop.transform))
         {
-            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Data.Two.Sloop());
+            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Data.Sloop());
             SetState(new CoveToSeaTransition_State()); return;
         }
-        else if (NearObject(Cove.Cutter.transform) && ShipUnlocked(new Data.Two.Sloop()))
+        else if (NearObject(Cove.Cutter.transform) && ShipUnlocked(new Data.Sloop()))
         {
             SetState(new CoveToSeaTransition_State()); return;
         }
-        else if (NearObject(Cove.Schooner.transform) && ShipUnlocked(new Data.Two.Cutter()))
+        else if (NearObject(Cove.Schooner.transform) && ShipUnlocked(new Data.Cutter()))
         {
             SetState(new CoveToSeaTransition_State()); return;
         }
-        else if (NearObject(Cove.Brig.transform) && ShipUnlocked(new Data.Two.Schooner()))
+        else if (NearObject(Cove.Brig.transform) && ShipUnlocked(new Data.Schooner()))
         {
             SetState(new CoveToSeaTransition_State()); return;
         }
-        else if (NearObject(Cove.Frigate.transform) && ShipUnlocked(new Data.Two.Brig()))
+        else if (NearObject(Cove.Frigate.transform) && ShipUnlocked(new Data.Brig()))
         {
             SetState(new CoveToSeaTransition_State()); return;
         }
-        else if (NearObject(Cove.Barque.transform) && ShipUnlocked(new Data.Two.Frigate()))
+        else if (NearObject(Cove.Barque.transform) && ShipUnlocked(new Data.Frigate()))
         {
             SetState(new CoveToSeaTransition_State()); return;
         }
         // else if (NearObject(Cove.SkillSheet.transform))
         // {
         //     SetState(new CoveToMenuTransition_State(
-        //         new Menus.Two.SkillsMenu(Data.Two.Manager.Io.Skill, Data.Two.Manager.Io.Player,
+        //         new Menus.SkillsMenu(Data.Manager.Io.Skill, Data.Manager.Io.Player,
         //             new CameraPan_State(
         //             subsequentState: this,
         //             pan: Cam.StoredCamRot = Cam.Io.Camera.transform.rotation.eulerAngles,
@@ -175,9 +175,9 @@ public class CoveScene_State : State
         Cove.HUD.HideTexts();
         if (NearObject(Cove.Sloop.transform))
         {
-            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Data.Two.Sloop());
+            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Data.Sloop());
             SetState(new CoveToMenuTransition_State(
-                new Menus.Two.ShipUpgradeMenu(DataManager.ShipUpgradeData,
+                new Menus.ShipUpgradeMenu(DataManager.ShipUpgradeData,
                     DataManager.Player,
                     DataManager.ActiveShip,
                     DataManager.ShipStats.ActiveShip,
@@ -188,30 +188,30 @@ public class CoveScene_State : State
                     speed: 5))));
             return;
         }
-        else if (NearObject(Cove.Cutter.transform) && ShipUnlocked(new Data.Two.Sloop()))
+        else if (NearObject(Cove.Cutter.transform) && ShipUnlocked(new Data.Sloop()))
         {
             SetState(new CoveToSeaTransition_State()); return;
         }
-        else if (NearObject(Cove.Schooner.transform) && ShipUnlocked(new Data.Two.Cutter()))
+        else if (NearObject(Cove.Schooner.transform) && ShipUnlocked(new Data.Cutter()))
         {
             SetState(new CoveToSeaTransition_State()); return;
         }
-        else if (NearObject(Cove.Brig.transform) && ShipUnlocked(new Data.Two.Schooner()))
+        else if (NearObject(Cove.Brig.transform) && ShipUnlocked(new Data.Schooner()))
         {
             SetState(new CoveToSeaTransition_State()); return;
         }
-        else if (NearObject(Cove.Frigate.transform) && ShipUnlocked(new Data.Two.Brig()))
+        else if (NearObject(Cove.Frigate.transform) && ShipUnlocked(new Data.Brig()))
         {
             SetState(new CoveToSeaTransition_State()); return;
         }
-        else if (NearObject(Cove.Barque.transform) && ShipUnlocked(new Data.Two.Frigate()))
+        else if (NearObject(Cove.Barque.transform) && ShipUnlocked(new Data.Frigate()))
         {
             SetState(new CoveToSeaTransition_State()); return;
         }
         else if (NearObject(Cove.Gramo.transform))
         {
             SetState(new CoveToMenuTransition_State(
-               new Menus.Two.GramophoneMenu(DataManager.Gramophones,
+               new Menus.GramophoneMenu(DataManager.Gramophones,
                    new CameraPan_State(
                    subsequentState: this,
                    pan: Cam.StoredCamRot = Cam.Io.Camera.transform.rotation.eulerAngles,
@@ -233,7 +233,7 @@ public class CoveScene_State : State
         else if (NearObject(Cove.Bottle.transform))
         {
             SetState(new CoveToMenuTransition_State(
-               new Menus.Two.StarChartsMenu(DataManager.StarChart,
+               new Menus.StarChartsMenu(DataManager.StarChart,
                    new CameraPan_State(
                    subsequentState: this,
                    pan: Cam.StoredCamRot = Cam.Io.Camera.transform.rotation.eulerAngles,
@@ -244,7 +244,7 @@ public class CoveScene_State : State
         else if (NearObject(Cove.SkillSheet.transform))
         {
             SetState(new CoveToMenuTransition_State(
-                new Menus.Two.SkillsMenu(Data.Two.Manager.Io.Skill, Data.Two.Manager.Io.Player,
+                new Menus.SkillsMenu(Data.Manager.Io.Skill, Data.Manager.Io.Player,
                     new CameraPan_State(
                     subsequentState: this,
                     pan: Cam.StoredCamRot = Cam.Io.Camera.transform.rotation.eulerAngles,
@@ -257,7 +257,7 @@ public class CoveScene_State : State
     protected override void SelectPressed()
     {
         SetState(new CoveToMenuTransition_State(
-            new Menus.Two.OptionsMenu(
+            new Menus.OptionsMenu(
                 DataManager,
                 Audio,
                 new CameraPan_State(
@@ -273,11 +273,11 @@ public class CoveScene_State : State
       new Vector2(b.position.x, b.position.z));
 
 
-    bool ShipUnlocked(Data.Two.IHull prevShip)
+    bool ShipUnlocked(Data.IHull prevShip)
     {
         var stats = DataManager.ShipStats.GetItem(prevShip);
-        if (stats.CannonStats.Cannon is not Data.Two.Culverin) return false;
-        if (stats.RiggingStats.ClothType is not Data.Two.Linen) return false;
+        if (stats.CannonStats.Cannon is not Data.Culverin) return false;
+        if (stats.RiggingStats.ClothType is not Data.Linen) return false;
         return true;
     }
 }

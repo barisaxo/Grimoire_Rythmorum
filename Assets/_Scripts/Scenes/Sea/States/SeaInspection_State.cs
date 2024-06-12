@@ -128,8 +128,8 @@ public class SeaInspection_State : State
 
     string ThreatLevel(NPCShip npc)
     {
-        float threat = (float)((float)npc.ShipStats.VolleyDamage / (float)DataManager.ActiveShip.GetLevel(new Data.Two.Damage()));
-        threat += (float)((float)npc.ShipStats.HullStrength / (float)DataManager.ActiveShip.GetLevel(new Data.Two.CurrentHitPoints()));
+        float threat = (float)((float)npc.ShipStats.VolleyDamage / (float)DataManager.ActiveShip.GetLevel(new Data.Damage()));
+        threat += (float)((float)npc.ShipStats.HullStrength / (float)DataManager.ActiveShip.GetLevel(new Data.CurrentHitPoints()));
         int t = (int)(threat * 50f);
         return threat switch
         {
