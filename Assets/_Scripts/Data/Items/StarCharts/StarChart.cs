@@ -89,5 +89,6 @@ namespace Data
                 _ => throw new System.ArgumentOutOfRangeException(@enum.Name)
             };
         }
+
     }
 }

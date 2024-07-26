@@ -7,11 +7,14 @@ public class NewGramoPuzzle_State : State
 {
     readonly State SubsequentState;
     readonly bool IsPractice;
-    public NewGramoPuzzle_State(State subsequentState, bool isPractice)
+    readonly Data.IGramophone Gramo;
+
+    public NewGramoPuzzle_State(State subsequentState, Data.IGramophone gramo, bool isPractice)
     {
         Fade = true;
         SubsequentState = subsequentState;
         IsPractice = isPractice;
+        Gramo = gramo;
     }
 
     protected override void PrepareState(Action callback)
@@ -21,6 +24,6 @@ public class NewGramoPuzzle_State : State
     }
     protected override void EngageState()
     {
-        SetState(IsPractice ? new GramoPractice_State(SubsequentState) : new Gramo_State(SubsequentState));
+        SetState(IsPractice ? new GramoPractice_State(SubsequentState, Gramo) : new Gramo_State(SubsequentState, Gramo));
     }
 }

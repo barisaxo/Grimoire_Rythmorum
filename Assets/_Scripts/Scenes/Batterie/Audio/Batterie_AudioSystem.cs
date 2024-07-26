@@ -8,15 +8,15 @@ namespace Audio
         {
             VolumeData = volumeData;
 
-            AudioSources[0].volume = VolumeData.GetLevel(new Click()) * .01f;
+            AudioSources[0].volume = VolumeData.GetScaledLevel(new Click());
             AudioSources[0].clip = BatterieAssets.RimShot;
             AudioSources[0].clip.LoadAudioData();
 
-            AudioSources[1].volume = VolumeData.GetLevel(new BatterieVolume()) * .01f;
+            AudioSources[1].volume = VolumeData.GetScaledLevel(new BatterieVolume());
             AudioSources[1].clip = BatterieAssets.SnareRoll;
             AudioSources[1].clip.LoadAudioData();
 
-            AudioSources[2].volume = VolumeData.GetLevel(new BatterieVolume()) * .01f;
+            AudioSources[2].volume = VolumeData.GetScaledLevel(new BatterieVolume());
             AudioSources[2].clip = BatterieAssets.MissStick;
             AudioSources[2].clip.LoadAudioData();
         }
@@ -61,7 +61,7 @@ namespace Audio
 
         public void Hit()
         {
-            AudioSources[1].volume = VolumeData.GetLevel(new BatterieVolume()) * .01f;
+            AudioSources[1].volume = VolumeData.GetScaledLevel(new BatterieVolume());
         }
 
         public override void Stop()

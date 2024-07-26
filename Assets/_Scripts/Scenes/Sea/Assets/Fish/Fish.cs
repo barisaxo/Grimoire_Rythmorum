@@ -10,7 +10,7 @@ namespace Sea
         public Fish(State currentState, Manager data)
         {
             Difficulty = new FishDifficultySetter(data);
-            IMAFish = Assets.SailFishPrefab;//todo difficultylevel switch
+            IMAFish = Assets.SailFishPrefab;//TODO difficulty level switch
             FishType = IMAFish.FishType;
             TF.SetParent(WorldMapScene.Io.TheSea.transform);
             Collidable = new NotCollidable(IMAFish.Col);

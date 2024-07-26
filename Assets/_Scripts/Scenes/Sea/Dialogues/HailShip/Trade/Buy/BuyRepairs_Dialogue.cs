@@ -8,7 +8,7 @@ public class BuyRepairs_Dialogue : Dialogue
     readonly Dialogue ReturnTo;
     readonly Standing Standing;
 
-    int StandingMod => Data.Manager.Io.StandingData.GetLevel(Standing);
+    int StandingMod => Data.Manager.Io.Standings.GetLevel(Standing);
     int Gold => Manager.Io.Inventory.GetLevel(new Gold());
     int Mats => Manager.Io.Inventory.GetLevel(new Material());
     int CurHP => Manager.Io.ActiveShip.GetLevel(new CurrentHitPoints());
@@ -80,7 +80,7 @@ public class BuyRepairs_Dialogue : Dialogue
     bool MedRepairs => HPPercent < .85f && !(Gold < medHealthAmount * goldPer) && !(Mats < medHealthAmount * matsPer);
     bool SmallRepairs => HPPercent < 1f && !(Gold < smallHealthAmount * goldPer) && !(Mats < smallHealthAmount * matsPer);
 
-    int matsPer => (int)(3f * StandingsModifier);
+    int matsPer => (int)(2f * StandingsModifier);
     int goldPer => (int)(25f * StandingsModifier);
 
     void RepairSmall()

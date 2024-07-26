@@ -3,15 +3,15 @@ namespace MusicTheory.Rhythms
 {
     public class RhythmSpecs
     {
-        public float Tempo = 80;
+        public float Tempo = 90;
         public int NumberOfMeasures = 4;
         public SubDivisionTier SubDivisionTier = SubDivisionTier.BeatOnly;
         public Meter Meter = Meter.SimpleQuadruple;
         public MetricLevel SmallestMetricLevel = MetricLevel.Beat;
-        public Time Time;
-        public bool HasTies;
-        public bool HasRests;
-        public bool HasTriplets;
+        public Time Time = new FourFour();
+        public bool HasTies = false;
+        public bool HasRests = false;
+        public bool HasTriplets = false;
 
         public RhythmSpecs SetTempo(float tempo) { Tempo = tempo; return this; }
         public RhythmSpecs SetNumberOfMeasures(int numberOfMeasures) { NumberOfMeasures = numberOfMeasures; return this; }

@@ -2,26 +2,8 @@ using System.Collections.Generic;
 
 namespace Data
 {
-    [System.Serializable]
     public class MainMenuData : IData
     {
-        // private Dictionary<MainOption, int> _datum;
-        // private Dictionary<MainOption, int> Datum => _datum ??= SetUpDatum();
-
-        // private Dictionary<MainOption, int> SetUpDatum()
-        // {
-        //     Dictionary<MainOption, int> datum = new();
-        //     for (int i = 0; i < Items.Length; i++)
-        //         if (Items[i] is BGMusic) datum.TryAdd((MainOption)Items[i], 35);
-        //         else if (Items[i] is Drums) datum.TryAdd((MainOption)Items[i], 75);
-        //         else if (Items[i] is Chords) datum.TryAdd((MainOption)Items[i], 95);
-        //         else if (Items[i] is Bass) datum.TryAdd((MainOption)Items[i], 95);
-        //         else if (Items[i] is SoundFX) datum.TryAdd((MainOption)Items[i], 95);
-        //         else datum.TryAdd((MainOption)Items[i], 20);
-
-        //     return datum;
-        // }
-
         private IItem[] _items;
         public IItem[] Items
         {

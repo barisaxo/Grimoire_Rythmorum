@@ -34,7 +34,8 @@ public class EndBatterie_State : State
         mats = (int)((level + 25f) * 2.55f * UnityEngine.Random.Range(.35f, 1) * (float)((100 - Result()) * .01f));
         rations = (int)(1 + ((level + 5f) * UnityEngine.Random.Range(.5f, 1) * (float)((100 - Result()) * .01f)));
         patterns = (int)((Scene.NMEShipStats.HullStrength + Scene.NMEShipStats.VolleyDamage) *
-                        (Scene.Pack.HasCritThisBattery ? .45f : .25f));
+                        (Scene.Pack.HasCritThisBattery ? .45f : .25f)
+                        * Data.Manager.Io.Skill.GetBonusRatio(new Data.Apophenia()));
         Results();
 
         Sea.WorldMapScene.Io.Ship.GO.transform.SetPositionAndRotation(
@@ -69,6 +70,7 @@ public class EndBatterie_State : State
                 Data.Manager.Io.Inventory.AdjustLevel(new Data.Ration(), rations /= 2);
                 Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), coins /= 2);
                 DataManager.Player.AdjustLevel(new Data.PatternsFound(), patterns);
+
                 SetState(
                     new CameraPan_State(
                         new NPCSailAway_State(
@@ -76,7 +78,7 @@ public class EndBatterie_State : State
                                 coins, mats, rations, patterns, BatterieResultType.NMESurrender))),
                         Cam.StoredCamRot,
                         Cam.StoredCamPos,
-                        3));
+                        5));
                 return;
 
             case BatterieResultType.Surrender:
@@ -90,7 +92,7 @@ public class EndBatterie_State : State
                                 coins, mats, rations, 0, BatterieResultType.Surrender))),
                         Cam.StoredCamRot,
                         Cam.StoredCamPos,
-                        3));
+                        5));
                 return;
 
             case BatterieResultType.Spam:
@@ -101,7 +103,7 @@ public class EndBatterie_State : State
                                 0, 0, 0, 0, BatterieResultType.Spam))),
                         Cam.StoredCamRot,
                         Cam.StoredCamPos,
-                        3));
+                        5));
                 return;
 
             case BatterieResultType.Fled:
@@ -112,7 +114,7 @@ public class EndBatterie_State : State
                                 0, 0, 0, 0, BatterieResultType.Fled)),
                             Cam.StoredCamRot,
                             Cam.StoredCamPos,
-                            3)));
+                            5)));
 
                 return;
 
@@ -124,7 +126,7 @@ public class EndBatterie_State : State
                                 0, 0, 0, 0, BatterieResultType.NMEscaped))),
                         Cam.StoredCamRot,
                         Cam.StoredCamPos,
-                        3));
+                        5));
                 return;
 
             case BatterieResultType.Lost://TODO
@@ -146,7 +148,7 @@ public class EndBatterie_State : State
                                 coins, mats, rations, patterns, BatterieResultType.Won)),
                             Cam.StoredCamRot,
                             Cam.StoredCamPos,
-                            3)));
+                            5)));
                 return;
         }
 

@@ -50,27 +50,6 @@ namespace Data
             return Datum[(IStarChart)item];
         }
 
-        // public void DecreaseLevel(IItem item)
-        // {
-        //     if (item is not StarChart) throw new System.Exception(item.GetType().ToString());
-        //     Datum[(StarChart)item] = Datum[(StarChart)item] - 1 < 0 ? 0 : Datum[(StarChart)item] - 1;
-        // }
-        // public void DecreaseLevel(IItem item, int i)
-        // {
-        //     if (item is not StarChart) throw new System.Exception(item.GetType().ToString());
-        //     Datum[(StarChart)item] = Datum[(StarChart)item] - i < 0 ? 0 : Datum[(StarChart)item] - i;
-        // }
-        // public void IncreaseLevel(IItem item)
-        // {
-        //     if (item is not StarChart) throw new System.Exception(item.GetType().ToString());
-        //     Datum[(StarChart)item] = Datum[(StarChart)item] + 1 > 999 ? 999 : Datum[(StarChart)item] + 1;
-        // }
-        // public void IncreaseLevel(IItem item, int i)
-        // {
-        //     if (item is not StarChart) throw new System.Exception(item.GetType().ToString());
-        //     Datum[(StarChart)item] = Datum[(StarChart)item] + i > 999 ? 999 : Datum[(StarChart)item] + i;
-        // }
-
         public void AdjustLevel(IItem item, int i)
         {
             if (item is not IStarChart) throw new System.Exception(item.GetType().ToString());

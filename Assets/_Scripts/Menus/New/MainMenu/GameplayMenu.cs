@@ -1,15 +1,19 @@
 using System;
 using Data;
+using UnityEngine;
 
 namespace Menus
 {
     public class GameplayMenu : IMenu
     {
-        public GameplayMenu(GameplayData gd)
+        public GameplayMenu(GameplayData gd, State subsequentState)
         {
             Data = gd;
+            // UnityEngine.Debug.Log(subsequentState.GetType());
+            SubsequentState = subsequentState;
         }
 
+        readonly State SubsequentState;
         TuningNote TuningNote;
         public IData Data { get; }
         MenuItem _selection;
@@ -28,6 +32,7 @@ namespace Menus
                     TuningNote?.SelfDestruct();
                     TuningNote = null;
                 }
+                ShowHideEast();
             }
         }
         public MenuItem[] MenuItems { get; set; }
@@ -46,6 +51,7 @@ namespace Menus
             L1 = new ButtonInput(() => TuningNote?.SelfDestruct()),
             North = new ButtonInput(IncreaseItem),
             West = new ButtonInput(DecreaseItem),
+            East = new ButtonInput(() => CalibrationMode()),
             South = new ButtonInput(() => TuningNote?.SelfDestruct()),
             Up = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Up, this)),
             Down = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Down, this)),
@@ -65,7 +71,68 @@ namespace Menus
             Selection.Card.SetTextString(DisplayData(Selection.Item));
         }
 
-        public State ConsequentState => null;
-        public IMenuScene Scene => null;
+        void ShowHideEast()
+        {
+            Debug.Log("Selection.Item is Calibrate: " + (Selection.Item is Calibrate).ToString());
+            if (Selection.Item is Calibrate)
+                Scene.East.SetImageColor(Color.white).SetTextColor(Color.white);
+            else
+                Scene.East.SetImageColor(Color.clear).SetTextColor(Color.clear);
+        }
+
+        void CalibrationMode()
+        {
+            ConsequentState = Selection.Item is Calibrate ? new LatencyCalibration_State(SubsequentState) : null;
+        }
+
+        private State _conState = null;
+        public State ConsequentState
+        {
+            get { var s = _conState; _conState = null; return s; }
+            private set => _conState = value;
+        }
+
+        private IMenuScene _scene;
+        public IMenuScene Scene => _scene ??= new GamePlayMenuScene();
+
+
+        public class GamePlayMenuScene : IMenuScene
+        {
+            public string Name { get; } = nameof(GamePlayMenuScene);
+
+            public void Initialize()
+            {
+                South.SetTextString("Back").SetImageColor(Color.white);
+                North.SetTextString("Increase").SetImageColor(Color.white);
+                West.SetTextString("Decrease").SetImageColor(Color.white);
+                East.SetTextString("Calibrate").SetImageColor(Color.clear).SetTextColor(Color.clear);
+                ((IMenuScene)this).SetCardPos1(South);
+                ((IMenuScene)this).SetCardPos2(West);
+                ((IMenuScene)this).SetCardPos3(North);
+                ((IMenuScene)this).SetCardPos4(East);
+            }
+
+            public void SelfDestruct()
+            {
+                Hud?.SelfDestruct();
+                Hud = null;
+                South = null;
+                West = null;
+                East = null;
+                North = null;
+                L1 = null;
+                R1 = null;
+            }
+
+            public Transform TF => null;
+
+            public Card Hud { get; set; }
+            public Card North { get; set; }
+            public Card East { get; set; }
+            public Card South { get; set; }
+            public Card West { get; set; }
+            public Card L1 { get; set; }
+            public Card R1 { get; set; }
+        }
     }
 }

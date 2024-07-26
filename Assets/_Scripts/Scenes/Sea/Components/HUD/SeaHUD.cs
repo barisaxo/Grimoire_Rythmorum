@@ -16,9 +16,11 @@ namespace Sea
             Data = characterData;
             _ = Icon;
             _ = HealthBar;
-            _ = North;
-            _ = East;
-            _ = South;
+            // _ = North;
+            // _ = East;
+            // _ = South;
+            _ = Start;
+            _ = Select;
             _ = West;
             _ = CoordText;
 
@@ -41,7 +43,7 @@ namespace Sea
 
         private Card[] _hidableHud;
         public Card[] HidableHud => _hidableHud ??= new Card[]{
-            Icon, HealthBar, North, East, South, West,
+            Icon, HealthBar, Select, Start, West,
         };
 
         private Card _hud;
@@ -98,32 +100,34 @@ namespace Sea
             // .SetFontScale(.5f, .5f);
             ;
 
-        private Card _northButton;
-        public Card North => _northButton ??= Hud.CreateChild(nameof(North), Hud.Canvas)
-            .SetPositionAll(Cam.UIOrthoX - 1.5f, Cam.UIOrthoY - 3.15f)
+        private Card _selectButton;
+        public Card Select => _selectButton ??= Hud.CreateChild(nameof(Select), Hud.Canvas)
+            .SetTMPPosition(Cam.UIOrthoX - 1.15f, Cam.UIOrthoY - 3.15f)
             .SetFontScale(.5f, .5f)
             .AutoSizeTextContainer(true)
-            .SetImageSprite(Assets.NorthButton)
-            .SetImageSize(.5f, .5f)
-            .SetTextString("Attack")
+            // .SetImageSprite(Assets.NorthButton)
+            // .SetImageSize(.5f, .5f)
+            .SetTextString("Menu    <voffset=-.3em><size=200%>-")
             .SetTextAlignment(TextAlignmentOptions.Right)
             .SetTMPRectPivot(new Vector2(1, .5f))
             .SetOutlineWidth(.15f)
-            .OffsetImagePosition(Vector2.right)
+            .SetImageSprite(Assets.CLEAR)
+            // .OffsetImagePosition(Vector2.right)
             ;
 
-        private Card _EastButton;
-        public Card East => _EastButton ??= Hud.CreateChild(nameof(East), Hud.Canvas)
-            .SetPositionAll(Cam.UIOrthoX - 1.5f, Cam.UIOrthoY - 4.15f)
+        private Card _StartButton;
+        public Card Start => _StartButton ??= Hud.CreateChild(nameof(Start), Hud.Canvas)
+            .SetTMPPosition(Cam.UIOrthoX - 1.15f, Cam.UIOrthoY - 4.15f)
             .SetFontScale(.5f, .5f)
             .AutoSizeTextContainer(true)
-            .SetImageSprite(Assets.EastButton)
-            .SetImageSize(.5f, .5f)
-            .SetTextString("Interact")
+            // .SetImageSprite(Assets.EastButton)
+            // .SetImageSize(.5f, .5f)
+            .SetTextString("Inventory    <voffset=-.3em><size=200%>+")
             .SetTextAlignment(TextAlignmentOptions.Right)
             .SetTMPRectPivot(new Vector2(1, .5f))
             .SetOutlineWidth(.15f)
-            .OffsetImagePosition(Vector2.right)
+            .SetImageSprite(Assets.CLEAR)
+            // .OffsetImagePosition(Vector2.right)
             ;
 
         private Card _southButton;

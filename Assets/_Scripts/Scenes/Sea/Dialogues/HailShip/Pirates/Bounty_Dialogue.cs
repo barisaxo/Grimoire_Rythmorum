@@ -97,7 +97,7 @@ public class Bounty_Dialogue : Dialogue
 
     void OverrideQuestPlayerAction()
     {
-        Manager.Io.StandingData.AdjustLevel(Standing, -1);
+        Manager.Io.Standings.AdjustLevel(Standing, -1);
         AcceptQuestPlayerAction();
     }
 
@@ -132,14 +132,14 @@ public class Bounty_Dialogue : Dialogue
         return new (IData Data, IItem DataItem, int Amount)[]
         {
             (Manager.Io.Inventory, new Gold(), 1000),
-            (Manager.Io.StandingData, Standing, 1),
+            (Manager.Io.Standings, Standing, 1),
         };
     }
 
     void RewardsPlayerAction()
     {
         Debug.Log("Rewards!!");
-        Manager.Io.StandingData.AdjustLevel(Standing, 1);
+        Manager.Io.Standings.AdjustLevel(Standing, 1);
         var q = Manager.Io.Quests.GetQuest(new Bounty());
         q.Reward.AddRewards();
     }

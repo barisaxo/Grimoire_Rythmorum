@@ -70,11 +70,11 @@ public class EndGramo_Dialogue : Dialogue
     string Practice_String => "That's great work!\nThe more you practice here the better you'll be at sea!";
 }
 
-public class EndStarChartPractice_Dialogue : Dialogue
+public class EndPractice_Dialogue : Dialogue
 {
     readonly bool _won;
 
-    public EndStarChartPractice_Dialogue(bool won, State subsequentState)
+    public EndPractice_Dialogue(bool won, State subsequentState)
     {
         SubsequentState = subsequentState;
         _won = won;

@@ -104,10 +104,10 @@ public class CoveScene
 
     private GameObject SetUpCannon()
     {
-        var go = Assets.Cannon;
+        var go = Assets.CannonPrefab;
         go.transform.SetParent(Parent);
-        go.transform.SetLocalPositionAndRotation(new Vector3(26.5f, 1.6f, 14), Quaternion.Euler(0, 90, 0));
-        go.transform.localScale = Vector3.one;
+        go.transform.SetLocalPositionAndRotation(new Vector3(26.5f, .8f, 12), Quaternion.Euler(0, 0, 0));
+        go.transform.localScale = Vector3.one * 7;
         return go;
     }
 
@@ -118,7 +118,7 @@ public class CoveScene
     {
         var go = Assets.SailFishPrefab.gameObject;
         go.transform.SetParent(Parent);
-        go.transform.SetLocalPositionAndRotation(new Vector3(26.5f, 1.6f, 17), Quaternion.Euler(0, 90, 0));
+        go.transform.SetLocalPositionAndRotation(new Vector3(26.5f, 1.2f, 15.333f), Quaternion.Euler(0, 90, 0));
         go.transform.localScale = Vector3.one;
         return go;
     }
@@ -130,7 +130,7 @@ public class CoveScene
     {
         var go = Assets.Bottle.gameObject;
         go.transform.SetParent(Parent);
-        go.transform.SetLocalPositionAndRotation(new Vector3(26.5f, 1.6f, 20), Quaternion.Euler(0, 90, 0));
+        go.transform.SetLocalPositionAndRotation(new Vector3(26.5f, 1.6f, 18.666f), Quaternion.Euler(0, 90, 0));
         go.transform.localScale = Vector3.one;
         return go;
     }
@@ -142,7 +142,7 @@ public class CoveScene
     {
         var go = Assets.Gramo.gameObject;
         go.transform.SetParent(Parent);
-        go.transform.SetLocalPositionAndRotation(new Vector3(26.5f, 1.6f, 23), Quaternion.Euler(0, 90, 0));
+        go.transform.SetLocalPositionAndRotation(new Vector3(26.5f, 1.6f, 22), Quaternion.Euler(0, 90, 0));
         go.transform.localScale = Vector3.one;
         return go;
     }
@@ -252,7 +252,7 @@ public class CoveScene
     {
         var go = Assets.Sloop.gameObject;
         go.transform.SetParent(Parent);
-        go.transform.SetLocalPositionAndRotation(new Vector3(6.5f, 1.6f, 25), Quaternion.Euler(0, 90, 0));
+        go.transform.SetLocalPositionAndRotation(new Vector3(6.5f, 1f, 25), Quaternion.Euler(0, 90, 0));
         CapsuleCollider c = go.GetComponentInChildren<CapsuleCollider>();
         c.isTrigger = false;
         go.transform.localScale *= .6f;
@@ -265,7 +265,7 @@ public class CoveScene
     {
         var go = Assets.Cutter.gameObject;
         go.transform.SetParent(Parent);
-        go.transform.SetLocalPositionAndRotation(new Vector3(6.5f, 1.6f, 22), Quaternion.Euler(0, 90, 0));
+        go.transform.SetLocalPositionAndRotation(new Vector3(6.5f, 1f, 22), Quaternion.Euler(0, 90, 0));
         CapsuleCollider c = go.GetComponentInChildren<CapsuleCollider>();
         c.isTrigger = false;
         go.transform.localScale *= .6f;
@@ -278,7 +278,7 @@ public class CoveScene
     {
         var go = Assets.Schooner.gameObject;
         go.transform.SetParent(Parent);
-        go.transform.SetLocalPositionAndRotation(new Vector3(6.5f, 1.6f, 19), Quaternion.Euler(0, 90, 0));
+        go.transform.SetLocalPositionAndRotation(new Vector3(6.5f, 1f, 19), Quaternion.Euler(0, 90, 0));
         CapsuleCollider c = go.GetComponentInChildren<CapsuleCollider>();
         c.isTrigger = false;
         go.transform.localScale *= .6f;
@@ -291,7 +291,7 @@ public class CoveScene
     {
         var go = Assets.Brig.gameObject;
         go.transform.SetParent(Parent);
-        go.transform.SetLocalPositionAndRotation(new Vector3(6.5f, 1.6f, 16), Quaternion.Euler(0, 90, 0));
+        go.transform.SetLocalPositionAndRotation(new Vector3(6.5f, 1f, 16), Quaternion.Euler(0, 90, 0));
         CapsuleCollider c = go.GetComponentInChildren<CapsuleCollider>();
         c.isTrigger = false;
         go.transform.localScale *= .6f;
@@ -304,7 +304,7 @@ public class CoveScene
     {
         var go = Assets.Frigate.gameObject;
         go.transform.SetParent(Parent);
-        go.transform.SetLocalPositionAndRotation(new Vector3(6.5f, 1.6f, 13), Quaternion.Euler(0, 90, 0));
+        go.transform.SetLocalPositionAndRotation(new Vector3(6.5f, 1f, 13), Quaternion.Euler(0, 90, 0));
         CapsuleCollider c = go.GetComponentInChildren<CapsuleCollider>();
         c.isTrigger = false;
         go.transform.localScale *= .6f;
@@ -317,7 +317,7 @@ public class CoveScene
     {
         var go = Assets.Barque.gameObject;
         go.transform.SetParent(Parent);
-        go.transform.SetLocalPositionAndRotation(new Vector3(6.5f, 1.6f, 10), Quaternion.Euler(0, 90, 0));
+        go.transform.SetLocalPositionAndRotation(new Vector3(6.5f, 1f, 10), Quaternion.Euler(0, 90, 0));
         CapsuleCollider c = go.GetComponentInChildren<CapsuleCollider>();
         c.isTrigger = false;
         go.transform.localScale *= .6f;
@@ -325,7 +325,6 @@ public class CoveScene
         RockTheBoat.Rocking = true;
         return go;
     }
-
 
     private GameObject SetUpSkillSheet()
     {

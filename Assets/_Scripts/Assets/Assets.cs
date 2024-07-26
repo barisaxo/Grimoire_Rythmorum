@@ -137,6 +137,8 @@ public partial class Assets
     public static Sprite Wall2a => Resources.Load<Sprite>("Sprites/Walls/wall2a");
     public static Sprite Wall3 => Resources.Load<Sprite>("Sprites/Walls/wall3");
     public static Sprite Wall4 => Resources.Load<Sprite>("Sprites/Walls/wall4");
+
+    public static Sprite CLEAR => Resources.Load<Sprite>("Sprites/Misc/CLEAR");
 }
 
 
@@ -256,6 +258,10 @@ public partial class Assets
     public static Sea.BottleWithScrollPrefab Bottle => Object.Instantiate(_bottle);
 
 
+    public static GameObject _cannonPrefab => Resources.Load<GameObject>("Models/CannonPrefab");
+    public static GameObject CannonPrefab => Object.Instantiate(_cannonPrefab);
+
+
     public static GramophonePrefab _gramo => Resources.Load<GameObject>("Prefabs/Sea/Gramophone/Gramophone").GetComponent<GramophonePrefab>();
     public static GramophonePrefab Gramo => Object.Instantiate(_gramo);
 
@@ -278,5 +284,17 @@ public partial class Assets
     public static VideoClip RhythmCellHrH => Resources.Load<VideoClip>("Video/RhythmCells/Quarter/4/HrH");
     public static VideoClip RhythmCellQrQQrQ => Resources.Load<VideoClip>("Video/RhythmCells/QrQQrQ");
     public static VideoClip RhythmCellTie => Resources.Load<VideoClip>("Video/RhythmCells/tie");
+
+
+    public static VideoClip NoteID => Resources.Load<VideoClip>("Video/Theory/NoteID");
+    public static VideoClip Steps => Resources.Load<VideoClip>("Video/Theory/Steps");
+    public static VideoClip Scales => Resources.Load<VideoClip>("Video/Theory/Scales");
+    public static VideoClip Interval => Resources.Load<VideoClip>("Video/Theory/Intervals");
+    public static VideoClip Triads => Resources.Load<VideoClip>("Video/Theory/Triads");
+    public static VideoClip SeventhChords => Resources.Load<VideoClip>("Video/Theory/7thChords");
+    public static VideoClip Inversions => Resources.Load<VideoClip>("Video/Theory/Inversions");
+    public static VideoClip Modes => Resources.Load<VideoClip>("Video/Theory/Modes");
+    public static VideoClip InvertedTriads => Resources.Load<VideoClip>("Video/Theory/Inverted Triads");
+    public static VideoClip InvertedSeventhChords => Resources.Load<VideoClip>("Video/Theory/Inverted 7th Chords");
     #endregion VIDEO
 }

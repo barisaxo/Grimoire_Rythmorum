@@ -116,7 +116,7 @@ public class SeaInspection_State : State
     {
         string s = string.Empty;
         s += npc.RegionalMode + " " + npc.ShipType + " Ship";
-        s += "\n" + DataManager.StandingData.GetDisplayLevel(npc.Standing) + " Standings";
+        s += "\n" + DataManager.Standings.GetDisplayLevel(npc.Standing) + " Standings";
         s += "\nRigging: " + npc.ShipPrefab._rig.name.StartCase();
         s += "\nHull Strength: " + npc.ShipStats.HullStrength;
         s += "\nArmament: " + npc.ShipStats.NumOfCannons + " " + npc.ShipStats.CannonStats.Metal.Name.StartCase() + " " + npc.ShipStats.CannonStats.Cannon.Name +

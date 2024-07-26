@@ -102,7 +102,7 @@ namespace MusicTheory.Rhythms
             {
                 for (int c = 0; c < ms.Measures[m].Cells.Length; c++)
                 {
-                    notes.AddRange(ms.NotesFromCell(ms.Measures[m].Cells[c], (MeasureNumber)m + 1));
+                    notes.AddRange(ms.NotesFromCell(ms.Measures[m].Cells[c], (MeasureNumber)(m + 1)));
                 }
             }
 
@@ -629,6 +629,7 @@ namespace MusicTheory.Rhythms
 
         public static Count GetQuantizedCount(this RhythmCell cell, SubBeatAssignment s)
         {
+            Debug.Log(s + " " + cell.MetricLevel + " " + cell.Count);
             return s switch
             {
                 E => cell.MetricLevel switch

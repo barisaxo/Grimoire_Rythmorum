@@ -53,14 +53,14 @@ public static class SeaHUDSystems
 
     public static HUD SetNorthToInteract(this HUD hud)
     {
-        hud.North.SetTextString("Interact")
+        hud.Select.SetTextString("Interact")
                  .SetImageColor(Color.white);
         return hud;
     }
 
     public static HUD HideNorth(this HUD hud)
     {
-        hud.North.SetTextString("")
+        hud.Select.SetTextString("")
                  .SetImageColor(Color.clear);
         return hud;
     }

@@ -6,23 +6,42 @@ public class BountyIntermission_Dialogue : Dialogue
     public BountyIntermission_Dialogue(BatterieScene scene, Quests.BountyQuest quest)
     {
         Quest = quest;
+        // Scene = scene;
+        // Speaker = Speaker.Pino;
+        // damageTaken = Scene.NMEShipStats.VolleyDamage;
+
+        // Debug.Log("BountyIntermission_Dialogue: " + scene.NMEShipStats.CannonStats.Cannon.Modifier + " " +
+        //     scene.NMEShipStats.CannonStats.Metal.Modifier + " " +
+        //     scene.NMEShipStats.NumOfCannons + " " +
+        //     scene.NMEShipStats.VolleyDamage + " Damage taken:!! " + damageTaken);
+
+        // if (Scene.Pack.Spammed) damageTaken *= 2;
+
         Scene = scene;
         Speaker = Speaker.Pino;
-        damageTaken = Scene.NMEShipStats.VolleyDamage;
+        damageTaken = (int)(Scene.NMEShipStats.VolleyDamage * Random.Range(.8f, 1f));
 
-        Debug.Log("BountyIntermission_Dialogue: " + scene.NMEShipStats.CannonStats.Cannon.Modifier + " " +
-            scene.NMEShipStats.CannonStats.Metal.Modifier + " " +
-            scene.NMEShipStats.NumOfCannons + " " +
-            scene.NMEShipStats.VolleyDamage + " Damage taken:!! " + damageTaken);
+        if (Scene.Pack.Spammed) { damageTaken *= 2; Scene.DamageDealt /= 2; }
 
-        if (Scene.Pack.Spammed) damageTaken *= 2;
+        else if (Scene.Pack.Crit)
+        {
+            damageTaken = (int)(.5f * (float)damageTaken * (float)(1f / Data.Manager.Io.Skill.GetBonusRatio(new Data.CriticalVolley())));
+            Scene.DamageDealt = (int)((float)Scene.DamageDealt + ((float)Scene.DamageDealt * (float)Data.Manager.Io.Skill.GetBonusRatio(new Data.CriticalVolley())));
+        }
+
+        Debug.Log("Spammed: " + Scene.Pack.Spammed + ", Damage taken: " + damageTaken + ", Damage dealt: " + Scene.DamageDealt);
+        Scene.BatterieHUD.PlayerCurrent -= damageTaken;
+        Data.Manager.Io.ActiveShip.AdjustLevel(new Data.CurrentHitPoints(), -damageTaken);
+        Scene.BatterieHUD.NMECurrent = Scene.NMEHealth.cur -= Scene.DamageDealt;
     }
+
     readonly Quests.BountyQuest Quest;
     readonly int damageTaken;
     readonly BatterieScene Scene;
 
     public override Dialogue Initiate()
     {
+        if (Scene.Pack.Crit) { }
         if (Scene.NMEHealth.cur < (float)(Scene.NMEHealth.max * .3f) &&
             Random.value > .65f)
         {
@@ -82,7 +101,18 @@ public class BountyIntermission_Dialogue : Dialogue
     Line Spammed => new Line("Cap, spamming like that only hurts us, cannons to back fired!\nWe've taken " + damageTaken + " damage", AttackAgain)
         .SetSpeaker(Speaker);
 
-    Line DamageReport => new Line("Damage report Cap!\nWe've taken " + damageTaken + " damage", _startLine)
+    // Line DamageReport => new Line("Damage report Cap!\nWe've taken " + damageTaken + " damage", _startLine)
+    //     .SetSpeaker(Speaker);
+
+    Line DamageReport => new Line(
+            "Damage report Cap!" +
+                (Scene.Pack.Crit ? "\nCritical Volley! Great execution!" : "") +
+                "\nWe dealt " +
+                Scene.DamageDealt +
+                " damage to the enemy, and have taken " +
+                damageTaken +
+                " damage to our hull.",
+            _startLine)
         .SetSpeaker(Speaker);
 
     Line LowPlayerHealth => new Line("We're in bad shape, we can't take much more!")
@@ -131,6 +161,7 @@ public class BountyIntermission_Dialogue : Dialogue
             return _flee;
         }
     }
+
     Line Fled => new Line("It's better we run and live to fight another day!",
                  new EndBounty_State(Scene, BatterieResultType.Fled, Quest))
         .SetSpeaker(Speaker)
@@ -144,6 +175,8 @@ public class BountyIntermission_Dialogue : Dialogue
     Response AcceptSurrender => new("Accept their surrender", new EndBounty_State(Scene, BatterieResultType.NMESurrender, Quest));
     Response LetThemGo => new("Let them go.", new EndBounty_State(Scene, BatterieResultType.NMEscaped, Quest));
 
-    Line GameOver => new("Sorry Cap. Looks like where going down with the ship.",
-        new MenuState(new Menus.MainMenu(Data.Manager.Io, Audio.AudioManager.Io)));
+    // Line GameOver => new("Sorry Cap. Looks like where going down with the ship.",
+    //     new MenuState(new Menus.MainMenu(Data.Manager.Io, Audio.AudioManager.Io)));
+    Line GameOver => new("This is it Cap. Looks like where going down with the ship.", new BatteryToGameOverTransition_State(Scene));
+
 }

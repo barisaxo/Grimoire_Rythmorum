@@ -16,7 +16,7 @@ namespace Menus
         public string GetDescription { get => Selection.Item.Description; }
         public string DisplayData(IItem item)
         {
-            return item.Name + ": " + Data.GetLevel(item) + " : " + Data.GetDisplayLevel(item);
+            return item.Name + ": " + Data.GetDisplayLevel(item);// Data.GetLevel(item);//+ " : " + Data.GetDisplayLevel(item);
         }
 
         public IInputHandler Input => new MenuInputHandler()

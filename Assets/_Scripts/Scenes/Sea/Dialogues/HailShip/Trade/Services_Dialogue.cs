@@ -6,7 +6,7 @@ public class Services_Dialogue : Dialogue
     readonly Dialogue ReturnTo;
     readonly Data.Standing Standing;
 
-    int StandingMod => Data.Manager.Io.StandingData.GetLevel(Standing);
+    int StandingMod => Data.Manager.Io.Standings.GetLevel(Standing);
     public Services_Dialogue(Dialogue returnTo, Speaker speaker, Data.Standing standing)
     {
         ReturnTo = returnTo;
@@ -49,8 +49,8 @@ public class Services_Dialogue : Dialogue
     bool buyRepairs => CurHP < MaxHP && !(Gold < smallRepair * goldPer) && !(Mats < smallRepair * matsPer);
 
     int smallRepair => (int)(MaxHP * .15f);
-    readonly int matsPer = 3;
-    readonly int goldPer = 25;
+    int matsPer => (int)(2f * StandingsModifier);
+    int goldPer => (int)(25f * StandingsModifier);
 
     string LatLong => RandomLoc.GlobalCoordsToLatLongs(Sea.WorldMapScene.Io.Map.GlobalSize);
     // string LatLong => _latLong ??= 

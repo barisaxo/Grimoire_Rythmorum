@@ -53,8 +53,6 @@ namespace Menus
             })
         };
 
-        public IMenuScene Scene { get; } = new InventoryMenuScene();
-
         public State ConsequentState { get; set; }
 
         State GetState
@@ -65,11 +63,15 @@ namespace Menus
 
                 if (Selection.Item is StarChart)
                     if (Manager.Io.Quests.GetLevel(new Navigation()) == 1)
-                        return new DialogStart_State(new OverrideQuest_Dialogue(GetPuzzleState, new MenuState(HeaderMenu)));
+                        return new DialogStart_State(
+                            new OverrideQuest_Dialogue(GetPuzzleState, new MenuState(HeaderMenu)));
                     else return GetPuzzleState;
 
                 if (Selection.Item is Gramophone)
-                    return new NewGramoPuzzle_State(SubsequentState, isPractice: false);
+                    return new NewGramoPuzzle_State(
+                        SubsequentState,
+                        (IGramophone)new Sea.GramophoneDifficultySetter(Manager.Io).DifficultyLevel,
+                        isPractice: false);
 
                 return null;
             }
@@ -122,10 +124,13 @@ namespace Menus
         };
 
 
-        public class InventoryMenuScene : IMenuScene
+        private IMenuScene _scene;
+        public IMenuScene Scene => _scene ??= new MenuScene();
+
+        public class MenuScene : IMenuScene
         {
             // public InventoryMenuScene() { Initialize(); }
-
+            public string Name { get; } = nameof(MenuScene);
             public void Initialize()
             {
                 South.SetTextString("Back").SetImageColor(Color.white);
@@ -136,9 +141,14 @@ namespace Menus
 
             public void SelfDestruct()
             {
-                Debug.Log(nameof(SelfDestruct));
                 Hud?.SelfDestruct();
-                Resources.UnloadUnusedAssets();
+                Hud = null;
+                South = null;
+                West = null;
+                East = null;
+                North = null;
+                L1 = null;
+                R1 = null;
             }
 
             public Transform TF => null;
@@ -148,6 +158,8 @@ namespace Menus
             public Card East { get; set; }
             public Card South { get; set; }
             public Card West { get; set; }
+            public Card L1 { get; set; }
+            public Card R1 { get; set; }
         }
     }
 }

@@ -4,6 +4,7 @@ using Dialog;
 using System;
 using SheetMusic;
 using MusicTheory.Rhythms;
+using Data;
 
 public class BatteryTutorial_State : State
 {
@@ -15,17 +16,37 @@ public class BatteryTutorial_State : State
         Measures = measures;
     }
 
+    public BatteryTutorial_State(Measure[] measures, RhythmSpecs rhythmSpecs, IData data, IItem item, State subsequentState)
+    {
+        RhythmSpecs = rhythmSpecs;
+        Measures = measures;
+        Data = data;
+        Item = item;
+        SubsequentState = subsequentState;
+    }
+
+
     readonly Measure[] Measures;
     readonly Dialogue PreviousDialogue;
     readonly Dialogue NextDialogue;
     readonly RhythmSpecs RhythmSpecs;
+    readonly State SubsequentState;
+
+    readonly IData Data;
+    readonly IItem Item;
 
     void FinishBattery()
     {
-        SetState(new DialogStart_State(new MiniTutorialResults_Dialogue(PreviousDialogue, NextDialogue, Measures, RhythmSpecs, Scene.Pack)));
+        bool won = Scene.Pack.TotalErrors == 0;
+
+        if (won) Data.AdjustLevel(Item, 1);
+
+        SetState(new DialogStart_State(new EndPractice_Dialogue(won, SubsequentState)));
+
+        // SetState(new DialogStart_State(new MiniTutorialResults_Dialogue(PreviousDialogue, NextDialogue, Measures, RhythmSpecs, Scene.Pack)));
     }
 
-    readonly BatterieTutorialScene Scene;
+    BatterieTutorialScene Scene;
     bool cadenceStarted = false;
     public int Counter { get; private set; }
     bool CountingOff = true;
@@ -42,7 +63,7 @@ public class BatteryTutorial_State : State
         Cam.Io.Camera.transform.SetPositionAndRotation((UnityEngine.Vector3.up * 7),
            Quaternion.Euler(new Vector3(-20f, 180, Cam.Io.Camera.transform.rotation.eulerAngles.z))
         );
-
+        Scene = new(Tick, RhythmSpecs, Measures);
         Scene.Initialize();
 
 

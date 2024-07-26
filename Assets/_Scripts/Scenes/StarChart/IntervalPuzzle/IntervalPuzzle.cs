@@ -3,8 +3,10 @@ using MusicTheory.Arithmetic;
 using MusicTheory.Keys;
 using MusicTheory.Intervals;
 using UnityEngine;
+using System.Collections.Generic;
 
 
+[System.Serializable]
 public class IntervalPuzzle : IPuzzle
 {
     public int NumOfNotes => 2;
@@ -16,7 +18,6 @@ public class IntervalPuzzle : IPuzzle
     public bool PlayOnEngage => false;
     public bool AllowPlayQuestion => true;
 
-    public System.Type GamutType => typeof(Interval);
     public IMusicalElement Gamut { get; private set; }
     public Interval Interval => Gamut is Interval interval ? interval : throw new System.ArgumentNullException();
 
@@ -27,25 +28,10 @@ public class IntervalPuzzle : IPuzzle
 
     private readonly string _question;
     public string Question => _question;
-    public string Clue => "1 m2 2 m3 3 p4 d5 p5 m6 6 m7 7 p8";
+    public string Clue => "1 mi2 M2 mi3 M3 P4 d5 P5 mi6 M6 mi7 M7 P8";
     public IntervalPuzzle()
     {
-        Gamut = Random.Range(0, 12) switch
-        {
-            0 => new mi2(),
-            1 => new M2(),
-            2 => new mi3(),
-            3 => new M3(),
-            4 => new P4(),
-            5 => new d5(),
-            6 => new P5(),
-            7 => new mi6(),
-            8 => new M6(),
-            9 => new mi7(),
-            10 => new M7(),
-            11 => new P8(),
-            _ => throw new System.ArgumentOutOfRangeException()
-        };
+        Gamut = WeightedRandomInterval();
 
         _notes = new KeyboardNoteName[NumOfNotes];
 
@@ -55,13 +41,26 @@ public class IntervalPuzzle : IPuzzle
 
         Notes[1] = Root.GetKeyAbove(Interval).GetKeyboardNoteName();
 
-        Notes[1] += Notes[1] < Notes[0] ? 12 : 0;
+        Notes[1] += Notes[1] <= Notes[0] ? 12 : 0;
 
         _question = Gamut.Name + " " + nameof(Interval);
     }
 
+    private Interval WeightedRandomInterval()
+    {
+        int solved = Data.Manager.Io.Puzzles.GetLevel(this);
+
+        List<Interval> scaleList = new() { new mi2(), new M2() };
+        if (solved > 1) { scaleList.Add(new mi3()); scaleList.Add(new M3()); }
+        if (solved > 3) { scaleList.Add(new P4()); scaleList.Add(new P5()); }
+        if (solved > 5) { scaleList.Add(new d4()); scaleList.Add(new P8()); }
+        if (solved > 7) { scaleList.Add(new mi6()); scaleList.Add(new M6()); }
+        if (solved > 9) { scaleList.Add(new mi7()); scaleList.Add(new M7()); }
+        return scaleList[Helpers.WeightedRandomInt(scaleList.Count)];
+    }
 }
 
+[System.Serializable]
 public class InvertedIntervalPuzzle : IPuzzle
 {
     public int NumOfNotes => 2;
@@ -84,7 +83,7 @@ public class InvertedIntervalPuzzle : IPuzzle
 
     private readonly string _question;
     public string Question => _question;
-    public string Clue => "1:8, 2:7, 3:6, 4:5, M:m, d:a, p:p";
+    public string Clue => "1:8, 2:7, 3:6, 4:5, M:mi, d:a, P:P";
     public InvertedIntervalPuzzle()
     {
         Gamut = Random.Range(0, 12) switch
@@ -112,7 +111,7 @@ public class InvertedIntervalPuzzle : IPuzzle
 
         Notes[1] = Root.GetKeyAbove(Interval.Invert()).GetKeyboardNoteName();
 
-        Notes[1] += Notes[1] < Notes[0] ? 12 : 0;
+        Notes[1] += Notes[1] <= Notes[0] ? 12 : 0;
 
         _question = Gamut.Name + " " + nameof(Interval);
     }

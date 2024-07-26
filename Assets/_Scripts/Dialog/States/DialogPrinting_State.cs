@@ -20,9 +20,13 @@ public class DialogPrinting_State : State
     {
         if (Dialog.CurrentLine.VideoClip != null)
         {
-            var width = Cam.Io.UICamera.orthographicSize * Cam.Io.UICamera.aspect * 1.65f;
-            Dialog.VideoPlayer.transform.localScale = new Vector3(width,
-                width / ((float)Dialog.CurrentLine.VideoClip.width / Dialog.CurrentLine.VideoClip.height), 1);
+            Debug.Log("Video");
+            // var width = Cam.Io.UICamera.orthographicSize * Cam.Io.UICamera.aspect * 1.65f;
+
+            // Dialog.VideoPlayer.transform.localScale = new Vector3(width,
+            //     width / ((float)Dialog.CurrentLine.VideoClip.width / Dialog.CurrentLine.VideoClip.height), 1);
+
+            Dialog.VideoPlayer.transform.localScale = new Vector3(1.65f, 1, 1);
             Dialog.VideoPlayer.gameObject.SetActive(true);
             Dialog.VideoPlayer.playOnAwake = false;
             Dialog.VideoPlayer.waitForFirstFrame = false;
@@ -47,7 +51,14 @@ public class DialogPrinting_State : State
 
     protected override void EngageState()
     {
-        if (Dialog.CurrentLine.VideoClip != null) Dialog.VideoPlayer.Play();
+        if (Dialog.CurrentLine.VideoClip != null)
+        {
+            Dialog.VideoPlayer.transform.SetPositionAndRotation(
+                    Cam.Io.Camera.transform.position + Cam.Io.Camera.transform.forward,
+                    Cam.Io.Camera.transform.rotation
+            );
+            Dialog.VideoPlayer.Play();
+        }
         if (Dialog.Dialogue.PlayTypingSounds)
         {
             Audio.SFX.PlayClip(Assets.TypingClicks, true);

@@ -6,21 +6,24 @@ namespace Audio
     public class AudioManager
     {
         private BGMusic_AudioSystem _bgMusic;
+        public BGMusic_AudioSystem BGMusic => _bgMusic ??= new(VolumeData);
+
+        private BeatFishing_AudioSystem _beatFishing;
+        public BeatFishing_AudioSystem BeatFishing => _beatFishing ??= new(VolumeData);
+
         private SoundFXAudioSystem _sfx;
-        public SoundFXAudioSystem SFX => _sfx ??= new SoundFXAudioSystem(VolumeData);
-        public BGMusic_AudioSystem BGMusic => _bgMusic ??= new BGMusic_AudioSystem(VolumeData);
+        public SoundFXAudioSystem SFX => _sfx ??= new(VolumeData);
+
         private Batterie_AudioSystem _batterie;
         public Batterie_AudioSystem Batterie => _batterie ??= new(VolumeData);
+
         private AmbienceAudioSystem _ambience;
         public AmbienceAudioSystem Ambience => _ambience ??= new(VolumeData);
 
-
         private KeyboardAudioSystem _kba;
-        public KeyboardAudioSystem KBAudio => _kba ??= new KeyboardAudioSystem(VolumeData);
+        public KeyboardAudioSystem KBAudio => _kba ??= new(VolumeData);
 
-
-        private static VolumeData VolumeData => Data.Manager.Io.Volume;
-
+        private static VolumeData VolumeData => Manager.Io.Volume;
 
         private AudioParserB _audioParser = new();
         public AudioParserB AudioParser => _audioParser ??= new();

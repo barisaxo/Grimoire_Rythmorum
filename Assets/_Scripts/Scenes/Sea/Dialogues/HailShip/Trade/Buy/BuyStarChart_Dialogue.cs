@@ -16,7 +16,7 @@ internal class BuyStarChart_Dialogue : Dialogue
     readonly Dialogue ReturnTo;
     readonly Data.Standing Standing;
 
-    int StandingMod => Data.Manager.Io.StandingData.GetLevel(Standing);
+    int StandingMod => Data.Manager.Io.Standings.GetLevel(Standing);
     int Coins => Data.Manager.Io.Inventory.GetLevel(new Data.Gold());
     float StandingsModifier => 1f + (float)(1f - (float)((float)StandingMod) / 9f);
 

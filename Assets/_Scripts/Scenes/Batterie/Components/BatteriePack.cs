@@ -15,34 +15,46 @@ public class BatteriePack
 
     // }
 
-    public BatteriePack(RhythmSpecs rhythmSpecs)
+    public BatteriePack(RhythmSpecs rhythmSpecs, bool setUpCounts)
     {
         _rhythmSpecs = rhythmSpecs;
+        SetUpCounts = setUpCounts;
     }
+    readonly bool SetUpCounts;
+    readonly RhythmSpecs _rhythmSpecs;
 
-    readonly RhythmSpecs _rhythmSpecs = null;
-
-    public void Initialize(Action<Batterie.Hit> HandleHit, BatterieFeedback BatterieFeedback, Action Tick)
+    public void Initialize(Action<Batterie.Hit> HandleHit, BatterieFeedback BatterieFeedback, Action Tick, Measure[] measures)
     {
         MusicSheet = new()
         {
             RhythmSpecs = _rhythmSpecs
         };
         MuscopaAudio = new(Data.Manager.Io.Volume);
-        MusicSheet.RhythmSpecs.Time.GenerateRhythmCells(MusicSheet);
+
+        MusicSheet.Measures = measures;
+
+        if (measures is null)
+            MusicSheet.RhythmSpecs.Time.GenerateRhythmCells(MusicSheet);
+
         MusicSheet.GetNotes();
-        MusicSheet.DrawRhythms();
+        MusicSheet.DrawRhythms(SetUpCounts);
         MusicSheet.BeatMap = MusicSheet.Notes.MapBeats(MusicSheet.RhythmSpecs.Tempo);
         Synchro = new(MusicSheet.RhythmSpecs.Time.GetQuantizement(), MusicSheet.RhythmSpecs.Tempo);
         CountOffNotes = CountOff.GetNotes(MusicSheet.RhythmSpecs.Time);
         CountOffBeatmap = CountOffNotes.MapBeats(MusicSheet.RhythmSpecs.Tempo);
-        Analyzer = new(BatterieFeedback.CreateCard, HandleHit, 5, MusicSheet.BeatMap);
+        Analyzer = new(BatterieFeedback.CreateCard, HandleHit, MusicSheet.BeatMap);
         Analyzer.SetUp();
 
         Synchro.TickEvent += Tick;
 
         MuscopaSettings = NewSettings(CadenceDifficulty.ALL, MusicTheory.Musica.RandomMode(), Genre.Stax);
         GoodHits = GoodRests = GoodHolds = ErroneousAttacks = MissedHits = MissedHolds = MissedRests = 0;
+
+    }
+
+    public void Initialize(Action<Batterie.Hit> HandleHit, BatterieFeedback BatterieFeedback, Action Tick)
+    {
+        Initialize(HandleHit, BatterieFeedback, Tick, null);
     }
 
     public int GoodHits;

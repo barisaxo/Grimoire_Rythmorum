@@ -18,7 +18,7 @@ public class ShipTask_Dialogue : Dialogue
         return this;
     }
 
-    int StandingLevel => Data.Manager.Io.StandingData.GetLevel(Standing);
+    int StandingLevel => Data.Manager.Io.Standings.GetLevel(Standing);
     string Leave_LineText => StandingLevel switch
     {
         10 or 9 or 8 => "Safe journey!",

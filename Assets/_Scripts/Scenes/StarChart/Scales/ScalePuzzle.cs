@@ -5,7 +5,9 @@ using MusicTheory.Arithmetic;
 using MusicTheory.Scales;
 using MusicTheory.Keys;
 using MusicTheory.Steps;
+using MusicTheory.ScaleDegrees;
 
+[System.Serializable]
 public class ScalePuzzle : IPuzzle
 {
     readonly int _numOfNotes;
@@ -18,7 +20,6 @@ public class ScalePuzzle : IPuzzle
     public bool PlayOnEngage => false;
     public bool AllowPlayQuestion => true;
 
-    public System.Type GamutType => typeof(Scale);
     public IMusicalElement Gamut { get; private set; }
     public Scale Scale => Gamut is Scale scale ? scale : throw new System.ArgumentNullException();
 
@@ -30,7 +31,7 @@ public class ScalePuzzle : IPuzzle
     private readonly string _question;
     public string Question => _question;
 
-    public string Clue => GetSteps();
+    public string Clue => GetSteps() + "\n" + GetScaleDegrees();
 
     public ScalePuzzle()
     {
@@ -60,20 +61,28 @@ public class ScalePuzzle : IPuzzle
         return temp;
     }
 
+    private string GetScaleDegrees()
+    {
+        string temp = string.Empty;
+        foreach (ScaleDegree s in Scale.ScaleDegrees) temp += s.Name + ' ';
+        return temp;
+    }
+
     private Scale WeightedRandomScale()
     {
-        return Random.Range(0, 53) switch
-        {
-            < 10 => new Major(),
-            < 19 => new JazzMinor(),
-            < 29 => new HarmonicMinor(),
-            < 37 => new Pentatonic(),
-            < 41 => new MusicTheory.Scales.Diminished(),
-            < 45 => new Diminished6th(),
-            < 48 => new MusicTheory.Scales.WholeTone(),
-            < 51 => new Blues(),
-            _ => new MusicTheory.Scales.Chromatic(),
-        };
+        int solved = Data.Manager.Io.Puzzles.GetLevel(this);
+
+        List<Scale> scaleList = new() { new Major() };
+        if (solved > 10) scaleList.Add(new Chromatic());
+        if (solved > 15) scaleList.Add(new Pentatonic());
+        if (solved > 25) scaleList.Add(new Blues());
+        if (solved > 35) scaleList.Add(new JazzMinor());
+        if (solved > 45) scaleList.Add(new HarmonicMinor());
+        if (solved > 55) scaleList.Add(new WholeTone());
+        if (solved > 65) scaleList.Add(new Diminished());
+        if (solved > 75) scaleList.Add(new Diminished6th());
+
+        return scaleList[Helpers.WeightedRandomInt(scaleList.Count)];
     }
 
 }

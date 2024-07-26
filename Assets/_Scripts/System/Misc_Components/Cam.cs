@@ -7,7 +7,7 @@ public class Cam
     {
         _ = Camera;
         _ = UICamera;
-        _ = UI3DCamera;
+        // _ = UI3DCamera;
         _ = AudioListener;
     }
 
@@ -51,7 +51,7 @@ public class Cam
                 c.orthographic = false;
                 c.fieldOfView = 60;
                 c.transform.position = Vector3.back * 10;
-                c.backgroundColor = new Color(Random.Range(.9f, 1f), Random.Range(.8f, 1f), Random.Range(.85f, 1f));
+                c.backgroundColor = Color.black;
                 c.gameObject.SetActive(true);
                 return c;
             }
@@ -92,6 +92,7 @@ public class Cam
                 c.orthographicSize = 5;
                 c.orthographic = true;
                 c.transform.position = Vector3.back * 1000;
+                c.allowHDR = false;
                 c.gameObject.SetActive(true);
                 return c;
             }

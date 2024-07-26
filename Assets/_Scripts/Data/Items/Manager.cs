@@ -29,8 +29,8 @@ namespace Data
         private InventoryData _inventory;
         public InventoryData Inventory => _inventory ??= new();
 
-        private StarChartData _starChartInventoryData;
-        public StarChartData StarChart => _starChartInventoryData ??= new();
+        private StarChartData _starChartData;
+        public StarChartData StarChart => _starChartData ??= new();
 
         private GramophoneInventoryData _gramophone;
         public GramophoneInventoryData Gramophones => _gramophone ??= new();
@@ -59,16 +59,41 @@ namespace Data
         private PlayerData _playerData;
         public PlayerData Player => _playerData ??= PlayerData.GetData();
 
+
+        private PlayerRecentData _playerRecentData;
+        public PlayerRecentData PlayerRecent => _playerRecentData ??= PlayerRecentData.GetData();
+
         private StandingData _standingData;
-        public StandingData StandingData => _standingData ??= new StandingData();
+        public StandingData Standings => _standingData ??= new StandingData();
 
         private ShipStatsData _shipStatsData;
         public ShipStatsData ShipStats => _shipStatsData ??= ShipStatsData.GetData();
 
         private ShipUpgradeData _shipUpgradeData;
-        public ShipUpgradeData ShipUpgradeData => _shipUpgradeData ??= new ShipUpgradeData(ShipStats.ActiveShip);
+        public ShipUpgradeData ShipUpgrade => _shipUpgradeData ??= new ShipUpgradeData(ShipStats.ActiveShip);
 
         private MiscData _miscData;
-        public MiscData MiscData => _miscData ??= MiscData.GetData();
+        public MiscData Misc => _miscData ??= MiscData.GetData();
+
+        private PuzzleData _puzzleData;
+        public PuzzleData Puzzles => _puzzleData ??= PuzzleData.GetData();
+
+        private BatteriePracticeData _batteriePracticeData;
+        public BatteriePracticeData BatteriePracticeData => _batteriePracticeData ??= BatteriePracticeData.GetData();
+
+        private QRhythmCellData _qRhythmCellData;
+        public QRhythmCellData QRhythmCellData => _qRhythmCellData ??= QRhythmCellData.GetData();
+
+        private ERhythmCellData _eRhythmCellData;
+        public ERhythmCellData ERhythmCellData => _eRhythmCellData ??= ERhythmCellData.GetData();
+
+        private SRhythmCellData _sRhythmCellData;
+        public SRhythmCellData SRhythmCellData => _sRhythmCellData ??= SRhythmCellData.GetData();
+
+        private BeatFishingPracticeData _beatFishingPracticeData;
+        public BeatFishingPracticeData BeatFishingPracticeData => _beatFishingPracticeData ??= BeatFishingPracticeData.GetData();
+
+        private ShipPurchaseData _shipPurchaseData;
+        public ShipPurchaseData ShipPurchaseData => _shipPurchaseData ??= ShipPurchaseData.GetData();
     }
 }

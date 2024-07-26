@@ -40,6 +40,7 @@ namespace Muscopa
                 BeatsPerAudioClip = newSettings.CountsPerClipBass,
                 BPM = newSettings.BPM,
             };
+
             MuscopaDrums.VolumeLevelSetting = VolumeData.GetScaledLevel(new Drums());
             MuscopaDrums.AudioClipSettings = new AudioClipSettings()
             {

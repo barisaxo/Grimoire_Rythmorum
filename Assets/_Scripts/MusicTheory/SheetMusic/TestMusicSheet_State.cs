@@ -35,7 +35,7 @@ public class TestMusicSheet_State : State
             }
         }
 
-        ms.DrawRhythms();
+        ms.DrawRhythms(true);
         base.PrepareState(callback);
     }
 }

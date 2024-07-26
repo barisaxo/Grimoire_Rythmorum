@@ -16,7 +16,7 @@ namespace Data
                 datum.TryAdd((ICurrency)Items[i], Items[i] switch
                 {
                     Gold => (int)(1000 * Manager.Io.Skill.GetBonusRatio(new Preparation()) * (Manager.Io.ActiveShip.ShipStats.HullStats.Hull.ID + 1)),
-                    Material => (int)(Manager.Io.ActiveShip.GetLevel(new MaterialStorage()) * .5f * Manager.Io.Skill.GetBonusRatio(new Preparation()) * (Manager.Io.ActiveShip.ShipStats.HullStats.Hull.ID + 1)),
+                    Material => (int)(Manager.Io.ActiveShip.GetLevel(new MaterialStorage()) * .5f * Manager.Io.Skill.GetBonusRatio(new Preparation())),
                     Ration => (int)(Manager.Io.ActiveShip.GetLevel(new RationStorage()) * .15f * Manager.Io.Skill.GetBonusRatio(new Preparation()) * (Manager.Io.ActiveShip.ShipStats.HullStats.Hull.ID + 1)),
                     StarChart => (int)(1.5f * Manager.Io.Skill.GetBonusRatio(new Preparation())) - 1 < 0 ? 0 : (int)(1f * Manager.Io.Skill.GetBonusRatio(new Preparation())) - 1,
                     Gramophone => 0,

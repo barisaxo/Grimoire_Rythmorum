@@ -28,6 +28,15 @@ namespace Sea
             (scene.Board.Center() + .3f + (((localRegion.Coord * localRegion.Resolution) + cellCoord).y - scene.Ship.GlobalLoc.y)).Smod(scene.Map.GlobalSize));
     }
 
+
+    public class UpdateBountyPosition : IUpdatePosition
+    {
+        public Vector3 NewPosition(WorldMapScene scene, Region localRegion, Vector2 cellCoord) => new(
+            (scene.Board.Center() + .3f + (((localRegion.Coord * localRegion.Resolution) + cellCoord).x - scene.Ship.GlobalLoc.x)).Smod(scene.Map.GlobalSize),
+            0,
+            (scene.Board.Center() + .3f + (((localRegion.Coord * localRegion.Resolution) + cellCoord).y - scene.Ship.GlobalLoc.y)).Smod(scene.Map.GlobalSize));
+    }
+
     public class UpdateCovePosition : IUpdatePosition
     {
         public Vector3 NewPosition(WorldMapScene scene, Region localRegion, Vector2 cellCoord) => new(
@@ -54,6 +63,8 @@ namespace Sea
                     0,
                     (scene.Board.Center() + .3f + npcGlobalPos.y - scene.Ship.GlobalLoc.y).Smod(scene.Map.GlobalSize));
     }
+
+
 
     public class UpdateBorderPosition : IUpdatePosition
     {

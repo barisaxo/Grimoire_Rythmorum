@@ -14,6 +14,8 @@ namespace Menus
         public IButtonInput Right { get; set; }
         public IButtonInput R1 { get; set; }
         public IButtonInput L1 { get; set; }
+        public IButtonInput Select { get; set; }
+        public IButtonInput Start { get; set; }
     }
 
     public class MenuInputHandler : IInputHandler
@@ -28,6 +30,8 @@ namespace Menus
         public IButtonInput Right { get; set; }
         public IButtonInput R1 { get; set; }
         public IButtonInput L1 { get; set; }
+        public IButtonInput Select { get; set; }
+        public IButtonInput Start { get; set; }
     }
 
     public interface IButtonInput

@@ -4,6 +4,7 @@ using MusicTheory.Arithmetic;
 using MusicTheory.Keys;
 using MusicTheory.SeventhChords;
 
+[System.Serializable]
 public class SeventhChordPuzzle : IPuzzle
 {
     public int NumOfNotes => 4;

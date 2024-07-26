@@ -1,7 +1,7 @@
 using UnityEngine;
-//using System;
 
-public sealed class SkyboxRotate
+
+internal sealed class SkyboxRotate
 {
     private SkyboxRotate() { }
 
@@ -9,14 +9,15 @@ public sealed class SkyboxRotate
     static void AutoInit()
     {
         Skybox = RenderSettings.skybox = Assets.Stars;
-        Skybox.SetFloat("_Rotation", Random.Range(-180, 180));
-        RotSpeed = .04f * Random.value < .5f ? 1 : -1;
+        Skybox.SetFloat(_Rotation, Random.Range(0f, 360f));
+        Direction = Random.value < .5f ? 1 : -1;
         MonoHelper.OnUpdate += RotateSkybox;
     }
 
     static Material Skybox;
-    static float RotSpeed;
+    static int Direction;
+    const string _Rotation = nameof(_Rotation);
 
-    static void RotateSkybox() =>
-        Skybox.SetFloat("_Rotation", Skybox.GetFloat("_Rotation") + Time.deltaTime * RotSpeed);
+    static void RotateSkybox() => Skybox.SetFloat(_Rotation,
+       (Skybox.GetFloat(_Rotation) + (Direction * Time.deltaTime)).Smod(360));
 }

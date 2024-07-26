@@ -5,17 +5,18 @@ using MusicTheory.Rhythms;
 
 public class BatterieTutorialScene
 {
-    public BatterieTutorialScene(Action tick, RhythmSpecs specs, Measure measure)
+    public BatterieTutorialScene(Action tick, RhythmSpecs specs, Measure[] measures)
     {
-        Pack = new(specs);
+        Pack = new(specs, true);
         Tick = tick;
         BatterieAudio = Audio.AudioManager.Io.Batterie;
+        Measures = measures;
     }
 
     public void Initialize()
     {
         BatterieFeedback = new();
-        Pack.Initialize(HandleHit, BatterieFeedback, Tick);
+        Pack.Initialize(HandleHit, BatterieFeedback, Tick, Measures);
         CountOffFeedBack = new(Pack.MusicSheet.RhythmSpecs.Time.GetCounts());
         BatterieFeedback.UpdateLoop();
         CountOffFeedBack.UpdateLoop();
@@ -26,6 +27,7 @@ public class BatterieTutorialScene
         Background.SelfDestruct();
     }
 
+    Measure[] Measures;
     public Action Tick;
     readonly Audio.Batterie_AudioSystem BatterieAudio;
     public BatteriePack Pack;

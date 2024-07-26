@@ -8,7 +8,7 @@ public class BuyRations_Dialogue : Dialogue
     readonly Dialogue ReturnTo;
     readonly Data.Standing Standing;
 
-    int StandingMod => Data.Manager.Io.StandingData.GetLevel(Standing);
+    int StandingMod => Data.Manager.Io.Standings.GetLevel(Standing);
     int Coins => Data.Manager.Io.Inventory.GetLevel(new Data.Gold());
     int rationsCapacity => Data.Manager.Io.ActiveShip.GetLevel(new Data.RationStorage());
 

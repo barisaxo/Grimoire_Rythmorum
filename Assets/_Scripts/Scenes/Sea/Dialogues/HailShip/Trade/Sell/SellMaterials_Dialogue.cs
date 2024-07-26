@@ -9,7 +9,7 @@ public class SellMaterials_Dialogue : Dialogue
     readonly Data.Standing Standing;
 
 
-    int StandingLevel => Data.Manager.Io.StandingData.GetLevel(Standing);
+    int StandingLevel => Data.Manager.Io.Standings.GetLevel(Standing);
     readonly int Mats = Data.Manager.Io.Inventory.GetLevel(new Data.Material());
     float StandingsModifier => 2f - (float)(1f - (float)((float)StandingLevel) / 9f);
 

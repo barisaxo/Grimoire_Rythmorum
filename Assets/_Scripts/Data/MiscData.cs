@@ -108,7 +108,7 @@ namespace Data
             return data;
         }
 
-        public IPersistentData PersistentData { get; } = new SaveData("Misc.Data");
+        public IPersistentData PersistentData { get; } = new SaveData(nameof(MiscData));
     }
     public interface IMisc : IItem
     {

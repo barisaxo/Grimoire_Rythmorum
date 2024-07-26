@@ -23,7 +23,7 @@ public class SeaToBatteryTransition_State : State
     protected override void EngageState()
     {
         Sea.WorldMapScene.Io.Board.Swells.DisableSwells();
-        DataManager.StandingData.AdjustLevel(Sea.WorldMapScene.Io.NearestNPC.RegionalMode, -1);
+        DataManager.Standings.AdjustLevel(Sea.WorldMapScene.Io.NearestNPC.RegionalMode, -1);
 
         var _RhythmSpecs = new RhythmSpecs()
         {

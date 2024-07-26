@@ -12,7 +12,7 @@ namespace MusicTheory.Rhythms
 
         protected override void GetRhythmCells(MusicSheet ms)
         {
-            ms.Measures = new Measure[ms.RhythmSpecs.NumberOfMeasures];
+            ms.Measures ??= new Measure[ms.RhythmSpecs.NumberOfMeasures];
 
             for (int m = 0; m < ms.Measures.Length; m++)
             {

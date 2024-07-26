@@ -13,7 +13,7 @@ public class BatterieIntermission_Dialogue : Dialogue
 
         else if (Scene.Pack.Crit)
         {
-            damageTaken = (int)((float)damageTaken * (float)(1f / Data.Manager.Io.Skill.GetBonusRatio(new Data.CriticalVolley())));
+            damageTaken = (int)(.5f * (float)damageTaken * (float)(1f / Data.Manager.Io.Skill.GetBonusRatio(new Data.CriticalVolley())));
             Scene.DamageDealt = (int)((float)Scene.DamageDealt + ((float)Scene.DamageDealt * (float)Data.Manager.Io.Skill.GetBonusRatio(new Data.CriticalVolley())));
         }
 

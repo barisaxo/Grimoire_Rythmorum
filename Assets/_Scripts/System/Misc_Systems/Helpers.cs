@@ -374,55 +374,26 @@ static class Helpers
         return temp;
     }
 
+    public static Vector3 NormalDirection(this Vector3 a, Vector3 b) => (b - a).normalized;
 
-
-    public static Vector3 NormalDirection(this Vector3 a, Vector3 b)
+    public static int WeightedRandomInt(int count)
     {
-        var AB = b - a;
-        return AB.normalized;
+        //Σ(i=1 to count) i {the summation of count, 1 + 2 + 3 +... count}
+        int sigma = count * (count + 1) / 2;
+
+        int weightedRand = UnityEngine.Random.Range(0, sigma);
+
+        // Using the quadratic formula to solve for n: n^2 + n - 2*randomNumber = 0
+        float a = 1;
+        float b = 1;
+        float c = -2 * weightedRand;
+
+        float discriminant = Mathf.Sqrt(b * b - 4 * a * c);
+        float n = (-b + discriminant) / (2 * a);
+
+        return (int)Mathf.Floor(n);
     }
 
-    public static int WeightedRandomInt(float rand, float solveRate, int puzzleCount)
-    {
-        // Calculate the weighted index based on the solve rate
-        float weightedIndex = Mathf.Pow(rand, Mathf.Lerp(1.0f, solveRate, solveRate)) * puzzleCount;
-
-        // Convert the weighted index to an integer
-        int weightedRand = Mathf.RoundToInt(weightedIndex);
-
-        // Ensure the weightedRand is within the valid range
-        weightedRand = Mathf.Clamp(weightedRand, 0, puzzleCount - 1);
-
-        return weightedRand;
-    }
-    // int WeightedRandomNumber(float rand, float solveRate, int puzzleCount)
-    // {
-    //     // Calculate the weighted index based on the solve rate
-    //     float weightedIndex = Mathf.Pow(rand, solveRate) * puzzleCount;
-
-    //     // Convert the weighted index to an integer
-    //     int weightedRand = Mathf.RoundToInt(weightedIndex);
-
-    //     // Ensure the weightedRand is within the valid range
-    //     weightedRand = Mathf.Clamp(weightedRand, 0, puzzleCount - 1);
-
-    //     return weightedRand;
-    // }    //         int c = 0;
-    // for (int i = 0; i < 11; i++)
-    // {
-    //     for (int ii = 0; ii < 11; ii++)
-    //     {
-    //         for (int iii = 1; iii < 11; iii++)
-    //         {
-    //             float fakeRand = (float)i * .1f;
-    //             float percent = ((float)ii * .1f);
-    //             float count = iii;
-
-    //             int weightedRand = WeightedRandomNumber(fakeRand, percent, (int)count); //(int)Mathf.Round(((((float)fakeRand / (float)percent)) * (float)count));
-    //             Debug.Log(weightedRand + " " + fakeRand + " " + percent + " " + count + " " + c++);
-    //         }
-    //     }
-    // }
 
     /// <summary>
     /// Subtract the larger number by the smaller number. 

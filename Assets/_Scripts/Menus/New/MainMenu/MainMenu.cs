@@ -28,6 +28,24 @@ namespace Menus
             Up = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Up, this)),
             Down = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Down, this)),
             East = new ButtonInput(() => { }),
+
+            Select = new ButtonInput(() =>
+            {
+                if (InputKey.InputActions.Map.Start.IsPressed())
+#if UNITY_EDITOR
+                    UnityEditor.EditorApplication.isPlaying = false;
+#endif
+                UnityEngine.Application.Quit();
+            }),
+
+            Start = new ButtonInput(() =>
+            {
+                if (InputKey.InputActions.Map.Select.IsPressed())
+#if UNITY_EDITOR
+                    UnityEditor.EditorApplication.isPlaying = false;
+#endif
+                UnityEngine.Application.Quit();
+            })
         };
 
         public string GetDescription { get => null; }
@@ -41,17 +59,17 @@ namespace Menus
 
         public State ConsequentState => Selection.Item switch
         {
-            Continue => Manager.Io.MiscData.Get(new FirstInstantiateDialogue()) ?
+            Continue => Manager.Io.Misc.Get(new FirstInstantiateDialogue()) ?
                 new NewCoveScene_State() :
                 new DialogStart_State(new InstantiateDialogue()) { Fade = true },
 
             Options =>
                 new MenuState(
-                new OptionsMenu(Manager, AudioManager,
-                new MenuState(new MainMenu(Manager, AudioManager)))),
+                    new OptionsMenu(Manager, AudioManager, new MenuState(this))),
             _ => throw new System.ArgumentOutOfRangeException()
         };
 
-        public IMenuScene Scene { get; } = new MainMenuScene();
+        private IMenuScene _scene;
+        public IMenuScene Scene => _scene ??= new MainMenuScene();
     }
 }

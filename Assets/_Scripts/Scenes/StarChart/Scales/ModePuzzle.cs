@@ -6,6 +6,7 @@ using MusicTheory.Scales;
 using MusicTheory.Keys;
 using MusicTheory.Modes;
 
+[System.Serializable]
 public class ModePuzzle : IPuzzle
 {
     private int _numOfNotes;
@@ -18,7 +19,6 @@ public class ModePuzzle : IPuzzle
     public bool PlayOnEngage => false;
     public bool AllowPlayQuestion => true;
 
-    public System.Type GamutType => typeof(Scale);
     public IMusicalElement Gamut { get; private set; }
     public Scale Scale => Gamut is Scale scale ? scale : throw new System.ArgumentNullException();
 

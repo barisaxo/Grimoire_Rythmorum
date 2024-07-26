@@ -8,7 +8,7 @@ public class SellRations_Dialogue : Dialogue
     readonly Dialogue ReturnTo;
     readonly Data.Standing Standing;
 
-    int StandingLevel => Data.Manager.Io.StandingData.GetLevel(Standing);
+    int StandingLevel => Data.Manager.Io.Standings.GetLevel(Standing);
     readonly int Rations = Data.Manager.Io.Inventory.GetLevel(new Data.Ration());
     float StandingsModifier => 2f - (float)(1f - (float)((float)StandingLevel) / 9f);
 

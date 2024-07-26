@@ -11,21 +11,23 @@ namespace Sea
         {
             Debug.Log("NEW BOUNTY SHIP ");
             Ship = Assets.BountyShip;
+            var ActiveShip = Manager.Io.ActiveShip;
             ShipStats = new(
-                new ShipStats.HullStats(new Schooner(), new Pine()),
-                new ShipStats.CannonStats(new Carronade(), new Bronze()),
-                new ShipStats.RiggingStats(new Hemp())
+                new ShipStats.HullStats(ActiveShip.ShipStats.HullStats.Hull, ActiveShip.ShipStats.HullStats.Timber),
+                new ShipStats.CannonStats(ActiveShip.ShipStats.CannonStats.Cannon, new Bronze()),
+                new ShipStats.RiggingStats(ActiveShip.ShipStats.RiggingStats.ClothType)
             );
+            Debug.Log("Volley Damage: " + ShipStats.VolleyDamage);
 
             TF.SetParent(WorldMapScene.Io.TheSea.transform);
             Collidable = new NotCollidable(Ship.Hull.Col);
             Interactable = new BountyInteraction(currentState, ShipStats, Ship.gameObject, region, cell);
             Triggerable = new NotTriggerable();
-            UpdatePosition = new UpdateFishPosition();
+            UpdatePosition = new UpdateBountyPosition();
             Telemeter = new FishTelemetry();
             Instantiator = new ItemInstantiator(
                 toInstantiate: Assets._bountyShip.gameObject,
-                scale: Vector3.one * .5f,
+                scale: Vector3.one * .65f,
                 rot: new Vector3(0, Random.Range(0f, 360f), 0));
             Description = new SceneObjectDescription("BountyShip");
             Inventoriable = new NotInventoriable();

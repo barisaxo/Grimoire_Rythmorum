@@ -13,11 +13,9 @@ namespace Data
             Dictionary<IVolume, int> datum = new();
             for (int i = 0; i < Items.Length; i++)
                 if (Items[i] is BGMusic) datum.TryAdd((IVolume)Items[i], 35);
-                else if (Items[i] is Drums) datum.TryAdd((IVolume)Items[i], 75);
-                else if (Items[i] is Chords) datum.TryAdd((IVolume)Items[i], 95);
-                else if (Items[i] is Bass) datum.TryAdd((IVolume)Items[i], 95);
-                else if (Items[i] is SoundFX) datum.TryAdd((IVolume)Items[i], 95);
-                else datum.TryAdd((IVolume)Items[i], 20);
+                else if (Items[i] is BatterieVolume or Click or SoundFX) datum.TryAdd((IVolume)Items[i], 75);
+                else if (Items[i] is Chords or Bass or Drums) datum.TryAdd((IVolume)Items[i], 90);
+                else datum.TryAdd((IVolume)Items[i], 50);
 
             return datum;
         }
@@ -60,6 +58,12 @@ namespace Data
 
         // public void DecreaseLevel(IItem item, int i) => DecreaseLevel(item);
 
+        /// <summary>
+        /// Give this to the audio source.
+        /// </summary>
+        /// <returns>
+        ///  GetLevel * .01f
+        /// </returns>
         public float GetScaledLevel(IItem item) => (float)GetLevel(item) * .01f;
 
         public int GetLevel(IItem item)
@@ -121,7 +125,7 @@ namespace Data
             return data;
         }
 
-        public IPersistentData PersistentData { get; } = new SaveData("Volume.Data");
+        public IPersistentData PersistentData { get; } = new SaveData(nameof(VolumeData));
     }
 
 }

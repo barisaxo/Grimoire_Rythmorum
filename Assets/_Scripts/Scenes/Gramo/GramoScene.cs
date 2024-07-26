@@ -5,11 +5,11 @@ using System.Collections;
 
 public class GramoScene
 {
-    public GramoScene()
+    public GramoScene(Data.IGramophone gramo)
     {
         _ = Light;
 
-        MuscopaSettings = NewSettings(CadenceDifficulty.ALL, Genre.Stax);
+        MuscopaSettings = NewSettings((CadenceDifficulty)gramo.ID, Genre.Stax);
         MuscopaAudio = new(Data.Manager.Io.Volume);
         GetNewSettings(null).StartCoroutine();
 

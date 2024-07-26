@@ -1,5 +1,6 @@
 using System;
 using Data;
+using UnityEngine;
 
 namespace Menus
 {
@@ -38,7 +39,7 @@ namespace Menus
             new InventoryMenu(Manager.Inventory, ConsequentState, this),
             // new StarChartsMenu(Manager.StarChart, Manager.Quests, ConsequentState, this),
             // new GramophoneMenu(Manager.Gramophones),
-            new StandingsMenu(Manager.StandingData),
+            new StandingsMenu(Manager.Standings),
             new LighthousesMenu(Manager.Lighthouse),
             new ShipStatMenu(Manager.ActiveShip),
             new PlayerStatsMenu(Manager.Player),
@@ -59,7 +60,41 @@ namespace Menus
         }
 
         public State ConsequentState { get; }
-        public IMenuScene Scene => null;
+
+        private IMenuScene _scene;
+        public IMenuScene Scene => _scene ??= new MenuScene();
+
+        public class MenuScene : IMenuScene
+        {
+            public string Name { get; } = nameof(MenuScene);
+            public void Initialize()
+            {
+                L1.SetTextColor(Color.white);
+                R1.SetTextColor(Color.white);
+            }
+
+            public void SelfDestruct()
+            {
+                Hud?.SelfDestruct();
+                Hud = null;
+                South = null;
+                West = null;
+                East = null;
+                North = null;
+                L1 = null;
+                R1 = null;
+            }
+
+            public Transform TF => null;
+
+            public Card Hud { get; set; }
+            public Card North { get; set; }
+            public Card East { get; set; }
+            public Card South { get; set; }
+            public Card West { get; set; }
+            public Card L1 { get; set; }
+            public Card R1 { get; set; }
+        }
     }
 
 }

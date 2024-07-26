@@ -1,11 +1,6 @@
-using System.Collections;
 using System;
 using UnityEngine;
-using SheetMusic;
-using Batterie;
 using MusicTheory.Rhythms;
-using MusicTheory;
-using Muscopa;
 
 public class BatterieAndCadence_State : State
 {
@@ -34,13 +29,9 @@ public class BatterieAndCadence_State : State
     bool CountingOff = true;
     bool Playing = false;
 
-    // public static Genre RandomGenre() => (Genre)UnityEngine.Random.Range(0, Count());
-    // public static int Count() => Enum.GetNames(typeof(Genre)).Length;
-
     protected override void PrepareState(Action callback)
     {
         Counter = 1;
-        // MonoHelper.OnUpdate += SpaceBar;
 
         Cam.Io.Camera.transform.SetPositionAndRotation((UnityEngine.Vector3.up * 7),
            Quaternion.Euler(new Vector3(-20f, 180, Cam.Io.Camera.transform.rotation.eulerAngles.z))
@@ -60,9 +51,6 @@ public class BatterieAndCadence_State : State
     protected override void DisengageState()
     {
         Scene.Pack.Synchro.TickEvent -= Tick;
-        // Scene.Pack.Synchro.BeatEvent -= Click;
-        // MonoHelper.OnUpdate -= SpaceBar;
-
         Scene.BatterieFeedback.SelfDestruct();
         Scene.CountOffFeedBack.SelfDestruct();
         Audio.Batterie.Stop();
@@ -80,9 +68,7 @@ public class BatterieAndCadence_State : State
             {
                 MonoHelper.OnUpdate += Scene.Pack.Analyzer.Tick;
                 Scene.Pack.Analyzer.Start();
-                // Scene.Pack.Synchro.BeatEvent += Click;
                 CountingOff = false; Playing = true; Counter = 0;
-                // Audio.Batterie.Miss();
             }
             return;
         }
@@ -105,10 +91,6 @@ public class BatterieAndCadence_State : State
             Scene.Pack.Synchro.Stop();
             MonoHelper.OnUpdate -= Scene.Pack.Analyzer.Tick;
             Scene.Pack.MuscopaAudio.StopTheCadence();
-
-            // FadeToState(PuzzleSelector.WeightedRandomPuzzleState(Data.TheoryPuzzleData));
-            // Scene.NMEHealth.cur -= Scene.Pack.GoodHits * DataManager.ShipData.ShipStats.DamagePotential;
-
             SetState(new DialogStart_State(new BatterieIntermission_Dialogue(Scene)));
         }
     }
@@ -148,8 +130,6 @@ public class BatterieAndCadence_State : State
             Scene.NMEFire.Play();
         }
     }
-
-
 
     protected override void GPInput(GamePadButton gpb)
     {

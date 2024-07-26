@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using System.Collections.Generic;
 
 public class BootStrap_State : State
 {
@@ -11,6 +12,7 @@ public class BootStrap_State : State
 
     protected override void PrepareState(Action callback)
     {
+        // Debug.Log(Application.persistentDataPath);
         // _ = new FPSDisplay();
         _ = Cam.Io;
         AudioSettings.Reset(AudioSettings.GetConfiguration());
@@ -30,4 +32,3 @@ public class ThrowState : State
         throw new System.NotImplementedException();
     }
 }
-

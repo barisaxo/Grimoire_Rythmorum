@@ -16,7 +16,7 @@ public class HailShip_Dialogue : Dialogue
         return base.Initiate();
     }
 
-    int StandingLevel => Data.Manager.Io.StandingData.GetLevel(Standing);
+    int StandingLevel => Data.Manager.Io.Standings.GetLevel(Standing);
     string Hail_LineText => StandingLevel switch
     {
         10 or 9 or 8 => "The weather favors us this day.",

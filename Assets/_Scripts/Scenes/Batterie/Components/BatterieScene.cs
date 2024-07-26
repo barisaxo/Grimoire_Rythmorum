@@ -19,7 +19,7 @@ public class BatterieScene
         int nmeHealth = (int)(NMEShipStats.HullStrength * UnityEngine.Random.Range(0.8f, 1.1f));
         NMEHealth = (nmeHealth, nmeHealth);
 
-        Pack = new(specs);
+        Pack = new(specs, false);
         Tick = tick;
         BatterieAudio = Audio.AudioManager.Io.Batterie;
     }
@@ -80,6 +80,7 @@ public class BatterieScene
     {
         GameObject.Destroy(ShipFire.gameObject);
         GameObject.Destroy(NMEFire.gameObject);
+        GameObject.Destroy(NMEGO);
         Background.SelfDestruct();
         BatterieHUD.SelfDestruct();
     }

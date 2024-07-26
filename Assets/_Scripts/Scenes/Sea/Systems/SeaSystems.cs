@@ -210,7 +210,7 @@ public static class SeaSystems
     {
         if (npc.SceneObject is null)
         {
-            npc.InstantiateNewSceneObject(currentState, Data.Manager.Io.StandingData);
+            npc.InstantiateNewSceneObject(currentState, Data.Manager.Io.Standings);
             npc.SceneObject.GO.transform.localScale = Vector3.one * Random.Range(.55f, .75f);
             npc.SceneObject.GO.transform.SetParent(Sea.WorldMapScene.Io.TheSea.transform);
             scene.RockTheBoat.AddBoat(npc.SceneObject.GO.transform, npc.Sway);

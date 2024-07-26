@@ -24,7 +24,7 @@ namespace Data
         {
             Dictionary<IPlayerShipStat, int> ship = new();
             foreach (var item in Items) ship.Add((IPlayerShipStat)item, 1);
-            ship[new CurrentHitPoints()] = ship[new MaxHitPoints()];
+            ship[new CurrentHitPoints()] = GetLevel(new MaxHitPoints());
             return ship;
         }
 
@@ -63,7 +63,7 @@ namespace Data
         {
             return item switch
             {
-                MaterialStorage => (int)(ShipStats.RiggingStats.ClothType.Modifier * ShipStats.HullStats.Hull.Modifier * .5f),
+                MaterialStorage => (int)(ShipStats.RiggingStats.ClothType.Modifier * ShipStats.HullStats.Hull.Modifier),
                 RationStorage => (int)(ShipStats.RiggingStats.ClothType.Modifier * ShipStats.HullStats.Hull.Modifier * .05f),
                 StarChartStorage => (int)(ShipStats.RiggingStats.ClothType.Modifier * ShipStats.HullStats.Hull.Modifier * .01f),
                 GramophoneStorage => (int)(ShipStats.RiggingStats.ClothType.Modifier * ShipStats.HullStats.Hull.Modifier * .01f),

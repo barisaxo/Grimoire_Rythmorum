@@ -22,6 +22,8 @@ public class AnglingToSeaTransition_State : State
         if (Won)
         {
             Manager.Io.Player.AdjustLevel(new FishCaught(), 1);
+            Manager.Io.PlayerRecent.AdjustLevel(new FishRecentCaught(), 1);
+
             Obj.Inventoriable.AddRewards();
 
             SetState(
@@ -34,6 +36,7 @@ public class AnglingToSeaTransition_State : State
         else
         {
             Manager.Io.Player.AdjustLevel(new FishLost(), 1);
+            Manager.Io.PlayerRecent.AdjustLevel(new FishRecentLost(), 1);
             SetState(new DialogStart_State(new FishGotAway_Dialogue(SubsequentState)));
         }
     }

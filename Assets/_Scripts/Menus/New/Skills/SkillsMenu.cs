@@ -81,35 +81,44 @@ namespace Menus
             // Selection.Card.SetTextString(DisplayData(Selection.Item));
         }
 
-
         public State ConsequentState { get; private set; }
-        public IMenuScene Scene { get; set; } = new SkillMenuScene();
+        private IMenuScene _scene;
+        public IMenuScene Scene => _scene ??= new SkillMenuScene();
 
+        internal class SkillMenuScene : IMenuScene
+        {
+            public string Name { get; } = nameof(SkillMenuScene);
 
+            public void Initialize()
+            {
+                South.SetTextString("Back").SetImageColor(Color.white);
+                North.SetTextString("Increase").SetImageColor(Color.white);
+                ((IMenuScene)this).SetCardPos1(South);
+                ((IMenuScene)this).SetCardPos2(North);
+            }
+
+            public void SelfDestruct()
+            {
+                Hud?.SelfDestruct();
+                Hud = null;
+                South = null;
+                West = null;
+                East = null;
+                North = null;
+                L1 = null;
+                R1 = null;
+            }
+
+            public Transform TF => null;
+
+            public Card Hud { get; set; }
+            public Card North { get; set; }
+            public Card East { get; set; }
+            public Card South { get; set; }
+            public Card West { get; set; }
+            public Card L1 { get; set; }
+            public Card R1 { get; set; }
+        }
     }
 
-    public class SkillMenuScene : IMenuScene
-    {
-        public void Initialize()
-        {
-            South.SetTextString("Back").SetImageColor(Color.white);
-            North.SetTextString("Increase").SetImageColor(Color.white);
-            ((IMenuScene)this).SetCardPos1(South);
-            ((IMenuScene)this).SetCardPos2(North);
-        }
-
-        public void SelfDestruct()
-        {
-            Hud?.SelfDestruct();
-            Resources.UnloadUnusedAssets();
-        }
-
-        public Transform TF => null;
-
-        public Card Hud { get; set; }
-        public Card North { get; set; }
-        public Card East { get; set; }
-        public Card South { get; set; }
-        public Card West { get; set; }
-    }
 }

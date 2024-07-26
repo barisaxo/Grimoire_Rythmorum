@@ -26,7 +26,7 @@ public class EndPuzzle_State : State
     {
         Vector2Int loc = Sea.WorldMapScene.Io.Ship.GlobalCoord + RandomLoc();
         string latLong = loc.GlobalCoordsToLatLongs(Sea.WorldMapScene.Io.Map.GlobalSize);
-        int patternsFound = (int)((float)(Puzzle.RewardsValue() + 1f) * 10f * (1f + UnityEngine.Random.value));
+        int patternsFound = (int)((float)((float)Puzzle.RewardsValue() * 100f * (1f + UnityEngine.Random.value)));
 
         if (Won)
         {
@@ -38,6 +38,7 @@ public class EndPuzzle_State : State
 
             Sea.WorldMapScene.Io.Map.AddToMap(Manager.Io.Quests.GetQuest(new Navigation()).QuestLocation, Sea.CellType.Gramo);
 
+            Manager.Io.Puzzles.AdjustLevel(Puzzle, 1);
             Manager.Io.Player.AdjustLevel(new PatternsAvailable(), patternsFound);
 
             // Manager.Io.Player.SetLevel(new PatternsFound(),

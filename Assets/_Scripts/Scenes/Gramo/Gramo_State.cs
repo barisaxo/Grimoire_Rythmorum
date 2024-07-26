@@ -7,11 +7,16 @@ public class Gramo_State : State
 {
     public GramoScene Scene;
     readonly State SubsequentState;
-    public Gramo_State(State subsequentState) { SubsequentState = subsequentState; }
+    readonly Data.IGramophone Gramo;
+    public Gramo_State(State subsequentState, Data.IGramophone gramo)
+    {
+        SubsequentState = subsequentState;
+        Gramo = gramo;
+    }
 
     protected override void PrepareState(Action callback)
     {
-        Scene = new();
+        Scene = new(Gramo);
         // new(new MusicTheory.HarmonicFunction[] {
         //     MusicTheory.HarmonicFunction.Predominant,
         //     MusicTheory.HarmonicFunction.Tonic,
@@ -39,14 +44,27 @@ public class Gramo_State : State
                 SetState(new CameraPan_State(
                     new DialogStart_State(
                         new EndGramo_Dialogue(
-                            true,
-                            SubsequentState,
-                            100)),//TODOTODO needs scale
+                            won: true,
+                            subsequentState: SubsequentState,
+                            patternsFound: (int)(1000f *
+                                DataManager.Skill.GetBonusRatio(new Data.Apophenia()) *
+                                (Gramo.ID + 1) *
+                                (UnityEngine.Random.value + 1f)
+                                ))),
                     pan: Cam.StoredCamRot,
                     strafe: Cam.StoredCamPos,
                     speed: 5));
-            else Debug.Log("Narp");
-        else Debug.Log("Not all dials have been answered");
+            else SetState(new CameraPan_State(
+                    new DialogStart_State(
+                        new EndGramo_Dialogue(
+                            won: false,
+                            subsequentState: SubsequentState,
+                            patternsFound: 0
+                            )),
+                    pan: Cam.StoredCamRot,
+                    strafe: Cam.StoredCamPos,
+                    speed: 5));
+        else Audio.SFX.PlayOneShot(BatterieAssets.MissStick);
     }
 
     protected override void DirectionPressed(Dir dir)
@@ -86,17 +104,17 @@ public class GramoPractice_State : State
 {
     public GramoScene Scene;
     readonly State SubsequentState;
-    public GramoPractice_State(State subsequentState) { SubsequentState = subsequentState; }
+    readonly Data.IGramophone Gramo;
+
+    public GramoPractice_State(State subsequentState, Data.IGramophone gramo)
+    {
+        Gramo = gramo;
+        SubsequentState = subsequentState;
+    }
 
     protected override void PrepareState(Action callback)
     {
-        Scene = new();
-        // new(new MusicTheory.HarmonicFunction[] {
-        //     MusicTheory.HarmonicFunction.Predominant,
-        //     MusicTheory.HarmonicFunction.Tonic,
-        //     MusicTheory.HarmonicFunction.Predominant,
-        //     MusicTheory.HarmonicFunction.Dominant,
-        // });
+        Scene = new(Gramo);
         Scene.DollyAnimation(callback);
     }
 
@@ -121,9 +139,8 @@ public class GramoPractice_State : State
                     pan: Cam.StoredCamRot,
                     strafe: Cam.StoredCamPos,
                     speed: 5));
-            else Debug.Log("Narp");
-        //TODO Bump sfx
-        else Debug.Log("Not all dials have been answered");
+            else Audio.SFX.PlayOneShot(BatterieAssets.MissStick);
+        else Audio.SFX.PlayOneShot(BatterieAssets.MissStick);
     }
 
     protected override void DirectionPressed(Dir dir)

@@ -3,6 +3,7 @@ using MusicTheory.Arithmetic;
 using MusicTheory.Keys;
 using MusicTheory.Triads;
 
+[System.Serializable]
 public class TriadPuzzle : IPuzzle
 {
     public int NumOfNotes => 3;

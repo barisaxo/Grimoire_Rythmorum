@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using MusicTheory;
 
 namespace Data
@@ -10,7 +9,7 @@ namespace Data
         public int Lag
         {
             get => _lag;
-            set => _lag = value > 25 ? 0 : value;
+            set => _lag = value;// > 25 ? 0 : value;
         }
 
         private KeyOf _currentKey = KeyOf.C;
@@ -138,7 +137,7 @@ namespace Data
             return data;
         }
 
-        public IPersistentData PersistentData { get; } = new SaveData("Gameplay.Data");
+        public IPersistentData PersistentData { get; } = new SaveData(nameof(GameplayData));
     }
 
 }

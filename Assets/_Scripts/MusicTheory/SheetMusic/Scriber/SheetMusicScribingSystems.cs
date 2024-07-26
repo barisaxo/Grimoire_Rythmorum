@@ -6,11 +6,11 @@ namespace SheetMusic
 {
     public static class SheetMusicScribingSystems
     {
-        public static MusicSheet DrawRhythms(this MusicSheet ms)
+        public static MusicSheet DrawRhythms(this MusicSheet ms, bool setUpCounts)
         {
             ms.SetUpStaff();
             ms.SetUpTimeSig();
-            ms.SetUpCounts(ms.SubCountsPerMeasure());
+            if (setUpCounts) ms.SetUpCounts(ms.SubCountsPerMeasure());
             ms.AssignNoteSprites();
             ms.AssignTies();
             return ms;
@@ -79,7 +79,7 @@ namespace SheetMusic
                                   SubBeatAssignment = beats[c]
                               },
                               MeasureNumber = (MeasureNumber)i + 1,
-                          }) + (Vector3.up * Cam.Io.Camera.aspect))
+                          }) + (.75f * Cam.Io.Camera.aspect * Vector3.up))
                           .SetFontScale(.4f, .4f)
                           .SetTextAlignment(TMPro.TextAlignmentOptions.Center)
                           .AutoSizeTextContainer(true)

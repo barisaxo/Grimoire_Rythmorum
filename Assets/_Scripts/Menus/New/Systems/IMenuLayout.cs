@@ -21,11 +21,11 @@ namespace Menus
     public class AlignLeft : IMenuLayout
     {
         public Card Card { get; set; }
-        public Vector2 GetDescPosition() => new(Cam.UIOrthoX - 1f, -Cam.UIOrthoY * .5f);
+        public Vector2 GetDescPosition() => new(0, -Cam.UIOrthoY * .5f);// new(Cam.UIOrthoX - 1f, -Cam.UIOrthoY * .5f);
         public Vector2 GetTextPosition(int i, int length) => new(-Cam.UIOrthoX + 2.5f, 1.8f - (i * .8f));
         public Vector2 GetImagePosition(int i, int length) => new(0, -Cam.UIOrthoY * .25f);
         public Vector2 ItemTMPRectPivot => new(0, .5f);
-        public Vector2 DescTMPRectPivot => new(1, .5f);
+        public Vector2 DescTMPRectPivot => new(.5f, .5f);//new(1, .5f);
         public TMPro.TextAlignmentOptions ItemTextAlignment => TMPro.TextAlignmentOptions.Left;
         public TMPro.TextAlignmentOptions DescTextAlignment => TMPro.TextAlignmentOptions.Left;
 
@@ -63,7 +63,7 @@ namespace Menus
     {
         public Card Card { get; set; }
 
-        public Vector2 GetDescPosition() => new(Cam.UIOrthoX - 1f, 2);
+        public Vector2 GetDescPosition() => new(Cam.UIOrthoX - 1f, 1.5f);
         public Vector2 GetTextPosition(int i, int length) => new(-Cam.UIOrthoX + 2.5f, -(i * .8f));
         public Vector2 GetImagePosition(int i, int length) => new(Cam.UIOrthoX - 2.5f, -2);
         public Vector2 ItemTMPRectPivot => new(0, .5f);

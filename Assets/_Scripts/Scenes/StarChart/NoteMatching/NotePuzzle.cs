@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using MusicTheory.Keys;
 
+[System.Serializable]
 public class NotePuzzle : IPuzzle
 {
     public int NumOfNotes => 1;
@@ -15,7 +16,6 @@ public class NotePuzzle : IPuzzle
     public bool AllowPlayQuestion => true;
 
     public IMusicalElement Gamut { get; private set; }
-    public System.Type GamutType => typeof(Key);
     public Key Key => Gamut is Key note ? note : throw new System.ArgumentNullException();
 
     private readonly KeyboardNoteName[] _notes;
@@ -32,12 +32,41 @@ public class NotePuzzle : IPuzzle
 
     public NotePuzzle()
     {
-        Gamut = (Key)Enumeration.All<KeyEnum>()[Random.Range(0, Enumeration.Length<KeyEnum>())];
+        // Gamut = (Key)Enumeration.All<KeyEnum>()[Random.Range(0, Enumeration.Length<KeyEnum>())];
+        Gamut = WeightedRandomKey();
         _notes = new KeyboardNoteName[NumOfNotes];
         Notes[0] = Key.GetKeyboardNoteName();
 
         _question = Key.Name;
     }
 
+    private Key WeightedRandomKey()
+    {
+        int solved = Data.Manager.Io.Puzzles.GetLevel(this);
+
+        List<int> ints = new() { 1 };
+        if (solved > 4) ints.Add(2);
+        if (solved > 8) ints.Add(3);
+
+        List<Key> KeyList;
+
+        switch (ints[Random.Range(0, ints.Count)])
+        {
+            case 1:
+                KeyList = new() { new C(), new D(), new E(), new F(), new G(), new A(), new B() };
+                return KeyList[Random.Range(0, KeyList.Count)];
+
+            case 2:
+                KeyList = new() { new Ab(), new Bb(), new Db(), new Eb(), new Gb(),
+                                  new As(), new Gs(), new Ds(), new Fs(), new Cs() };
+                return KeyList[Random.Range(0, KeyList.Count)];
+
+            case 3:
+                KeyList = new() { new Bs(), new Cb(), new Es(), new Fb() };
+                return KeyList[Random.Range(0, KeyList.Count)];
+        }
+
+        throw new System.Exception("?");
+    }
 
 }

@@ -22,43 +22,85 @@ namespace Menus
             return item.Name;//+ ": " + Data.GetDisplayLevel(item);
         }
 
-        public string GetDescription { get => Selection.Item.Description; }
+        public string GetDescription
+        {
+            get
+            {
+                if (Selection.Item is NotesT or NotesA) return "";
+
+                IItem sc = StarChartEnum.ToItem(Enumeration.FindId<StarChartEnum>(Selection.Item.ID - 2));
+
+                int solved = Manager.Io.Puzzles.GetLevel(GetPuzzle(sc));
+
+                if (solved < 10)
+                    return "solve " + (10 - solved) + " " +
+                        GetPuzzle(sc).GetType().ToString().SentenceCase() +
+                        ((10 - solved) == 1 ? "" : "s") +
+                        " to unlock";
+
+                return "";
+            }
+        }
 
         public IInputHandler Input => new MenuInputHandler()
         {
-            Up = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Up, this)),
-            Down = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Down, this)),
-            East = new ButtonInput(() => ConsequentState = GetNewPuzzle),
+            Up = new ButtonInput(() =>
+            {
+                Selection = Layout.ScrollMenuItems(Dir.Up, this);
+                UpdateButton();
+            }),
+            Down = new ButtonInput(() =>
+            {
+                Selection = Layout.ScrollMenuItems(Dir.Down, this);
+                UpdateButton();
+            }),
+            East = new ButtonInput(EastPressed),
             South = new ButtonInput(() => ConsequentState = SubsequentState),
+            West = new ButtonInput(WestPressed),
         };
 
-        public IMenuScene Scene { get; } = new PracticeMenuScene();
+        private IMenuScene _scene;
+        public IMenuScene Scene => _scene ??= new PracticeMenuScene();
 
         public State ConsequentState { get; set; }
 
-
         State GetNewPuzzle => new StarChartPractice_State(
-             GetPuzzle(),
-             GetPuzzleType(),
-             SubsequentState
+             GetPuzzle(Selection.Item),
+             GetPuzzleType(Selection.Item),
+             new MenuState(this)
              );
 
-        IPuzzle GetPuzzle() => Selection.Item switch
+        public State GetTutorial => Selection.Item switch
+        {
+            NotesT or NotesA => new Video_State(Assets.NoteID, new MenuState(this)),
+            StepsT or StepsA => new Video_State(Assets.Steps, new MenuState(this)),
+            ScalesT or ScalesA => new Video_State(Assets.Scales, new MenuState(this)),
+            IntervalsT or IntervalsA => new Video_State(Assets.Interval, new MenuState(this)),
+            InvertedTriadsT or InvertedTriadsA => new Video_State(Assets.InvertedTriads, new MenuState(this)),
+            ModesT or ModesA => new Video_State(Assets.Modes, new MenuState(this)),
+            InversionsT or InversionsA => new Video_State(Assets.Inversions, new MenuState(this)),
+            TriadsT or TriadsA => new Video_State(Assets.Triads, new MenuState(this)),
+            SeventhChordsA or SeventhChordsT => new Video_State(Assets.SeventhChords, new MenuState(this)),
+            Inverted7thChordsA or Inverted7thChordsT => new Video_State(Assets.InvertedSeventhChords, new MenuState(this)),
+            _ => throw new System.ArgumentException(),
+        };
+
+        IPuzzle GetPuzzle(IItem item) => item switch
         {
             NotesT or NotesA => new NotePuzzle(),
             StepsT or StepsA => new StepsPuzzle(),
+            ScalesT or ScalesA => new ScalePuzzle(),
             InvertedTriadsT or InvertedTriadsA => new InvertedTriadPuzzle(),
             ModesT or ModesA => new ModePuzzle(),
             IntervalsT or IntervalsA => new IntervalPuzzle(),
             InversionsT or InversionsA => new InvertedIntervalPuzzle(),
             TriadsT or TriadsA => new TriadPuzzle(),
-            ScalesT or ScalesA => new ScalePuzzle(),
             SeventhChordsA or SeventhChordsT => new SeventhChordPuzzle(),
             Inverted7thChordsA or Inverted7thChordsT => new InvertedSeventhChordPuzzle(),
             _ => throw new System.ArgumentException(),
         };
 
-        PuzzleType GetPuzzleType() => Selection.Item switch
+        PuzzleType GetPuzzleType(IItem item) => item switch
         {
             NotesT or Inverted7thChordsT or
             SeventhChordsT or StepsT or IntervalsT or
@@ -67,6 +109,34 @@ namespace Menus
 
             _ => PuzzleType.Aural,
         };
-    }
 
+
+        void UpdateButton()
+        {
+            if (!Unlocked(Selection.Item)) ((PracticeMenuScene)Scene).HideButtons();
+            else ((PracticeMenuScene)Scene).ShowButtons();
+        }
+        void EastPressed()
+        {
+            if (!Unlocked(Selection.Item)) ConsequentState = null;
+            else ConsequentState = GetNewPuzzle;
+        }
+        void NorthPressed()
+        {
+
+        }
+        void WestPressed()
+        {
+            if (!Unlocked(Selection.Item)) ConsequentState = null;
+            else ConsequentState = GetTutorial;
+        }
+
+        bool Unlocked(IItem item) =>
+            (item is NotesT or NotesA) ||
+                 Manager.Io.Puzzles.GetLevel(
+                    GetPuzzle(
+                        StarChartEnum.ToItem(
+                            Enumeration.FindId<StarChartEnum>(Selection.Item.ID - 2))))
+                                >= 10;
+    }
 }

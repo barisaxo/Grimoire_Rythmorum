@@ -34,6 +34,7 @@ public class Card
 
     public void SelfDestruct()
     {
+        // UnityEngine.Debug.Log("Destroying: " + Name);
         if (Children != null) { foreach (Card child in Children) child.SelfDestruct(); }
         if (GO != null) UnityEngine.Object.Destroy(GO);
         if (_uigo != null) UnityEngine.Object.Destroy(_uigo);

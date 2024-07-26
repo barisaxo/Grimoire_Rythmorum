@@ -21,12 +21,12 @@ public class BountyBatterie_State : State
         //     HasTriplets = false,
         //     Tempo = 90
         // };
-        RhythmSpecs rhythmSpecs = new RhythmSpecs().SetTime(RandomTimeSignature.Get());
+        RhythmSpecs rhythmSpecs = new RhythmSpecs().SetTime(new FourFour());//RandomTimeSignature.Get()
         rhythmSpecs.SetTempo(90)
-            .SetRests(UnityEngine.Random.value < .5f)
-            .SetTies(UnityEngine.Random.value < .5f);
+            .SetRests(UnityEngine.Random.value < .75f)
+            .SetTies(UnityEngine.Random.value < .75f);
 
-        BatteriePack pack = new(rhythmSpecs);
+        BatteriePack pack = new(rhythmSpecs, false);
         Scene = new(NMEShipStats, nmeGO, playerShip, Tick, pack, "Bounty");
     }
 
@@ -36,12 +36,16 @@ public class BountyBatterie_State : State
     public int Counter { get; private set; }
     bool CountingOff = true;
     bool Playing = false;
-    int score, cap;
+    // int score, cap;
 
     protected override void PrepareState(Action callback)
     {
-        Cam.Io.Camera.transform.SetPositionAndRotation(Cam.Io.Camera.transform.position + (UnityEngine.Vector3.up * 7),
-            Quaternion.Euler(new Vector3(-20f, 180, Cam.Io.Camera.transform.rotation.eulerAngles.z))
+        // Cam.Io.Camera.transform.SetPositionAndRotation(Cam.Io.Camera.transform.position + (UnityEngine.Vector3.up * 7),
+        //     Quaternion.Euler(new Vector3(-20f, 180, Cam.Io.Camera.transform.rotation.eulerAngles.z))
+        // );
+
+        Cam.Io.Camera.transform.SetPositionAndRotation((UnityEngine.Vector3.up * 7),
+           Quaternion.Euler(new Vector3(-20f, 180, Cam.Io.Camera.transform.rotation.eulerAngles.z))
         );
 
         Counter = 1;
@@ -59,7 +63,6 @@ public class BountyBatterie_State : State
 
     protected override void DisengageState()
     {
-        Debug.Log((float)((float)score / (float)cap));
         Scene.Pack.Synchro.TickEvent -= Tick;
         Scene.Pack.Synchro.BeatEvent -= Click;
         MonoHelper.OnUpdate -= SpaceBar;
@@ -70,20 +73,20 @@ public class BountyBatterie_State : State
         Scene.Pack.MuscopaAudio.StopTheCadence();
         Scene.Pack.MusicSheet.SelfDestruct();
 
-        Scene.BatterieHUD.PlayerCurrent -= Scene.NMEShipStats.VolleyDamage;
+        // Scene.BatterieHUD.PlayerCurrent -= Scene.NMEShipStats.VolleyDamage;
         // Debug.Log(DataManager.Io.CharData.GetLevel(Data.Player.CharacterData.DataItem.CurrentHP));
-        Data.Manager.Io.ActiveShip.SetLevel(
-            new Data.CurrentHitPoints(),
-            Data.Manager.Io.ActiveShip.GetLevel(new Data.CurrentHitPoints()) - Scene.NMEShipStats.VolleyDamage);
+        // Data.Manager.Io.ActiveShip.SetLevel(
+        //     new Data.CurrentHitPoints(),
+        //     Data.Manager.Io.ActiveShip.GetLevel(new Data.CurrentHitPoints()) - Scene.NMEShipStats.VolleyDamage);
 
-        if (Scene.Pack.Spammed)
-        {
-            Data.Manager.Io.ActiveShip.SetLevel(
-                new Data.CurrentHitPoints(),
-                Data.Manager.Io.ActiveShip.GetLevel(new Data.CurrentHitPoints()) - Scene.NMEShipStats.VolleyDamage);
+        // if (Scene.Pack.Spammed)
+        // {
+        //     Data.Manager.Io.ActiveShip.SetLevel(
+        //         new Data.CurrentHitPoints(),
+        //         Data.Manager.Io.ActiveShip.GetLevel(new Data.CurrentHitPoints()) - Scene.NMEShipStats.VolleyDamage);
 
-            Scene.BatterieHUD.NMECurrent = Scene.BatterieHUD.NMEMax;
-        }
+        //     Scene.BatterieHUD.NMECurrent = Scene.BatterieHUD.NMEMax;
+        // }
 
     }
 
@@ -200,7 +203,6 @@ public class BountyBatterie_State : State
         else if (Input.GetKeyUp(KeyCode.Space))
         {
             Scene.Pack.Analyzer.InputUpAction();
-
         }
 
     }

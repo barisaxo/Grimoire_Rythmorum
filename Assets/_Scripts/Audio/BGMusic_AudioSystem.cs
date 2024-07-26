@@ -8,7 +8,7 @@ public sealed class BGMusic_AudioSystem : AudioSystem
     public BGMusic_AudioSystem(VolumeData data) : base(1, nameof(BGMusic_AudioSystem))
     {
         Loop = true;
-        VolumeLevelSetting = data.GetLevel(new BGMusic()) * .01f;
+        VolumeLevelSetting = data.GetScaledLevel(new BGMusic());
         foreach (var a in AudioSources) a.playOnAwake = true;
 
         foreach (var a in AudioSources)
@@ -88,4 +88,32 @@ public sealed class BGMusic_AudioSystem : AudioSystem
             }
         }
     }
+}
+
+
+
+public sealed class BeatFishing_AudioSystem : AudioSystem
+{
+    public BeatFishing_AudioSystem(VolumeData data) : base(1, nameof(BeatFishing_AudioSystem))
+    {
+        Loop = true;
+        VolumeLevelSetting = data.GetScaledLevel(new BatterieVolume());
+    }
+
+
+    public void Pause()
+    {
+        foreach (var a in AudioSources) a.Pause();
+    }
+
+    public void PlayClip(AudioClip clip)
+    {
+        foreach (var a in AudioSources)
+        {
+            a.clip = clip;
+            a.loop = true;
+            a.Play();
+        }
+    }
+
 }

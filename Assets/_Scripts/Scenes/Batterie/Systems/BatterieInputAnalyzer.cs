@@ -8,15 +8,14 @@ namespace Batterie
 {
     public class BatterieInputAnalyzer
     {
-        public BatterieInputAnalyzer(Action<string> feedBack, Action<Hit> hit, float latencyOffset, MappedBeat[] beatmap)
+        public BatterieInputAnalyzer(Action<string> feedBack, Action<Hit> hit, MappedBeat[] beatmap)
         {
             FeedBack += feedBack;
-            // LatencyOffset = latencyOffset * .02f;
+            LatencyOffset = Data.Manager.Io.Gameplay.GetLevel(new Data.Latency()) * .01f;
             Hit = hit;
             BeatMap = beatmap.ToList(); ;
 
             FeedBack += FeedbackDebug;
-
         }
 
         public int score;

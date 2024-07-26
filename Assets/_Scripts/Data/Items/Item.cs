@@ -38,8 +38,8 @@ namespace Data
     public class SaveData : IPersistentData
     {
         public string FileName { get; }
-
-        public SaveData(string name) { FileName = name; }
+        const string Suffix = ".GR";
+        public SaveData(string fileNameNoSuffix) { FileName = fileNameNoSuffix + Suffix; }
 
         public void Save(IData data)
         {
@@ -79,7 +79,7 @@ namespace Data
     [System.Serializable]
     public class NotPersistentData : IPersistentData
     {
-        public string FileName => "";
+        public string FileName => string.Empty;
         public void Save(IData data) { }
         public IData TryLoadData() => null;
     }

@@ -71,18 +71,18 @@ namespace MusicTheory
             {
                 DiatonicRomanNumeral[] ChordalCadence = new DiatonicRomanNumeral[4];
 
-                ChordalCadence[0] = level switch
-                {
-                    RegionalMode.Dorian => DiatonicRomanNumeral.II,
-                    RegionalMode.Phrygian => DiatonicRomanNumeral.III,
-                    RegionalMode.Lydian => DiatonicRomanNumeral.IV,
-                    RegionalMode.MixoLydian => DiatonicRomanNumeral.V,
-                    RegionalMode.Aeolian => DiatonicRomanNumeral.VI,
-                    RegionalMode.Locrian => DiatonicRomanNumeral.VII,
-                    _ => DiatonicRomanNumeral.I,
-                };
+                // ChordalCadence[0] = level switch
+                // {
+                //     RegionalMode.Dorian => DiatonicRomanNumeral.II,
+                //     RegionalMode.Phrygian => DiatonicRomanNumeral.III,
+                //     RegionalMode.Lydian => DiatonicRomanNumeral.IV,
+                //     RegionalMode.MixoLydian => DiatonicRomanNumeral.V,
+                //     RegionalMode.Aeolian => DiatonicRomanNumeral.VI,
+                //     RegionalMode.Locrian => DiatonicRomanNumeral.VII,
+                //     _ => DiatonicRomanNumeral.I,
+                // };
 
-                for (int f = 1; f < functionalCadence.Length; f++)
+                for (int f = 0; f < functionalCadence.Length; f++)
                 {
                     ChordalCadence[f] = NewChord(functionalCadence[f]);
                 }
@@ -94,11 +94,9 @@ namespace MusicTheory
                     HarmonicFunction.Tonic =>
                     difficulty switch
                     {
-                        CadenceDifficulty.I_II_V => DiatonicRomanNumeral.I,
-                        CadenceDifficulty.I_IV_V_VI => UnityEngine.Random.value < (1f / 2f) ? DiatonicRomanNumeral.I : DiatonicRomanNumeral.VI,
-                        // CadenceDifficulty.LVL3 => UnityEngine.Random.Range(0, 3) switch { 0 => DiatonicRomanNumeral.I, 1 => DiatonicRomanNumeral.VI, _ => DiatonicRomanNumeral.III },
-                        // // CadenceDifficulty.LVL4 => UnityEngine.Random.value < (1f / 2f) ? DiatonicRomanNumeral.III : DiatonicRomanNumeral.VI,
-                        // CadenceDifficulty.LVL5 => UnityEngine.Random.value < (1f / 2f) ? DiatonicRomanNumeral.I : DiatonicRomanNumeral.VI,
+                        CadenceDifficulty.I_II_V or CadenceDifficulty.I_IV_V => DiatonicRomanNumeral.I,
+                        CadenceDifficulty.I_VI_II_V => UnityEngine.Random.value < (1f / 2f) ? DiatonicRomanNumeral.I : DiatonicRomanNumeral.VI,
+                        CadenceDifficulty.III_VI_II_V => UnityEngine.Random.value < (1f / 2f) ? DiatonicRomanNumeral.III : DiatonicRomanNumeral.VI,
                         _ => UnityEngine.Random.Range(0, 3) switch { 0 => DiatonicRomanNumeral.I, 1 => DiatonicRomanNumeral.VI, _ => DiatonicRomanNumeral.III }
                     },
                     // level switch
@@ -121,10 +119,11 @@ namespace MusicTheory
 
                     HarmonicFunction.Predominant => difficulty switch
                     {
-                        CadenceDifficulty.I_II_V => DiatonicRomanNumeral.II,
-                        CadenceDifficulty.I_IV_V_VI => DiatonicRomanNumeral.IV,
+                        CadenceDifficulty.I_II_V or CadenceDifficulty.III_VI_II_V or CadenceDifficulty.I_VI_II_V => DiatonicRomanNumeral.II,
+                        CadenceDifficulty.I_IV_V => DiatonicRomanNumeral.IV,
                         _ => UnityEngine.Random.value < (1f / 2f) ? DiatonicRomanNumeral.II : DiatonicRomanNumeral.IV,
                     },
+
 
                     // level switch
                     // {
@@ -144,10 +143,15 @@ namespace MusicTheory
 
                     _ => difficulty switch
                     {
-                        CadenceDifficulty.I_II_V => DiatonicRomanNumeral.V,
-                        CadenceDifficulty.I_IV_V_VI => DiatonicRomanNumeral.V,
-                        _ => UnityEngine.Random.value < (1f / 2f) ? DiatonicRomanNumeral.V : DiatonicRomanNumeral.VII,
+                        CadenceDifficulty.ALL => UnityEngine.Random.value < (1f / 2f) ? DiatonicRomanNumeral.V : DiatonicRomanNumeral.VII,
+                        _ => DiatonicRomanNumeral.V
                     },
+
+                    // I_II_V,
+                    // I_IV_V,
+                    // I_VI_II_V,
+                    // III_VI_II_V,
+                    // ALL
                     // level switch
 
                     // {

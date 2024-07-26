@@ -17,6 +17,7 @@ public class EndBounty_State : State
     int coins = 0;
     int mats = 0;
     int rations = 0;
+    int patterns = 0;
     // bool map;
 
     int level => (Scene.NMEShipStats.HullStats.Hull.ID * Scene.NMEShipStats.HullStats.Hull.ID) + 1;
@@ -34,9 +35,12 @@ public class EndBounty_State : State
         Scene.SelfDestruct();
         // Pack.BHUD.SelfDestruct();
 
-        coins = (int)((level + 25f) * 5.55f * UnityEngine.Random.Range(.15f, 1) * (float)((100 - Result()) * .01f));
-        mats = (int)(((level + 15f) * 2.55f) * UnityEngine.Random.Range(.15f, 1) * (float)((100 - Result()) * .01f));
-        rations = (int)(1 + ((level + 5f) * UnityEngine.Random.Range(.5f, 1) * (float)((100 - Result()) * .01f)));
+        coins = (int)((level + 50f) * 5.55f * UnityEngine.Random.Range(.15f, 1) * (float)((100 - Result()) * .01f));
+        mats = (int)(((level + 30f) * 2.55f) * UnityEngine.Random.Range(.15f, 1) * (float)((100 - Result()) * .01f));
+        rations = (int)(1 + ((level + 10f) * UnityEngine.Random.Range(.5f, 1) * (float)((100 - Result()) * .01f)));
+        patterns = (int)((Scene.NMEShipStats.HullStrength + Scene.NMEShipStats.VolleyDamage) *
+                               (Scene.Pack.HasCritThisBattery ? 1.45f : 1f)
+                               * Data.Manager.Io.Skill.GetBonusRatio(new Data.Apophenia()));
 
         // UnityEngine.GameObject.Destroy(Pack.NME);
         // UnityEngine.GameObject.Destroy(Pack.Ship);
@@ -65,20 +69,21 @@ public class EndBounty_State : State
         switch (Scene.Pack.ResultType)
         {
             case BatterieResultType.NMESurrender:
-                DataManager.StandingData.AdjustLevel(Quest.Standing, 1);
+                DataManager.Standings.AdjustLevel(Quest.Standing, 1);
 
                 Data.Manager.Io.Inventory.AdjustLevel(new Data.Material(), mats /= 2);
                 Data.Manager.Io.Inventory.AdjustLevel(new Data.Ration(), rations /= 2);
                 Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), coins /= 2);
+                DataManager.Player.AdjustLevel(new Data.PatternsFound(), patterns);
 
                 SetState(
                   new MoveNPCOffScreen_State(
                       new CameraPan_State(
                           new DialogStart_State(new EndBounty_Dialogue(
-                              coins, mats, rations, BatterieResultType.Won)),
+                              coins, mats, rations, patterns, BatterieResultType.Won)),
                           Cam.StoredCamRot,
                           Cam.StoredCamPos,
-                          3)));
+                          5)));
                 // SetState(
                 //     new CameraPan_State(
                 //         new NPCSailAway_State(
@@ -90,7 +95,7 @@ public class EndBounty_State : State
                 return;
 
             case BatterieResultType.Surrender:
-                DataManager.StandingData.AdjustLevel(Quest.Standing, -1);
+                DataManager.Standings.AdjustLevel(Quest.Standing, -1);
 
                 Data.Manager.Io.Inventory.AdjustLevel(new Data.Material(), mats /= -2);
                 Data.Manager.Io.Inventory.AdjustLevel(new Data.Ration(), rations /= -2);
@@ -100,10 +105,10 @@ public class EndBounty_State : State
                   new MoveNPCOffScreen_State(
                       new CameraPan_State(
                           new DialogStart_State(new EndBounty_Dialogue(
-                              coins, mats, rations, BatterieResultType.Won)),
+                              0, 0, 0, 0, BatterieResultType.Won)),
                           Cam.StoredCamRot,
                           Cam.StoredCamPos,
-                          3)));
+                          5)));
                 // SetState(
                 //     new CameraPan_State(
                 //         new NPCSailAway_State(
@@ -115,16 +120,16 @@ public class EndBounty_State : State
                 return;
 
             case BatterieResultType.Spam:
-                DataManager.StandingData.AdjustLevel(Quest.Standing, -1);
+                DataManager.Standings.AdjustLevel(Quest.Standing, -1);
 
                 SetState(
                   new MoveNPCOffScreen_State(
                       new CameraPan_State(
                           new DialogStart_State(new EndBounty_Dialogue(
-                              coins, mats, rations, BatterieResultType.Won)),
+                               0, 0, 0, 0, BatterieResultType.Won)),
                           Cam.StoredCamRot,
                           Cam.StoredCamPos,
-                          3)));
+                          5)));
                 // SetState(
                 //     new CameraPan_State(
                 //         new NPCSailAway_State(
@@ -136,16 +141,16 @@ public class EndBounty_State : State
                 return;
 
             case BatterieResultType.Fled:
-                DataManager.StandingData.AdjustLevel(Quest.Standing, -1);
+                DataManager.Standings.AdjustLevel(Quest.Standing, -1);
 
                 SetState(
                   new MoveNPCOffScreen_State(
                       new CameraPan_State(
                           new DialogStart_State(new EndBounty_Dialogue(
-                              coins, mats, rations, BatterieResultType.Won)),
+                              0, 0, 0, 0, BatterieResultType.Won)),
                           Cam.StoredCamRot,
                           Cam.StoredCamPos,
-                          3)));
+                          5)));
 
                 // SetState(
                 //     new MoveNPCOffScreen_State(
@@ -159,15 +164,15 @@ public class EndBounty_State : State
                 return;
 
             case BatterieResultType.NMEscaped:
-                DataManager.StandingData.AdjustLevel(Quest.Standing, -1);
+                DataManager.Standings.AdjustLevel(Quest.Standing, -1);
                 SetState(
                   new MoveNPCOffScreen_State(
                       new CameraPan_State(
                           new DialogStart_State(new EndBounty_Dialogue(
-                              coins, mats, rations, BatterieResultType.Won)),
+                              0, 0, 0, 0, BatterieResultType.Won)),
                           Cam.StoredCamRot,
                           Cam.StoredCamPos,
-                          3)));
+                          5)));
                 // SetState(
                 //     new CameraPan_State(
                 //         new NPCSailAway_State(
@@ -183,28 +188,29 @@ public class EndBounty_State : State
                 SetState(//TODO
                     new CameraPan_State(
                         new DialogStart_State(
-                            new EndBounty_Dialogue(0, 0, 0, BatterieResultType.NMEscaped)),
+                            new EndBounty_Dialogue(0, 0, 0, 0, BatterieResultType.NMEscaped)),
                         Cam.StoredCamRot,
                         Cam.StoredCamPos,
-                        3));
+                        5));
 
                 return;
 
             case BatterieResultType.Won:
-                DataManager.StandingData.AdjustLevel(Quest.Standing, 1);
+                DataManager.Standings.AdjustLevel(Quest.Standing, 1);
 
                 Data.Manager.Io.Inventory.AdjustLevel(new Data.Material(), mats);
                 Data.Manager.Io.Inventory.AdjustLevel(new Data.Ration(), rations);
                 Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), coins);
 
+                DataManager.Player.AdjustLevel(new Data.PatternsFound(), patterns);
                 SetState(
                     new MoveNPCOffScreen_State(
                         new CameraPan_State(
                             new DialogStart_State(new EndBounty_Dialogue(
-                                coins, mats, rations, BatterieResultType.Won)),
+                                coins, mats, rations, patterns, BatterieResultType.Won)),
                             Cam.StoredCamRot,
                             Cam.StoredCamPos,
-                            3)));
+                            5)));
                 return;
         }
 

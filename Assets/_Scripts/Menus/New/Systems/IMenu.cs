@@ -22,26 +22,25 @@ namespace Menus
             for (int i = 0; i < MenuItems.Length; i++)
                 MenuItems[i].Card?.SelfDestruct();
             Description?.SelfDestruct();
-            Scene?.Hud?.SelfDestruct();
             Scene?.SelfDestruct();
             Resources.UnloadUnusedAssets();
         }
 
         public void SetUpMenuCards()
         {
-            MenuItem[] items = new MenuItem[Data.Items.Length];
+            MenuItems = new MenuItem[Data.Items.Length];
             // Debug.Log(items.Length);
 
-            for (int i = 0; i < items.Length; i++)
+            for (int i = 0; i < MenuItems.Length; i++)
             {
                 // Debug.Log(Data.Items[i].Name + " " + i);
-                items[i] = new()
+                MenuItems[i] = new()
                 {
                     Item = Data.Items[i],
                     Card = new Card(Data.Items[i].Name, null)
                        .SetTextString(DisplayData(Data.Items[i]))
                        .AutoSizeTextContainer(true)
-                       .SetTMPPosition(Layout.GetTextPosition(i, items.Length))
+                       .SetTMPPosition(Layout.GetTextPosition(i, MenuItems.Length))
                        .AutoSizeFont(true)
                        .SetTextAlignment(Layout.ItemTextAlignment)
                        .AllowWordWrap(false)
@@ -51,20 +50,30 @@ namespace Menus
                 };
             }
 
-            MenuItems = items;
-            Selection = MenuItems[0];
+            bool initialized = false;
+            foreach (var item in MenuItems)
+            {
+                if (Selection.Equals(item))
+                {
+                    initialized = true;
+                    break;
+                }
+            }
+            if (!initialized) Selection = MenuItems[0];
+
             Layout.ScrollMenuItems(Dir.Reset, this);
         }
 
         public void SetUpDescription()
         {
             Description = new Card(nameof(Description), null)
-                .AutoSizeTextContainer(true)
+                // .AutoSizeTextContainer(true)
                 .SetTMPRectPivot(Layout.DescTMPRectPivot)
                 .SetTMPPosition(Layout.GetDescPosition())
                 .AutoSizeFont(true)
+                .SetTMPSize(Cam.UIOrthoX * .75f, Cam.UIOrthoX * .5f)
                 .SetTextAlignment(Layout.DescTextAlignment)
-                .AllowWordWrap(false)
+                .AllowWordWrap(true)
                 .SetFontScale(.5f, .5f);
         }
     }

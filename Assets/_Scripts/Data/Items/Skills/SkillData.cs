@@ -101,7 +101,7 @@ namespace Data
             return data;
         }
 
-        public IPersistentData PersistentData { get; } = new SaveData("Skills.Data");
+        public IPersistentData PersistentData { get; } = new SaveData(nameof(SkillData));
     }
 
 }

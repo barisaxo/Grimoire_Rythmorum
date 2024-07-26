@@ -47,16 +47,16 @@ public class Angling_State : State
         BatterieFeedback = new();
         BeatMap = FishingForBeats.BeatsFromTimeSig(Specs.Time, Specs.NumberOfMeasures).MapBeats(Specs.Tempo);
 
-        Analyzer = new(BatterieFeedback.CreateCard, HandleHit, 5, BeatMap);
+        Analyzer = new(BatterieFeedback.CreateCard, HandleHit, BeatMap);
         Analyzer.SetUp();
 
         BatterieFeedback.UpdateLoop();
         MonoHelper.OnUpdate += SpaceBar;
 
-        //TODO get volume data
-        Audio.Ambience.VolumeLevelSetting = .8f;
-        Audio.BGMusic.VolumeLevelSetting = .8f;
-        Audio.SFX.VolumeLevelSetting = .8f;
+        Audio.Ambience.VolumeLevelSetting = DataManager.Volume.GetScaledLevel(new Data.SoundFX());
+        Audio.BeatFishing.VolumeLevelSetting = DataManager.Volume.GetScaledLevel(new Data.Chords());
+        Audio.SFX.VolumeLevelSetting = DataManager.Volume.GetScaledLevel(new Data.BatterieVolume());
+        Audio.Ambience.Loop = false;
         Audio.Ambience.PlayClip(Resources.Load<AudioClip>("Audio/Fishing/SoftWaterSoundsA"));
 
         base.PrepareState(callback);
@@ -95,7 +95,7 @@ public class Angling_State : State
 
     protected override void EngageState()
     {
-        Audio.BGMusic.PlayClip(Resources.Load<AudioClip>("Audio/Drums/Stax_Drums_90_1"));
+        Audio.BeatFishing.PlayClip(Resources.Load<AudioClip>("Audio/Drums/Stax_Drums_90_1"));
         MonoHelper.OnUpdate += Analyzer.Tick;
         MonoHelper.OnUpdate += ReelingAnimations;
         Synchro.TickEvent += Tick;
@@ -109,7 +109,7 @@ public class Angling_State : State
     protected override void DisengageState()
     {
         GameObject.Destroy(Parent.gameObject);
-        // Audio.BGMusic.Stop();
+        Audio.BeatFishing.Stop();
         // Audio.SFX.Stop();
         // Audio.Ambience.Stop();
         Sea.WorldMapScene.Io.ClearCell();
@@ -324,16 +324,15 @@ public class AnglingPractice_State : State
         BatterieFeedback = new();
         BeatMap = FishingForBeats.BeatsFromTimeSig(Specs.Time, Specs.NumberOfMeasures).MapBeats(Specs.Tempo);
 
-        Analyzer = new(BatterieFeedback.CreateCard, HandleHit, 5, BeatMap);
+        Analyzer = new(BatterieFeedback.CreateCard, HandleHit, BeatMap);
         Analyzer.SetUp();
 
         BatterieFeedback.UpdateLoop();
         MonoHelper.OnUpdate += SpaceBar;
 
-        //TODO get volume data
-        Audio.Ambience.VolumeLevelSetting = .8f;
-        Audio.BGMusic.VolumeLevelSetting = .8f;
-        Audio.SFX.VolumeLevelSetting = .8f;
+        Audio.Ambience.VolumeLevelSetting = DataManager.Volume.GetScaledLevel(new Data.SoundFX());
+        Audio.BeatFishing.VolumeLevelSetting = DataManager.Volume.GetScaledLevel(new Data.BatterieVolume());
+        Audio.SFX.VolumeLevelSetting = DataManager.Volume.GetScaledLevel(new Data.SoundFX());
         Audio.Ambience.PlayClip(Resources.Load<AudioClip>("Audio/Fishing/SoftWaterSoundsA"));
 
         base.PrepareState(callback);
@@ -372,7 +371,7 @@ public class AnglingPractice_State : State
 
     protected override void EngageState()
     {
-        Audio.BGMusic.PlayClip(Resources.Load<AudioClip>("Audio/Drums/Stax_Drums_90_1"));
+        Audio.BeatFishing.PlayClip(Resources.Load<AudioClip>("Audio/Drums/Stax_Drums_90_1"));
         MonoHelper.OnUpdate += Analyzer.Tick;
         MonoHelper.OnUpdate += ReelingAnimations;
         Synchro.TickEvent += Tick;
@@ -386,9 +385,8 @@ public class AnglingPractice_State : State
     protected override void DisengageState()
     {
         GameObject.Destroy(Parent.gameObject);
-        Audio.BGMusic.Stop();
-        Audio.SFX.Stop();
-        // Audio.Ambience.Stop();
+        Audio.Ambience.Stop();
+        Audio.BeatFishing.Stop();
 
         Synchro.Stop();
         MonoHelper.OnUpdate -= Analyzer.Tick;

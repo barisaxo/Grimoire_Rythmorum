@@ -29,7 +29,6 @@ namespace Menus
 
         public IInputHandler Input => new MenuInputHandler()
         {
-
             // North = new ButtonInput(IncreaseItem),
             // West = new ButtonInput(DecreaseItem),
 
@@ -52,14 +51,17 @@ namespace Menus
         }
 
         private void Back() { ConsequentState = SubsequentState; }
-        private void Confirm() { ConsequentState = new NewGramoPuzzle_State(SubsequentState, true); }
+        private void Confirm() { ConsequentState = new NewGramoPuzzle_State(new MenuState(this), (IGramophone)Selection.Item, true); }
 
         public State ConsequentState { get; set; }
-        public IMenuScene Scene { get; } = new PracticeMenuScene();
+        private IMenuScene _scene;
+        public IMenuScene Scene => _scene ??= new PracticeMenuScene();
     }
 
     public class PracticeMenuScene : IMenuScene
     {
+        public string Name { get; } = nameof(PracticeMenuScene);
+
         public void Initialize()
         {
             South.SetTextString("Back").SetImageColor(Color.white);
@@ -69,11 +71,27 @@ namespace Menus
             ((IMenuScene)this).SetCardPos2(West);
             ((IMenuScene)this).SetCardPos3(East);
         }
+        public void ShowButtons()
+        {
+            East.SetTextString("Confirm").SetImageColor(Color.white);
+            West.SetImageColor(Color.white).SetTextString("Tutorial");
+        }
+        public void HideButtons()
+        {
+            East.SetTextString("").SetImageColor(Color.clear);
+            West.SetImageColor(Color.clear).SetTextString("");
+        }
 
         public void SelfDestruct()
         {
             Hud?.SelfDestruct();
-            Resources.UnloadUnusedAssets();
+            Hud = null;
+            South = null;
+            West = null;
+            East = null;
+            North = null;
+            L1 = null;
+            R1 = null;
         }
 
         public Transform TF => null;
@@ -83,5 +101,7 @@ namespace Menus
         public Card East { get; set; }
         public Card South { get; set; }
         public Card West { get; set; }
+        public Card L1 { get; set; }
+        public Card R1 { get; set; }
     }
 }

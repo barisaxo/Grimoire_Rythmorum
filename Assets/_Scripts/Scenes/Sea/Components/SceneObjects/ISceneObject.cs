@@ -59,8 +59,6 @@ namespace Sea
                 int lost = Manager.Player.GetLevel(new FishLost());
                 int total = caught + lost;
                 if (total < 10) return new SailFish();
-                float percent = (float)((float)caught / (float)total);
-                float rand = Random.value;
 
                 List<IItem> enums = new() { new SailFish() };
                 if (caught > 9 || total > 19) enums.Add(new Carp());
@@ -68,7 +66,7 @@ namespace Sea
                 if (caught > 69 || total > 99) enums.Add(new Sturgeon());
                 if (caught > 99 || total > 149) enums.Add(new Shark());
 
-                int weightedRand = Helpers.WeightedRandomInt(rand, percent, enums.Count);
+                int weightedRand = Helpers.WeightedRandomInt(enums.Count);
 
                 // Debug.Log(enums.Count + " " + rand + " " + percent + " " + weightedRand);
 
@@ -77,9 +75,9 @@ namespace Sea
         }
     }
 
-    public class StarChartDifficultySetter : IDifficulty
+    public class GramophoneDifficultySetter : IDifficulty
     {
-        public StarChartDifficultySetter(Manager manager)
+        public GramophoneDifficultySetter(Manager manager)
         {
             Manager = manager;
         }
@@ -89,51 +87,19 @@ namespace Sea
         {
             get
             {
-                int theorySolved = Manager.Player.GetLevel(new TheorySolved());
-                int theoryFailed = Manager.Player.GetLevel(new TheoryFailed());
-                int totalTheory = theorySolved + theoryFailed;
-                if (totalTheory < 6) return new NotesT();
+                int gramoSolved = Manager.Player.GetLevel(new GramoSolved());
+                int gramoFailed = Manager.Player.GetLevel(new GramoFailed());
+                int totalGramo = gramoSolved + gramoFailed;
+                if (totalGramo < 6) return new Gramo1();
 
-                int auralSolved = Manager.Player.GetLevel(new AuralSolved());
-                int auralFailed = Manager.Player.GetLevel(new AuralFailed());
-                int totalAural = auralSolved + auralFailed;
-                if (totalAural < 6) return new NotesA();
+                List<IItem> Puzzles = new() { new Gramo1() };
 
-                bool aOrT = Random.value < .666f;
-                float percent = aOrT ?
-                    (float)((float)theorySolved / (float)totalTheory) :
-                    (float)((float)auralSolved / (float)totalAural);
+                if (gramoSolved > 5) Puzzles.Add(new Gramo2());
+                if (gramoSolved > 10) Puzzles.Add(new Gramo3());
+                if (gramoSolved > 15) Puzzles.Add(new Gramo4());
+                if (gramoSolved > 20) Puzzles.Add(new Gramo5());
 
-                List<IItem> Puzzles = new() { aOrT ? new NotesT() : new NotesA() };
-                if (aOrT)
-                {
-                    if (theorySolved > 5) Puzzles.Add(new StepsT());
-                    if (theorySolved > 10) Puzzles.Add(new ScalesT());
-                    if (theorySolved > 15) Puzzles.Add(new IntervalsT());
-                    if (theorySolved > 20) Puzzles.Add(new TriadsT());
-                    if (theorySolved > 25) Puzzles.Add(new InversionsT());
-                    if (theorySolved > 30) Puzzles.Add(new InvertedTriadsT());
-                    if (theorySolved > 35) Puzzles.Add(new SeventhChordsT());
-                    if (theorySolved > 40) Puzzles.Add(new ModesT());
-                    if (theorySolved > 45) Puzzles.Add(new Inverted7thChordsT());
-                }
-                else
-                {
-                    if (auralSolved > 5) Puzzles.Add(new StepsA());
-                    if (auralSolved > 10) Puzzles.Add(new ScalesA());
-                    if (auralSolved > 15) Puzzles.Add(new IntervalsA());
-                    if (auralSolved > 20) Puzzles.Add(new TriadsA());
-                    if (auralSolved > 25) Puzzles.Add(new InversionsA());
-                    if (auralSolved > 30) Puzzles.Add(new InvertedTriadsA());
-                    if (auralSolved > 35) Puzzles.Add(new SeventhChordsA());
-                    if (auralSolved > 40) Puzzles.Add(new ModesA());
-                    if (auralSolved > 45) Puzzles.Add(new Inverted7thChordsA());
-                }
-                float rand = Random.value;
-
-                int weightedRand = Helpers.WeightedRandomInt(rand, percent, Puzzles.Count);
-
-                // Debug.Log(Puzzles.Count + " " + rand + " " + percent + " " + weightedRand);
+                int weightedRand = Helpers.WeightedRandomInt(Puzzles.Count);
 
                 return Puzzles[weightedRand];
             }

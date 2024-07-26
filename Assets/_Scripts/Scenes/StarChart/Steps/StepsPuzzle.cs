@@ -3,7 +3,9 @@ using MusicTheory.Arithmetic;
 using MusicTheory.Keys;
 using MusicTheory.Steps;
 using UnityEngine;
+using System.Collections.Generic;
 
+[System.Serializable]
 public class StepsPuzzle : IPuzzle
 {
     public int NumOfNotes => 2;
@@ -15,7 +17,6 @@ public class StepsPuzzle : IPuzzle
     public bool PlayOnEngage => false;
     public bool AllowPlayQuestion => true;
 
-    public System.Type GamutType => typeof(Step);
     public IMusicalElement Gamut { get; private set; }
     public Step Step => Gamut is Step step ? step : throw new System.ArgumentNullException();
 
@@ -26,16 +27,10 @@ public class StepsPuzzle : IPuzzle
 
     private readonly string _question;
     public string Question => _question;
-    public string Clue => "Half = +1, Whole = +2, Augmented = +3";
+    public string Clue => "Half = +1, Whole = +2, Skip = +3";
     public StepsPuzzle()
     {
-        Gamut = Random.Range(0, 3) switch
-        {
-            0 => new Half(),
-            1 => new Whole(),
-            2 => new Skip(),
-            _ => throw new System.ArgumentOutOfRangeException()
-        };
+        Gamut = WeightedRandomStep();
 
         _notes = new KeyboardNoteName[NumOfNotes];
 
@@ -47,7 +42,22 @@ public class StepsPuzzle : IPuzzle
 
         Notes[1] += Notes[1] < Notes[0] ? 12 : 0;
 
-        _question = Gamut.Name + " " + nameof(MusicTheory.Steps.Step);
+        _question = Gamut.Name + (Gamut.Name == nameof(Skip) ? "" : " " + nameof(MusicTheory.Steps.Step));
+    }
+
+    private Step WeightedRandomStep()
+    {
+        int solved = Data.Manager.Io.Puzzles.GetLevel(this);
+
+        List<int> ints = new() { 1 };
+        if (solved > 5) ints.Add(2);
+
+        return ints[Random.Range(0, ints.Count)] switch
+        {
+            1 => Random.value > .5f ? new Half() : new Whole(),
+            2 => Random.value < .333f ? new Half() : Random.value < .5f ? new Whole() : new Skip(),
+            _ => throw new System.Exception("?"),
+        };
     }
 
 }
