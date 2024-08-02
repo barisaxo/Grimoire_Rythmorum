@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Data
+namespace Datum
 {
     public class StarChartData : IData
     {

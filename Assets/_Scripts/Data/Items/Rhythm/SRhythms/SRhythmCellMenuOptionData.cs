@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-namespace Data.SRhythm
+namespace Datum.SRhythm
 {
     public class SRhythmCellMenuOptionData : IData
     {

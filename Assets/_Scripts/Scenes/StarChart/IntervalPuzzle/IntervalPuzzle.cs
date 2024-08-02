@@ -48,7 +48,7 @@ public class IntervalPuzzle : IPuzzle
 
     private Interval WeightedRandomInterval()
     {
-        int solved = Data.Manager.Io.Puzzles.GetLevel(this);
+        int solved = Datum.Manager.Io.Puzzles.GetLevel(this);
 
         List<Interval> scaleList = new() { new mi2(), new M2() };
         if (solved > 1) { scaleList.Add(new mi3()); scaleList.Add(new M3()); }

@@ -47,7 +47,7 @@ public class StepsPuzzle : IPuzzle
 
     private Step WeightedRandomStep()
     {
-        int solved = Data.Manager.Io.Puzzles.GetLevel(this);
+        int solved = Datum.Manager.Io.Puzzles.GetLevel(this);
 
         List<int> ints = new() { 1 };
         if (solved > 5) ints.Add(2);

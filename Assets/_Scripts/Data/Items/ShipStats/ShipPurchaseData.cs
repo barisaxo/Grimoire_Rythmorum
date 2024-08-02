@@ -1,19 +1,19 @@
 using System;
 using System.Collections.Generic;
 
-namespace Data
+namespace Datum
 {
     [Serializable]
     public class ShipPurchaseData : IData
     {
-        private Dictionary<IShipPurchase, int> _datum;
-        private Dictionary<IShipPurchase, int> Datum => _datum ??= SetUpDatum();
+        private Dictionary<IShipPurchase, bool> _datum;
+        private Dictionary<IShipPurchase, bool> Datum => _datum ??= SetUpDatum();
 
-        private Dictionary<IShipPurchase, int> SetUpDatum()
+        private Dictionary<IShipPurchase, bool> SetUpDatum()
         {
-            Dictionary<IShipPurchase, int> datum = new();
+            Dictionary<IShipPurchase, bool> datum = new();
             for (int i = 0; i < Items.Length; i++)
-                datum.TryAdd((IShipPurchase)Items[i], 0);
+                datum.TryAdd((IShipPurchase)Items[i], false);
 
             return datum;
         }
@@ -53,14 +53,14 @@ namespace Data
         {
             if (item is not IShipPurchase)
                 throw new Exception(item.GetType().ToString());
-            return Datum[(IShipPurchase)item];
+            return Datum[(IShipPurchase)item] ? 1 : 0;
         }
 
         public void AdjustLevel(IItem item, int i)
         {
             if (item is not IShipPurchase || i < 0)
                 throw new Exception(item.GetType().ToString() + " " + i);
-            Datum[(IShipPurchase)item] += i;
+            Datum[(IShipPurchase)item] = i > 0;
             PersistentData.Save(this);
         }
 
@@ -68,7 +68,7 @@ namespace Data
         {
             if (item is not IShipPurchase)
                 throw new Exception(item.GetType().ToString());
-            Datum[(IShipPurchase)item] = level;
+            Datum[(IShipPurchase)item] = level > 0;
             PersistentData.Save(this);
         }
 
@@ -76,7 +76,7 @@ namespace Data
         {
             if (item is not IShipPurchase)
                 throw new Exception(item.GetType().ToString());
-            Datum[(IShipPurchase)item] = value;
+            Datum[(IShipPurchase)item] = value > 0;
         }
 
         public bool InventoryIsFull(int space) => false;
@@ -107,10 +107,16 @@ namespace Data
         ShipPurchaseEnum Enum { get; }
         int IItem.ID => Enum.Id;
         string IItem.Name => Enum.Name;
-        string IItem.Description => Enum.Description;
+        string IItem.Description => Enum.Cost.ToString();
+        int Cost => Enum.Cost;
     }
 
     [Serializable] public struct SloopPurchase : IShipPurchase { public readonly ShipPurchaseEnum Enum => ShipPurchaseEnum.SloopPurchase; }
+    [Serializable] public struct CutterPurchase : IShipPurchase { public readonly ShipPurchaseEnum Enum => ShipPurchaseEnum.CutterPurchase; }
+    [Serializable] public struct SchoonerPurchase : IShipPurchase { public readonly ShipPurchaseEnum Enum => ShipPurchaseEnum.SchoonerPurchase; }
+    [Serializable] public struct BrigPurchase : IShipPurchase { public readonly ShipPurchaseEnum Enum => ShipPurchaseEnum.BrigPurchase; }
+    [Serializable] public struct FrigatePurchase : IShipPurchase { public readonly ShipPurchaseEnum Enum => ShipPurchaseEnum.FrigatePurchase; }
+    [Serializable] public struct BarquePurchase : IShipPurchase { public readonly ShipPurchaseEnum Enum => ShipPurchaseEnum.BarquePurchase; }
 
     // [Serializable] public struct SSSS : IShipPurchase { public readonly ShipPurchaseEnum Enum => ShipPurchaseEnum.SSSS; }
     // [Serializable] public struct Q : IShipPurchase { public readonly ShipPurchaseEnum Enum => ShipPurchaseEnum.Q; }
@@ -126,32 +132,40 @@ namespace Data
     {
         public ShipPurchaseEnum() : base(0, null) { }
         public ShipPurchaseEnum(int id, string name) : base(id, name) { }
+        public ShipPurchaseEnum(int id, string name, int cost) : base(id, name) { Cost = cost; }
 
-        public readonly string Description;
-        public static ShipPurchaseEnum SloopPurchase = new(0, "");
-        // public static ShipPurchaseEnum Q = new(1, "Q");
-        // public static ShipPurchaseEnum EE = new(2, "EE");
-        // public static ShipPurchaseEnum ESS = new(3, "ESS");
-        // public static ShipPurchaseEnum SSE = new(4, "SSE");
-        // public static ShipPurchaseEnum DES = new(5, "E.S");
-        // public static ShipPurchaseEnum SDE = new(6, "SE.");
-        // public static ShipPurchaseEnum SES = new(7, "SES");
+        public readonly int Cost;
+
+        public static ShipPurchaseEnum SloopPurchase = new(0, nameof(SloopPurchase), 250);
+        public static ShipPurchaseEnum CutterPurchase = new(1, nameof(CutterPurchase), 5000);
+        public static ShipPurchaseEnum SchoonerPurchase = new(3, nameof(SchoonerPurchase), 10000);
+        public static ShipPurchaseEnum BrigPurchase = new(4, nameof(BrigPurchase), 20000);
+        public static ShipPurchaseEnum FrigatePurchase = new(5, nameof(FrigatePurchase), 50000);
+        public static ShipPurchaseEnum BarquePurchase = new(6, nameof(BarquePurchase), 100000);
 
         internal static IItem ToItem(ShipPurchaseEnum @enum)
         {
             return @enum switch
             {
                 _ when @enum == SloopPurchase => new SloopPurchase(),
-                // _ when @enum == SSSS => new SSSS(),
-                // _ when @enum == Q => new Q(),
-                // _ when @enum == EE => new EE(),
-                // _ when @enum == ESS => new ESS(),
-                // _ when @enum == SSE => new SSE(),
-                // _ when @enum == DES => new DES(),
-                // _ when @enum == SDE => new SDE(),
-                // _ when @enum == SES => new SES(),
+                _ when @enum == CutterPurchase => new CutterPurchase(),
+                _ when @enum == SchoonerPurchase => new SchoonerPurchase(),
+                _ when @enum == BrigPurchase => new BrigPurchase(),
+                _ when @enum == FrigatePurchase => new FrigatePurchase(),
+                _ when @enum == BarquePurchase => new BarquePurchase(),
                 _ => throw new ArgumentOutOfRangeException(@enum.Name)
             };
         }
     }
 }
+/*
+CutterPurchase  
+SchoonerPurchase
+BrigPurchase    
+FrigatePurchase 
+BarquePurchase  
+
+
+
+
+*/

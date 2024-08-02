@@ -5,12 +5,12 @@ using System.Collections;
 
 public class GramoScene
 {
-    public GramoScene(Data.IGramophone gramo)
+    public GramoScene(Datum.IGramophone gramo)
     {
         _ = Light;
 
         MuscopaSettings = NewSettings((CadenceDifficulty)gramo.ID, Genre.Stax);
-        MuscopaAudio = new(Data.Manager.Io.Volume);
+        MuscopaAudio = new(Datum.Manager.Io.Volume);
         GetNewSettings(null).StartCoroutine();
 
         AnswerSheet = MuscopaSettings.Cadence.DiatonicToHarmonicFunctionCadence();

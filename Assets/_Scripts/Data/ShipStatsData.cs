@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using ShipStats;
 
-namespace Data
+namespace Datum
 {
     [System.Serializable]
     public class ShipStatsData : IData
@@ -16,16 +16,17 @@ namespace Data
 
         Dictionary<IHull, ShipStats.ShipStats> SetUpShip()
         {
-            Dictionary<IHull, ShipStats.ShipStats> ship = new();
+            Dictionary<IHull, ShipStats.ShipStats> ships = new();
 
-            ship.TryAdd(new Sloop(), new ShipStats.ShipStats(new HullStats(new Sloop(), new Pine()), new CannonStats(new Mynion(), new Bronze()), new RiggingStats(new Hemp())));
-            ship.TryAdd(new Cutter(), new ShipStats.ShipStats(new HullStats(new Cutter(), new Pine()), new CannonStats(new Mynion(), new Bronze()), new RiggingStats(new Hemp())));
-            ship.TryAdd(new Schooner(), new ShipStats.ShipStats(new HullStats(new Schooner(), new Pine()), new CannonStats(new Mynion(), new Bronze()), new RiggingStats(new Hemp())));
-            ship.TryAdd(new Brig(), new ShipStats.ShipStats(new HullStats(new Brig(), new Pine()), new CannonStats(new Mynion(), new Bronze()), new RiggingStats(new Hemp())));
-            ship.TryAdd(new Frigate(), new ShipStats.ShipStats(new HullStats(new Frigate(), new Pine()), new CannonStats(new Mynion(), new Bronze()), new RiggingStats(new Hemp())));
-            ship.TryAdd(new Barque(), new ShipStats.ShipStats(new HullStats(new Barque(), new Pine()), new CannonStats(new Mynion(), new Bronze()), new RiggingStats(new Hemp())));
+            ships.TryAdd(new CatBoat(), new ShipStats.ShipStats(new HullStats(new CatBoat(), new Pine()), new CannonStats(new Mynion(), new Bronze()), new RiggingStats(new Hemp())));
+            ships.TryAdd(new Sloop(), new ShipStats.ShipStats(new HullStats(new Sloop(), new Pine()), new CannonStats(new Mynion(), new Bronze()), new RiggingStats(new Hemp())));
+            ships.TryAdd(new Cutter(), new ShipStats.ShipStats(new HullStats(new Cutter(), new Pine()), new CannonStats(new Mynion(), new Bronze()), new RiggingStats(new Hemp())));
+            ships.TryAdd(new Schooner(), new ShipStats.ShipStats(new HullStats(new Schooner(), new Pine()), new CannonStats(new Mynion(), new Bronze()), new RiggingStats(new Hemp())));
+            ships.TryAdd(new Brig(), new ShipStats.ShipStats(new HullStats(new Brig(), new Pine()), new CannonStats(new Mynion(), new Bronze()), new RiggingStats(new Hemp())));
+            ships.TryAdd(new Frigate(), new ShipStats.ShipStats(new HullStats(new Frigate(), new Pine()), new CannonStats(new Mynion(), new Bronze()), new RiggingStats(new Hemp())));
+            ships.TryAdd(new Barque(), new ShipStats.ShipStats(new HullStats(new Barque(), new Pine()), new CannonStats(new Mynion(), new Bronze()), new RiggingStats(new Hemp())));
 
-            return ship;
+            return ships;
         }
 
         public string GetDisplayLevel(IItem item)

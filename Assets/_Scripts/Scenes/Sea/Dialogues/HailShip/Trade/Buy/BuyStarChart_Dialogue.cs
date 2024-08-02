@@ -1,5 +1,5 @@
 using Dialog;
-using Data;
+using Datum;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -14,16 +14,16 @@ internal class BuyStarChart_Dialogue : Dialogue
     }
 
     readonly Dialogue ReturnTo;
-    readonly Data.Standing Standing;
+    readonly Datum.Standing Standing;
 
-    int StandingMod => Data.Manager.Io.Standings.GetLevel(Standing);
-    int Coins => Data.Manager.Io.Inventory.GetLevel(new Data.Gold());
+    int StandingMod => Datum.Manager.Io.Standings.GetLevel(Standing);
+    int Coins => Datum.Manager.Io.Inventory.GetLevel(new Datum.Gold());
     float StandingsModifier => 1f + (float)(1f - (float)((float)StandingMod) / 9f);
 
 
-    int starChartCapacity => Data.Manager.Io.ActiveShip.GetLevel(new Data.StarChartStorage());
+    int starChartCapacity => Datum.Manager.Io.ActiveShip.GetLevel(new Datum.StarChartStorage());
 
-    float availableStarChartSpace => 1f - ((float)Data.Manager.Io.Inventory.GetLevel(new Data.StarChart()) / starChartCapacity);
+    float availableStarChartSpace => 1f - ((float)Datum.Manager.Io.Inventory.GetLevel(new Datum.StarChart()) / starChartCapacity);
 
 
     int largeGold => (int)(largeStarChart * 700f * StandingsModifier);
@@ -91,18 +91,18 @@ internal class BuyStarChart_Dialogue : Dialogue
 
     void BuyStarChartsSmall()
     {
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.StarChart(), smallStarChart);
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), -smallGold);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.StarChart(), smallStarChart);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Gold(), -smallGold);
     }
     void BuyStarChartsMedium()
     {
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.StarChart(), medStarChart);
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), -medGold);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.StarChart(), medStarChart);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Gold(), -medGold);
     }
     void BuyStarChartsLarge()
     {
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.StarChart(), largeStarChart);
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), -largeGold);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.StarChart(), largeStarChart);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Gold(), -largeGold);
     }
 
 }

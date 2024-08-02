@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Dialog;
-using Data;
+using Datum;
 
 public class OverrideQuest_Dialogue : Dialogue
 {

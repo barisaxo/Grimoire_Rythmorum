@@ -78,10 +78,16 @@ public static class SeaHUDSystems
         ;
     }
 
-    public static void UpdateRations(this HUD hud, int rations)
+    public static void UpdateRations(this HUD hud, int rations, bool isCatboat)
     {
+        if (isCatboat)
+        {
+            hud.RationsText.SetTextString(string.Empty);
+            return;
+        }
+
         hud.RationsText.SetTextString("Rations: " + rations)
-            .SetTextColor((float)((float)rations / (float)Data.Manager.Io.ActiveShip.GetLevel(new Data.RationStorage())) switch
+            .SetTextColor((float)((float)rations / (float)Datum.Manager.Io.ActiveShip.GetLevel(new Datum.RationStorage())) switch
             {
                 < .2f => Color.red,
                 < .35f => new Color(1, .5f, 0),

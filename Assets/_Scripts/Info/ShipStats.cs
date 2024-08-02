@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Data;
+using Datum;
 
 namespace ShipStats
 {
     [System.Serializable]
     public class ShipStats
     {
+        public Sea.IShipPrefab ShipPrefab;
         public IHullStats HullStats;
         public ICannonStats CannonStats;
         public IRiggingStats RiggingStats;
@@ -19,11 +20,23 @@ namespace ShipStats
 
         public ShipStats(IHullStats hull, ICannonStats cannon, IRiggingStats rigging)
         {
+            ShipPrefab = hull.Hull switch
+            {
+                CatBoat => Assets._catBoat,
+                Sloop => Assets._sloop,
+                Cutter => Assets._cutter,
+                Schooner => Assets._schooner,
+                Brig => Assets._brig,
+                Frigate => Assets._frigate,
+                Barque => Assets._barque,
+                _ => throw new System.NotImplementedException(hull.Hull.Enum.Name)
+            };
             HullStats = hull;
             CannonStats = cannon;
             RiggingStats = rigging;
             NumOfCannons = hull.Hull switch
             {
+                CatBoat => 0,
                 Sloop or Cutter => 16,
                 Schooner or Brig => 32,
                 Frigate or Barque => 64,

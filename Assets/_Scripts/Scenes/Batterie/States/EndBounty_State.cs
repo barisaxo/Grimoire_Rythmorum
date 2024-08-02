@@ -40,7 +40,7 @@ public class EndBounty_State : State
         rations = (int)(1 + ((level + 10f) * UnityEngine.Random.Range(.5f, 1) * (float)((100 - Result()) * .01f)));
         patterns = (int)((Scene.NMEShipStats.HullStrength + Scene.NMEShipStats.VolleyDamage) *
                                (Scene.Pack.HasCritThisBattery ? 1.45f : 1f)
-                               * Data.Manager.Io.Skill.GetBonusRatio(new Data.Apophenia()));
+                               * Datum.Manager.Io.Skill.GetBonusRatio(new Datum.Apophenia()));
 
         // UnityEngine.GameObject.Destroy(Pack.NME);
         // UnityEngine.GameObject.Destroy(Pack.Ship);
@@ -71,10 +71,10 @@ public class EndBounty_State : State
             case BatterieResultType.NMESurrender:
                 DataManager.Standings.AdjustLevel(Quest.Standing, 1);
 
-                Data.Manager.Io.Inventory.AdjustLevel(new Data.Material(), mats /= 2);
-                Data.Manager.Io.Inventory.AdjustLevel(new Data.Ration(), rations /= 2);
-                Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), coins /= 2);
-                DataManager.Player.AdjustLevel(new Data.PatternsFound(), patterns);
+                Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Material(), mats /= 2);
+                Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Ration(), rations /= 2);
+                Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Gold(), coins /= 2);
+                DataManager.Player.AdjustLevel(new Datum.PatternsFound(), patterns);
 
                 SetState(
                   new MoveNPCOffScreen_State(
@@ -97,9 +97,9 @@ public class EndBounty_State : State
             case BatterieResultType.Surrender:
                 DataManager.Standings.AdjustLevel(Quest.Standing, -1);
 
-                Data.Manager.Io.Inventory.AdjustLevel(new Data.Material(), mats /= -2);
-                Data.Manager.Io.Inventory.AdjustLevel(new Data.Ration(), rations /= -2);
-                Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), coins /= -2);
+                Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Material(), mats /= -2);
+                Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Ration(), rations /= -2);
+                Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Gold(), coins /= -2);
 
                 SetState(
                   new MoveNPCOffScreen_State(
@@ -198,11 +198,11 @@ public class EndBounty_State : State
             case BatterieResultType.Won:
                 DataManager.Standings.AdjustLevel(Quest.Standing, 1);
 
-                Data.Manager.Io.Inventory.AdjustLevel(new Data.Material(), mats);
-                Data.Manager.Io.Inventory.AdjustLevel(new Data.Ration(), rations);
-                Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), coins);
+                Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Material(), mats);
+                Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Ration(), rations);
+                Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Gold(), coins);
 
-                DataManager.Player.AdjustLevel(new Data.PatternsFound(), patterns);
+                DataManager.Player.AdjustLevel(new Datum.PatternsFound(), patterns);
                 SetState(
                     new MoveNPCOffScreen_State(
                         new CameraPan_State(

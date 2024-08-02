@@ -20,9 +20,9 @@ public class CoveScene_State : State
     protected override void EngageState()
     {
         CoveScene.Io.RockTheBoat.Rocking = true;
-        Data.Manager.Io.Lighthouse.Reset();
+        Datum.Manager.Io.Lighthouse.Reset();
 
-        DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Data.Sloop());
+        DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Datum.Sloop());
 
         if (!Audio.BGMusic.AudioSources[0].isPlaying)
             Audio.BGMusic.Resume();
@@ -30,11 +30,11 @@ public class CoveScene_State : State
 
     protected override void DisengageState()
     {
-        Data.Manager.Io.ActiveShip.SetLevel(new Data.MaxHitPoints(),
-            Data.Manager.Io.ActiveShip.ShipStats.HullStrength);
+        Datum.Manager.Io.ActiveShip.SetLevel(new Datum.MaxHitPoints(),
+            Datum.Manager.Io.ActiveShip.ShipStats.HullStrength);
 
-        Data.Manager.Io.ActiveShip.SetLevel(new Data.CurrentHitPoints(),
-            Data.Manager.Io.ActiveShip.ShipStats.HullStrength);
+        Datum.Manager.Io.ActiveShip.SetLevel(new Datum.CurrentHitPoints(),
+            Datum.Manager.Io.ActiveShip.ShipStats.HullStrength);
 
         Cam.StoredCamRot = Cam.Io.Camera.transform.rotation.eulerAngles;
         Cam.StoredCamPos = Cam.Io.Camera.transform.position;
@@ -69,121 +69,182 @@ public class CoveScene_State : State
     {
         Cove.Player.Bark.SetTextString("");
         Cove.HUD.HideTexts();
-        if (NearObject(Cove.Sloop.transform))
+
+        if (NearObject(Cove.Catboat.transform))
         {
-            if (!ShipUnlocked(new Data.Sloop())) { Cove.Player.Bark.SetTextString("Complete Quarter Note Batterie to unlock"); return; }
+            if (DataManager.BeatFishingPracticeData.GetLevel(new Datum.BeatFishing.QHQ()) == 0)
+            {
+                Cove.Player.Bark.SetTextString("Complete Beat Fishing to unlock");
+                return;
+            }
+            Cove.HUD.East.SetImageColor(Color.white).SetTextString("Set Sail");
+        }
+
+        else if (NearObject(Cove.Sloop.transform))
+        {
+            if (!ShipUnlocked(new Datum.Sloop()))
+            {
+                Cove.Player.Bark.SetTextString("Complete Quarter Note Batterie to unlock");
+                return;
+            }
+
+            if (DataManager.ShipPurchaseData.GetLevel(new Datum.SloopPurchase()) == 0)
+            {
+                Cove.HUD.North.SetImageColor(Color.white).SetTextString("Purchase Sloop: " + Datum.ShipPurchaseEnum.SloopPurchase.Cost + " patterns\n[" +
+                    DataManager.Player.GetLevel(new Datum.PatternsAvailable()) + " patterns available]");
+                return;
+            }
             Cove.HUD.North.SetImageColor(Color.white).SetTextString("View Upgrades");
             Cove.HUD.East.SetImageColor(Color.white).SetTextString("Set Sail");
-            return;
         }
         else if (NearObject(Cove.Cutter.transform))
         {
-            if (!ShipUnlocked(new Data.Cutter())) { Cove.Player.Bark.SetTextString("(locked)"); return; }
+            if (!ShipUnlocked(new Datum.Cutter()))
+            {
+                Cove.Player.Bark.SetTextString("Complete Quarter Note Batterie to unlock");
+                return;
+            }
+
+            if (DataManager.ShipPurchaseData.GetLevel(new Datum.CutterPurchase()) == 0)
+            {
+                Cove.HUD.North.SetImageColor(Color.white).SetTextString("Purchase Cutter: " + Datum.ShipPurchaseEnum.CutterPurchase.Cost + " patterns\n[" +
+                    DataManager.Player.GetLevel(new Datum.PatternsAvailable()) + " patterns available]");
+                return;
+            }
             Cove.HUD.North.SetImageColor(Color.white).SetTextString("View Upgrades");
             Cove.HUD.East.SetImageColor(Color.white).SetTextString("Set Sail");
-            return;
         }
         else if (NearObject(Cove.Schooner.transform))
         {
-            if (!ShipUnlocked(new Data.Schooner())) { Cove.Player.Bark.SetTextString("(locked)"); return; }
+            if (!ShipUnlocked(new Datum.Schooner()))
+            {
+                Cove.Player.Bark.SetTextString("Complete Eighth Note Batterie to unlock");
+                return;
+            }
+
+            if (DataManager.ShipPurchaseData.GetLevel(new Datum.SchoonerPurchase()) == 0)
+            {
+                Cove.HUD.North.SetImageColor(Color.white).SetTextString("Purchase Schooner: " + Datum.ShipPurchaseEnum.SchoonerPurchase.Cost + " patterns\n[" +
+                    DataManager.Player.GetLevel(new Datum.PatternsAvailable()) + " patterns available]");
+                return;
+            }
+
             Cove.HUD.North.SetImageColor(Color.white).SetTextString("View Upgrades");
             Cove.HUD.East.SetImageColor(Color.white).SetTextString("Set Sail");
-            return;
         }
         else if (NearObject(Cove.Brig.transform))
         {
-            if (!ShipUnlocked(new Data.Brig())) { Cove.Player.Bark.SetTextString("(locked)"); return; }
+            if (!ShipUnlocked(new Datum.Brig()))
+            {
+                Cove.Player.Bark.SetTextString("Complete Eighth Note Batterie to unlock");
+                return;
+            }
+
+            if (DataManager.ShipPurchaseData.GetLevel(new Datum.BrigPurchase()) == 0)
+            {
+                Cove.HUD.North.SetImageColor(Color.white).SetTextString("Purchase Brig: " + Datum.ShipPurchaseEnum.BrigPurchase.Cost + " patterns\n[" +
+                    DataManager.Player.GetLevel(new Datum.PatternsAvailable()) + " patterns available]");
+                return;
+            }
             Cove.HUD.North.SetImageColor(Color.white).SetTextString("View Upgrades");
             Cove.HUD.East.SetImageColor(Color.white).SetTextString("Set Sail");
-            return;
         }
         else if (NearObject(Cove.Frigate.transform))
         {
-            if (!ShipUnlocked(new Data.Frigate())) { Cove.Player.Bark.SetTextString("(locked)"); return; }
+            if (!ShipUnlocked(new Datum.Frigate()))
+            {
+                Cove.Player.Bark.SetTextString("Complete Sixteenth Note Batterie to unlock");
+                return;
+            }
+
+            if (DataManager.ShipPurchaseData.GetLevel(new Datum.FrigatePurchase()) == 0)
+            {
+                Cove.HUD.North.SetImageColor(Color.white).SetTextString("Purchase Frigate: " + Datum.ShipPurchaseEnum.FrigatePurchase.Cost + " patterns\n[" +
+                    DataManager.Player.GetLevel(new Datum.PatternsAvailable()) + " patterns available]");
+                return;
+            }
             Cove.HUD.North.SetImageColor(Color.white).SetTextString("View Upgrades");
             Cove.HUD.East.SetImageColor(Color.white).SetTextString("Set Sail");
-            return;
         }
         else if (NearObject(Cove.Barque.transform))
         {
-            if (!ShipUnlocked(new Data.Barque())) { Cove.Player.Bark.SetTextString("(locked)"); return; }
+            if (!ShipUnlocked(new Datum.Barque()))
+            {
+                Cove.Player.Bark.SetTextString("Complete Sixteenth Note Batterie to unlock");
+                return;
+            }
+
+            if (DataManager.ShipPurchaseData.GetLevel(new Datum.BarquePurchase()) == 0)
+            {
+                Cove.HUD.North.SetImageColor(Color.white).SetTextString("Purchase Barque: " + Datum.ShipPurchaseEnum.BarquePurchase.Cost + " patterns\n[" +
+                    DataManager.Player.GetLevel(new Datum.PatternsAvailable()) + " patterns available]");
+                return;
+            }
             Cove.HUD.North.SetImageColor(Color.white).SetTextString("View Upgrades");
             Cove.HUD.East.SetImageColor(Color.white).SetTextString("Set Sail");
-            return;
         }
         else if (NearObject(Cove.SkillSheet.transform))
         {
             Cove.HUD.North.SetImageColor(Color.white).SetTextString("View Skills");
-            return;
         }
         else if (NearObject(Cove.Gramo.transform))
         {
             Cove.HUD.North.SetImageColor(Color.white).SetTextString("Diatonic Cadencing");
-            return;
         }
         else if (NearObject(Cove.Fish.transform))
         {
-            Cove.HUD.North.SetImageColor(Color.white).SetTextString("Beat Fishing");
-            return;
+            if (DataManager.QRhythmCellData.GetLevel(new Datum.QRhythm.QHQ()) > 0)
+                Cove.HUD.North.SetImageColor(Color.white).SetTextString("Beat Fishing");
+            else Cove.HUD.North.SetImageColor(Color.white).SetTextString("Complete Quarter Note Rhythm Cells to unlock");
         }
         else if (NearObject(Cove.Bottle.transform))
         {
             Cove.HUD.North.SetImageColor(Color.white).SetTextString("Celestial Navigation");
-            return;
         }
         else if (NearObject(Cove.Cannon.transform))
         {
-            Cove.HUD.North.SetImageColor(Color.white).SetTextString("Batterie");
-            return;
+            Cove.HUD.North.SetImageColor(Color.white).SetTextString("Rhythm Cells &\nBatterie Practice");
         }
     }
 
     protected override void EastPressed()
     {
         Cove.HUD.HideTexts();
+        if (NearObject(Cove.Catboat.transform))
+        {
+            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Datum.CatBoat());
+            SetState(new CoveToSeaTransition_State()); return;
+        }
         if (NearObject(Cove.Sloop.transform))
         {
-            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Data.Sloop());
+            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Datum.Sloop());
             SetState(new CoveToSeaTransition_State()); return;
         }
-        else if (NearObject(Cove.Cutter.transform) && ShipUnlocked(new Data.Cutter()))
+        else if (NearObject(Cove.Cutter.transform) && ShipUnlocked(new Datum.Cutter()))
         {
-            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Data.Cutter());
+            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Datum.Cutter());
             SetState(new CoveToSeaTransition_State()); return;
         }
-        else if (NearObject(Cove.Schooner.transform) && ShipUnlocked(new Data.Schooner()))
+        else if (NearObject(Cove.Schooner.transform) && ShipUnlocked(new Datum.Schooner()))
         {
-            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Data.Schooner());
+            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Datum.Schooner());
             SetState(new CoveToSeaTransition_State()); return;
         }
-        else if (NearObject(Cove.Brig.transform) && ShipUnlocked(new Data.Brig()))
+        else if (NearObject(Cove.Brig.transform) && ShipUnlocked(new Datum.Brig()))
         {
-            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Data.Brig());
+            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Datum.Brig());
             SetState(new CoveToSeaTransition_State()); return;
         }
-        else if (NearObject(Cove.Frigate.transform) && ShipUnlocked(new Data.Frigate()))
+        else if (NearObject(Cove.Frigate.transform) && ShipUnlocked(new Datum.Frigate()))
         {
-            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Data.Frigate());
+            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Datum.Frigate());
             SetState(new CoveToSeaTransition_State()); return;
         }
-        else if (NearObject(Cove.Barque.transform) && ShipUnlocked(new Data.Barque()))
+        else if (NearObject(Cove.Barque.transform) && ShipUnlocked(new Datum.Barque()))
         {
-            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Data.Barque());
+            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Datum.Barque());
             SetState(new CoveToSeaTransition_State()); return;
         }
-
-        // else if (NearObject(Cove.SkillSheet.transform))
-        // {
-        //     SetState(new CoveToMenuTransition_State(
-        //         new Menus.SkillsMenu(Data.Manager.Io.Skill, Data.Manager.Io.Player,
-        //             new CameraPan_State(
-        //             subsequentState: this,
-        //             pan: Cam.StoredCamRot = Cam.Io.Camera.transform.rotation.eulerAngles,
-        //             strafe: Cam.StoredCamPos = Cam.Io.Camera.transform.position,
-        //             speed: 5))));
-        //     return;
-        // }
-
     }
 
     protected override void NorthPressed()
@@ -192,33 +253,81 @@ public class CoveScene_State : State
         bool nearShip = false;
         if (NearObject(Cove.Sloop.transform))
         {
+            if (DataManager.ShipPurchaseData.GetLevel(new Datum.SloopPurchase()) == 0 &&
+                DataManager.Player.GetLevel(new Datum.PatternsAvailable()) >=
+                Datum.ShipPurchaseEnum.SloopPurchase.Cost)
+            {
+                DataManager.ShipPurchaseData.AdjustLevel(new Datum.SloopPurchase(), 1);
+                DataManager.Player.AdjustLevel(new Datum.PatternsSpent(), Datum.ShipPurchaseEnum.SloopPurchase.Cost);
+                return;
+            };
             nearShip = true;
-            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Data.Sloop());
+            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Datum.Sloop());
         }
-        else if (NearObject(Cove.Cutter.transform) && ShipUnlocked(new Data.Cutter()))
+        else if (NearObject(Cove.Cutter.transform) && ShipUnlocked(new Datum.Cutter()))
         {
+            if (DataManager.ShipPurchaseData.GetLevel(new Datum.CutterPurchase()) == 0 &&
+                DataManager.Player.GetLevel(new Datum.PatternsAvailable()) >=
+                Datum.ShipPurchaseEnum.CutterPurchase.Cost)
+            {
+                DataManager.ShipPurchaseData.AdjustLevel(new Datum.CutterPurchase(), 1);
+                DataManager.Player.AdjustLevel(new Datum.PatternsSpent(), Datum.ShipPurchaseEnum.CutterPurchase.Cost);
+                return;
+            };
             nearShip = true;
-            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Data.Cutter());
+            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Datum.Cutter());
         }
-        else if (NearObject(Cove.Schooner.transform) && ShipUnlocked(new Data.Schooner()))
+        else if (NearObject(Cove.Schooner.transform) && ShipUnlocked(new Datum.Schooner()))
         {
+            if (DataManager.ShipPurchaseData.GetLevel(new Datum.SchoonerPurchase()) == 0 &&
+                DataManager.Player.GetLevel(new Datum.PatternsAvailable()) >=
+                Datum.ShipPurchaseEnum.SchoonerPurchase.Cost)
+            {
+                DataManager.ShipPurchaseData.AdjustLevel(new Datum.SchoonerPurchase(), 1);
+                DataManager.Player.AdjustLevel(new Datum.PatternsSpent(), Datum.ShipPurchaseEnum.SchoonerPurchase.Cost);
+                return;
+            };
             nearShip = true;
-            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Data.Schooner());
+            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Datum.Schooner());
         }
-        else if (NearObject(Cove.Brig.transform) && ShipUnlocked(new Data.Brig()))
+        else if (NearObject(Cove.Brig.transform) && ShipUnlocked(new Datum.Brig()))
         {
+            if (DataManager.ShipPurchaseData.GetLevel(new Datum.BrigPurchase()) == 0 &&
+                DataManager.Player.GetLevel(new Datum.PatternsAvailable()) >=
+                Datum.ShipPurchaseEnum.BrigPurchase.Cost)
+            {
+                DataManager.ShipPurchaseData.AdjustLevel(new Datum.BrigPurchase(), 1);
+                DataManager.Player.AdjustLevel(new Datum.PatternsSpent(), Datum.ShipPurchaseEnum.BrigPurchase.Cost);
+                return;
+            };
             nearShip = true;
-            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Data.Brig());
+            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Datum.Brig());
         }
-        else if (NearObject(Cove.Frigate.transform) && ShipUnlocked(new Data.Frigate()))
+        else if (NearObject(Cove.Frigate.transform) && ShipUnlocked(new Datum.Frigate()))
         {
+            if (DataManager.ShipPurchaseData.GetLevel(new Datum.FrigatePurchase()) == 0 &&
+                DataManager.Player.GetLevel(new Datum.PatternsAvailable()) >=
+                Datum.ShipPurchaseEnum.FrigatePurchase.Cost)
+            {
+                DataManager.ShipPurchaseData.AdjustLevel(new Datum.FrigatePurchase(), 1);
+                DataManager.Player.AdjustLevel(new Datum.PatternsSpent(), Datum.ShipPurchaseEnum.FrigatePurchase.Cost);
+                return;
+            };
             nearShip = true;
-            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Data.Frigate());
+            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Datum.Frigate());
         }
-        else if (NearObject(Cove.Barque.transform) && ShipUnlocked(new Data.Barque()))
+        else if (NearObject(Cove.Barque.transform) && ShipUnlocked(new Datum.Barque()))
         {
+            if (DataManager.ShipPurchaseData.GetLevel(new Datum.BarquePurchase()) == 0 &&
+                DataManager.Player.GetLevel(new Datum.PatternsAvailable()) >=
+                Datum.ShipPurchaseEnum.BarquePurchase.Cost)
+            {
+                DataManager.ShipPurchaseData.AdjustLevel(new Datum.BarquePurchase(), 1);
+                DataManager.Player.AdjustLevel(new Datum.PatternsSpent(), Datum.ShipPurchaseEnum.BarquePurchase.Cost);
+                return;
+            };
             nearShip = true;
-            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Data.Barque());
+            DataManager.ShipStats.ActiveShip = DataManager.ShipStats.GetItem(new Datum.Barque());
         }
         else if (NearObject(Cove.Gramo.transform))
         {
@@ -233,13 +342,14 @@ public class CoveScene_State : State
         }
         else if (NearObject(Cove.Fish.transform))
         {
-            SetState(new CoveToMenuTransition_State(
-               new Menus.BeatFishingPracticeMenu(
-                   new CameraPan_State(
-                   subsequentState: this,
-                   pan: Cam.StoredCamRot = Cam.Io.Camera.transform.rotation.eulerAngles,
-                   strafe: Cam.StoredCamPos = Cam.Io.Camera.transform.position,
-                   speed: 5))));
+            if (DataManager.QRhythmCellData.GetLevel(new Datum.QRhythm.QHQ()) > 0)
+                SetState(new CoveToMenuTransition_State(
+                   new Menus.BeatFishingPracticeMenu(
+                       new CameraPan_State(
+                       subsequentState: this,
+                       pan: Cam.StoredCamRot = Cam.Io.Camera.transform.rotation.eulerAngles,
+                       strafe: Cam.StoredCamPos = Cam.Io.Camera.transform.position,
+                       speed: 5))));
 
             // SetState(new CoveToAnglingTransition_State(
             //    new AnglingPractice_State(
@@ -276,7 +386,7 @@ public class CoveScene_State : State
         else if (NearObject(Cove.SkillSheet.transform))
         {
             SetState(new CoveToMenuTransition_State(
-                new Menus.SkillsMenu(Data.Manager.Io.Skill, Data.Manager.Io.Player,
+                new Menus.SkillsMenu(Datum.Manager.Io.Skill, Datum.Manager.Io.Player,
                     new CameraPan_State(
                     subsequentState: this,
                     pan: Cam.StoredCamRot = Cam.Io.Camera.transform.rotation.eulerAngles,
@@ -329,23 +439,23 @@ public class CoveScene_State : State
       new Vector2(b.position.x, b.position.z));
 
 
-    bool ShipUnlocked(Data.IHull ship)
+    bool ShipUnlocked(Datum.IHull ship)
     {
         switch (ship)
         {
-            case Data.Cutter:
-            case Data.Sloop:
-                if (DataManager.BatteriePracticeData.GetLevel(new Data.QRhythmCell()) < 1) return false;
+            case Datum.Cutter:
+            case Datum.Sloop:
+                if (DataManager.BatteriePracticeData.GetLevel(new Datum.QRhythmCell()) < 1) return false;
                 break;
 
-            case Data.Schooner:
-            case Data.Brig:
-                if (DataManager.BatteriePracticeData.GetLevel(new Data.ERhythmCell()) < 1) return false;
+            case Datum.Schooner:
+            case Datum.Brig:
+                if (DataManager.BatteriePracticeData.GetLevel(new Datum.ERhythmCell()) < 1) return false;
                 break;
 
-            case Data.Frigate:
-            case Data.Barque:
-                if (DataManager.BatteriePracticeData.GetLevel(new Data.SRhythmCell()) < 1) return false;
+            case Datum.Frigate:
+            case Datum.Barque:
+                if (DataManager.BatteriePracticeData.GetLevel(new Datum.SRhythmCell()) < 1) return false;
                 break;
         }
 

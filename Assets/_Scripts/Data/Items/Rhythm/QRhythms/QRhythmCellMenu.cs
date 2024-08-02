@@ -1,5 +1,5 @@
-using Data.QRhythm;
-using Data;
+using Datum.QRhythm;
+using Datum;
 using MusicTheory.Rhythms;
 
 namespace Menus
@@ -74,8 +74,20 @@ namespace Menus
 
         void WestPressed()
         {
-            // if (!Unlocked(Selection.Item)) ConsequentState = null;
-            // else ConsequentState = GetTutorial;
+            if (!Unlocked(Selection.Item)) { ConsequentState = null; return; }
+            var video = Selection.Item switch
+            {
+                QQQQ => Assets.RhythmCellQQQQ,
+                HH => Assets.RhythmCellHH,
+                W => Assets.RhythmCellW,
+                HQQ => Assets.RhythmCellHQQ,
+                QQH => Assets.RhythmCellQQH,
+                DHQ => Assets.RhythmCellDHQ,
+                QDH => Assets.RhythmCellQDH,
+                QHQ => Assets.RhythmCellQHQ,
+                _ => throw new System.Exception("???")
+            };
+            ConsequentState = new Video_State(video, new MenuState(this));
         }
 
         bool Unlocked(IItem item) =>

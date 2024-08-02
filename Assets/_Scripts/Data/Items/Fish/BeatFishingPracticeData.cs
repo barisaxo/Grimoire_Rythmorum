@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Data
+namespace Datum.BeatFishing
 {
     [System.Serializable]
     public class BeatFishingPracticeData : IData
@@ -110,16 +110,14 @@ namespace Data
         string IItem.Description => Enum.Description;
     }
 
-    [Serializable] public struct LVL1 : IBeatFishingPractice { public readonly BeatFishingPracticeEnum Enum => BeatFishingPracticeEnum.LVL1; }
-
-    // [Serializable] public struct SSSS : IBeatFishingPractice { public readonly BeatFishingPracticeEnum Enum => BeatFishingPracticeEnum.SSSS; }
-    // [Serializable] public struct Q : IBeatFishingPractice { public readonly BeatFishingPracticeEnum Enum => BeatFishingPracticeEnum.Q; }
-    // [Serializable] public struct EE : IBeatFishingPractice { public readonly BeatFishingPracticeEnum Enum => BeatFishingPracticeEnum.EE; }
-    // [Serializable] public struct ESS : IBeatFishingPractice { public readonly BeatFishingPracticeEnum Enum => BeatFishingPracticeEnum.ESS; }
-    // [Serializable] public struct SSE : IBeatFishingPractice { public readonly BeatFishingPracticeEnum Enum => BeatFishingPracticeEnum.SSE; }
-    // [Serializable] public struct DES : IBeatFishingPractice { public readonly BeatFishingPracticeEnum Enum => BeatFishingPracticeEnum.DES; }
-    // [Serializable] public struct SDE : IBeatFishingPractice { public readonly BeatFishingPracticeEnum Enum => BeatFishingPracticeEnum.SDE; }
-    // [Serializable] public struct SES : IBeatFishingPractice { public readonly BeatFishingPracticeEnum Enum => BeatFishingPracticeEnum.SES; }
+    [Serializable] public struct QQQQ : IBeatFishingPractice { public readonly BeatFishingPracticeEnum Enum => BeatFishingPracticeEnum.QQQQ; }
+    [Serializable] public struct W : IBeatFishingPractice { public readonly BeatFishingPracticeEnum Enum => BeatFishingPracticeEnum.W; }
+    [Serializable] public struct HH : IBeatFishingPractice { public readonly BeatFishingPracticeEnum Enum => BeatFishingPracticeEnum.HH; }
+    [Serializable] public struct HQQ : IBeatFishingPractice { public readonly BeatFishingPracticeEnum Enum => BeatFishingPracticeEnum.HQQ; }
+    [Serializable] public struct QQH : IBeatFishingPractice { public readonly BeatFishingPracticeEnum Enum => BeatFishingPracticeEnum.QQH; }
+    [Serializable] public struct DHQ : IBeatFishingPractice { public readonly BeatFishingPracticeEnum Enum => BeatFishingPracticeEnum.DHQ; }
+    [Serializable] public struct QDH : IBeatFishingPractice { public readonly BeatFishingPracticeEnum Enum => BeatFishingPracticeEnum.QDH; }
+    [Serializable] public struct QHQ : IBeatFishingPractice { public readonly BeatFishingPracticeEnum Enum => BeatFishingPracticeEnum.QHQ; }
 
     [Serializable]
     public class BeatFishingPracticeEnum : Enumeration
@@ -128,28 +126,27 @@ namespace Data
         public BeatFishingPracticeEnum(int id, string name) : base(id, name) { }
 
         public readonly string Description;
-        public static BeatFishingPracticeEnum LVL1 = new(0, "Level 1");
-        // public static BeatFishingPracticeEnum Q = new(1, "Q");
-        // public static BeatFishingPracticeEnum EE = new(2, "EE");
-        // public static BeatFishingPracticeEnum ESS = new(3, "ESS");
-        // public static BeatFishingPracticeEnum SSE = new(4, "SSE");
-        // public static BeatFishingPracticeEnum DES = new(5, "E.S");
-        // public static BeatFishingPracticeEnum SDE = new(6, "SE.");
-        // public static BeatFishingPracticeEnum SES = new(7, "SES");
+        public static BeatFishingPracticeEnum QQQQ = new(0, "QQQQ");
+        public static BeatFishingPracticeEnum HH = new(1, "HH");
+        public static BeatFishingPracticeEnum W = new(2, "W");
+        public static BeatFishingPracticeEnum HQQ = new(3, "HQQ");
+        public static BeatFishingPracticeEnum QQH = new(4, "QQH");
+        public static BeatFishingPracticeEnum DHQ = new(5, "H.Q");
+        public static BeatFishingPracticeEnum QDH = new(6, "QH.");
+        public static BeatFishingPracticeEnum QHQ = new(7, "QHQ");
 
         internal static IItem ToItem(BeatFishingPracticeEnum @enum)
         {
             return @enum switch
             {
-                _ when @enum == LVL1 => new LVL1(),
-                // _ when @enum == SSSS => new SSSS(),
-                // _ when @enum == Q => new Q(),
-                // _ when @enum == EE => new EE(),
-                // _ when @enum == ESS => new ESS(),
-                // _ when @enum == SSE => new SSE(),
-                // _ when @enum == DES => new DES(),
-                // _ when @enum == SDE => new SDE(),
-                // _ when @enum == SES => new SES(),
+                _ when @enum == QQQQ => new QQQQ(),
+                _ when @enum == HH => new HH(),
+                _ when @enum == W => new W(),
+                _ when @enum == HQQ => new HQQ(),
+                _ when @enum == QQH => new QQH(),
+                _ when @enum == DHQ => new DHQ(),
+                _ when @enum == QDH => new QDH(),
+                _ when @enum == QHQ => new QHQ(),
                 _ => throw new System.ArgumentOutOfRangeException(@enum.Name)
             };
         }

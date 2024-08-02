@@ -12,7 +12,7 @@ public class BootStrap_State : State
 
     protected override void PrepareState(Action callback)
     {
-        // Debug.Log(Application.persistentDataPath);
+        Debug.Log(Application.persistentDataPath);
         // _ = new FPSDisplay();
         _ = Cam.Io;
         AudioSettings.Reset(AudioSettings.GetConfiguration());
@@ -21,7 +21,7 @@ public class BootStrap_State : State
 
     protected override void EngageState()
     {
-        SetState(new MenuState(new Menus.MainMenu(Data.Manager.Io, Audio)));
+        SetState(new MenuState(new Menus.MainMenu(Datum.Manager.Io, Audio)));
     }
 }
 

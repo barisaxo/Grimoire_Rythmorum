@@ -1,5 +1,5 @@
-using Data.SRhythm;
-using Data;
+using Datum.SRhythm;
+using Datum;
 using MusicTheory.Rhythms;
 
 namespace Menus
@@ -23,7 +23,7 @@ namespace Menus
             return item.Name;//+ ": " + Data.GetDisplayLevel(item);
         }
 
-        public string GetDescription => BatterieUnlocked ? "Complete Rhythm Cells to unlock" : string.Empty;
+        public string GetDescription => !BatterieUnlocked ? "Complete Rhythm Cells to unlock" : string.Empty;
 
         public IInputHandler Input => new MenuInputHandler()
         {
@@ -42,7 +42,7 @@ namespace Menus
         };
 
         private IMenuScene _scene;
-        public IMenuScene Scene => _scene ??= new PracticeMenuScene();
+        public IMenuScene Scene => _scene ??= new BatteriePracticeMenuScene();
 
         public State ConsequentState { get; set; }
 
@@ -51,7 +51,8 @@ namespace Menus
             About => null,
             RhythmCells => new MenuState(new SRhythmCellMenu(new MenuState(this))),
             BatteriePractice => BatterieUnlocked ?
-                new BatteryTutorial_State(null, GetSpecs(), Manager.Io.BatteriePracticeData, new SRhythmCell(), new MenuState(this))
+                new MenuState(new SBatterieOptionMenu(new MenuState(this)))
+                // new BatteryTutorial_State(null, GetSpecs(), Manager.Io.BatteriePracticeData, new SRhythmCell(), new MenuState(this))
                 : null,
             _ => throw new System.ArgumentException(),
         };
@@ -68,8 +69,8 @@ namespace Menus
 
         void UpdateButtons()
         {
-            if (BatterieUnlocked) ((PracticeMenuScene)Scene).ShowButtons();
-            else ((PracticeMenuScene)Scene).HideButtons();
+            if (BatterieUnlocked) ((BatteriePracticeMenuScene)Scene).ShowButtons();
+            else ((BatteriePracticeMenuScene)Scene).HideButtons();
         }
 
         bool BatterieUnlocked =>

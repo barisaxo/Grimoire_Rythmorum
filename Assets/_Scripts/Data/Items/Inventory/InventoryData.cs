@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System;
 
-namespace Data
+namespace Datum
 {
     [Serializable]
     public class InventoryData : IData
@@ -47,29 +47,29 @@ namespace Data
 
                 case Material:
                     Datum[(ICurrency)item] = Datum[(ICurrency)item] + i < 0 ? 0 :
-                    Datum[(ICurrency)item] + i > Data.Manager.Io.ActiveShip.GetLevel(new Data.MaterialStorage()) ?
-                    Data.Manager.Io.ActiveShip.GetLevel(new Data.MaterialStorage()) :
+                    Datum[(ICurrency)item] + i > global::Datum.Manager.Io.ActiveShip.GetLevel(new Datum.MaterialStorage()) ?
+                    global::Datum.Manager.Io.ActiveShip.GetLevel(new Datum.MaterialStorage()) :
                     Datum[(ICurrency)item] + i;
                     break;
 
                 case Ration:
                     Datum[(ICurrency)item] = Datum[(ICurrency)item] + i < 0 ? 0 :
-                    Datum[(ICurrency)item] + i > Data.Manager.Io.ActiveShip.GetLevel(new Data.RationStorage()) ?
-                    Data.Manager.Io.ActiveShip.GetLevel(new Data.RationStorage()) :
+                    Datum[(ICurrency)item] + i > global::Datum.Manager.Io.ActiveShip.GetLevel(new Datum.RationStorage()) ?
+                    global::Datum.Manager.Io.ActiveShip.GetLevel(new Datum.RationStorage()) :
                     Datum[(ICurrency)item] + i;
                     break;
 
                 case StarChart:
                     Datum[(ICurrency)item] = Datum[(ICurrency)item] + i < 0 ? 0 :
-                    Datum[(ICurrency)item] + i > Data.Manager.Io.ActiveShip.GetLevel(new Data.StarChartStorage()) ?
-                    Data.Manager.Io.ActiveShip.GetLevel(new Data.StarChartStorage()) :
+                    Datum[(ICurrency)item] + i > global::Datum.Manager.Io.ActiveShip.GetLevel(new Datum.StarChartStorage()) ?
+                    global::Datum.Manager.Io.ActiveShip.GetLevel(new Datum.StarChartStorage()) :
                     Datum[(ICurrency)item] + i;
                     break;
 
                 case Gramophone:
                     Datum[(ICurrency)item] = Datum[(ICurrency)item] + i < 0 ? 0 :
-                    Datum[(ICurrency)item] + i > Data.Manager.Io.ActiveShip.GetLevel(new Data.GramophoneStorage()) ?
-                    Data.Manager.Io.ActiveShip.GetLevel(new Data.GramophoneStorage()) :
+                    Datum[(ICurrency)item] + i > global::Datum.Manager.Io.ActiveShip.GetLevel(new Datum.GramophoneStorage()) ?
+                    global::Datum.Manager.Io.ActiveShip.GetLevel(new Datum.GramophoneStorage()) :
                     Datum[(ICurrency)item] + i;
                     break;
             }

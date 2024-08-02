@@ -28,8 +28,8 @@ public class LatencyCalibration_State : State
 
     void Complete()
     {
-        DataManager.Gameplay.SetLevel(new Data.Latency(), (int)(Average() * 100));
-        UnityEngine.Debug.Log(DataManager.Gameplay.GetLevel(new Data.Latency()));
+        DataManager.Gameplay.SetLevel(new Datum.Latency(), (int)(Average() * 100));
+        UnityEngine.Debug.Log(DataManager.Gameplay.GetLevel(new Datum.Latency()));
         SetState(SubsequentState);
     }
 

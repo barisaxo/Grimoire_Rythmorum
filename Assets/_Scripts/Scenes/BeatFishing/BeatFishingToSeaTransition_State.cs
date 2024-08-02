@@ -2,15 +2,15 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Data;
+using Datum;
 
-public class AnglingToSeaTransition_State : State
+public class BeatFishingToSeaTransition_State : State
 {
     readonly State SubsequentState;
     readonly Sea.ISceneObject Obj;
     readonly bool Won;
 
-    public AnglingToSeaTransition_State(State subsequentState, Sea.ISceneObject obj, bool won)
+    public BeatFishingToSeaTransition_State(State subsequentState, Sea.ISceneObject obj, bool won)
     {
         SubsequentState = subsequentState;
         Obj = obj;

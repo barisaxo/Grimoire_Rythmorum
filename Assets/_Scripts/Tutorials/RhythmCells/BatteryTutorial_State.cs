@@ -4,7 +4,7 @@ using Dialog;
 using System;
 using SheetMusic;
 using MusicTheory.Rhythms;
-using Data;
+using Datum;
 
 public class BatteryTutorial_State : State
 {

@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public static class SeaRegionSystems
 {
-    public static List<Cell> InitializeCells(this Region region, Data.QuestData questData)
+    public static List<Cell> InitializeCells(this Region region, Datum.QuestData questData)
     {
         Debug.Log("Initializing region: " + region.Coord);
         List<Cell> cells = new();
@@ -135,14 +135,14 @@ public static class SeaRegionSystems
 
 
 
-    public static NPCShip[] SetUpNPCs(this Region region, Data.Manager dataManager)
+    public static NPCShip[] SetUpNPCs(this Region region, Datum.Manager dataManager)
     {
         NPCShip[] ships = new NPCShip[(int)(region.Resolution * .2f)];
 
         for (int i = 0; i < ships.Length; i++)
         {
             var path = region.PatrolPattern(i);
-            Data.IHull hull = GetHull();
+            Datum.IHull hull = GetHull();
             ships[i] = new(path, GetShipType(), hull, region.Coord * region.Resolution, GetShipStats(hull)) { };
         }
 
@@ -157,29 +157,29 @@ public static class SeaRegionSystems
             };
         }
 
-        ShipStats.ShipStats GetShipStats(Data.IHull hull)
+        ShipStats.ShipStats GetShipStats(Datum.IHull hull)
         {
             var stats = new ShipStats.ShipStats(
-                new ShipStats.HullStats(hull, Data.WoodEnum.GetRandomWood()),
-                new ShipStats.CannonStats(Data.CannonEnum.GetRandomCannon(), Data.MetalEnum.GetRandomMetal()),
-                new ShipStats.RiggingStats((Data.ICloth)Data.ClothEnum.GetRandomCloth())
+                new ShipStats.HullStats(hull, Datum.WoodEnum.GetRandomWood()),
+                new ShipStats.CannonStats(Datum.CannonEnum.GetRandomCannon(), Datum.MetalEnum.GetRandomMetal()),
+                new ShipStats.RiggingStats((Datum.ICloth)Datum.ClothEnum.GetRandomCloth())
             );
 
             return stats;
         }
 
-        Data.IHull GetHull()
+        Datum.IHull GetHull()
         {
             // Debug.Log(region.Coord + " " + Mathf.Abs(region.Coord.x - (WorldMapScene.Io.Map.Size * .5f)) + " " + Mathf.Abs(region.Coord.y - (WorldMapScene.Io.Map.Size * .5f)) + " " + WorldMapScene.Io.Map.Size);
             return Mathf.Abs(Mathf.Abs(region.Coord.x - (WorldMapScene.Io.Map.RegionResolution * .5f)) + Mathf.Abs(region.Coord.y - (WorldMapScene.Io.Map.RegionResolution * .5f))) switch
             {
-                < 3 => new Data.Sloop(),
-                3 => Random.value < .65f ? new Data.Sloop() : new Data.Brig(),
-                4 => Random.value < .65f ? new Data.Brig() : new Data.Schooner(),
-                5 => Random.value < .65f ? new Data.Schooner() : new Data.Cutter(),
-                6 => Random.value < .65f ? new Data.Cutter() : new Data.Frigate(),
-                7 => Random.value < .65f ? new Data.Frigate() : new Data.Barque(),
-                _ => Random.value < .50f ? new Data.Frigate() : new Data.Barque(),
+                < 3 => new Datum.Sloop(),
+                3 => Random.value < .65f ? new Datum.Sloop() : new Datum.Brig(),
+                4 => Random.value < .65f ? new Datum.Brig() : new Datum.Schooner(),
+                5 => Random.value < .65f ? new Datum.Schooner() : new Datum.Cutter(),
+                6 => Random.value < .65f ? new Datum.Cutter() : new Datum.Frigate(),
+                7 => Random.value < .65f ? new Datum.Frigate() : new Datum.Barque(),
+                _ => Random.value < .50f ? new Datum.Frigate() : new Datum.Barque(),
             };
         }
     }

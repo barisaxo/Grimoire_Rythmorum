@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Data
+namespace Datum
 {
     [System.Serializable]
     public class ERhythmCellData : IData

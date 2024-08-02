@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Data
+namespace Datum
 {
     [System.Serializable]
     public class StandingData : IData

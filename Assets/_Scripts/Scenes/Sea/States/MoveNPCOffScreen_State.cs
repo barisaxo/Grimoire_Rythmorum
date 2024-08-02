@@ -15,7 +15,19 @@ public class MoveNPCOffScreen_State : State
 
     protected override void EngageState()
     {
-        if (NPC is null) { SetState(SubsequentState); return; }
+        if (NPC is null)
+        {
+            SetState(SubsequentState);
+            return;
+        }
+
+        if (NPC.SceneObject.GO == null)
+        {
+            if (WorldMapScene.Io.NPCShips.Contains(NPC))
+                WorldMapScene.Io.NPCShips.Remove(NPC);
+            SetState(SubsequentState);
+            return;
+        }
 
 
         int i = NPC.PatrolIndex + 1;

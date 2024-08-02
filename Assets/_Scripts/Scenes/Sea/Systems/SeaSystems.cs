@@ -4,7 +4,7 @@ using Sea.Maps;
 
 public static class SeaSystems
 {
-    public static Vector3 UpdateMap(this Sea.WorldMapScene scene, State current, Data.Manager data, Vector3 dir)
+    public static Vector3 UpdateMap(this Sea.WorldMapScene scene, State current, Datum.Manager data, Vector3 dir)
     {
         scene.UpdateLocalRegions(current);
         scene.UpdateBoardSubTiles();
@@ -80,7 +80,8 @@ public static class SeaSystems
 
         foreach (NPCShip npc in scene.NPCShips)
             if (npc.SceneObject.Interactable != IInteractable.Null &&
-                Vector3.Distance(npc.SceneObject.GO.transform.position, scene.Ship.GO.transform.position) < 1.5f)
+                Vector3.Distance(npc.SceneObject.GO.transform.position, scene.Ship.GO.transform.position) < 1.5f &&
+                scene.Ship.ShipStats.HullStats.Hull is not Datum.CatBoat)
             {
                 scene.NearestNPC = npc;
 
@@ -101,11 +102,15 @@ public static class SeaSystems
                     cell.SceneObject.Telemeter.IsInRange(cell.SceneObject.Collidable.GetCollider, scene.Ship.CapsuleCollider) &&
                     cell.SceneObject.Interactable.SubsequentState != null)
                 {
+                    if (scene.Ship.ShipStats.HullStats.Hull is Datum.CatBoat &&
+                        cell.SceneObject is Sea.Lighthouse) return;
+
                     if (cell.SceneObject.Interactable.PopupText != null)
                     {
                         scene.Ship.ConfirmPopup.GO.SetActive(true);
                         scene.Ship.ConfirmPopup.TextString = cell.SceneObject.Interactable.PopupText;
                     }
+
                     scene.NearestInteractableCell = cell;
                     return;
                 }
@@ -118,7 +123,7 @@ public static class SeaSystems
         scene.LocalRegions = scene.Map.RegionsAdjacentTo(scene.Ship);
     }
 
-    private static void UpdateMapObjects(this Sea.WorldMapScene scene, State currentState, Data.Manager data)
+    private static void UpdateMapObjects(this Sea.WorldMapScene scene, State currentState, Datum.Manager data)
     {
         for (int x = -1; x < scene.Board.Size + 1; x++)
             for (int y = -1; y < scene.Board.Size + 1; y++)
@@ -141,7 +146,7 @@ public static class SeaSystems
         }
     }
 
-    private static void UpdateCellObject(Sea.WorldMapScene scene, State currentState, Cell cell, Vector2Int offsetGlobalCoord, Data.Manager data)
+    private static void UpdateCellObject(Sea.WorldMapScene scene, State currentState, Cell cell, Vector2Int offsetGlobalCoord, Datum.Manager data)
     {
         if (cell.SceneObject is null)
         {
@@ -210,7 +215,7 @@ public static class SeaSystems
     {
         if (npc.SceneObject is null)
         {
-            npc.InstantiateNewSceneObject(currentState, Data.Manager.Io.Standings);
+            npc.InstantiateNewSceneObject(currentState, Datum.Manager.Io.Standings);
             npc.SceneObject.GO.transform.localScale = Vector3.one * Random.Range(.55f, .75f);
             npc.SceneObject.GO.transform.SetParent(Sea.WorldMapScene.Io.TheSea.transform);
             scene.RockTheBoat.AddBoat(npc.SceneObject.GO.transform, npc.Sway);

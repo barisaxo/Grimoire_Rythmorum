@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Data;
+using Datum;
 using TMPro;
 
 namespace Menus
@@ -21,7 +21,7 @@ namespace Menus
         public Card Description { get; set; }
         public IMenuLayout Layout { get; } = new LeftScroll();
 
-        public string GetDescription { get => Selection.Item.Description; }
+        public string GetDescription { get => "(Tutorial not yet implemented)"; }// Selection.Item.Description; }
         public string DisplayData(IItem item)
         {
             return item.Name + ": " + Data.GetDisplayLevel(item);

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Data
+namespace Datum
 {
     [System.Serializable]
     public class PlayerData : IData

@@ -6,20 +6,20 @@ using Dialog;
 public class Buy_Dialogue : Dialogue
 {
     readonly Dialogue ReturnTo;
-    readonly Data.Standing Standing;
+    readonly Datum.Standing Standing;
 
-    int StandingMod => Data.Manager.Io.Standings.GetLevel(Standing);
-    int Gold => Data.Manager.Io.Inventory.GetLevel(new Data.Gold());
-    int Mats => Data.Manager.Io.Inventory.GetLevel(new Data.Material());
-    int CurHP => Data.Manager.Io.ActiveShip.GetLevel(new Data.CurrentHitPoints());
-    int MaxHP => Data.Manager.Io.ActiveShip.GetLevel(new Data.MaxHitPoints());
+    int StandingMod => Datum.Manager.Io.Standings.GetLevel(Standing);
+    int Gold => Datum.Manager.Io.Inventory.GetLevel(new Datum.Gold());
+    int Mats => Datum.Manager.Io.Inventory.GetLevel(new Datum.Material());
+    int CurHP => Datum.Manager.Io.ActiveShip.GetLevel(new Datum.CurrentHitPoints());
+    int MaxHP => Datum.Manager.Io.ActiveShip.GetLevel(new Datum.MaxHitPoints());
     float StandingsModifier => 1f + (float)(1f - (float)((float)StandingMod) / 9f);
 
     int smallAmount => (int)(MaxHP * .15f);
     readonly int matsPer = 3;
     readonly int goldPer = 25;
 
-    public Buy_Dialogue(Dialogue returnTo, Speaker speaker, Data.Standing standing)
+    public Buy_Dialogue(Dialogue returnTo, Speaker speaker, Datum.Standing standing)
     {
         ReturnTo = returnTo;
         Speaker = speaker;

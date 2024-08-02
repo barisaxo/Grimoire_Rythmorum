@@ -7,8 +7,8 @@ public class Gramo_State : State
 {
     public GramoScene Scene;
     readonly State SubsequentState;
-    readonly Data.IGramophone Gramo;
-    public Gramo_State(State subsequentState, Data.IGramophone gramo)
+    readonly Datum.IGramophone Gramo;
+    public Gramo_State(State subsequentState, Datum.IGramophone gramo)
     {
         SubsequentState = subsequentState;
         Gramo = gramo;
@@ -47,7 +47,7 @@ public class Gramo_State : State
                             won: true,
                             subsequentState: SubsequentState,
                             patternsFound: (int)(1000f *
-                                DataManager.Skill.GetBonusRatio(new Data.Apophenia()) *
+                                DataManager.Skill.GetBonusRatio(new Datum.Apophenia()) *
                                 (Gramo.ID + 1) *
                                 (UnityEngine.Random.value + 1f)
                                 ))),
@@ -104,9 +104,9 @@ public class GramoPractice_State : State
 {
     public GramoScene Scene;
     readonly State SubsequentState;
-    readonly Data.IGramophone Gramo;
+    readonly Datum.IGramophone Gramo;
 
-    public GramoPractice_State(State subsequentState, Data.IGramophone gramo)
+    public GramoPractice_State(State subsequentState, Datum.IGramophone gramo)
     {
         Gramo = gramo;
         SubsequentState = subsequentState;

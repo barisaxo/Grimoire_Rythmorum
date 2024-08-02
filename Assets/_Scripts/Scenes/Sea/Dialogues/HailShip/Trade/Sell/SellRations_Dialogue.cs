@@ -6,10 +6,10 @@ using Dialog;
 public class SellRations_Dialogue : Dialogue
 {
     readonly Dialogue ReturnTo;
-    readonly Data.Standing Standing;
+    readonly Datum.Standing Standing;
 
-    int StandingLevel => Data.Manager.Io.Standings.GetLevel(Standing);
-    readonly int Rations = Data.Manager.Io.Inventory.GetLevel(new Data.Ration());
+    int StandingLevel => Datum.Manager.Io.Standings.GetLevel(Standing);
+    readonly int Rations = Datum.Manager.Io.Inventory.GetLevel(new Datum.Ration());
     float StandingsModifier => 2f - (float)(1f - (float)((float)StandingLevel) / 9f);
 
     int largeGold => (int)(largeRation * 17.5f * StandingsModifier);
@@ -20,7 +20,7 @@ public class SellRations_Dialogue : Dialogue
     int medRation => 25;
     int smallRation => 5;
 
-    public SellRations_Dialogue(Dialogue returnTo, Speaker speaker, Data.Standing standing)
+    public SellRations_Dialogue(Dialogue returnTo, Speaker speaker, Datum.Standing standing)
     {
         ReturnTo = returnTo;
         Speaker = speaker;
@@ -80,20 +80,20 @@ public class SellRations_Dialogue : Dialogue
 
     void SellRationsSmall()
     {
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.Ration(), -smallRation);
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), smallGold);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Ration(), -smallRation);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Gold(), smallGold);
     }
 
     void SellRationsMedium()
     {
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.Ration(), -medRation);
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), medGold);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Ration(), -medRation);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Gold(), medGold);
     }
 
     void SellRationsLarge()
     {
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.Ration(), -largeRation);
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), largeGold);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Ration(), -largeRation);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Gold(), largeGold);
     }
 
 }

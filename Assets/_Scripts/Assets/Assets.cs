@@ -175,8 +175,8 @@ public partial class Assets
     public static SloopPrefab _bountyShip => Resources.Load<SloopPrefab>("Prefabs/Sea/Ships/BountyShip/BountyShip");
     public static SloopPrefab BountyShip => Object.Instantiate(_bountyShip);
 
-    public static GameObject _catBoat => Resources.Load<GameObject>("Prefabs/Sea/Boats/CatBoat2");
-    public static GameObject CatBoat => Object.Instantiate(_catBoat);
+    public static CatBoatPrefab _catBoat => Resources.Load<GameObject>("Prefabs/Sea/Boats/CatBoat").GetComponent<CatBoatPrefab>();
+    public static CatBoatPrefab CatBoat => Object.Instantiate(_catBoat);
 
     public static ParticleSystem _cannonFire => Resources.Load<GameObject>("Prefabs/Sea/CannonFire").GetComponent<ParticleSystem>();
     public static ParticleSystem CannonFire => Object.Instantiate(_cannonFire);
@@ -273,6 +273,7 @@ public partial class Assets
 
 
     #region VIDEO
+    public static VideoClip RhythmIntro => Resources.Load<VideoClip>("Video/RhythmCells/Quarter/Rhythm Intro2");
     public static VideoClip RhythmCellW => Resources.Load<VideoClip>("Video/RhythmCells/Quarter/4/W");
     public static VideoClip RhythmCellHH => Resources.Load<VideoClip>("Video/RhythmCells/Quarter/4/HH");
     public static VideoClip RhythmCellQQQQ => Resources.Load<VideoClip>("Video/RhythmCells/Quarter/4/QQQQ");

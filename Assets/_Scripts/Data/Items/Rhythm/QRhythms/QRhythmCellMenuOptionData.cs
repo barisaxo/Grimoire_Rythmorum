@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-namespace Data.QRhythm
+namespace Datum.QRhythm
 {
     public class QRhythmCellMenuOptionData : IData
     {

@@ -1,5 +1,5 @@
-using Data;
-
+using Datum;
+using Datum.QRhythm;
 namespace Menus
 {
     public class BatteriePracticeSubMenu : IMenu

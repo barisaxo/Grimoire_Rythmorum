@@ -11,7 +11,7 @@ namespace Sea
     {
         #region  INSTANCE
 
-        public HUD(Data.ActiveShipData characterData)
+        public HUD(Datum.ActiveShipData characterData)
         {
             Data = characterData;
             _ = Icon;
@@ -62,7 +62,7 @@ namespace Sea
             }
         }
 
-        readonly Data.ActiveShipData Data;
+        readonly Datum.ActiveShipData Data;
 
         private Card _icon;
         public Card Icon => _icon ??= Hud.CreateChild(nameof(Icon), Hud.Canvas)

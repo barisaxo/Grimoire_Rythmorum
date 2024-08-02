@@ -1,5 +1,5 @@
-using Data.QRhythm;
-using Data;
+using Datum.QRhythm;
+using Datum;
 using MusicTheory.Rhythms;
 
 namespace Menus
@@ -23,7 +23,7 @@ namespace Menus
             return item.Name;//+ ": " + Data.GetDisplayLevel(item);
         }
 
-        public string GetDescription => BatterieUnlocked ? "Complete Rhythm Cells to unlock" : string.Empty;
+        public string GetDescription => !BatterieUnlocked ? "Complete Rhythm Cells to unlock" : string.Empty;
 
         public IInputHandler Input => new MenuInputHandler()
         {
@@ -42,24 +42,25 @@ namespace Menus
         };
 
         private IMenuScene _scene;
-        public IMenuScene Scene => _scene ??= new PracticeMenuScene();
+        public IMenuScene Scene => _scene ??= new BatteriePracticeMenuScene();
 
         public State ConsequentState { get; set; }
 
         public State GetNextState => Selection.Item switch
         {
-            About => null,
+            About => new Video_State(Assets.RhythmIntro, new MenuState(this)),
             RhythmCells => new MenuState(new QRhythmCellMenu(new MenuState(this))),
             BatteriePractice => BatterieUnlocked ?
-                new BatteryTutorial_State(null, GetSpecs(), Manager.Io.BatteriePracticeData, new QRhythmCell(), new MenuState(this))
+                new MenuState(new QBatterieOptionMenu(new MenuState(this)))
+                // new BatteryTutorial_State(null, GetSpecs(), Manager.Io.BatteriePracticeData, new QRhythmCell(), new MenuState(this))
                 : null,
             _ => throw new System.ArgumentException(),
         };
 
         void UpdateButtons()
         {
-            if (BatterieUnlocked) ((PracticeMenuScene)Scene).ShowButtons();
-            else ((PracticeMenuScene)Scene).HideButtons();
+            if (BatterieUnlocked) ((BatteriePracticeMenuScene)Scene).ShowButtons();
+            else ((BatteriePracticeMenuScene)Scene).HideButtons();
         }
 
         bool BatterieUnlocked => Selection.Item is About or RhythmCells || Manager.Io.QRhythmCellData.GetLevel(new QHQ()) > 0;

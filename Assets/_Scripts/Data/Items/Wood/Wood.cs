@@ -1,6 +1,6 @@
 
 using System;
-namespace Data
+namespace Datum
 {
     public interface IWood : IItem
     {

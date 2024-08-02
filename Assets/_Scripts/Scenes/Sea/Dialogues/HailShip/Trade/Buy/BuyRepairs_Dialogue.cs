@@ -1,21 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using Dialog;
-using Data;
+using Datum;
 
 public class BuyRepairs_Dialogue : Dialogue
 {
     readonly Dialogue ReturnTo;
     readonly Standing Standing;
 
-    int StandingMod => Data.Manager.Io.Standings.GetLevel(Standing);
+    int StandingMod => Manager.Io.Standings.GetLevel(Standing);
     int Gold => Manager.Io.Inventory.GetLevel(new Gold());
     int Mats => Manager.Io.Inventory.GetLevel(new Material());
     int CurHP => Manager.Io.ActiveShip.GetLevel(new CurrentHitPoints());
     int MaxHP => Manager.Io.ActiveShip.GetLevel(new MaxHitPoints());
 
     float HPPercent => (float)CurHP / (float)MaxHP;
-    int HPDown => MaxHP - CurHP;
+    // int HPDown => MaxHP - CurHP;
 
     float StandingsModifier => 1f + (float)(1f - (float)((float)StandingMod) / 9f);
 
@@ -80,8 +80,8 @@ public class BuyRepairs_Dialogue : Dialogue
     bool MedRepairs => HPPercent < .85f && !(Gold < medHealthAmount * goldPer) && !(Mats < medHealthAmount * matsPer);
     bool SmallRepairs => HPPercent < 1f && !(Gold < smallHealthAmount * goldPer) && !(Mats < smallHealthAmount * matsPer);
 
-    int matsPer => (int)(2f * StandingsModifier);
-    int goldPer => (int)(25f * StandingsModifier);
+    int matsPer => (int)(1);
+    int goldPer => (int)(2.66f * StandingsModifier);
 
     void RepairSmall()
     {

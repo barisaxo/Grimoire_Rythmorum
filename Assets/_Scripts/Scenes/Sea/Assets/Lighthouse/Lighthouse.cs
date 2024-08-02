@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Data;
+using Datum;
 
 namespace Sea
 {
@@ -48,7 +48,7 @@ namespace Sea
         public IQuestable Questable => new NotQuestable();
         public IDifficulty Difficulty { get; } = new NoDifficulty();
 
-        public Data.Lighthouse RegionData => Region.R switch
+        public Datum.Lighthouse RegionData => Region.R switch
         {
             Sea.Maps.R.i => new IonianLighthouse(),
             Sea.Maps.R.d => new DorianLighthouse(),

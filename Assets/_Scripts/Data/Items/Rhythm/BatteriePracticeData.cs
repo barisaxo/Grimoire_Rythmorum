@@ -2,7 +2,7 @@ using System;
 using Menus;
 using UnityEngine;
 using System.Collections.Generic;
-namespace Data
+namespace Datum
 {
     [Serializable]
     public class BatteriePracticeData : IData

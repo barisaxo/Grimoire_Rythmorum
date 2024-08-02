@@ -19,19 +19,19 @@ public class Video_State : State
     {
         if (VideoClip != null)
         {
-            Debug.Log("Video");
             // var width = Cam.Io.UICamera.orthographicSize * Cam.Io.UICamera.aspect * 1.65f;
 
             // Dialog.VideoPlayer.transform.localScale = new Vector3(width,
             //     width / ((float)Dialog.CurrentLine.VideoClip.width / Dialog.CurrentLine.VideoClip.height), 1);
+            float aspect = (float)((float)VideoClip.width / (float)VideoClip.height);
 
-            VideoPlayer.transform.localScale = new Vector3(1.65f, 1, 1);
+            Debug.Log("Height: " + VideoClip.height + ", width: " + VideoClip.width + ", " + aspect);
             VideoPlayer.gameObject.SetActive(true);
-            VideoPlayer.playOnAwake = false;
-            VideoPlayer.waitForFirstFrame = false;
+            VideoPlayer.transform.localScale = new Vector3(1.5f, 1.5f / aspect, 1);
             VideoPlayer.isLooping = false;
             VideoPlayer.clip = VideoClip;
             VideoPlayer.audioOutputMode = VideoAudioOutputMode.Direct;
+            VideoPlayer.SetDirectAudioVolume(0, .85f);
             VideoPlayer.Prepare();
             LoadVideo(callback).StartCoroutine();
             return;

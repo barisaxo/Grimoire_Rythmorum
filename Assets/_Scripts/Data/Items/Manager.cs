@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace Data
+using Datum.QRhythm;
+
+namespace Datum
 {
     public class Manager
     {
@@ -81,6 +83,15 @@ namespace Data
         private BatteriePracticeData _batteriePracticeData;
         public BatteriePracticeData BatteriePracticeData => _batteriePracticeData ??= BatteriePracticeData.GetData();
 
+        private QRhythm.QBatterieOptionData _qBatterieOptionData;
+        public QRhythm.QBatterieOptionData QBatterieOptionData => _qBatterieOptionData ??= QRhythm.QBatterieOptionData.GetData();
+
+        private ERhythm.EBatterieOptionData _eBatterieOptionData;
+        public ERhythm.EBatterieOptionData EBatterieOptionData => _eBatterieOptionData ??= ERhythm.EBatterieOptionData.GetData();
+
+        private SRhythm.SBatterieOptionData _sBatterieOptionData;
+        public SRhythm.SBatterieOptionData SBatterieOptionData => _sBatterieOptionData ??= SRhythm.SBatterieOptionData.GetData();
+
         private QRhythmCellData _qRhythmCellData;
         public QRhythmCellData QRhythmCellData => _qRhythmCellData ??= QRhythmCellData.GetData();
 
@@ -90,8 +101,8 @@ namespace Data
         private SRhythmCellData _sRhythmCellData;
         public SRhythmCellData SRhythmCellData => _sRhythmCellData ??= SRhythmCellData.GetData();
 
-        private BeatFishingPracticeData _beatFishingPracticeData;
-        public BeatFishingPracticeData BeatFishingPracticeData => _beatFishingPracticeData ??= BeatFishingPracticeData.GetData();
+        private BeatFishing.BeatFishingPracticeData _beatFishingPracticeData;
+        public BeatFishing.BeatFishingPracticeData BeatFishingPracticeData => _beatFishingPracticeData ??= BeatFishing.BeatFishingPracticeData.GetData();
 
         private ShipPurchaseData _shipPurchaseData;
         public ShipPurchaseData ShipPurchaseData => _shipPurchaseData ??= ShipPurchaseData.GetData();

@@ -6,11 +6,11 @@ using Dialog;
 public class SellMaterials_Dialogue : Dialogue
 {
     readonly Dialogue ReturnTo;
-    readonly Data.Standing Standing;
+    readonly Datum.Standing Standing;
 
 
-    int StandingLevel => Data.Manager.Io.Standings.GetLevel(Standing);
-    readonly int Mats = Data.Manager.Io.Inventory.GetLevel(new Data.Material());
+    int StandingLevel => Datum.Manager.Io.Standings.GetLevel(Standing);
+    readonly int Mats = Datum.Manager.Io.Inventory.GetLevel(new Datum.Material());
     float StandingsModifier => 2f - (float)(1f - (float)((float)StandingLevel) / 9f);
 
     int largeGold => (int)(largeMat * 7f * StandingsModifier);
@@ -21,7 +21,7 @@ public class SellMaterials_Dialogue : Dialogue
     int medMat => 75;
     int smallMat => 25;
 
-    public SellMaterials_Dialogue(Dialogue returnTo, Speaker speaker, Data.Standing standing)
+    public SellMaterials_Dialogue(Dialogue returnTo, Speaker speaker, Datum.Standing standing)
     {
         ReturnTo = returnTo;
         Speaker = speaker;
@@ -77,18 +77,18 @@ public class SellMaterials_Dialogue : Dialogue
 
     void SellMaterialsSmall()
     {
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.Material(), -smallMat);
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), smallGold);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Material(), -smallMat);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Gold(), smallGold);
     }
     void SellMaterialsMedium()
     {
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.Material(), -medMat);
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), medGold);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Material(), -medMat);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Gold(), medGold);
     }
     void SellMaterialsLarge()
     {
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.Material(), -largeMat);
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), largeGold);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Material(), -largeMat);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Gold(), largeGold);
     }
 
     readonly string TradeComplete_LineText = "Good deal! Until next time!";

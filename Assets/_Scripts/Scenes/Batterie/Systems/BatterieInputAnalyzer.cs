@@ -11,7 +11,7 @@ namespace Batterie
         public BatterieInputAnalyzer(Action<string> feedBack, Action<Hit> hit, MappedBeat[] beatmap)
         {
             FeedBack += feedBack;
-            LatencyOffset = Data.Manager.Io.Gameplay.GetLevel(new Data.Latency()) * .01f;
+            LatencyOffset = Datum.Manager.Io.Gameplay.GetLevel(new Datum.Latency()) * .01f;
             Hit = hit;
             BeatMap = beatmap.ToList(); ;
 

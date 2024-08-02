@@ -29,7 +29,7 @@ public class BatteriePack
         {
             RhythmSpecs = _rhythmSpecs
         };
-        MuscopaAudio = new(Data.Manager.Io.Volume);
+        MuscopaAudio = new(Datum.Manager.Io.Volume);
 
         MusicSheet.Measures = measures;
 
@@ -71,7 +71,7 @@ public class BatteriePack
     {
         get
         {
-            bool c = TotalErrors <= Data.Manager.Io.Skill.GetLevel(new Data.PerfectTiming()) + 1;
+            bool c = TotalErrors <= Datum.Manager.Io.Skill.GetLevel(new Datum.PerfectTiming()) + 1;
             if (c) HasCritThisBattery = true;
             return c;
         }

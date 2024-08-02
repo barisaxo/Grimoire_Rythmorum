@@ -1,6 +1,6 @@
 using MusicTheory;
 
-namespace Data
+namespace Datum
 {
     [System.Serializable]
     public class GameplayData : IData

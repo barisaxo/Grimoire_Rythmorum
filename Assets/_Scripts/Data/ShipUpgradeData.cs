@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using ShipStats;
 
-namespace Data
+namespace Datum
 {
     [System.Serializable]
     public class ShipUpgradeData : IData
