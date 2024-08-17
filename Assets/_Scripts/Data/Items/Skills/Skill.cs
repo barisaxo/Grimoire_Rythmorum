@@ -1,5 +1,5 @@
 using System;
-namespace Data
+namespace Datum
 {
     public interface ISkill : IItem
     {

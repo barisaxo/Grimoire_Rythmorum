@@ -9,6 +9,7 @@ namespace MusicTheory.Rhythms
         public void GenerateRhythmCells(MusicSheet ms) { GetRhythmCells(ms); ms.GetRestsAndTies(); }
         protected virtual void GetRhythmCells(MusicSheet ms) { }
 
+        public abstract float GetTempo();
         public static bool operator ==(Time a, Time b) => a.Signature.Quality == b.Signature.Quality && a.Signature.Quantity == b.Signature.Quantity;
         public static bool operator !=(Time a, Time b) => a.Signature.Quality != b.Signature.Quality || a.Signature.Quantity != b.Signature.Quantity;
         public override bool Equals(object obj) => obj is Time t && Signature.Quality == t.Signature.Quality && Signature.Quantity == t.Signature.Quantity;

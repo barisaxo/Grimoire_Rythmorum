@@ -1,4 +1,4 @@
-namespace Data
+namespace Datum
 {
     public interface ICurrency : IItem
     {

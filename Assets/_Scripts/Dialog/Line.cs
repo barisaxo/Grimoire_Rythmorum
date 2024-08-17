@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.Video;
+// using UnityEngine.Video;
 
 namespace Dialog
 {
@@ -17,7 +17,7 @@ namespace Dialog
         // public string SpeakerName { get; private set; } = "\n";
         public string SpeakerText { get; private set; }
 
-        public VideoClip VideoClip { get; private set; }
+        // public VideoClip VideoClip { get; private set; }
 
         public Line NextLine { get; private set; }
         public State NextState { get; private set; }
@@ -38,7 +38,7 @@ namespace Dialog
         // public Line SetSpeakerName(string name) { SpeakerName = name; return this; }
         public Line SetSpeaker(Speaker speaker) { Speaker = speaker; return this; }
         public Line SetSpeakerText(string speakerText) { SpeakerText = speakerText; return this; }
-        public Line SetVideoClip(VideoClip videoClip) { VideoClip = videoClip; return this; }
+        // public Line SetVideoClip(VideoClip videoClip) { VideoClip = videoClip; return this; }
 
         public Line SetCameraPan(Vector3 pan, Vector3 strafe, float speed)
         {

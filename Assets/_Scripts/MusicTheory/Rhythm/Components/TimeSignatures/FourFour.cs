@@ -10,6 +10,7 @@ namespace MusicTheory.Rhythms
     {
         public FourFour() { Signature = TimeSignatureEnum.FourFour; }
 
+        public override float GetTempo() => 90;
         protected override void GetRhythmCells(MusicSheet ms)
         {
             ms.Measures ??= new Measure[ms.RhythmSpecs.NumberOfMeasures];

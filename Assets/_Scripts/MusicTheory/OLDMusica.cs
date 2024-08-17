@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 
-//TODO this is the old music theory
 namespace MusicTheory
 {
     /// <summary>
@@ -33,7 +32,7 @@ namespace MusicTheory
         public static string ToRomanString(this HarmonicFunction hf) => RomanNumeralGroupOfHarmonicFunction(hf);
         public static string RomanNumeralGroupOfHarmonicFunction(HarmonicFunction hf) => hf switch
         {
-            HarmonicFunction.Predominant => "II  IV",
+            HarmonicFunction.Subdominant => "II  IV",
             HarmonicFunction.Dominant => "V  VII",
             HarmonicFunction.Tonic => "I  III  VI",
             _ => "?"
@@ -156,9 +155,9 @@ namespace MusicTheory
         public static string FunctionToString(DiatonicFunction function) => function switch
         {
             DiatonicFunction.Tonic => nameof(DiatonicFunction.Tonic),
-            DiatonicFunction.LateralPredominant => nameof(DiatonicFunction.Predominant),
+            DiatonicFunction.LateralPredominant => nameof(DiatonicFunction.Subdominant),
             DiatonicFunction.MediantTonic => nameof(DiatonicFunction.Tonic),
-            DiatonicFunction.Predominant => nameof(DiatonicFunction.Predominant),
+            DiatonicFunction.Subdominant => nameof(DiatonicFunction.Subdominant),
             DiatonicFunction.Dominant => nameof(DiatonicFunction.Dominant),
             DiatonicFunction.SubmediantTonic => nameof(DiatonicFunction.Tonic),
             DiatonicFunction.LateralDominant => nameof(DiatonicFunction.Dominant),
@@ -171,9 +170,9 @@ namespace MusicTheory
         public static HarmonicFunction NumeralToFunction(ChromaticRomanNumeral numeral) => numeral switch
         {
             ChromaticRomanNumeral.I => HarmonicFunction.Tonic,
-            ChromaticRomanNumeral.II => HarmonicFunction.Predominant,
+            ChromaticRomanNumeral.II => HarmonicFunction.Subdominant,
             ChromaticRomanNumeral.III => HarmonicFunction.Tonic,
-            ChromaticRomanNumeral.IV => HarmonicFunction.Predominant,
+            ChromaticRomanNumeral.IV => HarmonicFunction.Subdominant,
             ChromaticRomanNumeral.V => HarmonicFunction.Dominant,
             ChromaticRomanNumeral.VI => HarmonicFunction.Tonic,
             ChromaticRomanNumeral.VII => HarmonicFunction.Dominant,
@@ -211,7 +210,7 @@ namespace MusicTheory
 
                 },
                 Extension.Seventh => chord switch
-                {//TODO make ∆7 && -7 audio clips
+                {
                     ChromaticRomanNumeral.I => ChordQuality.Maj,
                     ChromaticRomanNumeral.II => ChordQuality.Min,
                     ChromaticRomanNumeral.III => ChordQuality.Min,
@@ -223,7 +222,7 @@ namespace MusicTheory
 
                 },
                 Extension.Jazz => chord switch
-                {//TODO make jazz audio clips
+                {
                     ChromaticRomanNumeral.I => ChordQuality.Maj,
                     ChromaticRomanNumeral.II => ChordQuality.Min,
                     ChromaticRomanNumeral.III => ChordQuality.Min,
@@ -291,7 +290,7 @@ namespace MusicTheory
             DiatonicFunction.Tonic => ChromaticRomanNumeral.I,
             DiatonicFunction.LateralPredominant => ChromaticRomanNumeral.II,
             DiatonicFunction.MediantTonic => ChromaticRomanNumeral.II,
-            DiatonicFunction.Predominant => ChromaticRomanNumeral.IV,
+            DiatonicFunction.Subdominant => ChromaticRomanNumeral.IV,
             DiatonicFunction.Dominant => ChromaticRomanNumeral.V,
             DiatonicFunction.SubmediantTonic => ChromaticRomanNumeral.VI,
             DiatonicFunction.LateralDominant => ChromaticRomanNumeral.VII,
@@ -306,7 +305,7 @@ namespace MusicTheory
         {
             DiatonicRomanNumeral.II => DiatonicFunction.LateralPredominant,
             DiatonicRomanNumeral.III => DiatonicFunction.MediantTonic,
-            DiatonicRomanNumeral.IV => DiatonicFunction.Predominant,
+            DiatonicRomanNumeral.IV => DiatonicFunction.Subdominant,
             DiatonicRomanNumeral.V => DiatonicFunction.Dominant,
             DiatonicRomanNumeral.VI => DiatonicFunction.SubmediantTonic,
             DiatonicRomanNumeral.VII => DiatonicFunction.LateralDominant,
@@ -320,7 +319,7 @@ namespace MusicTheory
         public static DiatonicFunction HarmonicToDiatonicFunction(HarmonicFunction hf) => hf switch
         {
             HarmonicFunction.Dominant => DiatonicFunction.Dominant,
-            HarmonicFunction.Predominant => DiatonicFunction.Predominant,
+            HarmonicFunction.Subdominant => DiatonicFunction.Subdominant,
             _ => DiatonicFunction.Tonic,
         };
 
@@ -332,8 +331,8 @@ namespace MusicTheory
         {
             DiatonicFunction.Dominant => HarmonicFunction.Dominant,
             DiatonicFunction.LateralDominant => HarmonicFunction.Dominant,
-            DiatonicFunction.LateralPredominant => HarmonicFunction.Predominant,
-            DiatonicFunction.Predominant => HarmonicFunction.Predominant,
+            DiatonicFunction.LateralPredominant => HarmonicFunction.Subdominant,
+            DiatonicFunction.Subdominant => HarmonicFunction.Subdominant,
             _ => HarmonicFunction.Tonic,
         };
 
@@ -474,13 +473,13 @@ namespace MusicTheory
     public enum ChromaticRomanNumeral { I, II, III, IV, V, VI, VII, bII, bIII, bV, bVI, bVII };
     public enum SecondaryRomanNumeral { bII, bIII, bV, bVI, bVII }
 
-    public enum HarmonicFunction { Tonic, Predominant, Dominant, Secondary };
+    public enum HarmonicFunction { Tonic, Subdominant, Dominant, Secondary };
     public enum DiatonicFunction
     {
         Tonic,
         LateralPredominant,
         MediantTonic,
-        Predominant,
+        Subdominant,
         Dominant,
         SubmediantTonic,
         LateralDominant

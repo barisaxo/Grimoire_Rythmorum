@@ -2,7 +2,8 @@
     "dotnet.preferCSharpExtension": true,
     "cSpell.words": [
         "Capsa",
-        "Inventoriable"
+        "Inventoriable",
+        "Rhythmorum"
     ],
     "dotnet.defaultSolution": "Grimoire_Rythmorum.sln"
 }

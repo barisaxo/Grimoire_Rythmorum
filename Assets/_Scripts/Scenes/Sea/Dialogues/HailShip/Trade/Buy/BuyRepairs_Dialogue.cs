@@ -1,21 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using Dialog;
-using Data;
+using Datum;
 
 public class BuyRepairs_Dialogue : Dialogue
 {
     readonly Dialogue ReturnTo;
     readonly Standing Standing;
 
-    int StandingMod => Data.Manager.Io.Standings.GetLevel(Standing);
+    int StandingMod => Manager.Io.Standings.GetLevel(Standing);
     int Gold => Manager.Io.Inventory.GetLevel(new Gold());
     int Mats => Manager.Io.Inventory.GetLevel(new Material());
     int CurHP => Manager.Io.ActiveShip.GetLevel(new CurrentHitPoints());
     int MaxHP => Manager.Io.ActiveShip.GetLevel(new MaxHitPoints());
 
     float HPPercent => (float)CurHP / (float)MaxHP;
-    int HPDown => MaxHP - CurHP;
+    // int HPDown => MaxHP - CurHP;
 
     float StandingsModifier => 1f + (float)(1f - (float)((float)StandingMod) / 9f);
 
@@ -28,8 +28,6 @@ public class BuyRepairs_Dialogue : Dialogue
         ReturnTo = returnTo;
         Speaker = speaker;
         Standing = standing;
-        UnityEngine.Debug.Log(HPPercent + nameof(HPPercent) + "StandingsMod:" + StandingsModifier + ", mats: " + Mats + ", mats cost: " + (smallHealthAmount * matsPer) + ", smallHealth:" + smallHealthAmount + ", SmallHealthBool:" + SmallRepairs);
-        UnityEngine.Debug.Log(RepairSmall_RepText);
     }
 
     public override Dialogue Initiate()
@@ -44,7 +42,6 @@ public class BuyRepairs_Dialogue : Dialogue
         .SetSpeaker(Speaker)
         ;
 
-    //TODOTODO
     string RepairLarge_RepText => "50% hull [" + (-largeHealthAmount * goldPer) + " gold, " + (-largeHealthAmount * matsPer) + " mats]";
     string RepairMedium_RepText => "25% hull [" + (-medHealthAmount * goldPer) + " gold, " + (-medHealthAmount * matsPer) + " mats]";
     string RepairSmall_RepText => "15% hull [" + (-smallHealthAmount * goldPer) + " gold, " + (-smallHealthAmount * matsPer) + " mats]";
@@ -53,13 +50,22 @@ public class BuyRepairs_Dialogue : Dialogue
     Response RepairLarge_Response => _repairLarge_response ??= new Response(RepairLarge_RepText, TradeComplete_Line)
         .SetPlayerAction(RepairLarge);
 
+    Response _cantAffordRepairLarge_response;
+    Response CantAffordRepairLarge_Response => _cantAffordRepairLarge_response ??= new Response("50% hull [can't afford]");
+
+
     Response _repairMedium_response;
     Response RepairMedium_Response => _repairMedium_response ??= new Response(RepairMedium_RepText, TradeComplete_Line)
         .SetPlayerAction(RepairMedium);
+    Response _cantAffordRepairMedium_response;
+    Response CantAffordRepairMedium_Response => _cantAffordRepairMedium_response ??= new Response("25% hull [can't afford]");
 
     Response _repairSmall_response;
     Response RepairSmall_Response => _repairSmall_response ??= new Response(RepairSmall_RepText, TradeComplete_Line)
         .SetPlayerAction(RepairSmall);
+
+    Response _cantAffordRepairSmall_response;
+    Response CantAffordRepairSmall_Response => _cantAffordRepairSmall_response ??= new Response("15% hull [can't afford]");
 
     Response[] _repairResponses;
     Response[] RepairResponses => _repairResponses ??= GetRepairResponses();
@@ -67,21 +73,39 @@ public class BuyRepairs_Dialogue : Dialogue
     {
         List<Response> responses = new();
 
-        if (LargeRepairs) { responses.Add(RepairLarge_Response); }
-        if (MedRepairs) { responses.Add(RepairMedium_Response); }
-        if (SmallRepairs) { responses.Add(RepairSmall_Response); }
+        if (LargeRepairsNeeded)
+        {
+            if (AffordLargeRepairs) responses.Add(RepairLarge_Response);
+            else responses.Add(CantAffordRepairLarge_Response);
+        }
+
+        if (MedRepairsNeeded)
+        {
+            if (AffordMedRepairs) responses.Add(RepairMedium_Response);
+            else responses.Add(CantAffordRepairMedium_Response);
+        }
+
+        if (SmallRepairsNeeded)
+        {
+            if (AffordSmallRepairs) responses.Add(RepairSmall_Response);
+            else responses.Add(CantAffordRepairSmall_Response);
+        }
+        else responses.Add(new("[No repairs needed]"));
 
         responses.Add(BackResponse);
 
         return responses.ToArray();
     }
 
-    bool LargeRepairs => HPPercent < .75f && !(Gold < largeHealthAmount * goldPer) && !(Mats < largeHealthAmount * matsPer);
-    bool MedRepairs => HPPercent < .85f && !(Gold < medHealthAmount * goldPer) && !(Mats < medHealthAmount * matsPer);
-    bool SmallRepairs => HPPercent < 1f && !(Gold < smallHealthAmount * goldPer) && !(Mats < smallHealthAmount * matsPer);
+    bool LargeRepairsNeeded => HPPercent < .75f;
+    bool AffordLargeRepairs => !(Gold < largeHealthAmount * goldPer) && !(Mats < largeHealthAmount * matsPer);
+    bool MedRepairsNeeded => HPPercent < .85f;
+    bool AffordMedRepairs => !(Gold < medHealthAmount * goldPer) && !(Mats < medHealthAmount * matsPer);
+    bool SmallRepairsNeeded => HPPercent < 1f;
+    bool AffordSmallRepairs => !(Gold < smallHealthAmount * goldPer) && !(Mats < smallHealthAmount * matsPer);
 
-    int matsPer => (int)(2f * StandingsModifier);
-    int goldPer => (int)(25f * StandingsModifier);
+    int matsPer => (int)(1);
+    int goldPer => (int)(2.66f * StandingsModifier);
 
     void RepairSmall()
     {
@@ -111,5 +135,5 @@ public class BuyRepairs_Dialogue : Dialogue
         ;
 
     Response _backResponse;
-    Response BackResponse => _backResponse ??= new Response("Never mind", ReturnTo);
+    Response BackResponse => _backResponse ??= new Response("Back", ReturnTo);
 }

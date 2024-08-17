@@ -33,7 +33,7 @@ public class PatternViewer
     }
 
 
-    private readonly int Patterns = Data.Manager.Io.Player.GetLevel(new Data.PatternsFound());
+    private readonly int Patterns = Datum.Manager.Io.Player.GetLevel(new Datum.PatternsFound());
 
     private Card _patternIDText;
     public Card PatternIDText => _patternIDText ??= new Card(nameof(PatternIDText), null)

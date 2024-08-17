@@ -1,5 +1,5 @@
 using UnityEngine;
-using Data;
+using Datum;
 using System.Collections.Generic;
 
 namespace Sea
@@ -110,21 +110,21 @@ namespace Sea
     {
         public QuestData QuestData { get; }
         public IQuest Quest { get; }
-        public void QuestComplete();
+        public void CompleteQuest();
     }
 
     public class Questable : IQuestable
     {
         public QuestData QuestData { get; }
         public IQuest Quest { get; }
-        public void QuestComplete()
+        public void CompleteQuest()
         {
             QuestData.SetQuest(Quest, null);
         }
-        public Questable(QuestData data, IQuest dataItem)
+        public Questable(QuestData data, IQuest questItem)
         {
             QuestData = data;
-            Quest = dataItem;
+            Quest = questItem;
         }
     }
 
@@ -132,7 +132,7 @@ namespace Sea
     {
         public QuestData QuestData => null;
         public IQuest Quest => null;
-        public void QuestComplete() { }
+        public void CompleteQuest() { }
     }
 
     public interface IInventoriable

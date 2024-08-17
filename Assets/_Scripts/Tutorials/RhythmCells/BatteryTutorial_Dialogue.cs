@@ -5,51 +5,24 @@ using Dialog;
 
 public class BatteryTutorial_Dialogue : Dialogue
 {
-    BatteryTutorial_Dialogue(State subsequentState) { SubsequentState = subsequentState; }
+    public BatteryTutorial_Dialogue(State subsequentState) { SubsequentState = subsequentState; }
     readonly State SubsequentState;
-    public override Dialogue Initiate() { FirstLine = GetStartLine(); return this; }
 
-    Line GetStartLine()
+    public override Dialogue Initiate()
     {
-        var battery = _battery;
-
-        Line[] lines = new Line[battery.Length];
-        for (int i = 0; i < lines.Length; i++)
-        {
-            lines[i] = new(battery[i]);
-        }
-
-        lines[^1].SetResponses(new Response[3] {
-             new Response("Rhythm Cells Tutorial", new W_Dialogue(SubsequentState)),
-             new Response("Previous", lines[^2]), Exit });
-
-        for (int i = 1; i < lines.Length - 1; i++)
-        {
-            lines[i].SetResponses(Replies(lines[i + 1], lines[i - 1]));
-        }
-
-        lines[0].SetResponses(new Response[2] { new Response("Next", lines[1]), Exit });
-
-        return lines[0];
+        FirstLine = GetStartLines(_battery, SubsequentState);
+        return this;
     }
 
-    Response[] Replies(Line nextLine, Line prevLine) => new Response[3]{
-            new Response("Next", nextLine),
-            new Response("Previous", prevLine),
-            Exit,
-    };
-
-    Response _exit;
-    Response Exit => _exit ??= new Response("Exit", SubsequentState);
-
-    string[] _battery => new string[7]{
-        "Battery is a rhythm game emulating both the battery of a drum line, and the battery of a ships cannons.",
+    string[] _battery => new string[]{
+        "Batterie is a rhythm game emulating both the batterie of a drum line, and the battery of a ships cannons.",
         "The goal is to sight-read rhythms with sheet music, and perform these rhythms by tapping.",
         "The key to this reading rhythms is understanding Rhythm Cells. Just like there are only 12 notes in music, there are only 12 rhythm shapes. Really!",
-        "By combining these 12 shapes we call rhythm cells with ties and rests, we can create any rhythm possible!",
+        "By combining these 12 shapes with ties and rests, we can create any rhythm possible!",
         "There are two main types of these 12 shapes, those with 4 counts, and those with 3 counts, sometimes called triplets.",
-        "There are eight 4-count shapes, and four 3-count shapes. For now we will focus on the eight 4-count shapes.",
-        "Let's take a look at them..."
+        "There are eight 4-count shapes, and four 3-count shapes.",
+        "Rhythm cells may use different subdivisions such as quarter notes, eight notes, or sixteenth notes...",
+        "...but that doesn't change the rhythmic shape, only how we count it."
     };
 
 

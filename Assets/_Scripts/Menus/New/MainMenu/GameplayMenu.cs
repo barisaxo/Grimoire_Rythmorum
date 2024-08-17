@@ -1,5 +1,5 @@
 using System;
-using Data;
+using Datum;
 using UnityEngine;
 
 namespace Menus
@@ -73,7 +73,6 @@ namespace Menus
 
         void ShowHideEast()
         {
-            Debug.Log("Selection.Item is Calibrate: " + (Selection.Item is Calibrate).ToString());
             if (Selection.Item is Calibrate)
                 Scene.East.SetImageColor(Color.white).SetTextColor(Color.white);
             else

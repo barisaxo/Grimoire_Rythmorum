@@ -178,7 +178,7 @@ public static class CardSystems
     public static Card OffsetImagePosition(this Card Card, Vector2 v)
     {
         Card.Image.rectTransform.localPosition +=
-        (Vector3)(Card.Image.rectTransform.sizeDelta * v);
+            (Vector3)(Card.Image.rectTransform.sizeDelta * v);
         return Card;
     }
 

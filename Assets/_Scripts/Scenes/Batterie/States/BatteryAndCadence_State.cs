@@ -7,7 +7,7 @@ public class BatterieAndCadence_State : State
     public BatterieAndCadence_State(BatterieScene batterieScene)
     {
         Scene = batterieScene;
-        Scene.Tick = Tick;
+        Scene.BatterieSceneTick = BatterieAndCadenceTick;
     }
 
     public BatterieAndCadence_State(RhythmSpecs specs)
@@ -17,7 +17,7 @@ public class BatterieAndCadence_State : State
               Sea.WorldMapScene.Io.NearestNPC.ShipStats,
               Sea.WorldMapScene.Io.NearestNPC.SceneObject.GO,
               playerShip: Sea.WorldMapScene.Io.Ship,
-              tick: Tick,
+              tick: BatterieAndCadenceTick,
               specs: specs,
               nmeName: Sea.WorldMapScene.Io.NearestNPC.Name
         );
@@ -50,23 +50,23 @@ public class BatterieAndCadence_State : State
 
     protected override void DisengageState()
     {
-        Scene.Pack.Synchro.TickEvent -= Tick;
+        Scene.Pack.Synchro.TickEvent -= BatterieAndCadenceTick;
         Scene.BatterieFeedback.SelfDestruct();
         Scene.CountOffFeedBack.SelfDestruct();
-        Audio.Batterie.Stop();
+        Audio.Batterie.FadeAndStop();
         Scene.Pack.MuscopaAudio.StopTheCadence();
         Scene.Pack.MusicSheet.SelfDestruct();
     }
 
 
-    void Tick()
+    void BatterieAndCadenceTick()
     {
         if (CountingOff)
         {
             CountOffTimeEvent();
             if (++Counter == Scene.Pack.CountOffBeatmap.Length - 1)
             {
-                MonoHelper.OnUpdate += Scene.Pack.Analyzer.Tick;
+                MonoHelper.OnUpdate += Scene.Pack.Analyzer.BatterieInputAnalyzerTick;
                 Scene.Pack.Analyzer.Start();
                 CountingOff = false; Playing = true; Counter = 0;
             }
@@ -87,9 +87,9 @@ public class BatterieAndCadence_State : State
 
         if (!Playing && !CountingOff)
         {
-            Audio.Batterie.Stop();
+            Audio.Batterie.FadeAndStop();
             Scene.Pack.Synchro.Stop();
-            MonoHelper.OnUpdate -= Scene.Pack.Analyzer.Tick;
+            MonoHelper.OnUpdate -= Scene.Pack.Analyzer.BatterieInputAnalyzerTick;
             Scene.Pack.MuscopaAudio.StopTheCadence();
             SetState(new DialogStart_State(new BatterieIntermission_Dialogue(Scene)));
         }
@@ -161,6 +161,8 @@ public class BatterieAndCadence_State : State
             case GamePadButton.R1_Press:
             case GamePadButton.L2_Press:
             case GamePadButton.R2_Press:
+            case GamePadButton.L3_Press:
+            case GamePadButton.R3_Press:
                 Scene.Pack.Analyzer.InputDownAction(); break;
         }
     }

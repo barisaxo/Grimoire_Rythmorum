@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using Ships;
 
+
 public class BarquePrefab : MonoBehaviour, Sea.IShipPrefab
 {
     [Header(nameof(Hull))]

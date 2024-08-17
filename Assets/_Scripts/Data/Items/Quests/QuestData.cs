@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Quests;
 
-namespace Data
+namespace Datum
 {
     [System.Serializable]
     public class QuestData : IData
@@ -47,7 +47,6 @@ namespace Data
         public void SetQuest(IItem item, Quests.IQuest quest)
         {
             Quests[(IQuest)item] = quest;
-            PersistentData.Save(this);
         }
 
         public Quests.IQuest GetQuest(IItem item) =>

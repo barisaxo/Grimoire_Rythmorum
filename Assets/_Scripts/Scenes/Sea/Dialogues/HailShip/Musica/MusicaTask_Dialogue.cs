@@ -31,8 +31,8 @@ public class MusicaTask_Dialogue : Dialogue
     {
         List<Response> temp = new();
         // if (!DataManager.Io.CharacterData.Sextant) temp.Add(SextantResponse);
-        if (Data.Manager.Io.ActiveShip.GetLevel(new Data.StarChartStorage()) > 0) temp.Add(MapResponse);
-        if (Data.Manager.Io.ActiveShip.GetLevel(new Data.GramophoneStorage()) > 0) temp.Add(GramoResponse);
+        if (Datum.Manager.Io.ActiveShip.GetLevel(new Datum.StarChartStorage()) > 0) temp.Add(MapResponse);
+        if (Datum.Manager.Io.ActiveShip.GetLevel(new Datum.GramophoneStorage()) > 0) temp.Add(GramoResponse);
 
         if (temp.Count == 0) temp.Add(CantResponse);
         else temp.Add(BackResponse);

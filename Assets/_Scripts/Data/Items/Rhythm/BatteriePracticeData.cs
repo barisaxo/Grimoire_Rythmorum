@@ -2,7 +2,7 @@ using System;
 using Menus;
 using UnityEngine;
 using System.Collections.Generic;
-namespace Data
+namespace Datum
 {
     [Serializable]
     public class BatteriePracticeData : IData
@@ -106,19 +106,19 @@ namespace Data
             PersistentData.Save(this);
         }
 
-        private BatteriePracticeData() { }
+        // private BatteriePracticeData() { }
 
-        public static BatteriePracticeData GetData()
-        {
-            BatteriePracticeData data = new();
-            if (data.PersistentData.TryLoadData() is not BatteriePracticeData loadData) return data;
-            for (int i = 0; i < data.Items.Length; i++)
-                try { data.LoadValue(data.Items[i], loadData.GetLevel(data.Items[i])); }
-                catch { }
-            return data;
-        }
+        // public static BatteriePracticeData GetData()
+        // {
+        //     BatteriePracticeData data = new();
+        //     if (data.PersistentData.TryLoadData() is not BatteriePracticeData loadData) return data;
+        //     for (int i = 0; i < data.Items.Length; i++)
+        //         try { data.LoadValue(data.Items[i], loadData.GetLevel(data.Items[i])); }
+        //         catch { }
+        //     return data;
+        // }
 
-        public IPersistentData PersistentData { get; } = new SaveData(nameof(BatteriePracticeData));
+        public IPersistentData PersistentData { get; } = new NotPersistentData();
     }
 
     public interface IBatteriePracticeOption : IItem
@@ -132,6 +132,7 @@ namespace Data
     [Serializable] public struct QRhythmCell : IBatteriePracticeOption { public readonly BatteriePracticeOptionEnum Enum => BatteriePracticeOptionEnum.QRhythmCell; }
     [Serializable] public struct ERhythmCell : IBatteriePracticeOption { public readonly BatteriePracticeOptionEnum Enum => BatteriePracticeOptionEnum.ERhythmCell; }
     [Serializable] public struct SRhythmCell : IBatteriePracticeOption { public readonly BatteriePracticeOptionEnum Enum => BatteriePracticeOptionEnum.SRhythmCell; }
+    [Serializable] public struct TimeSignatures : IBatteriePracticeOption { public readonly BatteriePracticeOptionEnum Enum => BatteriePracticeOptionEnum.TimeSignatures; }
 
     [Serializable]
     public class BatteriePracticeOptionEnum : Enumeration
@@ -144,6 +145,7 @@ namespace Data
         public static BatteriePracticeOptionEnum QRhythmCell = new(0, "Quarter Note Rhythms");
         public static BatteriePracticeOptionEnum ERhythmCell = new(1, "Eighth Note Rhythms");
         public static BatteriePracticeOptionEnum SRhythmCell = new(2, "Sixteenth Note Rhythms");
+        public static BatteriePracticeOptionEnum TimeSignatures = new(3, "Time Signatures");
 
         internal static IItem ToItem(BatteriePracticeOptionEnum @enum)
         {
@@ -152,6 +154,7 @@ namespace Data
                 _ when @enum == QRhythmCell => new QRhythmCell(),
                 _ when @enum == ERhythmCell => new ERhythmCell(),
                 _ when @enum == SRhythmCell => new SRhythmCell(),
+                _ when @enum == TimeSignatures => new TimeSignatures(),
                 _ => throw new System.ArgumentOutOfRangeException(@enum.Name)
             };
         }

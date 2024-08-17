@@ -1,8 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Dialog;
 
-public partial class Assets
+public class Cove_Dialogue : Dialogue
 {
+
+
+
+
 
 }

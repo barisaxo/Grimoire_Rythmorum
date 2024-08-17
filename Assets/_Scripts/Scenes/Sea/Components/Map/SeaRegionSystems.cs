@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 public static class SeaRegionSystems
 {
-    public static List<Cell> InitializeCells(this Region region, Data.QuestData questData)
+    public static List<Cell> InitializeCells(this Region region, Datum.QuestData questData)
     {
         Debug.Log("Initializing region: " + region.Coord);
         List<Cell> cells = new();
@@ -20,7 +20,7 @@ public static class SeaRegionSystems
                 {
                     case Feature.Cove:
                         cells.Add(new Cell(size - 1, 1) { Type = CellType.Cove });
-                        Debug.Log((cells[^1].Coord + (region.Coord * size)).GlobalCoordsToLatLongs(Sea.WorldMapScene.Io.Map.GlobalSize));
+                        Debug.Log((cells[^1].LocalCoord + (region.Coord * size)).GlobalCoordsToLatLongs(Sea.WorldMapScene.Io.Map.GlobalSize));
                         break;
 
                     case Feature.LightHouse:
@@ -57,7 +57,7 @@ public static class SeaRegionSystems
 
         void AddFish()
         {
-            int numOfFish = 0;
+            int numOfFishSchools = 0;
 
             for (int x = 0; x < size; x++)
                 for (int y = 0; y < size; y++)
@@ -65,15 +65,15 @@ public static class SeaRegionSystems
                     if (!(x == size - 1 && y == 1) &&
                        ((x > 3 && y > 3) || (x < size - 3 && y < size - 3) ||
                         (x > 3 && y < size - 3) || (x < size - 3 && y > 3) ||
-                        (x > halfSize - 2 && y > halfSize - 2 && x < halfSize + 2 && y < halfSize + 2))
-                         &&
-                        (numOfFish < 3 && x + y > numOfFish * 8 && Random.value > .9f))
+                        (x > halfSize - 2 && y > halfSize - 2 && x < halfSize + 2 && y < halfSize + 2)) &&
+                        numOfFishSchools < 3 &&
+                        Random.value > .9f)
                     {
-                        foreach (Cell cell in cells) if (cell.Coord.x == x && cell.Coord.y == y) continue;
-                        int ii = Random.Range(1, 4);
-                        for (int i = 0; i < ii; i++)
+                        foreach (Cell cell in cells) if (cell.LocalCoord.x == x && cell.LocalCoord.y == y) continue;
+                        int fishToAdd = Random.Range(1, 4);
+                        numOfFishSchools++;
+                        for (int i = 0; i < fishToAdd; i++)
                         {
-                            numOfFish++;
                             cells.Add(new Cell(x, y)
                             {
                                 Type = CellType.Fish,
@@ -129,20 +129,20 @@ public static class SeaRegionSystems
     public static bool IsCellOccupied(this List<Cell> cells, int x, int y) => cells.IsCellOccupied(new Vector2Int(x, y));
     public static bool IsCellOccupied(this List<Cell> cells, Vector2Int v2i)
     {
-        foreach (Cell cell in cells) if (cell.Coord == v2i) return true;
+        foreach (Cell cell in cells) if (cell.LocalCoord == v2i) return true;
         return false;
     }
 
 
 
-    public static NPCShip[] SetUpNPCs(this Region region, Data.Manager dataManager)
+    public static NPCShip[] SetUpNPCs(this Region region, Datum.Manager dataManager)
     {
         NPCShip[] ships = new NPCShip[(int)(region.Resolution * .2f)];
 
         for (int i = 0; i < ships.Length; i++)
         {
             var path = region.PatrolPattern(i);
-            Data.IHull hull = GetHull();
+            Datum.IHull hull = GetHull();
             ships[i] = new(path, GetShipType(), hull, region.Coord * region.Resolution, GetShipStats(hull)) { };
         }
 
@@ -157,29 +157,29 @@ public static class SeaRegionSystems
             };
         }
 
-        ShipStats.ShipStats GetShipStats(Data.IHull hull)
+        ShipStats.ShipStats GetShipStats(Datum.IHull hull)
         {
             var stats = new ShipStats.ShipStats(
-                new ShipStats.HullStats(hull, Data.WoodEnum.GetRandomWood()),
-                new ShipStats.CannonStats(Data.CannonEnum.GetRandomCannon(), Data.MetalEnum.GetRandomMetal()),
-                new ShipStats.RiggingStats((Data.ICloth)Data.ClothEnum.GetRandomCloth())
+                new ShipStats.HullStats(hull, Datum.WoodEnum.GetRandomWood()),
+                new ShipStats.CannonStats(Datum.CannonEnum.GetRandomCannon(), Datum.MetalEnum.GetRandomMetal()),
+                new ShipStats.RiggingStats((Datum.ICloth)Datum.ClothEnum.GetRandomCloth())
             );
 
             return stats;
         }
 
-        Data.IHull GetHull()
+        Datum.IHull GetHull()
         {
             // Debug.Log(region.Coord + " " + Mathf.Abs(region.Coord.x - (WorldMapScene.Io.Map.Size * .5f)) + " " + Mathf.Abs(region.Coord.y - (WorldMapScene.Io.Map.Size * .5f)) + " " + WorldMapScene.Io.Map.Size);
             return Mathf.Abs(Mathf.Abs(region.Coord.x - (WorldMapScene.Io.Map.RegionResolution * .5f)) + Mathf.Abs(region.Coord.y - (WorldMapScene.Io.Map.RegionResolution * .5f))) switch
             {
-                < 3 => new Data.Sloop(),
-                3 => Random.value < .65f ? new Data.Sloop() : new Data.Brig(),
-                4 => Random.value < .65f ? new Data.Brig() : new Data.Schooner(),
-                5 => Random.value < .65f ? new Data.Schooner() : new Data.Cutter(),
-                6 => Random.value < .65f ? new Data.Cutter() : new Data.Frigate(),
-                7 => Random.value < .65f ? new Data.Frigate() : new Data.Barque(),
-                _ => Random.value < .50f ? new Data.Frigate() : new Data.Barque(),
+                < 3 => new Datum.Sloop(),
+                3 => Random.value < .65f ? new Datum.Sloop() : new Datum.Brig(),
+                4 => Random.value < .65f ? new Datum.Brig() : new Datum.Schooner(),
+                5 => Random.value < .65f ? new Datum.Schooner() : new Datum.Cutter(),
+                6 => Random.value < .65f ? new Datum.Cutter() : new Datum.Frigate(),
+                7 => Random.value < .65f ? new Datum.Frigate() : new Datum.Barque(),
+                _ => Random.value < .50f ? new Datum.Frigate() : new Datum.Barque(),
             };
         }
     }

@@ -101,15 +101,15 @@ namespace MusicTheory.Rhythms
         {
             return time switch
             {
-                TwoTwo => Quantizement.Half,
-                ThreeTwo => Quantizement.Half,
-                NineEight => Quantizement.EighthTrips,
-                SixEight => Quantizement.EighthTrips,
+                // TwoTwo or
+                // ThreeTwo => Quantizement.Half,
+                SixEight or
+                NineEight or
                 TwelveEight => Quantizement.EighthTrips,
-                ThreeEight => Quantizement.Eighth,
-                FiveEight23 => Quantizement.Eighth,
-                FiveEight32 => Quantizement.Eighth,
-                SevenEight34 => Quantizement.Eighth,
+                ThreeEight or
+                FiveEight23 or
+                FiveEight32 or
+                SevenEight34 or
                 SevenEight43 => Quantizement.Eighth,
                 _ => Quantizement.Quarter,
             };

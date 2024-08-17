@@ -5,9 +5,9 @@ using Dialog;
 
 public class NavigateStarChart_Dialogue : Dialogue
 {
-    readonly Data.Standing Standing;
-    int StandingMod => Data.Manager.Io.Standings.GetLevel(Standing);
-    public NavigateStarChart_Dialogue(Dialogue returnToDialogue, Speaker speaker, Data.Standing standing)
+    readonly Datum.Standing Standing;
+    int StandingMod => Datum.Manager.Io.Standings.GetLevel(Standing);
+    public NavigateStarChart_Dialogue(Dialogue returnToDialogue, Speaker speaker, Datum.Standing standing)
     {
         ReturnTo = returnToDialogue;
         Speaker = speaker;
@@ -54,9 +54,9 @@ public class NavigateStarChart_Dialogue : Dialogue
 
 public class UnlockGramophone_Dialogue : Dialogue
 {
-    readonly Data.Standing Standing;
-    int StandingMod => Data.Manager.Io.Standings.GetLevel(Standing);
-    public UnlockGramophone_Dialogue(Dialogue returnToDialogue, Speaker speaker, Data.Standing standing)
+    readonly Datum.Standing Standing;
+    int StandingMod => Datum.Manager.Io.Standings.GetLevel(Standing);
+    public UnlockGramophone_Dialogue(Dialogue returnToDialogue, Speaker speaker, Datum.Standing standing)
     {
         ReturnTo = returnToDialogue;
         Speaker = speaker;

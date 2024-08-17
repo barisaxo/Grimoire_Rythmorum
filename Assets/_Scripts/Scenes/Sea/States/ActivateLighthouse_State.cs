@@ -1,5 +1,5 @@
 using System;
-using Data;
+using Datum;
 namespace Sea
 {
     public class ActivateLighthouse_State : State
@@ -22,12 +22,18 @@ namespace Sea
             Lighthouse.LighthousePrefab.Light.SetActive(true);
             Lighthouse.RemoveInteractable();
             // }
+
             base.PreEngageState(callback);
         }
 
         protected override void EngageState()
         {
-            SetState(SubsequentState);
+            if (Manager.Io.Lighthouse.AllActivated())
+            {
+                DataManager.Player.AdjustLevel(new Datum.PatternsFound(), 10000);
+                new DialogStart_State(new WonTheGame_Dialogue());
+            }
+            else SetState(SubsequentState);
         }
     }
 }

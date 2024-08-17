@@ -5,9 +5,9 @@ using System;
 public class Trade_Dialogue : Dialogue
 {
     readonly Dialogue ReturnTo;
-    readonly Data.Standing Standing;
+    readonly Datum.Standing Standing;
 
-    public Trade_Dialogue(Dialogue returnTo, Speaker speaker, Data.Standing standing)
+    public Trade_Dialogue(Dialogue returnTo, Speaker speaker, Datum.Standing standing)
     {
         ReturnTo = returnTo;
         Speaker = speaker;

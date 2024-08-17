@@ -1,6 +1,6 @@
 using UnityEngine;
 using Audio;
-using Data;
+using Datum;
 
 namespace Muscopa
 {
@@ -61,9 +61,9 @@ namespace Muscopa
 
         public void StopTheCadence()
         {
-            MuscopaChords.Stop();
-            MuscopaBass.Stop();
-            MuscopaDrums.Stop();
+            MuscopaChords.FadeAndStop();
+            MuscopaBass.FadeAndStop();
+            MuscopaDrums.FadeAndStop();
         }
 
     }

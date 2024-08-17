@@ -40,15 +40,15 @@ public class DisplayItem_State : State
 
         // DisplayItem = GameObject.Instantiate(ToInstantiate);
         // DisplayItem.transform.SetPositionAndRotation(Cam.Io.Camera.transform.position + Cam.Io.Camera.transform.forward, Quaternion.identity);
-        MonoHelper.OnUpdate += Tick;
+        MonoHelper.OnUpdate += DisplayItemTick;
     }
     protected override void DisengageState()
     {
-        MonoHelper.OnUpdate -= Tick;
+        MonoHelper.OnUpdate -= DisplayItemTick;
         Display3DCard.SelfDestruct();
     }
 
-    void Tick()
+    void DisplayItemTick()
     {
         Display3DCard.UIGO.transform.Rotate(36 * Time.deltaTime * Vector3.up);
         timer += Time.deltaTime;

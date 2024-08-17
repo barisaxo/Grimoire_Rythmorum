@@ -8,7 +8,7 @@ public class BatterieTutorialScene
     public BatterieTutorialScene(Action tick, RhythmSpecs specs, Measure[] measures)
     {
         Pack = new(specs, true);
-        Tick = tick;
+        BatterieTutorialSceneTick = tick;
         BatterieAudio = Audio.AudioManager.Io.Batterie;
         Measures = measures;
     }
@@ -16,7 +16,7 @@ public class BatterieTutorialScene
     public void Initialize()
     {
         BatterieFeedback = new();
-        Pack.Initialize(HandleHit, BatterieFeedback, Tick, Measures);
+        Pack.Initialize(HandleHit, BatterieFeedback, BatterieTutorialSceneTick, Measures);
         CountOffFeedBack = new(Pack.MusicSheet.RhythmSpecs.Time.GetCounts());
         BatterieFeedback.UpdateLoop();
         CountOffFeedBack.UpdateLoop();
@@ -28,7 +28,7 @@ public class BatterieTutorialScene
     }
 
     Measure[] Measures;
-    public Action Tick;
+    public Action BatterieTutorialSceneTick;
     readonly Audio.Batterie_AudioSystem BatterieAudio;
     public BatteriePack Pack;
 

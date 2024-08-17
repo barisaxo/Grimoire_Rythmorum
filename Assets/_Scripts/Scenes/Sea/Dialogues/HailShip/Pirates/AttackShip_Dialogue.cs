@@ -26,7 +26,7 @@ public class AttackShip_Dialogue : Dialogue
     Line _confirmLine;
     Line ConfirmLine => _confirmLine ??= new Line(ConfirmLineText, new Response[] { ConfirmResponse, BackResponse });
 
-    Line _attackLine;//TODO pan camera
+    Line _attackLine;//TODO pan camera//7/5/24 - is this still todo?
     Line Attack_Line => _attackLine ??= new Line(Attack_LineText, new SeaToBatteryTransition_State())
         .SetSpeaker(Speaker)
         // .FadeToNextState()

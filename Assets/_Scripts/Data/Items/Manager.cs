@@ -1,12 +1,17 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-namespace Data
+using Datum.QRhythm;
+
+namespace Datum
 {
     public class Manager
     {
         #region  INSTANCE
-        private Manager() { }
+        private Manager()
+        {
+            Debug.Log(Application.persistentDataPath);
+        }
 
         public static Manager Io => Instance.Io;
         private class Instance
@@ -59,7 +64,6 @@ namespace Data
         private PlayerData _playerData;
         public PlayerData Player => _playerData ??= PlayerData.GetData();
 
-
         private PlayerRecentData _playerRecentData;
         public PlayerRecentData PlayerRecent => _playerRecentData ??= PlayerRecentData.GetData();
 
@@ -79,7 +83,16 @@ namespace Data
         public PuzzleData Puzzles => _puzzleData ??= PuzzleData.GetData();
 
         private BatteriePracticeData _batteriePracticeData;
-        public BatteriePracticeData BatteriePracticeData => _batteriePracticeData ??= BatteriePracticeData.GetData();
+        public BatteriePracticeData BatteriePracticeData => _batteriePracticeData ??= new();
+
+        private QRhythm.QBatterieOptionData _qBatterieOptionData;
+        public QRhythm.QBatterieOptionData QBatterieOptionData => _qBatterieOptionData ??= QRhythm.QBatterieOptionData.GetData();
+
+        private ERhythm.EBatterieOptionData _eBatterieOptionData;
+        public ERhythm.EBatterieOptionData EBatterieOptionData => _eBatterieOptionData ??= ERhythm.EBatterieOptionData.GetData();
+
+        private SRhythm.SBatterieOptionData _sBatterieOptionData;
+        public SRhythm.SBatterieOptionData SBatterieOptionData => _sBatterieOptionData ??= SRhythm.SBatterieOptionData.GetData();
 
         private QRhythmCellData _qRhythmCellData;
         public QRhythmCellData QRhythmCellData => _qRhythmCellData ??= QRhythmCellData.GetData();
@@ -90,10 +103,13 @@ namespace Data
         private SRhythmCellData _sRhythmCellData;
         public SRhythmCellData SRhythmCellData => _sRhythmCellData ??= SRhythmCellData.GetData();
 
-        private BeatFishingPracticeData _beatFishingPracticeData;
-        public BeatFishingPracticeData BeatFishingPracticeData => _beatFishingPracticeData ??= BeatFishingPracticeData.GetData();
+        private BeatFishing.BeatFishingPracticeData _beatFishingPracticeData;
+        public BeatFishing.BeatFishingPracticeData BeatFishingPracticeData => _beatFishingPracticeData ??= BeatFishing.BeatFishingPracticeData.GetData();
 
         private ShipPurchaseData _shipPurchaseData;
         public ShipPurchaseData ShipPurchaseData => _shipPurchaseData ??= ShipPurchaseData.GetData();
+
+        private Datum.Rhythm.TimeSignatures _timeSignatures;
+        public Datum.Rhythm.TimeSignatures TimeSignatures => _timeSignatures ??= new();
     }
 }

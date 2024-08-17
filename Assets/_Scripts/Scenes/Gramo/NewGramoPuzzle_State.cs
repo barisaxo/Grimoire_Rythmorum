@@ -7,9 +7,9 @@ public class NewGramoPuzzle_State : State
 {
     readonly State SubsequentState;
     readonly bool IsPractice;
-    readonly Data.IGramophone Gramo;
+    readonly Datum.IGramophone Gramo;
 
-    public NewGramoPuzzle_State(State subsequentState, Data.IGramophone gramo, bool isPractice)
+    public NewGramoPuzzle_State(State subsequentState, Datum.IGramophone gramo, bool isPractice)
     {
         Fade = true;
         SubsequentState = subsequentState;

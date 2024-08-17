@@ -1,4 +1,4 @@
-using Data;
+using Datum;
 
 namespace Menus
 {
@@ -16,6 +16,7 @@ namespace Menus
         public MenuItem[] MenuItems { get; set; }
         public Card Description { get; set; }
         public IMenuLayout Layout { get; } = new LeftScroll();
+        readonly int solveReq = 1;
 
         public string DisplayData(IItem item)
         {
@@ -26,19 +27,25 @@ namespace Menus
         {
             get
             {
-                if (Selection.Item is NotesT or NotesA) return "";
+                if (Selection.Item is NotesT or NotesA) return Manager.Io.Puzzles.GetLevel(GetPuzzle(Selection.Item)) >= solveReq ? "Completed" : "solve " + (solveReq - -Manager.Io.Puzzles.GetLevel(GetPuzzle(Selection.Item))) + " " +
+                        GetPuzzle(Selection.Item).GetType().ToString().SentenceCase() +
+                        ((solveReq - Manager.Io.Puzzles.GetLevel(GetPuzzle(Selection.Item))) == 1 ? "" : "s") +
+                        " to unlock next puzzle";
 
                 IItem sc = StarChartEnum.ToItem(Enumeration.FindId<StarChartEnum>(Selection.Item.ID - 2));
 
                 int solved = Manager.Io.Puzzles.GetLevel(GetPuzzle(sc));
 
-                if (solved < 10)
-                    return "solve " + (10 - solved) + " " +
+                if (solved < solveReq)
+                    return "solve " + (solveReq - solved) + " " +
                         GetPuzzle(sc).GetType().ToString().SentenceCase() +
-                        ((10 - solved) == 1 ? "" : "s") +
+                        ((solveReq - solved) == 1 ? "" : "s") +
                         " to unlock";
 
-                return "";
+                return Manager.Io.Puzzles.GetLevel(GetPuzzle(Selection.Item)) >= solveReq ? "Completed" : "solve " + (solveReq - Manager.Io.Puzzles.GetLevel(GetPuzzle(Selection.Item))) + " " +
+                        GetPuzzle(Selection.Item).GetType().ToString().SentenceCase() +
+                        ((solveReq - Manager.Io.Puzzles.GetLevel(GetPuzzle(Selection.Item))) == 1 ? "" : "s") +
+                        " to unlock next puzzle";
             }
         }
 
@@ -137,6 +144,6 @@ namespace Menus
                     GetPuzzle(
                         StarChartEnum.ToItem(
                             Enumeration.FindId<StarChartEnum>(Selection.Item.ID - 2))))
-                                >= 10;
+                                >= solveReq;
     }
 }

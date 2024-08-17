@@ -37,6 +37,10 @@ public partial class Assets
 
     #region GAMEPAD 
 
+    public static Sprite UpButton => Resources.Load<Sprite>("Sprites/GamePad_Button/Up");
+    public static Sprite DownButton => Resources.Load<Sprite>("Sprites/GamePad_Button/Down");
+    public static Sprite LeftButton => Resources.Load<Sprite>("Sprites/GamePad_Button/Left");
+    public static Sprite RightButton => Resources.Load<Sprite>("Sprites/GamePad_Button/Right");
     public static Sprite EastButton => Resources.Load<Sprite>("Sprites/GamePad_Button/East");
     public static Sprite NorthButton => Resources.Load<Sprite>("Sprites/GamePad_Button/North");
     public static Sprite SouthButton => Resources.Load<Sprite>("Sprites/GamePad_Button/South");
@@ -75,6 +79,7 @@ public partial class Assets
     #region PINO
 
     public static Sprite Pino => Resources.Load<Sprite>("Sprites/Characters/Pino/Pino");
+    public static Sprite ShipIcon => Resources.Load<Sprite>("Sprites/Characters/ShipIcon1");
 
     #endregion PINO
 
@@ -175,8 +180,8 @@ public partial class Assets
     public static SloopPrefab _bountyShip => Resources.Load<SloopPrefab>("Prefabs/Sea/Ships/BountyShip/BountyShip");
     public static SloopPrefab BountyShip => Object.Instantiate(_bountyShip);
 
-    public static GameObject _catBoat => Resources.Load<GameObject>("Prefabs/Sea/Boats/CatBoat2");
-    public static GameObject CatBoat => Object.Instantiate(_catBoat);
+    public static CatBoatPrefab _catBoat => Resources.Load<GameObject>("Prefabs/Sea/Boats/CatBoat").GetComponent<CatBoatPrefab>();
+    public static CatBoatPrefab CatBoat => Object.Instantiate(_catBoat);
 
     public static ParticleSystem _cannonFire => Resources.Load<GameObject>("Prefabs/Sea/CannonFire").GetComponent<ParticleSystem>();
     public static ParticleSystem CannonFire => Object.Instantiate(_cannonFire);
@@ -266,6 +271,7 @@ public partial class Assets
     public static GramophonePrefab Gramo => Object.Instantiate(_gramo);
 
     public static AudioClip SailAmbience => Resources.Load<AudioClip>("Audio/SFX/SailAmbience");
+    public static AudioClip TuneUp => Resources.Load<AudioClip>("Audio/SFX/Warmup");
 
     public static Sprite Compass => Resources.Load<Sprite>("Sprites/Compass");
     #endregion SEA
@@ -273,6 +279,7 @@ public partial class Assets
 
 
     #region VIDEO
+    public static VideoClip RhythmIntro => Resources.Load<VideoClip>("Video/RhythmCells/Quarter/Rhythm Intro2");
     public static VideoClip RhythmCellW => Resources.Load<VideoClip>("Video/RhythmCells/Quarter/4/W");
     public static VideoClip RhythmCellHH => Resources.Load<VideoClip>("Video/RhythmCells/Quarter/4/HH");
     public static VideoClip RhythmCellQQQQ => Resources.Load<VideoClip>("Video/RhythmCells/Quarter/4/QQQQ");

@@ -1,5 +1,5 @@
-using Data.QRhythm;
-using Data;
+using Datum.QRhythm;
+using Datum;
 using MusicTheory.Rhythms;
 
 namespace Menus
@@ -74,8 +74,20 @@ namespace Menus
 
         void WestPressed()
         {
-            // if (!Unlocked(Selection.Item)) ConsequentState = null;
-            // else ConsequentState = GetTutorial;
+            if (!Unlocked(Selection.Item)) { ConsequentState = null; return; }
+            var video = Selection.Item switch
+            {
+                QQQQ => Assets.RhythmCellQQQQ,
+                HH => Assets.RhythmCellHH,
+                W => Assets.RhythmCellW,
+                HQQ => Assets.RhythmCellHQQ,
+                QQH => Assets.RhythmCellQQH,
+                DHQ => Assets.RhythmCellDHQ,
+                QDH => Assets.RhythmCellQDH,
+                QHQ => Assets.RhythmCellQHQ,
+                _ => throw new System.Exception("???")
+            };
+            ConsequentState = new Video_State(video, new MenuState(this));
         }
 
         bool Unlocked(IItem item) =>
@@ -88,14 +100,14 @@ namespace Menus
 
         State TrainingBattery => Selection.Item switch
         {
-            QQQQ => new BatteryTutorial_State(GetMeasures(CellShape.SSSS), GetSpecs(), Manager.Io.QRhythmCellData, Selection.Item, new MenuState(this)),
-            HH => new BatteryTutorial_State(GetMeasures(CellShape.LL), GetSpecs(), Manager.Io.QRhythmCellData, Selection.Item, new MenuState(this)),
-            W => new BatteryTutorial_State(GetMeasures(CellShape.L), GetSpecs(), Manager.Io.QRhythmCellData, Selection.Item, new MenuState(this)),
-            HQQ => new BatteryTutorial_State(GetMeasures(CellShape.LSS), GetSpecs(), Manager.Io.QRhythmCellData, Selection.Item, new MenuState(this)),
-            QQH => new BatteryTutorial_State(GetMeasures(CellShape.SSL), GetSpecs(), Manager.Io.QRhythmCellData, Selection.Item, new MenuState(this)),
-            DHQ => new BatteryTutorial_State(GetMeasures(CellShape.LS), GetSpecs(), Manager.Io.QRhythmCellData, Selection.Item, new MenuState(this)),
-            QDH => new BatteryTutorial_State(GetMeasures(CellShape.SL), GetSpecs(), Manager.Io.QRhythmCellData, Selection.Item, new MenuState(this)),
-            QHQ => new BatteryTutorial_State(GetMeasures(CellShape.SLS), GetSpecs(), Manager.Io.QRhythmCellData, Selection.Item, new MenuState(this)),
+            QQQQ => new BatteryTutorial_State(GetMeasures(CellShape.SSSS), GetSpecs(), Manager.Io.QRhythmCellData, Selection.Item, new MenuState(this), true),
+            HH => new BatteryTutorial_State(GetMeasures(CellShape.LL), GetSpecs(), Manager.Io.QRhythmCellData, Selection.Item, new MenuState(this), true),
+            W => new BatteryTutorial_State(GetMeasures(CellShape.L), GetSpecs(), Manager.Io.QRhythmCellData, Selection.Item, new MenuState(this), true),
+            HQQ => new BatteryTutorial_State(GetMeasures(CellShape.LSS), GetSpecs(), Manager.Io.QRhythmCellData, Selection.Item, new MenuState(this), true),
+            QQH => new BatteryTutorial_State(GetMeasures(CellShape.SSL), GetSpecs(), Manager.Io.QRhythmCellData, Selection.Item, new MenuState(this), true),
+            DHQ => new BatteryTutorial_State(GetMeasures(CellShape.LS), GetSpecs(), Manager.Io.QRhythmCellData, Selection.Item, new MenuState(this), true),
+            QDH => new BatteryTutorial_State(GetMeasures(CellShape.SL), GetSpecs(), Manager.Io.QRhythmCellData, Selection.Item, new MenuState(this), true),
+            QHQ => new BatteryTutorial_State(GetMeasures(CellShape.SLS), GetSpecs(), Manager.Io.QRhythmCellData, Selection.Item, new MenuState(this), true),
             _ => throw new System.Exception(Selection.Item.Name)
         };
 

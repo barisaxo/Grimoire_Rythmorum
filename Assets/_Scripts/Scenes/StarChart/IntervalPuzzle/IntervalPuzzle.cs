@@ -25,6 +25,7 @@ public class IntervalPuzzle : IPuzzle
     public KeyboardNoteName[] Notes => _notes;
 
     public string Desc => "Build the <b><i>interval";
+    public string puzzleType => "interval";
 
     private readonly string _question;
     public string Question => _question;
@@ -48,7 +49,7 @@ public class IntervalPuzzle : IPuzzle
 
     private Interval WeightedRandomInterval()
     {
-        int solved = Data.Manager.Io.Puzzles.GetLevel(this);
+        int solved = Datum.Manager.Io.Puzzles.GetLevel(this);
 
         List<Interval> scaleList = new() { new mi2(), new M2() };
         if (solved > 1) { scaleList.Add(new mi3()); scaleList.Add(new M3()); }
@@ -80,6 +81,7 @@ public class InvertedIntervalPuzzle : IPuzzle
     public KeyboardNoteName[] Notes => _notes;
 
     public string Desc => "Invert the <b><i>interval";
+    public string puzzleType => "inverted interval";
 
     private readonly string _question;
     public string Question => _question;

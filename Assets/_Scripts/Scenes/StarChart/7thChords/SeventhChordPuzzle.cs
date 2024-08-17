@@ -23,6 +23,7 @@ public class SeventhChordPuzzle : IPuzzle
     public KeyboardNoteName[] Notes => _notes;
 
     public string Desc => "Build the <b><i>seventh chord";
+    public string puzzleType => "seventh chord";
 
     private readonly string _question;
     public string Question => _question;

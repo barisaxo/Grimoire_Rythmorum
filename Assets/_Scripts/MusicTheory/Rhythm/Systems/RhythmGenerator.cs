@@ -629,7 +629,7 @@ namespace MusicTheory.Rhythms
 
         public static Count GetQuantizedCount(this RhythmCell cell, SubBeatAssignment s)
         {
-            Debug.Log(s + " " + cell.MetricLevel + " " + cell.Count);
+            // Debug.Log(s + " " + cell.MetricLevel + " " + cell.Count);
             return s switch
             {
                 E => cell.MetricLevel switch

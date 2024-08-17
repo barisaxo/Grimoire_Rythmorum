@@ -1,6 +1,7 @@
 using System;
-namespace Data
+namespace Datum
 {
+
     public interface ICloth : IItem
     {
         ClothEnum Enum { get; }

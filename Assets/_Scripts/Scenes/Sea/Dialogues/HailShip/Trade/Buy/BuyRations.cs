@@ -6,14 +6,14 @@ using Dialog;
 public class BuyRations_Dialogue : Dialogue
 {
     readonly Dialogue ReturnTo;
-    readonly Data.Standing Standing;
+    readonly Datum.Standing Standing;
 
-    int StandingMod => Data.Manager.Io.Standings.GetLevel(Standing);
-    int Coins => Data.Manager.Io.Inventory.GetLevel(new Data.Gold());
-    int rationsCapacity => Data.Manager.Io.ActiveShip.GetLevel(new Data.RationStorage());
+    int StandingMod => Datum.Manager.Io.Standings.GetLevel(Standing);
+    int Coins => Datum.Manager.Io.Inventory.GetLevel(new Datum.Gold());
+    int rationsCapacity => Datum.Manager.Io.ActiveShip.GetLevel(new Datum.RationStorage());
 
     float availableRationsSpace => 1f -
-        ((float)Data.Manager.Io.Inventory.GetLevel(new Data.Ration()) /
+        ((float)Datum.Manager.Io.Inventory.GetLevel(new Datum.Ration()) /
         (float)rationsCapacity);
 
     float StandingsModifier => 1f + (float)(1f - (float)((float)StandingMod) / 9f);
@@ -28,7 +28,7 @@ public class BuyRations_Dialogue : Dialogue
     int smallRation => (int)((float)rationsCapacity * .15f);
 
 
-    public BuyRations_Dialogue(Dialogue returnTo, Speaker speaker, Data.Standing standing)
+    public BuyRations_Dialogue(Dialogue returnTo, Speaker speaker, Datum.Standing standing)
     {
         ReturnTo = returnTo;
         Speaker = speaker;
@@ -65,6 +65,13 @@ public class BuyRations_Dialogue : Dialogue
         .SetPlayerAction(BuyRationsSmall)
         ;
 
+    Response _cantResponse;
+    Response CantAffordResponse => _cantResponse ??= new Response("[not enough gold]", ReturnTo);
+
+    Response _noSpace;
+    Response InventoryFullResponse => _noSpace ??= new Response("[inventory full]", ReturnTo);
+
+
     Response[] _rationsResponses;
     Response[] RationsResponses => _rationsResponses ??= GetRationsResponses();
     Response[] GetRationsResponses()
@@ -73,7 +80,13 @@ public class BuyRations_Dialogue : Dialogue
 
         if (!(Coins < largeGold) && availableRationsSpace < .75f) { responses.Add(RationsLarge_Response); }
         if (!(Coins < medGold) && availableRationsSpace < .85f) { responses.Add(RationsMedium_Response); }
-        if (!(Coins < smallGold) && availableRationsSpace < 9f) { responses.Add(RationsSmall_Response); }
+        if (!(Coins < smallGold))
+        {
+            if (availableRationsSpace < 9f) responses.Add(RationsSmall_Response);
+            else responses.Add(InventoryFullResponse);
+        }
+        else responses.Add(CantAffordResponse);
+
         responses.Add(BackResponse);
 
         return responses.ToArray();
@@ -90,18 +103,18 @@ public class BuyRations_Dialogue : Dialogue
 
     void BuyRationsSmall()
     {
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.Ration(), smallRation);
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), -smallGold);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Ration(), smallRation);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Gold(), -smallGold);
     }
     void BuyRationsMedium()
     {
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.Ration(), medRation);
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), -medGold);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Ration(), medRation);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Gold(), -medGold);
     }
     void BuyRationsLarge()
     {
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.Ration(), largeRation);
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), -largeGold);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Ration(), largeRation);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Gold(), -largeGold);
     }
 
 }

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Data;
+using Datum;
 
 namespace Menus
 {
@@ -66,10 +66,13 @@ namespace Menus
 
         private void IncreaseItem()
         {
-            if (((SkillData)Data).GetSkillCost(Selection.Item) >
-                PlayerData.GetLevel(new PatternsAvailable()) &&
-                Data.GetLevel(Selection.Item) < ((ISkill)Selection.Item).MaxLevel)
+            if (((SkillData)Data).GetSkillCost(Selection.Item) > PlayerData.GetLevel(new PatternsAvailable()) ||
+                Data.GetLevel(Selection.Item) >= ((ISkill)Selection.Item).MaxLevel)
                 return;
+
+            Debug.Log("Skill: " + Selection.Item.Name +
+                ", current Level: " + Data.GetLevel(Selection.Item) +
+                ", max level: " + ((ISkill)Selection.Item).MaxLevel);
 
             PlayerData.AdjustLevel(new PatternsSpent(), +
                 ((SkillData)Data).GetSkillCost(Selection.Item));

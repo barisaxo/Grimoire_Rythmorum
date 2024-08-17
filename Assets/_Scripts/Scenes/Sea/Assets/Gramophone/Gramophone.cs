@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Data;
+using Datum;
 
 namespace Sea
 {
@@ -23,7 +23,7 @@ namespace Sea
             Description = new SceneObjectDescription("Gramophone");
             Inventoriable = new Inventoriable(
                 (inventoryData,
-                new Data.Gramophone(),
+                new Datum.Gramophone(),
                 1));
 
             Questable = new Questable(questData, new Navigation());

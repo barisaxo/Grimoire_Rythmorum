@@ -1,5 +1,5 @@
 
-namespace Data
+namespace Datum
 {
     public interface SettingsOption : IItem
     {

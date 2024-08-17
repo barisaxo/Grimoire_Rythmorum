@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Data;
+using Datum;
 using Quests;
 
 public class EndPuzzle_State : State
@@ -10,21 +10,21 @@ public class EndPuzzle_State : State
     readonly State SubsequentState;
     readonly IPuzzle Puzzle;
     readonly PuzzleType PuzzleType;
-    // readonly IStarChart StarChart;
-
     public EndPuzzle_State(bool winLose, State subsequentState, IPuzzle puzzle, PuzzleType puzzleType)
     {
         Won = winLose;
         SubsequentState = subsequentState;
         Puzzle = puzzle;
         PuzzleType = puzzleType;
-        // StarChart = item;
     }
 
 
     protected override void EngageState()
     {
-        Vector2Int loc = Sea.WorldMapScene.Io.Ship.GlobalCoord + RandomLoc();
+        // Vector2Int RandLoc = Sea.WorldMapScene.Io.Map.GetAvailableLocalCoordFromGlobalLoc(Sea.WorldMapScene.Io.Ship.GlobalCoord + RandomLoc());
+
+        Vector2Int loc = Sea.WorldMapScene.Io.Map.GetAvailableLocalCoordFromGlobalLoc(Sea.WorldMapScene.Io.Ship.GlobalCoord + RandomLoc());
+        // (Sea.WorldMapScene.Io.Ship.GlobalCoord + RandomLoc()).Smod(Sea.WorldMapScene.Io.Map.GlobalSize);
         string latLong = loc.GlobalCoordsToLatLongs(Sea.WorldMapScene.Io.Map.GlobalSize);
         int patternsFound = (int)((float)((float)Puzzle.RewardsValue() * 100f * (1f + UnityEngine.Random.value)));
 
@@ -36,14 +36,10 @@ public class EndPuzzle_State : State
                     loc,
                     latLong));
 
-            Sea.WorldMapScene.Io.Map.AddToMap(Manager.Io.Quests.GetQuest(new Navigation()).QuestLocation, Sea.CellType.Gramo);
+            Sea.WorldMapScene.Io.Map.AddCellToMap(Manager.Io.Quests.GetQuest(new Navigation()).QuestLocation, Sea.CellType.Gramo);
 
             Manager.Io.Puzzles.AdjustLevel(Puzzle, 1);
-            Manager.Io.Player.AdjustLevel(new PatternsAvailable(), patternsFound);
-
-            // Manager.Io.Player.SetLevel(new PatternsFound(),
-            //     Manager.Io.Player.GetLevel(new PatternsFound()) + patternsFound);
-
+            Manager.Io.Player.AdjustLevel(new PatternsFound(), patternsFound);
             Manager.Io.Player.AdjustLevel(PuzzleType == PuzzleType.Aural ?
                 new AuralSolved() : new TheorySolved(), 1);
         }
@@ -72,28 +68,6 @@ public class EndPuzzle_State : State
             UnityEngine.Random.Range(30, 60) * (UnityEngine.Random.value < .5f ? 1 : -1)
         );
     }
-
-    // Action GiveRewards() => PuzzleType switch
-    // {
-    //     PuzzleType.Aural => GiveAuralRewards(),
-    //     PuzzleType.Theory => GiveTheoryRewards(),
-    //     _ => throw new System.NotImplementedException(),
-    // };
-
-    // Action GiveTheoryRewards() => Puzzle switch
-    // {
-    //     _ when Puzzle is NotePuzzle => () => { Manager.Io.QuestsData.IncreaseLevel(QuestData.DataItem.StarChart); }
-    //     ,
-    //     _ => null,
-    // };
-
-    // Action GiveAuralRewards() => Puzzle switch
-    // {
-    //     _ when Puzzle is NotePuzzle => () => { Manager.Io.QuestsData.IncreaseLevel(QuestData.DataItem.StarChart); }
-    //     ,
-    //     _ => null,
-    // };
-
 
 }
 

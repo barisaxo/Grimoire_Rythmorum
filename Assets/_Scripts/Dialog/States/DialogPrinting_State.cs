@@ -18,47 +18,47 @@ public class DialogPrinting_State : State
 
     protected override void PrepareState(Action callback)
     {
-        if (Dialog.CurrentLine.VideoClip != null)
-        {
-            Debug.Log("Video");
-            // var width = Cam.Io.UICamera.orthographicSize * Cam.Io.UICamera.aspect * 1.65f;
+        // if (Dialog.CurrentLine.VideoClip != null)
+        // {
+        //     Debug.Log("Video");
+        //     // var width = Cam.Io.UICamera.orthographicSize * Cam.Io.UICamera.aspect * 1.65f;
 
-            // Dialog.VideoPlayer.transform.localScale = new Vector3(width,
-            //     width / ((float)Dialog.CurrentLine.VideoClip.width / Dialog.CurrentLine.VideoClip.height), 1);
+        //     // Dialog.VideoPlayer.transform.localScale = new Vector3(width,
+        //     //     width / ((float)Dialog.CurrentLine.VideoClip.width / Dialog.CurrentLine.VideoClip.height), 1);
 
-            Dialog.VideoPlayer.transform.localScale = new Vector3(1.65f, 1, 1);
-            Dialog.VideoPlayer.gameObject.SetActive(true);
-            Dialog.VideoPlayer.playOnAwake = false;
-            Dialog.VideoPlayer.waitForFirstFrame = false;
-            Dialog.VideoPlayer.isLooping = false;
-            Dialog.VideoPlayer.clip = Dialog.CurrentLine.VideoClip;
-            Dialog.VideoPlayer.audioOutputMode = VideoAudioOutputMode.Direct;
-            Dialog.VideoPlayer.Prepare();
-            LoadVideo(callback).StartCoroutine();
-            return;
-        }
+        //     Dialog.VideoPlayer.transform.localScale = new Vector3(1.65f, 1, 1);
+        //     Dialog.VideoPlayer.gameObject.SetActive(true);
+        //     Dialog.VideoPlayer.playOnAwake = false;
+        //     Dialog.VideoPlayer.waitForFirstFrame = false;
+        //     Dialog.VideoPlayer.isLooping = false;
+        //     Dialog.VideoPlayer.clip = Dialog.CurrentLine.VideoClip;
+        //     Dialog.VideoPlayer.audioOutputMode = VideoAudioOutputMode.Direct;
+        //     Dialog.VideoPlayer.Prepare();
+        //     LoadVideo(callback).StartCoroutine();
+        //     return;
+        // }
 
-        Dialog.VideoPlayer.gameObject.SetActive(false);
+        // Dialog.VideoPlayer.gameObject.SetActive(false);
         callback();
     }
 
-    private IEnumerator LoadVideo(Action callback)
-    {
-        while (!Dialog.VideoPlayer.isPrepared) yield return null;
+    // private IEnumerator LoadVideo(Action callback)
+    // {
+    //     while (!Dialog.VideoPlayer.isPrepared) yield return null;
 
-        callback();
-    }
+    //     callback();
+    // }
 
     protected override void EngageState()
     {
-        if (Dialog.CurrentLine.VideoClip != null)
-        {
-            Dialog.VideoPlayer.transform.SetPositionAndRotation(
-                    Cam.Io.Camera.transform.position + Cam.Io.Camera.transform.forward,
-                    Cam.Io.Camera.transform.rotation
-            );
-            Dialog.VideoPlayer.Play();
-        }
+        // if (Dialog.CurrentLine.VideoClip != null)
+        // {
+        //     Dialog.VideoPlayer.transform.SetPositionAndRotation(
+        //             Cam.Io.Camera.transform.position + Cam.Io.Camera.transform.forward,
+        //             Cam.Io.Camera.transform.rotation
+        //     );
+        //     Dialog.VideoPlayer.Play();
+        // }
         if (Dialog.Dialogue.PlayTypingSounds)
         {
             Audio.SFX.PlayClip(Assets.TypingClicks, true);

@@ -110,7 +110,6 @@ static class Helpers
     {
         return (x * boardSize) + y;
     }
-    //TODOThis really should be (X * height) + Y
 
 
     /// <summary>
@@ -308,6 +307,19 @@ static class Helpers
     }
 
 
+    /// <summary>
+    /// Turn number of seconds into timestamp ie TimeStamp(60) => 1:00
+    /// </summary>
+    public static string TimeStamp(this int seconds)
+    {
+        int minutes = 0;
+        while (seconds > 59)
+        {
+            minutes++;
+            seconds -= 60;
+        }
+        return minutes.ToString() + ":" + (seconds < 10 ? "0" + seconds.ToString() : seconds.ToString());
+    }
 
     /// <summary>
     /// _thisIsStartCase => This Is Start Case

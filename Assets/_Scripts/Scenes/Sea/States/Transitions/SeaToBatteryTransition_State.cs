@@ -16,6 +16,7 @@ public class SeaToBatteryTransition_State : State
 
         Sea.WorldMapScene.Io.Ship.SeaPos = Sea.WorldMapScene.Io.Ship.GO.transform.position;
         Sea.WorldMapScene.Io.Ship.SeaRot = Sea.WorldMapScene.Io.Ship.GO.transform.rotation;
+        // Sea.WorldMapScene.Io.NPCShips.Remove(Sea.WorldMapScene.Io.NearestNPC);
 
         base.PrepareState(callback);
     }

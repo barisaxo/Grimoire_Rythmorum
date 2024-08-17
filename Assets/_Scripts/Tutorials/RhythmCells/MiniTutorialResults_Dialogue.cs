@@ -55,6 +55,6 @@ public class MiniTutorialResults_Dialogue : Dialogue
         }
     }
 
-    State TrainingBattery() => new BatteryTutorial_State(PreviousDialogue, SubsequentDialogue, Measures, RhythmSpecs);
+    State TrainingBattery() => new BatteryTutorial_State(PreviousDialogue, SubsequentDialogue, Measures, RhythmSpecs, true);
 
 }

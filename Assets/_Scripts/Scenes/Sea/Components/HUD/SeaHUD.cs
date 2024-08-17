@@ -4,21 +4,20 @@ using UnityEngine;
 using TMPro;
 
 
-//TODO HUD, Inventory, 
 namespace Sea
 {
     public class HUD
     {
         #region  INSTANCE
 
-        public HUD(Data.ActiveShipData characterData)
+        public HUD(Datum.ActiveShipData characterData)
         {
             Data = characterData;
             _ = Icon;
             _ = HealthBar;
             // _ = North;
             // _ = East;
-            // _ = South;
+            _ = South;
             _ = Start;
             _ = Select;
             _ = West;
@@ -43,7 +42,7 @@ namespace Sea
 
         private Card[] _hidableHud;
         public Card[] HidableHud => _hidableHud ??= new Card[]{
-            Icon, HealthBar, Select, Start, West,
+            Icon, HealthBar, Select, Start, West, South,
         };
 
         private Card _hud;
@@ -62,11 +61,11 @@ namespace Sea
             }
         }
 
-        readonly Data.ActiveShipData Data;
+        readonly Datum.ActiveShipData Data;
 
         private Card _icon;
         public Card Icon => _icon ??= Hud.CreateChild(nameof(Icon), Hud.Canvas)
-            .SetImageSprite(Assets.Pino)
+            .SetImageSprite(Assets.ShipIcon)
             .SetImageSize(1, 1f)
             .SetImagePosition(-Cam.UIOrthoX + 1.5f, Cam.UIOrthoY - 1.5f)
             ;
@@ -137,6 +136,7 @@ namespace Sea
             .AutoSizeTextContainer(true)
             .SetImageSize(.5f, .5f)
             .SetImageSprite(Assets.SouthButton)
+            .SetTextString("Talk to Pino")
             .SetTextAlignment(TextAlignmentOptions.Right)
             .SetTMPRectPivot(new Vector2(1, .5f))
             .SetOutlineWidth(.15f)

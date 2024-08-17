@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Data
+namespace Datum
 {
     public interface ICannon : IItem
     {
@@ -69,6 +69,7 @@ namespace Data
         float Modifier => Enum.Modifier;
     }
 
+    [Serializable] public readonly struct CatBoat : IHull { public readonly HullEnum Enum => HullEnum.CatBoat; }
     [Serializable] public readonly struct Sloop : IHull { public readonly HullEnum Enum => HullEnum.Sloop; }
     [Serializable] public readonly struct Cutter : IHull { public readonly HullEnum Enum => HullEnum.Cutter; }
     [Serializable] public readonly struct Schooner : IHull { public readonly HullEnum Enum => HullEnum.Schooner; }
@@ -90,17 +91,19 @@ namespace Data
         public readonly string Description;
         public readonly float Modifier;
 
-        public readonly static HullEnum Sloop = new(0, "Sloop", "A small vessel with a minimal armament", 512);
-        public readonly static HullEnum Cutter = new(1, "Cutter", "A small yet robust vessel with a minimal armament", 768);
-        public readonly static HullEnum Schooner = new(2, "Sloop", "Known for its speed, versatility, decent armament", 1024);
-        public readonly static HullEnum Brig = new(3, "Brig", "A powerful small vessel, can take on any but the largest of ships", 1280);
-        public readonly static HullEnum Frigate = new(4, "Frigate", "A large vessel boasting superior combination of speed, firepower, and endurance", 1536);
-        public readonly static HullEnum Barque = new(5, "Barque", "Unmatched firepower and size. A very difficult ship to captain.", 1792);
+        public readonly static HullEnum CatBoat = new(0, "CatBoat", "A small fishing boat", 512);
+        public readonly static HullEnum Sloop = new(1, "Sloop", "A small vessel with a minimal armament", 512);
+        public readonly static HullEnum Cutter = new(2, "Cutter", "A small yet robust vessel with a minimal armament", 768);
+        public readonly static HullEnum Schooner = new(3, "Sloop", "Known for its speed, versatility, decent armament", 1024);
+        public readonly static HullEnum Brig = new(4, "Brig", "A powerful small vessel, can take on any but the largest of ships", 1280);
+        public readonly static HullEnum Frigate = new(5, "Frigate", "A large vessel boasting superior combination of speed, firepower, and endurance", 1536);
+        public readonly static HullEnum Barque = new(6, "Barque", "Unmatched firepower and size. A very difficult ship to captain.", 1792);
 
         internal static IHull ToItem(HullEnum @enum)
         {
             return @enum switch
             {
+                _ when @enum == CatBoat => new CatBoat(),
                 _ when @enum == Sloop => new Sloop(),
                 _ when @enum == Brig => new Brig(),
                 _ when @enum == Schooner => new Schooner(),

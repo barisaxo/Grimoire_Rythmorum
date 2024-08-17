@@ -4,6 +4,7 @@ using UnityEngine;
 using Ships;
 
 //https://docs.unity3d.com/ScriptReference/HeaderAttribute.html
+
 public class CutterPrefab : MonoBehaviour, Sea.IShipPrefab
 {
     [Header(nameof(Hull))]

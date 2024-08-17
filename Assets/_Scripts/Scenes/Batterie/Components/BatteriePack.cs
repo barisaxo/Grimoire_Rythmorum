@@ -21,15 +21,15 @@ public class BatteriePack
         SetUpCounts = setUpCounts;
     }
     readonly bool SetUpCounts;
-    readonly RhythmSpecs _rhythmSpecs;
+    public readonly RhythmSpecs _rhythmSpecs;
 
-    public void Initialize(Action<Batterie.Hit> HandleHit, BatterieFeedback BatterieFeedback, Action Tick, Measure[] measures)
+    public void Initialize(Action<Batterie.Hit> HandleHit, BatterieFeedback BatterieFeedback, Action tick, Measure[] measures)
     {
         MusicSheet = new()
         {
             RhythmSpecs = _rhythmSpecs
         };
-        MuscopaAudio = new(Data.Manager.Io.Volume);
+        MuscopaAudio = new(Datum.Manager.Io.Volume);
 
         MusicSheet.Measures = measures;
 
@@ -38,14 +38,15 @@ public class BatteriePack
 
         MusicSheet.GetNotes();
         MusicSheet.DrawRhythms(SetUpCounts);
-        MusicSheet.BeatMap = MusicSheet.Notes.MapBeats(MusicSheet.RhythmSpecs.Tempo);
+        MusicSheet.BeatMap = MusicSheet.Notes.MapBeats(MusicSheet.RhythmSpecs.Time.GetQuantizement(), MusicSheet.RhythmSpecs.Tempo);
         Synchro = new(MusicSheet.RhythmSpecs.Time.GetQuantizement(), MusicSheet.RhythmSpecs.Tempo);
         CountOffNotes = CountOff.GetNotes(MusicSheet.RhythmSpecs.Time);
-        CountOffBeatmap = CountOffNotes.MapBeats(MusicSheet.RhythmSpecs.Tempo);
+        CountOffBeatmap = CountOffNotes.MapBeats(MusicSheet.RhythmSpecs.Time.GetQuantizement(), MusicSheet.RhythmSpecs.Tempo);
         Analyzer = new(BatterieFeedback.CreateCard, HandleHit, MusicSheet.BeatMap);
         Analyzer.SetUp();
 
-        Synchro.TickEvent += Tick;
+
+        Synchro.TickEvent += tick;
 
         MuscopaSettings = NewSettings(CadenceDifficulty.ALL, MusicTheory.Musica.RandomMode(), Genre.Stax);
         GoodHits = GoodRests = GoodHolds = ErroneousAttacks = MissedHits = MissedHolds = MissedRests = 0;
@@ -71,7 +72,7 @@ public class BatteriePack
     {
         get
         {
-            bool c = TotalErrors <= Data.Manager.Io.Skill.GetLevel(new Data.PerfectTiming()) + 1;
+            bool c = TotalErrors <= Datum.Manager.Io.Skill.GetLevel(new Datum.PerfectTiming()) + 1;
             if (c) HasCritThisBattery = true;
             return c;
         }

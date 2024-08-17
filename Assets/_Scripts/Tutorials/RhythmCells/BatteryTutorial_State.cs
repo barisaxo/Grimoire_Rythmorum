@@ -4,20 +4,22 @@ using Dialog;
 using System;
 using SheetMusic;
 using MusicTheory.Rhythms;
-using Data;
+using Datum;
 
 public class BatteryTutorial_State : State
 {
-    public BatteryTutorial_State(Dialogue previousDialogue, Dialogue nextDialogue, Measure[] measures, RhythmSpecs rhythmSpecs)
+    public BatteryTutorial_State(Dialogue previousDialogue, Dialogue nextDialogue, Measure[] measures, RhythmSpecs rhythmSpecs, bool cadence)
     {
+        Cadence = cadence;
         PreviousDialogue = previousDialogue;
         NextDialogue = nextDialogue;
         RhythmSpecs = rhythmSpecs;
         Measures = measures;
     }
 
-    public BatteryTutorial_State(Measure[] measures, RhythmSpecs rhythmSpecs, IData data, IItem item, State subsequentState)
+    public BatteryTutorial_State(Measure[] measures, RhythmSpecs rhythmSpecs, IData data, IItem item, State subsequentState, bool cadence)
     {
+        Cadence = cadence;
         RhythmSpecs = rhythmSpecs;
         Measures = measures;
         Data = data;
@@ -25,7 +27,7 @@ public class BatteryTutorial_State : State
         SubsequentState = subsequentState;
     }
 
-
+    readonly bool Cadence;
     readonly Measure[] Measures;
     readonly Dialogue PreviousDialogue;
     readonly Dialogue NextDialogue;
@@ -63,9 +65,8 @@ public class BatteryTutorial_State : State
         Cam.Io.Camera.transform.SetPositionAndRotation((UnityEngine.Vector3.up * 7),
            Quaternion.Euler(new Vector3(-20f, 180, Cam.Io.Camera.transform.rotation.eulerAngles.z))
         );
-        Scene = new(Tick, RhythmSpecs, Measures);
+        Scene = new(BatteryTutorialTick, RhythmSpecs, Measures);
         Scene.Initialize();
-
 
         Scene.Pack.GetNewSettings(callback).StartCoroutine();
     }
@@ -77,26 +78,26 @@ public class BatteryTutorial_State : State
 
     protected override void DisengageState()
     {
-        Scene.Pack.Synchro.TickEvent -= Tick;
-        // Scene.Pack.Synchro.BeatEvent -= Click;
+        Scene.Pack.Synchro.TickEvent -= BatteryTutorialTick;
+        if (Cadence) Scene.Pack.MuscopaAudio.StopTheCadence();
+        else Scene.Pack.Synchro.BeatEvent -= Click;
         // MonoHelper.OnUpdate -= SpaceBar;
 
         Scene.BatterieFeedback.SelfDestruct();
         Scene.CountOffFeedBack.SelfDestruct();
-        Audio.Batterie.Stop();
-        Scene.Pack.MuscopaAudio.StopTheCadence();
+        Audio.Batterie.FadeAndStop();
         Scene.Pack.MusicSheet.SelfDestruct();
     }
 
 
-    void Tick()
+    void BatteryTutorialTick()
     {
         if (CountingOff)
         {
             CountOffTimeEvent();
             if (++Counter == Scene.Pack.CountOffBeatmap.Length - 1)
             {
-                MonoHelper.OnUpdate += Scene.Pack.Analyzer.Tick;
+                MonoHelper.OnUpdate += Scene.Pack.Analyzer.BatterieInputAnalyzerTick;
                 Scene.Pack.Analyzer.Start();
                 // Scene.Pack.Synchro.BeatEvent += Click;
                 CountingOff = false; Playing = true; Counter = 0;
@@ -107,7 +108,9 @@ public class BatteryTutorial_State : State
 
         if (!cadenceStarted)
         {
-            Scene.Pack.MuscopaAudio.PlayNewMuscopaPuzzleMusic();
+            if (Cadence) Scene.Pack.MuscopaAudio.PlayNewMuscopaPuzzleMusic();
+            else Scene.Pack.Synchro.BeatEvent += Click;
+
             cadenceStarted = true;
         }
 
@@ -119,9 +122,9 @@ public class BatteryTutorial_State : State
 
         if (!Playing && !CountingOff)
         {
-            Audio.Batterie.Stop();
+            Audio.Batterie.FadeAndStop();
             Scene.Pack.Synchro.Stop();
-            MonoHelper.OnUpdate -= Scene.Pack.Analyzer.Tick;
+            MonoHelper.OnUpdate -= Scene.Pack.Analyzer.BatterieInputAnalyzerTick;
             Scene.Pack.MuscopaAudio.StopTheCadence();
 
             // FadeToState(PuzzleSelector.WeightedRandomPuzzleState(Data.TheoryPuzzleData));
@@ -163,8 +166,6 @@ public class BatteryTutorial_State : State
         }
     }
 
-
-
     protected override void GPInput(GamePadButton gpb)
     {
         switch (gpb)
@@ -181,6 +182,7 @@ public class BatteryTutorial_State : State
             case GamePadButton.R1_Release:
             case GamePadButton.L2_Release:
             case GamePadButton.R2_Release:
+            case GamePadButton.R3_Release:
                 Scene.Pack.Analyzer.InputUpAction(); break;
 
             case GamePadButton.Up_Press:
@@ -195,13 +197,17 @@ public class BatteryTutorial_State : State
             case GamePadButton.R1_Press:
             case GamePadButton.L2_Press:
             case GamePadButton.R2_Press:
-                Scene.Pack.Analyzer.InputDownAction(); break;
+            case GamePadButton.R3_Press:
+                Scene.Pack.Analyzer.InputDownAction();
+                UnityEngine.Debug.Log(gpb.ToString());
+                break;
         }
+
     }
-    // void Click()
-    // {
-    //     //Audio.Batterie.PlayClick();
-    // }
+    void Click()
+    {
+        Audio.Batterie.PlayClick();
+    }
 
     // protected override void Clicked(MouseAction action, Vector3 mousePos)
     // {

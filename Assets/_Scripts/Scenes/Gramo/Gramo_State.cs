@@ -3,12 +3,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+//TODO HUD & Info (like in proto-bard)
 public class Gramo_State : State
 {
     public GramoScene Scene;
     readonly State SubsequentState;
-    readonly Data.IGramophone Gramo;
-    public Gramo_State(State subsequentState, Data.IGramophone gramo)
+    readonly Datum.IGramophone Gramo;
+
+    public Gramo_State(State subsequentState, Datum.IGramophone gramo)
     {
         SubsequentState = subsequentState;
         Gramo = gramo;
@@ -18,9 +20,9 @@ public class Gramo_State : State
     {
         Scene = new(Gramo);
         // new(new MusicTheory.HarmonicFunction[] {
-        //     MusicTheory.HarmonicFunction.Predominant,
+        //     MusicTheory.HarmonicFunction.Subdominant,
         //     MusicTheory.HarmonicFunction.Tonic,
-        //     MusicTheory.HarmonicFunction.Predominant,
+        //     MusicTheory.HarmonicFunction.Subdominant,
         //     MusicTheory.HarmonicFunction.Dominant,
         // });
         Scene.DollyAnimation(callback);
@@ -37,23 +39,41 @@ public class Gramo_State : State
         Scene.SelfDestruct();
     }
 
+    protected override void SelectPressed()
+    {
+        SetState(new CameraPan_State(
+                    new DialogStart_State(
+                        new EndGramo_Dialogue(SubsequentState)),
+                    pan: Cam.StoredCamRot,
+                    strafe: Cam.StoredCamPos,
+                    speed: 5));
+    }
+
+
     protected override void EastPressed()
     {
         if (Scene.AllAnswered())
             if (Scene.CorrectAnswers())
+            {
+                DataManager.Player.AdjustLevel(new Datum.PatternsFound(), (int)(1000f *
+                                DataManager.Skill.GetBonusRatio(new Datum.Apophenia()) *
+                                (Gramo.ID + 1) *
+                                (UnityEngine.Random.value + 1f)
+                                ));
                 SetState(new CameraPan_State(
                     new DialogStart_State(
                         new EndGramo_Dialogue(
                             won: true,
                             subsequentState: SubsequentState,
                             patternsFound: (int)(1000f *
-                                DataManager.Skill.GetBonusRatio(new Data.Apophenia()) *
+                                DataManager.Skill.GetBonusRatio(new Datum.Apophenia()) *
                                 (Gramo.ID + 1) *
                                 (UnityEngine.Random.value + 1f)
                                 ))),
                     pan: Cam.StoredCamRot,
                     strafe: Cam.StoredCamPos,
                     speed: 5));
+            }
             else SetState(new CameraPan_State(
                     new DialogStart_State(
                         new EndGramo_Dialogue(
@@ -104,9 +124,9 @@ public class GramoPractice_State : State
 {
     public GramoScene Scene;
     readonly State SubsequentState;
-    readonly Data.IGramophone Gramo;
+    readonly Datum.IGramophone Gramo;
 
-    public GramoPractice_State(State subsequentState, Data.IGramophone gramo)
+    public GramoPractice_State(State subsequentState, Datum.IGramophone gramo)
     {
         Gramo = gramo;
         SubsequentState = subsequentState;
@@ -127,6 +147,16 @@ public class GramoPractice_State : State
     protected override void DisengageState()
     {
         Scene.SelfDestruct();
+    }
+
+    protected override void SelectPressed()
+    {
+        SetState(new CameraPan_State(
+                    new DialogStart_State(
+                        new EndGramo_Dialogue(SubsequentState)),
+                    pan: Cam.StoredCamRot,
+                    strafe: Cam.StoredCamPos,
+                    speed: 5));
     }
 
     protected override void EastPressed()

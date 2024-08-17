@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using Sea;
 using Sea.Maps;
-using Data;
+using Datum;
 
 public class SeaScene_State : State
 {
@@ -11,7 +11,7 @@ public class SeaScene_State : State
 
     Vector2 ShipVelocity = Vector2.zero;
     public CameraFollow CameraFollow;
-
+    private int Rations = Manager.Io.Inventory.GetLevel(new Ration());
     readonly bool up, down, left, right;
     float _timeSinceLastL = 2.5f;
     float _distTraveled;
@@ -96,7 +96,7 @@ public class SeaScene_State : State
         Scene.Ship.AttackPopup.GO.SetActive(false);
         Scene.MiniMap.Card.GO.SetActive(true);
 
-        // MonoHelper.OnUpdate += Tick;
+        MonoHelper.OnUpdate += SeaSceneTick;
         MonoHelper.OnFixedUpdate += FixedTick;
     }
 
@@ -111,39 +111,50 @@ public class SeaScene_State : State
         Cam.StoredCamPos = Cam.Io.Camera.transform.position;
         CameraFollow.SelfDestruct();
 
-        // MonoHelper.OnUpdate -= Tick;
+        MonoHelper.OnUpdate -= SeaSceneTick;
         MonoHelper.OnFixedUpdate -= FixedTick;
     }
 
-    protected override void DirectionPressed(Dir dir)
-    {
-        switch (dir)
-        {
-            // case Dir.Up: up = true; break;
-            // case Dir.Up_Off: up = false; break;
-            // case Dir.Down: down = true; break;
-            // case Dir.Down_Off: down = false; break;
-            // case Dir.Left: left = true; break;
-            // case Dir.Left_Off: left = false; break;
-            // case Dir.Right: right = true; break;
-            // case Dir.Right_Off: right = false; break;
-        }
-
-    }
+    // protected override void DirectionPressed(Dir dir)
+    // {
+    //     switch (dir)
+    //     {
+    //         case Dir.Up: up = true; break;
+    //         case Dir.Up_Off: up = false; break;
+    //         case Dir.Down: down = true; break;
+    //         case Dir.Down_Off: down = false; break;
+    //         case Dir.Left: left = true; break;
+    //         case Dir.Left_Off: left = false; break;
+    //         case Dir.Right: right = true; break;
+    //         case Dir.Right_Off: right = false; break;
+    //     }
+    // }
 
     protected void CheckDirectionalInput()
     {
-        if (UnityEngine.InputSystem.Keyboard.current.wKey.wasPressedThisFrame) DirectionPressed(Dir.Up);
-        else if (UnityEngine.InputSystem.Keyboard.current.wKey.wasReleasedThisFrame) DirectionPressed(Dir.Up_Off);
+        // if (UnityEngine.InputSystem.Keyboard.current.wKey.wasPressedThisFrame) DirectionPressed(Dir.Up);
+        // else if (UnityEngine.InputSystem.Keyboard.current.wKey.wasReleasedThisFrame) DirectionPressed(Dir.Up_Off);
 
-        if (UnityEngine.InputSystem.Keyboard.current.sKey.wasPressedThisFrame) DirectionPressed(Dir.Down);
-        else if (UnityEngine.InputSystem.Keyboard.current.sKey.wasReleasedThisFrame) DirectionPressed(Dir.Down_Off);
+        // if (UnityEngine.InputSystem.Keyboard.current.sKey.wasPressedThisFrame) DirectionPressed(Dir.Down);
+        // else if (UnityEngine.InputSystem.Keyboard.current.sKey.wasReleasedThisFrame) DirectionPressed(Dir.Down_Off);
 
-        if (UnityEngine.InputSystem.Keyboard.current.aKey.wasPressedThisFrame) DirectionPressed(Dir.Left);
-        else if (UnityEngine.InputSystem.Keyboard.current.aKey.wasReleasedThisFrame) DirectionPressed(Dir.Left_Off);
+        // if (UnityEngine.InputSystem.Keyboard.current.aKey.wasPressedThisFrame) DirectionPressed(Dir.Left);
+        // else if (UnityEngine.InputSystem.Keyboard.current.aKey.wasReleasedThisFrame) DirectionPressed(Dir.Left_Off);
 
-        if (UnityEngine.InputSystem.Keyboard.current.dKey.wasPressedThisFrame) DirectionPressed(Dir.Right);
-        else if (UnityEngine.InputSystem.Keyboard.current.dKey.wasReleasedThisFrame) DirectionPressed(Dir.Right_Off);
+        // if (UnityEngine.InputSystem.Keyboard.current.dKey.wasPressedThisFrame) DirectionPressed(Dir.Right);
+        // else if (UnityEngine.InputSystem.Keyboard.current.dKey.wasReleasedThisFrame) DirectionPressed(Dir.Right_Off);
+
+        if (UnityEngine.InputSystem.Keyboard.current.wKey.wasPressedThisFrame) LStick = Vector2.up;
+        else if (UnityEngine.InputSystem.Keyboard.current.wKey.wasReleasedThisFrame) LStick = Vector2.zero;
+
+        if (UnityEngine.InputSystem.Keyboard.current.sKey.wasPressedThisFrame) LStick = Vector2.down;
+        else if (UnityEngine.InputSystem.Keyboard.current.sKey.wasReleasedThisFrame) LStick = Vector2.zero;
+
+        if (UnityEngine.InputSystem.Keyboard.current.aKey.wasPressedThisFrame) RStick = Vector2.left;
+        else if (UnityEngine.InputSystem.Keyboard.current.aKey.wasReleasedThisFrame) RStick = Vector2.zero;
+
+        if (UnityEngine.InputSystem.Keyboard.current.dKey.wasPressedThisFrame) RStick = Vector2.right;
+        else if (UnityEngine.InputSystem.Keyboard.current.dKey.wasReleasedThisFrame) RStick = Vector2.zero;
     }
 
     void Movement()
@@ -168,20 +179,13 @@ public class SeaScene_State : State
 
     protected override void NorthPressed()
     {
-        // _ = Scene.NearestNPC;
-        // Debug.Log("North pressed;"
-        //         + " Scene.NearestNPC is not null: " +
-        //         (Scene.NearestNPC is not null) +
-        //         ", Scene.NearestNPC.SceneObject.Interactable is not NoInteraction: " +
-        //         (Scene.NearestNPC.SceneObject.Interactable is not NoInteraction));
-
         if (Scene.NearestNPC is not null &&
-            Scene.NearestNPC.SceneObject.Interactable is not NoInteraction)
+            Scene.NearestNPC.SceneObject.Interactable is not NoInteraction &&
+            Scene.Ship.ShipStats.HullStats.Hull is not CatBoat)
         {
             Scene.NearestNPC.HideTimer = Scene.NearestNPC.HideTime;
             // SetState(Scene.NearestNPC.SceneObject.Interactable.SubsequentState);
             SetState(new SeaToBatteryTransition_State());
-            Debug.Log("battery transition state setting");
             return;
         }
     }
@@ -190,7 +194,8 @@ public class SeaScene_State : State
     {
         Debug.Log("East pressed;" + " " + Scene.NearestNPC + " " + Scene.NearestNPC?.SceneObject.Interactable.GetType() + " " + Scene.NearestNPC?.SceneObject.Interactable.SubsequentState);
         if (Scene.NearestNPC is not null &&
-            Scene.NearestNPC.SceneObject.Interactable is not NoInteraction)
+            Scene.NearestNPC.SceneObject.Interactable is not NoInteraction &&
+            Scene.Ship.ShipStats.HullStats.Hull is not CatBoat)
         {
             Scene.NearestNPC.HideTimer = Scene.NearestNPC.HideTime;
             SetState(Scene.NearestNPC.SceneObject.Interactable.SubsequentState);
@@ -198,7 +203,12 @@ public class SeaScene_State : State
         }
 
         if (Scene.NearestInteractableCell is not null)
+        {
+            if (Scene.Ship.ShipStats.HullStats.Hull is CatBoat && Scene.NearestInteractableCell.SceneObject is Sea.Lighthouse)
+                return;
+
             SetState(Scene.NearestInteractableCell.SceneObject.Interactable.SubsequentState);
+        }
     }
 
     protected override void StartPressed()
@@ -206,23 +216,7 @@ public class SeaScene_State : State
         SetState(new SeaToNewMenuTransition_State(
         new Menus.SeaMenu(
                Manager.Io,
-               this
-                   // new CameraPan_State(
-                   //     subsequentState: this,
-                   //     pan: Cam.StoredCamRot = Cam.Io.Camera.transform.rotation.eulerAngles,
-                   //     strafe: Cam.StoredCamPos = Cam.Io.Camera.transform.position,
-                   //     speed: 3)
-                   )));
-
-        // SetState(new SeaToMenuTransition_State(
-        //     new Menus.Inventory.InventoryMenu(DataManager,
-        //     this
-        //             // new CameraPan_State(
-        //             //     subsequentState: this,
-        //             //     pan: Cam.StoredCamRot = Cam.Io.Camera.transform.rotation.eulerAngles,
-        //             //     strafe: Cam.StoredCamPos = Cam.Io.Camera.transform.position,
-        //             //     speed: 3)
-        //             )));
+               this)));
     }
 
     protected override void SelectPressed()
@@ -231,18 +225,11 @@ public class SeaScene_State : State
          new Menus.OptionsMenu(
                 Manager.Io,
                 Audio,
-                this
-                    // new CameraPan_State(
-                    //     subsequentState: this,
-                    //     pan: Cam.StoredCamRot = Cam.Io.Camera.transform.rotation.eulerAngles,
-                    //     strafe: Cam.StoredCamPos = Cam.Io.Camera.transform.position,
-                    //     speed: 3)
-                    )));
+                this)));
     }
 
     protected override void LStickInput(Vector2 v2)
     {
-        // Debug.Log(v2);
         ShipVelocity.y = Mathf.Clamp(ShipVelocity.y + (Time.deltaTime * v2.y * .9f), -.15f, .8f);
         ShipVelocity.x = Mathf.Clamp(ShipVelocity.x - Time.deltaTime * -v2.x * 2, -1f, 1f);
         if (v2 != Vector2.zero) { TimeSinceLastL -= Time.deltaTime * 2; }
@@ -259,34 +246,52 @@ public class SeaScene_State : State
         SetState(new SeaToInspection_State(this));
     }
 
-    void Tick()
+    void SeaSceneTick()
     {
 
+        CheckDirectionalInput();
 
+    }
+
+    protected override void SouthPressed()
+    {
+
+        SetState(
+            new SeaToDialogueTransition_State(
+               new Dialog.Pino.PinoFalseStart_Dialogue(this)));
     }
 
     void FixedTick()
     {
-        if ((Scene.NearestNPC = Scene.CheckNMETriggers()) is not null)
+        if (Scene.Ship.ShipStats.HullStats.Hull is not CatBoat &&
+            (Scene.NearestNPC = Scene.CheckNMETriggers()) is not null)
         {
             Scene.NearestNPC.HideTimer = Scene.NearestNPC.HideTime;
             SetState(Scene.NearestNPC.SceneObject.Triggerable.SubsequentState);
             return;
         }
 
-        CheckDirectionalInput();
 
         Movement();
-
 
         Scene.MiniMap.BlinkMiniMap(Scene.Ship.RegionCoord, (int)Scene.Map.RegionResolution);
 
         Scene.HUD.SetCompassRotation(Scene.Ship.RotY);
 
         Scene.HUD.UpdateCoords(Scene.Ship.GlobalCoord.GlobalCoordsToLatLongs(Scene.Map.GlobalSize));
-        Scene.HUD.UpdateRations(DataManager.Inventory.GetLevel(new Ration()));
 
-        if (DataManager.Inventory.GetLevel(new Ration()) == 0) SetState(new SeaToGameOverTransition_State());//todo Dialogue
+        if (//Scene.Ship.ShipStats.HullStats.Hull is not CatBoat &&
+            Rations < 4 &&
+            DataManager.Inventory.GetLevel(new Ration()) < Rations)
+        {
+            Rations = DataManager.Inventory.GetLevel(new Ration());
+            Scene.HUD.UpdateRations(Rations, false);
+            SetState(new DialogStart_State(new LowRationsDialogue(Rations, this)));
+            return;
+        }
+
+        Rations = DataManager.Inventory.GetLevel(new Ration());
+        Scene.HUD.UpdateRations(Rations, false);//Scene.Ship.ShipStats.HullStats.Hull is CatBoat);
     }
 
 }

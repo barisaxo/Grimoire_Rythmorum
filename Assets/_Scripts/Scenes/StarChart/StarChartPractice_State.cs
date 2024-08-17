@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
-using Data;
+using Datum;
+
 /*
  * hack this clickable works..
     private Card _listen;
@@ -17,7 +18,7 @@ using Data;
         //.ImageClickable()
         .AllowWordWrap(false)
         .SetImageToUILayer();
- 
+        
  * hack this clickable does not work
     private Card _listen;
     public Card Listen => _listen ??= new Card(nameof(Listen), null)
@@ -109,7 +110,7 @@ public class StarChartPractice_State : State
 
     protected override void DisengageState()
     {
-        Audio.KBAudio.Stop();
+        Audio.KBAudio.FadeAndStop();
         Question.SelfDestruct();
         SubmitAnswer.SelfDestruct();
         Keyboard.SelfDestruct();
@@ -396,7 +397,7 @@ public class StarChartPractice_State : State
 
     private Card _question;
     public Card Question => _question ??= new Card(nameof(Question), null)
-        .SetTextString(PuzzleType == PuzzleType.Aural ? "Listen to question" : Puzzle.Question)
+       .SetTextString(PuzzleType == PuzzleType.Aural ? "Listen to the " + Puzzle.puzzleType : Puzzle.Question)
         // .SetTMPPosition(new Vector2(0, Cam.UIOrthoY - 1.75f))
         .SetPositionAll(new Vector2(0, Cam.UIOrthoY - 1.75f))
         .SetFontScale(.65f, .65f)
@@ -415,7 +416,7 @@ public class StarChartPractice_State : State
 
     private Card _listen;
     public Card Listen => _listen ??= new Card(nameof(Listen), null)
-        .SetTextString("Listen to answer")
+        .SetTextString("Hear your answer")
         // .SetTMPPosition(new Vector2(-Cam.UIOrthoX + 1, -Cam.UIOrthoY + 1))
         .SetPositionAll(new Vector2(-Cam.UIOrthoX + 1, -Cam.UIOrthoY + 1))
         .SetFontScale(.6f, .6f)

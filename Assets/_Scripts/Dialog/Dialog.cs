@@ -82,18 +82,18 @@ namespace Dialog
 
 
 
-        private VideoPlayer _videoPlayer;
-        public VideoPlayer VideoPlayer => _videoPlayer = _videoPlayer != null ? _videoPlayer : SetUpVideo();
-        VideoPlayer SetUpVideo()
-        {
-            GameObject go = GameObject.CreatePrimitive(PrimitiveType.Quad);
-            go.GetComponent<MeshRenderer>().material = Assets.Video_Mat;
-            go.name = nameof(VideoPlayer);
-            go.transform.SetParent(Parent.transform);
-            go.transform.position = new Vector3(0, -1, -1f);
-            VideoPlayer v = go.AddComponent<VideoPlayer>();
-            v.playOnAwake = false;
-            return v;
-        }
+        // private VideoPlayer _videoPlayer;
+        // public VideoPlayer VideoPlayer => _videoPlayer = _videoPlayer != null ? _videoPlayer : SetUpVideo();
+        // VideoPlayer SetUpVideo()
+        // {
+        //     GameObject go = GameObject.CreatePrimitive(PrimitiveType.Quad);
+        //     go.GetComponent<MeshRenderer>().material = Assets.Video_Mat;
+        //     go.name = nameof(VideoPlayer);
+        //     go.transform.SetParent(Parent.transform);
+        //     go.transform.position = new Vector3(0, -1, -1f);
+        //     VideoPlayer v = go.AddComponent<VideoPlayer>();
+        //     v.playOnAwake = false;
+        //     return v;
+        // }
     }
 }

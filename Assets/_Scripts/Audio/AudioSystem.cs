@@ -151,7 +151,7 @@ namespace Audio
             //}
         }
 
-        public virtual void Stop()
+        public virtual void FadeAndStop()
         {
             FadeOutAndStop().StartCoroutine();
 
@@ -168,6 +168,16 @@ namespace Audio
                 Running = false;
                 Destruct();
             }
+        }
+
+        public virtual void ImmediateStop()
+        {
+
+            CurrentVolumeLevel = 0;
+            foreach (var a in AudioSources) a.Stop();
+            Running = false;
+            Destruct();
+
         }
 
         private IEnumerator SerialAudioClipsUpdateLoop()

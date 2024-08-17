@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Data;
+using Datum;
 using ShipStats;
 
 namespace Menus
@@ -78,13 +78,6 @@ namespace Menus
                     };
 
                     timber += "\nCost: " + GetCost();
-                    // timber += ShipStats.HullStats.Timber switch
-                    // {
-                    //     Pine => "\nCost: TODO" + WoodEnum.Fir.Name,
-                    //     Fir => "\nCost: TODO" + WoodEnum.Oak.Name,
-                    //     Oak => "\nCost: TODO" + WoodEnum.Teak.Name,
-                    //     _ => throw new System.Exception(ShipStats.HullStats.Timber.Name)
-                    // };
                     timber += "\n(" + PlayerData.GetLevel(new PatternsAvailable()) + " patterns available)";
                     return timber;
                 }
@@ -123,13 +116,6 @@ namespace Menus
                     };
 
                     cloth += "\nCost: " + GetCost();
-                    // cloth += ShipStats.RiggingStats.ClothType switch
-                    // {
-                    //     Hemp => "\nCost: TODO" + ClothEnum.Cotton.Name,
-                    //     Cotton => "\nCost: TODO" + ClothEnum.Linen.Name,
-                    //     Linen => "\nCost: TODO" + ClothEnum.Silk.Name,
-                    //     _ => throw new System.Exception(ShipStats.RiggingStats.ClothType.Name)
-                    // };
                     cloth += "\n(" + PlayerData.GetLevel(new PatternsAvailable()) + " patterns available)";
                     return cloth;
                 }
@@ -172,25 +158,9 @@ namespace Menus
                         _ => throw new System.Exception(ShipStats.CannonStats.Cannon.Name)
                     };
                     cannon += "\nCost: " + GetCost();
-                    // cannon += ShipStats.CannonStats.Cannon switch
-                    // {
-                    //     Mynion => "\nCost: TODO" + CannonEnum.Saker.Name,
-                    //     Saker => "\nCost: TODO" + CannonEnum.Culverin.Name,
-                    //     Culverin => "\nCost: TODO" + CannonEnum.DemiCannon.Name,
-                    //     DemiCannon => "\nCost: TODO" + CannonEnum.Carronade.Name,
-                    //     _ => throw new System.Exception(ShipStats.RiggingStats.ClothType.Name)
-                    // };
                     cannon += "\n(" + PlayerData.GetLevel(new PatternsAvailable()) + " patterns available)";
                     return cannon;
                 }
-
-                // return ((IShipUpgradeStat)Selection.Item).Description +
-                //     "\n" + ((IShipUpgradeStat)Selection.Item).Description + "% bonus per level." +
-                //     "\nCurrent Level: " + Data.GetLevel(Selection.Item) + " / " + ((IShipUpgradeStat)Selection.Item).MaxLevel +
-                //     "\nCurrent Bonus: " + (int)(Data.GetLevel(Selection.Item) * ((IShipUpgradeStat)Selection.Item).Per) + "%" +
-                //     "\nCost: " + ((SkillData)Data).GetSkillCost(Selection.Item) + " patterns." +
-                //     "\n(" + PlayerData.GetLevel(new PatternsAvailable()) + " patterns available)"
-                //      ;
             }
         }
 
@@ -210,8 +180,6 @@ namespace Menus
 
         private void IncreaseItem()
         {
-            if (GetCost() > PlayerData.GetLevel(new PatternsAvailable())) return;
-
             HullStats newHull = (HullStats)ShipStats.HullStats;
             CannonStats newCannon = (CannonStats)ShipStats.CannonStats;
             RiggingStats newRigging = (RiggingStats)ShipStats.RiggingStats;
@@ -220,24 +188,27 @@ namespace Menus
             {
                 case TimberType:
                     if (ShipStats.HullStats.Timber is Teak) return;
+                    if (GetCost() > PlayerData.GetLevel(new PatternsAvailable())) return;
                     newHull = new HullStats(ShipStats.HullStats.Hull, WoodEnum.ToItem(ShipStats.HullStats.Timber.Enum + 1));
                     break;
                 case RiggingType:
                     if (ShipStats.RiggingStats.ClothType is Silk) return;
+                    if (GetCost() > PlayerData.GetLevel(new PatternsAvailable())) return;
                     newRigging = new RiggingStats(ClothEnum.ToItem(ShipStats.RiggingStats.ClothType.Enum + 1));
                     break; ;
                 case CannonType:
                     if (ShipStats.CannonStats.Cannon is Carronade) return;
+                    if (GetCost() > PlayerData.GetLevel(new PatternsAvailable())) return;
                     newCannon = new CannonStats(CannonEnum.ToItem(ShipStats.CannonStats.Cannon.Enum + 1), new Patina());
                     break; ;
             };
 
             ShipStats.ShipStats newStats = new(newHull, newCannon, newRigging);
 
+            PlayerData.AdjustLevel(new PatternsSpent(), GetCost());
             ShipStats = newStats;
             Manager.Io.ShipStats.ActiveShip = newStats;
             Manager.Io.ShipStats.AdjustItem(newStats.HullStats.Hull, newStats);
-            PlayerData.AdjustLevel(new PatternsSpent(), GetCost());
 
             // if (((ShipUpgradeData)Data).GetSkillCost(Selection.Item) >
             //     PlayerData.GetLevel(new PatternsAvailable()) &&

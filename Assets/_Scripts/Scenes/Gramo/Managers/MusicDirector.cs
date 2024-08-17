@@ -28,7 +28,7 @@
 //             VolumeSettings_Data.VolumeChangedEvent -= UpdateVolumeLevel;
 
 //             foreach (AudioSource a in Gramo.ChordsASs) { a.Stop(); }
-//             //foreach (AudioSource a in Gramo.BassASs) { a.Stop(); }//TODO
+//             //foreach (AudioSource a in Gramo.BassASs) { a.Stop(); }//
 //             foreach (AudioSource a in Gramo.DrumASs) { a.Stop(); }
 //         }
 
@@ -49,7 +49,6 @@
 
 //             if (time + 1.0f > Gramo.nextEventTimeBass)
 //             {
-//                 //TODO
 //                 //bassASs[cuedBassAS].clip = Gramo.settings.chordsClips[cuedBassClip];
 //                 //bassASs[cuedBassAS].PlayScheduled(nextEventTimeBass);
 

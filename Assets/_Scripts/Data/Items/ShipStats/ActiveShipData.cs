@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Data
+namespace Datum
 {
     [System.Serializable]
     public class ActiveShipData : IData
@@ -42,8 +42,8 @@ namespace Data
 
                 CurrentHitPoints => GetLevel(item).ToString(),
 
-                MaxHitPoints =>
-                    ((int)(ShipStats.HullStats.Hull.Modifier * ShipStats.HullStats.Timber.Modifier)).ToString(),
+                MaxHitPoints => GetLevel(item).ToString(),
+                // ((int)(ShipStats.HullStats.Hull.Modifier * ShipStats.HullStats.Timber.Modifier)).ToString(),
 
                 Armament =>
                     ShipStats.NumOfCannons + " " + ShipStats.CannonStats.Metal.Name.StartCase() + " " + ShipStats.CannonStats.Cannon.Name +
@@ -67,7 +67,7 @@ namespace Data
                 RationStorage => (int)(ShipStats.RiggingStats.ClothType.Modifier * ShipStats.HullStats.Hull.Modifier * .05f),
                 StarChartStorage => (int)(ShipStats.RiggingStats.ClothType.Modifier * ShipStats.HullStats.Hull.Modifier * .01f),
                 GramophoneStorage => (int)(ShipStats.RiggingStats.ClothType.Modifier * ShipStats.HullStats.Hull.Modifier * .01f),
-                MaxHitPoints => (int)(ShipStats.HullStats.Hull.Modifier * ShipStats.HullStats.Timber.Modifier),
+                MaxHitPoints => (int)((int)ShipStats.HullStats.Hull.Modifier * ShipStats.HullStats.Timber.Modifier),
                 CurrentHitPoints => Stats[(IPlayerShipStat)item],
                 Armament => ShipStats.NumOfCannons,
                 Damage => (int)(ShipStats.CannonStats.Cannon.Modifier * ShipStats.CannonStats.Metal.Modifier * ShipStats.NumOfCannons),
@@ -84,6 +84,9 @@ namespace Data
             Stats[(IPlayerShipStat)item] =
                 Stats[(IPlayerShipStat)item] + i < 0 ? 0 :
                 Stats[(IPlayerShipStat)item] + i;
+
+            if (item is CurrentHitPoints && Stats[(IPlayerShipStat)item] > GetLevel(new MaxHitPoints()))
+                Stats[(IPlayerShipStat)item] = Stats[new MaxHitPoints()];
         }
 
         public void SetLevel(IItem item, int i)

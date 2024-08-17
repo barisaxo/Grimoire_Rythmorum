@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Data
+namespace Datum
 {
     [System.Serializable]
     public class LighthouseData : IData
@@ -20,6 +20,11 @@ namespace Data
 
         public int GetLevel(IItem item) => Lighthouses[(Lighthouse)item] ? 1 : 0;
 
+        public bool AllActivated()
+        {
+            foreach (var l in Lighthouses) if (!l.Value) return false;
+            return true;
+        }
 
         public void AdjustLevel(IItem item, int i)
         {

@@ -22,6 +22,7 @@ public class InvertedTriadPuzzle : IPuzzle
     public KeyboardNoteName[] Notes => _notes;
     readonly Inversion inversion;
     public string Desc => "Build the <b><i>inverted triad";
+    public string puzzleType => "inverted triad";
 
     private readonly string _question;
     public string Question => _question;

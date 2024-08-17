@@ -72,7 +72,7 @@ public static class InputKey
         InputActions.Map.RStickAltY.performed += _ => RAltYInput(-_.ReadValue<float>());
         InputActions.Map.RStickAltY.canceled += _ => RAltYInput(0);
 
-        MonoHelper.OnUpdate += CheckForMouseClick;
+        MonoHelper.OnUpdate += AltInput;
         MonoHelper.OnUpdate += RStickAltReadLoop;
         // StickEvent += DebugStick;
         InputActions.Map.Enable();
@@ -80,11 +80,25 @@ public static class InputKey
 
     // static void DebugStick(GamePadButton gpi, Vector2 v3) { Debug.Log(gpi + " " + v3); }
 
-    static void CheckForMouseClick()
+    static void AltInput()
     {
         if (Input.GetMouseButtonDown(0)) { MouseClickEvent?.Invoke(MouseAction.LDown, Input.mousePosition); }
         else if (Input.GetMouseButtonUp(0)) { MouseClickEvent?.Invoke(MouseAction.LUp, Input.mousePosition); }
         else if (Input.GetMouseButton(0)) { MouseClickEvent?.Invoke(MouseAction.LHold, Input.mousePosition); }
+
+        if (UnityEngine.InputSystem.Keyboard.current.spaceKey.wasPressedThisFrame) ButtonEvent?.Invoke(GamePadButton.R3_Press);
+        if (UnityEngine.InputSystem.Keyboard.current.aKey.wasPressedThisFrame) ButtonEvent?.Invoke(GamePadButton.Left_Press);
+        if (UnityEngine.InputSystem.Keyboard.current.sKey.wasPressedThisFrame) ButtonEvent?.Invoke(GamePadButton.Down_Press);
+        if (UnityEngine.InputSystem.Keyboard.current.dKey.wasPressedThisFrame) ButtonEvent?.Invoke(GamePadButton.Right_Press);
+        if (UnityEngine.InputSystem.Keyboard.current.wKey.wasPressedThisFrame) ButtonEvent?.Invoke(GamePadButton.Up_Press);
+        if (UnityEngine.InputSystem.Keyboard.current.iKey.wasPressedThisFrame) ButtonEvent?.Invoke(GamePadButton.North_Press);
+        if (UnityEngine.InputSystem.Keyboard.current.kKey.wasPressedThisFrame) ButtonEvent?.Invoke(GamePadButton.South_Press);
+        if (UnityEngine.InputSystem.Keyboard.current.lKey.wasPressedThisFrame) ButtonEvent?.Invoke(GamePadButton.East_Press);
+        if (UnityEngine.InputSystem.Keyboard.current.jKey.wasPressedThisFrame) ButtonEvent?.Invoke(GamePadButton.West_Press);
+        if (UnityEngine.InputSystem.Keyboard.current.gKey.wasPressedThisFrame) ButtonEvent?.Invoke(GamePadButton.Select_Press);
+        if (UnityEngine.InputSystem.Keyboard.current.hKey.wasPressedThisFrame) ButtonEvent?.Invoke(GamePadButton.Start_Press);
+        if (UnityEngine.InputSystem.Keyboard.current.rKey.wasPressedThisFrame) ButtonEvent?.Invoke(GamePadButton.L1_Press);
+        if (UnityEngine.InputSystem.Keyboard.current.uKey.wasPressedThisFrame) ButtonEvent?.Invoke(GamePadButton.R1_Press);
     }
 
     ///nintendo switch R sticks are weird

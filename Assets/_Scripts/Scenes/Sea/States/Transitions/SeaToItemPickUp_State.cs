@@ -2,22 +2,22 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Data;
+using Datum;
 
 
 public class SeaToItemPickUp_State : State
 {
     readonly Sea.ISceneObject Obj;
     readonly State SubsequentState;
-    readonly IData iData;
-    readonly IItem DataItem;
+    // readonly IData iData;
+    // readonly IItem DataItem;
 
     public SeaToItemPickUp_State(State subsequentState, IData data, IItem dataItem, Sea.ISceneObject obj)
     {
         SubsequentState = subsequentState;
         Obj = obj;
-        iData = data;
-        DataItem = dataItem;
+        // iData = data;
+        // DataItem = dataItem;
     }
 
     protected override void PrepareState(Action callback)
@@ -28,15 +28,8 @@ public class SeaToItemPickUp_State : State
 
     protected override void EngageState()
     {
-        // if (iData.InventoryIsFull(DataManager.ShipData.GetLevel(DataItem)))
-        // {
-        //     SetState(new DialogStart_State(new InventoryIsFull_Dialogue(new ItemPickupToSea_State(SubsequentState))));
-        //     return;
-        // }
-
         Obj.Inventoriable.AddRewards();
-        Obj.Questable.QuestComplete();
-        // Data.starChartsData.IncreaseLevel(StarChartsData.DataItem.Inverted7thChordsT);//todo difficulty levels
+        Obj.Questable.CompleteQuest();
 
         SetState(new DisplayItem_State(
             Obj.Instantiator.ToInstantiate,

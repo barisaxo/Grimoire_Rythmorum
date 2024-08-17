@@ -34,7 +34,7 @@ public class OpenGramoTask_Dialogue : Dialogue
 
 
     readonly string TradeComplete_LineText = "Good deal! Until next time!";
-    Line _tradeCompleteLine;//TODO sail away to new gramo contents dialogue to seaScene.
+    Line _tradeCompleteLine;//TODO sail away to new gramo contents dialogue to seaScene.7/5/24 - is this still todo?
     Line TradeComplete_Line => _tradeCompleteLine ??= new Line(TradeComplete_LineText, new NPCSailAway_State(new SeaScene_State()))
         .SetSpeaker(Speaker)
         ;

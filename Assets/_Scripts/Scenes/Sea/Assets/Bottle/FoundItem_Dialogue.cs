@@ -22,7 +22,7 @@ public class FoundItem_Dialogue : Dialogue
     }
 
     Line _startLine;
-    Line StartLine => _startLine ??= GetStartLine();
+    Line StartLine => _startLine ??= GetStartLine().SetSpeaker(Speaker.Pino);
 
     private Line GetStartLine()
     {
@@ -30,7 +30,7 @@ public class FoundItem_Dialogue : Dialogue
 
         var lines = new Line[Rewards.Rewards.Length];
 
-        if (Rewards.Rewards[^1].DataItem is Data.PatternsFound)
+        if (Rewards.Rewards[^1].DataItem is Datum.PatternsFound)
         {
             lines[^1] = new Line("You gained " + Rewards.Rewards[^1].Amount + " Pattern"
                      + (Rewards.Rewards[^1].Amount > 1 ? "s." : "."), SubsequentState);
@@ -44,7 +44,7 @@ public class FoundItem_Dialogue : Dialogue
 
         for (var i = lines.Length - 2; i > -1; i--)
         {
-            if (Rewards.Rewards[i].DataItem is Data.PatternsFound)
+            if (Rewards.Rewards[i].DataItem is Datum.PatternsFound)
             {
                 lines[^1] = new Line("You gained " + Rewards.Rewards[i].Amount + " Pattern"
                          + (Rewards.Rewards[i].Amount > 1 ? "s." : "."), lines[i + 1]);

@@ -1,5 +1,5 @@
-using Data.SRhythm;
-using Data;
+using Datum.SRhythm;
+using Datum;
 using MusicTheory.Rhythms;
 
 namespace Menus
@@ -87,14 +87,14 @@ namespace Menus
 
         State TrainingBattery => Selection.Item switch
         {
-            SSSS => new BatteryTutorial_State(GetMeasures(CellShape.SSSS), GetSpecs(), Manager.Io.SRhythmCellData, Selection.Item, new MenuState(this)),
-            Q => new BatteryTutorial_State(GetMeasures(CellShape.LL), GetSpecs(), Manager.Io.SRhythmCellData, Selection.Item, new MenuState(this)),
-            EE => new BatteryTutorial_State(GetMeasures(CellShape.L), GetSpecs(), Manager.Io.SRhythmCellData, Selection.Item, new MenuState(this)),
-            ESS => new BatteryTutorial_State(GetMeasures(CellShape.LSS), GetSpecs(), Manager.Io.SRhythmCellData, Selection.Item, new MenuState(this)),
-            SSE => new BatteryTutorial_State(GetMeasures(CellShape.SSL), GetSpecs(), Manager.Io.SRhythmCellData, Selection.Item, new MenuState(this)),
-            DES => new BatteryTutorial_State(GetMeasures(CellShape.LS), GetSpecs(), Manager.Io.SRhythmCellData, Selection.Item, new MenuState(this)),
-            SDE => new BatteryTutorial_State(GetMeasures(CellShape.SL), GetSpecs(), Manager.Io.SRhythmCellData, Selection.Item, new MenuState(this)),
-            SES => new BatteryTutorial_State(GetMeasures(CellShape.SLS), GetSpecs(), Manager.Io.SRhythmCellData, Selection.Item, new MenuState(this)),
+            SSSS => new BatteryTutorial_State(GetMeasures(CellShape.SSSS), GetSpecs(), Manager.Io.SRhythmCellData, Selection.Item, new MenuState(this), false),
+            Q => new BatteryTutorial_State(GetMeasures(CellShape.L), GetSpecs(), Manager.Io.SRhythmCellData, Selection.Item, new MenuState(this), false),
+            EE => new BatteryTutorial_State(GetMeasures(CellShape.LL), GetSpecs(), Manager.Io.SRhythmCellData, Selection.Item, new MenuState(this), false),
+            ESS => new BatteryTutorial_State(GetMeasures(CellShape.LSS), GetSpecs(), Manager.Io.SRhythmCellData, Selection.Item, new MenuState(this), false),
+            SSE => new BatteryTutorial_State(GetMeasures(CellShape.SSL), GetSpecs(), Manager.Io.SRhythmCellData, Selection.Item, new MenuState(this), false),
+            DES => new BatteryTutorial_State(GetMeasures(CellShape.LS), GetSpecs(), Manager.Io.SRhythmCellData, Selection.Item, new MenuState(this), false),
+            SDE => new BatteryTutorial_State(GetMeasures(CellShape.SL), GetSpecs(), Manager.Io.SRhythmCellData, Selection.Item, new MenuState(this), false),
+            SES => new BatteryTutorial_State(GetMeasures(CellShape.SLS), GetSpecs(), Manager.Io.SRhythmCellData, Selection.Item, new MenuState(this), false),
             _ => throw new System.Exception(Selection.Item.Name)
         };
 
@@ -103,6 +103,7 @@ namespace Menus
             return new RhythmSpecs()
                 .SetNumberOfMeasures(1)
                 .SetSubDivision(SubDivisionTier.D2Only)
+                .SetTempo(60)
                 ;
         }
 

@@ -19,7 +19,7 @@ public class PirateEncounter_Dialogue : Dialogue
     Line StartLine => new Line("Pirates off the starboard bow!", Line2)// DataManager.Io.GamePlay.ExplainBatterie ? Line2 : Line5)
         .SetSpeaker(Speaker);
 
-    Line Line2 => new Line("Pino: YOU NEED TO IMPLEMENT THIS STILL!...\n\n\nExecuting proper timing of the Battery is critical in sea battles.", Line3)
+    Line Line2 => new Line("Executing proper timing of the Batterie is critical in sea battles.", Line3)
         .SetSpeaker(Speaker);
 
     Line Line3 => new Line("I will show you the beat map, but the performance is up to you.", Line4)

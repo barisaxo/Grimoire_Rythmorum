@@ -6,9 +6,9 @@ using Dialog;
 public class SellGramo_Dialogue : Dialogue
 {
     readonly Dialogue ReturnTo;
-    int Gramos => Data.Manager.Io.Inventory.GetLevel(new Data.Gramophone());
+    int Gramos => Datum.Manager.Io.Inventory.GetLevel(new Datum.Gramophone());
 
-    public SellGramo_Dialogue(Dialogue returnTo, Speaker speaker, Data.Standing standingData)
+    public SellGramo_Dialogue(Dialogue returnTo, Speaker speaker, Datum.Standing standingData)
     {
         ReturnTo = returnTo;
         Speaker = speaker;
@@ -21,11 +21,11 @@ public class SellGramo_Dialogue : Dialogue
         return base.Initiate();
     }
 
-    readonly Data.Standing Standing;
+    readonly Datum.Standing Standing;
 
 
-    int StandingLevel => Data.Manager.Io.Standings.GetLevel(Standing);
-    readonly int Mats = Data.Manager.Io.Inventory.GetLevel(new Data.Material());
+    int StandingLevel => Datum.Manager.Io.Standings.GetLevel(Standing);
+    readonly int Mats = Datum.Manager.Io.Inventory.GetLevel(new Datum.Material());
     float StandingsModifier => 2f - (float)(1f - (float)((float)StandingLevel) / 9f);
 
     static readonly int largeAmount = 10000;
@@ -75,18 +75,18 @@ public class SellGramo_Dialogue : Dialogue
 
     void SellGramoSmall()
     {
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gramophone(), -1);
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), smallAmount);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Gramophone(), -1);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Gold(), smallAmount);
     }
     void SellGramoMedium()
     {
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gramophone(), -3);
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), medAmount);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Gramophone(), -3);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Gold(), medAmount);
     }
     void SellGramoLarge()
     {
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gramophone(), -5);
-        Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), largeAmount);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Gramophone(), -5);
+        Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Gold(), largeAmount);
     }
 
     readonly string TradeComplete_LineText = "Good deal! Until next time!";

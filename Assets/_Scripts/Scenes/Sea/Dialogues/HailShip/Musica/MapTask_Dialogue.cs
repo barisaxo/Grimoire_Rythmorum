@@ -33,7 +33,7 @@ public class MapTask_Dialogue : Dialogue
     Response BackResponse => _backResponse ??= new Response("Never mind", ReturnTo);
 
     readonly string TradeComplete_LineText = "Good deal! Until next time!";
-    Line _tradeCompleteLine;//TODO sail away to new contents dialogue to seaScene.
+    Line _tradeCompleteLine;//TODO sail away to new contents dialogue to seaScene.7/5/24 - is this still todo?
     Line TradeComplete_Line => _tradeCompleteLine ??= new Line(TradeComplete_LineText, new NPCSailAway_State(new SeaScene_State()))
         .SetSpeaker(Speaker)
         ;

@@ -87,7 +87,7 @@ namespace Muscopa
             return rn switch
             {
                 DiatonicRomanNumeral.I or DiatonicRomanNumeral.III or DiatonicRomanNumeral.VI => HarmonicFunction.Tonic,
-                DiatonicRomanNumeral.II or DiatonicRomanNumeral.IV => HarmonicFunction.Predominant,
+                DiatonicRomanNumeral.II or DiatonicRomanNumeral.IV => HarmonicFunction.Subdominant,
                 _ => HarmonicFunction.Dominant
             };
         }

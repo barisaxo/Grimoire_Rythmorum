@@ -27,6 +27,7 @@ public class ScalePuzzle : IPuzzle
     public KeyboardNoteName[] Notes => _notes;
 
     public string Desc => "Build the <b><i>scale";
+    public string puzzleType => "scale";
 
     private readonly string _question;
     public string Question => _question;
@@ -70,7 +71,7 @@ public class ScalePuzzle : IPuzzle
 
     private Scale WeightedRandomScale()
     {
-        int solved = Data.Manager.Io.Puzzles.GetLevel(this);
+        int solved = Datum.Manager.Io.Puzzles.GetLevel(this);
 
         List<Scale> scaleList = new() { new Major() };
         if (solved > 10) scaleList.Add(new Chromatic());

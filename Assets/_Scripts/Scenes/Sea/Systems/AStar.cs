@@ -93,7 +93,7 @@ public static class AStar
         Vector2Int[] ConsolidateBlockedCoords(Sea.Cell[] tiles)
         {
             List<Vector2Int> v2is = new();
-            foreach (Sea.Cell cell in tiles) if (cell.IsAStarOpen) v2is.Add(cell.Coord);
+            foreach (Sea.Cell cell in tiles) if (cell.IsAStarOpen) v2is.Add(cell.LocalCoord);
             return v2is.ToArray();
         }
 

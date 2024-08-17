@@ -1,6 +1,6 @@
 ﻿using Audio;
 using UnityEngine;
-using Data;
+using Datum;
 public sealed class KeyboardAudioSystem : AudioSystem
 {
     private int _audioSourceIndex = 0;
@@ -138,7 +138,7 @@ public sealed class KeyboardAudioSystem : AudioSystem
     //     AudioSources[3].Play();
     // }
 
-    public override void Stop()
+    public override void FadeAndStop()
     {
         foreach (var a in AudioSources) a.Stop();
     }

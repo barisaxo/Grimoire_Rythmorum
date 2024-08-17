@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System;
-namespace Data
+namespace Datum
 {
     [System.Serializable]
     public class MiscData : IData

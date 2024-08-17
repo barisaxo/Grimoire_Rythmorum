@@ -5,7 +5,7 @@ using Dialog;
 
 public class Sell_Dialogue : Dialogue
 {
-    public Sell_Dialogue(Dialogue returnTo, Speaker speaker, Data.Standing standing)
+    public Sell_Dialogue(Dialogue returnTo, Speaker speaker, Datum.Standing standing)
     {
         ReturnTo = returnTo;
         Speaker = speaker;
@@ -18,14 +18,14 @@ public class Sell_Dialogue : Dialogue
         return base.Initiate();
     }
 
-    readonly Data.Standing Standing;
+    readonly Datum.Standing Standing;
     readonly Dialogue ReturnTo;
 
     // int Gramos => Data.Manager.Io.Inventory.GetLevel(new Data.Gramos());
     // int Maps => DataManager.Io.CharacterData.Maps;
-    readonly int Mats = Data.Manager.Io.Inventory.GetLevel(new Data.Material());
-    readonly int Rations = Data.Manager.Io.Inventory.GetLevel(new Data.Ration());
-    readonly int Gramos = Data.Manager.Io.Inventory.GetLevel(new Data.Gramophone());
+    readonly int Mats = Datum.Manager.Io.Inventory.GetLevel(new Datum.Material());
+    readonly int Rations = Datum.Manager.Io.Inventory.GetLevel(new Datum.Ration());
+    readonly int Gramos = Datum.Manager.Io.Inventory.GetLevel(new Datum.Gramophone());
 
     readonly string SellGramo_RepText = "Sell Gramophones";
     readonly string SellMat_RepText = "Sell Materials";

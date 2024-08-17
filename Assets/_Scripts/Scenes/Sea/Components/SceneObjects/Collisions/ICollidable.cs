@@ -22,7 +22,7 @@ namespace Sea
         private readonly CapsuleCollider _collider;
         public CapsuleCollider GetCollider => _collider;
 
-        public Vector2 CollisionResults(WorldMapScene scene, ITelemeter telemeter, Vector2 dir, RaycastHit hit)
+        public Vector2 CollisionResults(WorldMapScene scene, ITelemeter telemeter, Vector2 direction, RaycastHit hit)
         {
             if (telemeter.IsInRange(GetCollider, scene.Ship.CapsuleCollider))
             {
@@ -33,20 +33,20 @@ namespace Sea
                     Vector2 forward2D = new(scene.Ship.CapsuleCollider.transform.forward.x, scene.Ship.CapsuleCollider.transform.forward.z);
                     Vector2 shipPos = new(scene.Ship.CapsuleCollider.transform.position.x, scene.Ship.CapsuleCollider.transform.position.z);
 
-                    if (IsMovingTowards(shipPos, forward2D * dir.y, b, 45))
+                    if (IsMovingTowards(shipPos, forward2D * direction.y, b, 45))
                     {
                         Vector3 leftV3 = scene.Ship.GO.transform.rotation * Vector3.left;
                         Vector3 rightV3 = scene.Ship.GO.transform.rotation * Vector3.right;
                         Vector2 leftV2 = new(leftV3.x, leftV3.z);
                         Vector2 rightV2 = new(rightV3.x, rightV3.z);
 
-                        dir.x += Vector2.Distance(a + leftV2, b) > Vector2.Distance(a + rightV2, b) ? -1 : 1;
-                        dir.y *= Vector2.Distance(a, b);
+                        direction.x += Vector2.Distance(a + leftV2, b) > Vector2.Distance(a + rightV2, b) ? -1 : 1;
+                        direction.y *= Vector2.Distance(a, b);
                     }
                 }
             }
 
-            return dir;
+            return direction;
 
             static bool IsMovingTowards(Vector2 transformPosition, Vector2 transformDirection, Vector2 targetPosition, float approach)
             {

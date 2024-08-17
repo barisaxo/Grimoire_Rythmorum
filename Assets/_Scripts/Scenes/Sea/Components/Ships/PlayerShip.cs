@@ -1,9 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Sea;
-using Sea.Maps;
-using System;
 
 public class PlayerShip
 {
@@ -23,7 +19,6 @@ public class PlayerShip
     {
         get
         {
-            // return WorldMapScene.Io.Map.Territories.GetValueOrDefault(new Vector2Int((int)(GlobalLoc.x / RegionSize), (int)(GlobalLoc.y / RegionSize))).re;
             return WorldMapScene.Io.Map.Regions[WorldMapScene.Io.Map.RegionIndexFromGlobalCoord(GlobalCoord)];
         }
     }
@@ -46,7 +41,6 @@ public class PlayerShip
     public Vector3 SeaPos;
     public Quaternion SeaRot;
 
-    // public NPCShipType ShipType;
     public GameObject Parent;
     public GameObject GO;
     public CapsuleCollider CapsuleCollider;
@@ -54,20 +48,7 @@ public class PlayerShip
     private readonly int RegionSize;
     private readonly int GlobalSize;
 
-    public ShipStats.ShipStats ShipStats = Data.Manager.Io.ActiveShip.ShipStats;
-
-    //  TO DO get actual data
-    //     new(
-    //         new ShipStats.HullStats(
-    //             new Data.Schooner(),
-    //            new Data.Oak()),
-    //         new ShipStats.CannonStats(
-    //           new Data.Culverin(),
-    //            new Data.CastIron()),
-    //         new ShipStats.RiggingStats(new Data.Hemp()),
-    //         numOfCannons: 32
-    //    );
-
+    public ShipStats.ShipStats ShipStats = Datum.Manager.Io.ActiveShip.ShipStats;
 
     public PlayerShip(Sea.WorldMapScene scene)
     {
@@ -89,7 +70,7 @@ public class PlayerShip
             .1f,
             (float)((float)scene.Board.Size * (float)(1f / (float)scene.Board.SubDivision)));
 
-        GameObject go = Assets.Sloop.gameObject;
+        GameObject go = Object.Instantiate(Datum.Manager.Io.ActiveShip.ShipStats.ShipPrefab.GO);
         go.name = nameof(PlayerShip);
         go.transform.SetParent(Parent.transform);
         go.transform.SetPositionAndRotation(Parent.transform.position, Quaternion.Euler(new Vector3(0, 180, 0)));
@@ -131,13 +112,3 @@ public class PlayerShip
         .OffsetImageFromTMP(Vector2.right * .5f)
         ;
 }
-
-// public static class PlayerShipSystems
-// {
-
-//     public static void UpdateShipCoords(this PlayerShip player, Sea.WorldMapScene scene)
-//     {
-//         scene.HUD.UpdateCoords(player.GlobalCoord, scene.Map.GlobalSize);
-//     }
-
-// }

@@ -96,19 +96,23 @@ namespace Cove
 
         public void SetCardPos1(Card card)
         {
-            card.SetPositionAll(Cam.UIOrthoX - 1.5f, -Cam.UIOrthoY + 1.15f);
+            card.SetPositionAll(Cam.UIOrthoX - 1.5f, -Cam.UIOrthoY + 1.15f)
+                .OffsetImagePosition(Vector2.right);
         }
         public void SetCardPos2(Card card)
         {
-            card.SetPositionAll(Cam.UIOrthoX - 1.5f, -Cam.UIOrthoY + 2.15f);
+            card.SetPositionAll(Cam.UIOrthoX - 1.5f, -Cam.UIOrthoY + 2.15f)
+                .OffsetImagePosition(Vector2.right);
         }
         public void SetCardPos3(Card card)
         {
-            card.SetPositionAll(Cam.UIOrthoX - 1.5f, -Cam.UIOrthoY + 3.15f);
+            card.SetPositionAll(Cam.UIOrthoX - 1.5f, -Cam.UIOrthoY + 3.15f)
+                .OffsetImagePosition(Vector2.right);
         }
         public void SetCardPos4(Card card)
         {
-            card.SetPositionAll(Cam.UIOrthoX - 1.5f, -Cam.UIOrthoY + 4.15f);
+            card.SetPositionAll(Cam.UIOrthoX - 1.5f, -Cam.UIOrthoY + 4.15f)
+                .OffsetImagePosition(Vector2.right);
         }
     }
 }

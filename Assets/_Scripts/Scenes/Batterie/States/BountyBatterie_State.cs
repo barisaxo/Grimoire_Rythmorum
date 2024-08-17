@@ -10,24 +10,31 @@ public class BountyBatterie_State : State
     public BountyBatterie_State(ShipStats.ShipStats NMEShipStats, GameObject nmeGO, PlayerShip playerShip, Quests.BountyQuest quest)
     {
         Quest = quest;
-        Fade = true;
-        // var specs = new RhythmSpecs()
-        // {
-        //     Time = RandomTimeSignature.Get(),
-        //     NumberOfMeasures = 4,
-        //     SubDivisionTier = MusicTheory.Rhythms.SubDivisionTier.D1Only,
-        //     HasTies = UnityEngine.Random.value > .5f,
-        //     HasRests = UnityEngine.Random.value > .5f,
-        //     HasTriplets = false,
-        //     Tempo = 90
-        // };
-        RhythmSpecs rhythmSpecs = new RhythmSpecs().SetTime(new FourFour());//RandomTimeSignature.Get()
-        rhythmSpecs.SetTempo(90)
+        Fade = false;
+        RhythmSpecs rhythmSpecs = new RhythmSpecs().SetTime(RandomTimeSignatureSans44.Get());
+        rhythmSpecs.SetTempo(rhythmSpecs.Time.GetTempo())
             .SetRests(UnityEngine.Random.value < .75f)
             .SetTies(UnityEngine.Random.value < .75f);
 
         BatteriePack pack = new(rhythmSpecs, false);
-        Scene = new(NMEShipStats, nmeGO, playerShip, Tick, pack, "Bounty");
+        Scene = new(NMEShipStats, nmeGO, playerShip, BatterieStateTick, pack, "Bounty");
+    }
+
+    public BountyBatterie_State(BatterieScene scene, Quests.BountyQuest quest)
+    {
+        Quest = quest;
+        // RhythmSpecs rhythmSpecs = scene.Pack._rhythmSpecs;//new FourFour());//
+        // rhythmSpecs.SetTempo(90)//todo get tempo from time sig
+        //     .SetRests(UnityEngine.Random.value < .75f)
+        //     .SetTies(UnityEngine.Random.value < .75f);
+
+        Scene = scene;
+        Scene.BatterieSceneTick = BatterieStateTick;
+        // Scene.Pack = new(rhythmSpecs, false);
+        // Scene = new(scene.NMEShipStats, scene.NMEGO, scene.PlayerShip, Tick, pack, "Bounty");
+
+        // scene.SelfDestruct();
+
     }
 
     Quests.BountyQuest Quest;
@@ -52,6 +59,7 @@ public class BountyBatterie_State : State
         MonoHelper.OnUpdate += SpaceBar;
 
         Scene.Initialize();
+
         Scene.Pack.GetNewSettings(callback).StartCoroutine();
     }
 
@@ -63,13 +71,13 @@ public class BountyBatterie_State : State
 
     protected override void DisengageState()
     {
-        Scene.Pack.Synchro.TickEvent -= Tick;
+        Scene.Pack.Synchro.TickEvent -= BatterieStateTick;
         Scene.Pack.Synchro.BeatEvent -= Click;
         MonoHelper.OnUpdate -= SpaceBar;
 
         Scene.BatterieFeedback.SelfDestruct();
         Scene.CountOffFeedBack.SelfDestruct();
-        Audio.Batterie.Stop();
+        Audio.Batterie.FadeAndStop();
         Scene.Pack.MuscopaAudio.StopTheCadence();
         Scene.Pack.MusicSheet.SelfDestruct();
 
@@ -91,14 +99,14 @@ public class BountyBatterie_State : State
     }
 
 
-    void Tick()
+    void BatterieStateTick()
     {
         if (CountingOff)
         {
             CountOffTimeEvent();
             if (++Counter == Scene.Pack.CountOffBeatmap.Length - 1)
             {
-                MonoHelper.OnUpdate += Scene.Pack.Analyzer.Tick;
+                MonoHelper.OnUpdate += Scene.Pack.Analyzer.BatterieInputAnalyzerTick;
                 Scene.Pack.Analyzer.Start();
                 Scene.Pack.Synchro.BeatEvent += Click;
                 CountingOff = false; Playing = true; Counter = 0;
@@ -109,7 +117,9 @@ public class BountyBatterie_State : State
 
         if (!cadenceStarted)
         {
-            Scene.Pack.MuscopaAudio.PlayNewMuscopaPuzzleMusic();
+            //TODO: I'm temporarily disabling the cadence while waiting for audio assets, 
+            //TODO: to enable time signatures in the mean time
+            // Scene.Pack.MuscopaAudio.PlayNewMuscopaPuzzleMusic();
             cadenceStarted = true;
         }
 
@@ -121,10 +131,10 @@ public class BountyBatterie_State : State
 
         if (!Playing && !CountingOff)
         {
-            Audio.Batterie.Stop();
+            Audio.Batterie.FadeAndStop();
             Scene.Pack.Synchro.Stop();
-            MonoHelper.OnUpdate -= Scene.Pack.Analyzer.Tick;
-            Scene.Pack.MuscopaAudio.StopTheCadence();
+            MonoHelper.OnUpdate -= Scene.Pack.Analyzer.BatterieInputAnalyzerTick;
+            // Scene.Pack.MuscopaAudio.StopTheCadence();
 
             // FadeToState(PuzzleSelector.WeightedRandomPuzzleState(Data.TheoryPuzzleData));
             // Scene.NMEHealth.cur -= Scene.Pack.GoodHits * DataManager.ShipData.ShipStats.DamagePotential;
@@ -177,7 +187,7 @@ public class BountyBatterie_State : State
 
     void Click()
     {
-        //Audio.Batterie.PlayClick();
+        Audio.Batterie.PlayClick();
     }
 
     protected override void Clicked(MouseAction action, Vector3 mousePos)

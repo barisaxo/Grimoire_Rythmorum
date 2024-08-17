@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Data;
+using Datum;
 
 namespace Sea
 {
@@ -85,7 +85,7 @@ namespace Sea
         public State CurrentState { get; }
 
         private State _subsequentState;
-        public State SubsequentState => _subsequentState ??= new SeaToItemPickUp_State(CurrentState, StarChartData, new Data.StarChartStorage(), Obj);
+        public State SubsequentState => _subsequentState ??= new SeaToItemPickUp_State(CurrentState, StarChartData, new Datum.StarChartStorage(), Obj);
         // StarChartsData.InventoryIsFull(ShipData.GetLevel(ShipData.DataItem.Bottle)) ?
         //     new DialogStart_State(new InventoryIsFull_Dialogue(CurrentState)) :
         //     new SeaToItemPickUp_State(CurrentState, StarChartsData, ShipData.DataItem.Bottle, Obj);
@@ -103,7 +103,8 @@ namespace Sea
         }
 
         readonly InventoryData InventoryData;
-        readonly ActiveShipData ShipData; private string _popupText;
+        readonly ActiveShipData ShipData;
+        private string _popupText;
         public string PopupText =>
             _popupText ??= ShipData.InventoryIsFull(ShipData.GetLevel(new GramophoneStorage())) ?
             "(inventory full)" :

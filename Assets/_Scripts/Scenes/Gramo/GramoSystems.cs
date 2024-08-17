@@ -25,9 +25,9 @@ public static class GramoSystems
         return cur switch
         {
             HarmonicFunction.Secondary => dir == Dir.Left ? HarmonicFunction.Dominant : HarmonicFunction.Tonic,
-            HarmonicFunction.Tonic => dir == Dir.Left ? HarmonicFunction.Dominant : HarmonicFunction.Predominant,
-            HarmonicFunction.Predominant => dir == Dir.Left ? HarmonicFunction.Tonic : HarmonicFunction.Dominant,
-            HarmonicFunction.Dominant => dir == Dir.Left ? HarmonicFunction.Predominant : HarmonicFunction.Tonic,
+            HarmonicFunction.Tonic => dir == Dir.Left ? HarmonicFunction.Dominant : HarmonicFunction.Subdominant,
+            HarmonicFunction.Subdominant => dir == Dir.Left ? HarmonicFunction.Tonic : HarmonicFunction.Dominant,
+            HarmonicFunction.Dominant => dir == Dir.Left ? HarmonicFunction.Subdominant : HarmonicFunction.Tonic,
             _ => throw new System.ArgumentException(cur.ToString())
         };
     }
@@ -205,7 +205,7 @@ public static class GramoSystems
                 _ => throw new System.ArgumentException(dial.material.name)
             },
 
-            HarmonicFunction.Predominant => scene.CurSelection switch
+            HarmonicFunction.Subdominant => scene.CurSelection switch
             {
                 _ when scene.CurSelection == scene.Gramo.AnswerMesh1 => mats[0][1],
                 _ when scene.CurSelection == scene.Gramo.AnswerMesh2 => mats[1][1],

@@ -22,6 +22,7 @@ public class NotePuzzle : IPuzzle
     public KeyboardNoteName[] Notes => _notes;
 
     public string Desc => "Find the <b><i>note";
+    public string puzzleType => "note";
 
     private readonly string _question;
     public string Question => _question;
@@ -42,7 +43,7 @@ public class NotePuzzle : IPuzzle
 
     private Key WeightedRandomKey()
     {
-        int solved = Data.Manager.Io.Puzzles.GetLevel(this);
+        int solved = Datum.Manager.Io.Puzzles.GetLevel(this);
 
         List<int> ints = new() { 1 };
         if (solved > 4) ints.Add(2);

@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-namespace Data.ERhythm
+namespace Datum.ERhythm
 {
     public class ERhythmCellMenuOptionData : IData
     {

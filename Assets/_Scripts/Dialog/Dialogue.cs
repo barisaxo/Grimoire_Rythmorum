@@ -24,6 +24,59 @@ namespace Dialog
         {
             return this;
         }
+
+        public static Line GetStartLines(string[] text, State returnTo)
+        {
+            Line[] lines = new Line[text.Length];
+
+            for (int i = 0; i < lines.Length; i++) lines[i] = new(text[i]);
+
+            lines[^1].SetResponses(new Response[] {
+                new ("Back", returnTo),
+                new ("Previous", lines[^2]),});
+
+            for (int i = 1; i < lines.Length - 1; i++)
+                lines[i].SetResponses(Replies(lines[i + 1], lines[i - 1]));
+
+            lines[0].SetResponses(new Response[] { new("Next", lines[1]), Back() });
+
+            return lines[0];
+
+            Response[] Replies(Line nextLine, Line prevLine) => new Response[]{
+                new ("Previous", prevLine),
+                new ("Next", nextLine),
+                Back(),
+            };
+
+            Response Back() => new("Back", returnTo);
+        }
+
+        public static Line GetStartLines(string[] text, Dialogue returnTo)
+        {
+            Line[] lines = new Line[text.Length];
+
+            for (int i = 0; i < lines.Length; i++) lines[i] = new(text[i]);
+
+            lines[^1].SetResponses(new Response[] {
+                new ("Back", returnTo),
+                new ("Previous", lines[^2]),});
+
+            for (int i = 1; i < lines.Length - 1; i++)
+                lines[i].SetResponses(Replies(lines[i + 1], lines[i - 1]));
+
+            lines[0].SetResponses(new Response[] { new("Next", lines[1]), Back() });
+
+            return lines[0];
+
+            Response[] Replies(Line nextLine, Line prevLine) => new Response[]{
+                new ("Previous", prevLine),
+                new ("Next", nextLine),
+                Back(),
+            };
+
+            Response Back() => new("Back", returnTo);
+        }
+
     }
 }
 

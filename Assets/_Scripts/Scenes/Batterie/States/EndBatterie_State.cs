@@ -35,7 +35,7 @@ public class EndBatterie_State : State
         rations = (int)(1 + ((level + 5f) * UnityEngine.Random.Range(.5f, 1) * (float)((100 - Result()) * .01f)));
         patterns = (int)((Scene.NMEShipStats.HullStrength + Scene.NMEShipStats.VolleyDamage) *
                         (Scene.Pack.HasCritThisBattery ? .45f : .25f)
-                        * Data.Manager.Io.Skill.GetBonusRatio(new Data.Apophenia()));
+                        * Datum.Manager.Io.Skill.GetBonusRatio(new Datum.Apophenia()));
         Results();
 
         Sea.WorldMapScene.Io.Ship.GO.transform.SetPositionAndRotation(
@@ -66,10 +66,10 @@ public class EndBatterie_State : State
         switch (Scene.Pack.ResultType)
         {
             case BatterieResultType.NMESurrender:
-                Data.Manager.Io.Inventory.AdjustLevel(new Data.Material(), mats /= 2);
-                Data.Manager.Io.Inventory.AdjustLevel(new Data.Ration(), rations /= 2);
-                Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), coins /= 2);
-                DataManager.Player.AdjustLevel(new Data.PatternsFound(), patterns);
+                Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Material(), mats /= 2);
+                Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Ration(), rations /= 2);
+                Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Gold(), coins /= 2);
+                DataManager.Player.AdjustLevel(new Datum.PatternsFound(), patterns);
 
                 SetState(
                     new CameraPan_State(
@@ -82,9 +82,9 @@ public class EndBatterie_State : State
                 return;
 
             case BatterieResultType.Surrender:
-                Data.Manager.Io.Inventory.AdjustLevel(new Data.Material(), mats /= -2);
-                Data.Manager.Io.Inventory.AdjustLevel(new Data.Ration(), rations /= -2);
-                Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), coins /= -2);
+                Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Material(), mats /= -2);
+                Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Ration(), rations /= -2);
+                Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Gold(), coins /= -2);
                 SetState(
                     new CameraPan_State(
                         new NPCSailAway_State(
@@ -129,18 +129,19 @@ public class EndBatterie_State : State
                         5));
                 return;
 
-            case BatterieResultType.Lost://TODO
-                SetState(new MenuState(new Menus.MainMenu(Data.Manager.Io, Audio))); ;
+            case BatterieResultType.Lost:
+                SetState(new BatterieToGameOverTransition_State(Scene));
 
                 return;
 
             case BatterieResultType.Won:
                 //  DataManager.CharacterData.Map = map;
-                Data.Manager.Io.Inventory.AdjustLevel(new Data.Material(), mats);
-                Data.Manager.Io.Inventory.AdjustLevel(new Data.Ration(), rations);
-                Data.Manager.Io.Inventory.AdjustLevel(new Data.Gold(), coins);
-                DataManager.Player.AdjustLevel(new Data.PatternsFound(), patterns);
+                Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Material(), mats);
+                Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Ration(), rations);
+                Datum.Manager.Io.Inventory.AdjustLevel(new Datum.Gold(), coins);
+                DataManager.Player.AdjustLevel(new Datum.PatternsFound(), patterns);
 
+                //todo .... does Rock the boat still have NPC?
                 SetState(
                     new MoveNPCOffScreen_State(
                         new CameraPan_State(

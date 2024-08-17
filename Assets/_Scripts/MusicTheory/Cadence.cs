@@ -11,8 +11,8 @@ namespace MusicTheory
             // HarmonicFunction f1 = (HarmonicFunction)(UnityEngine.Random.value * FunctionCount());
             HarmonicFunction f1 = shipRegion switch
             {
-                RegionalMode.Dorian => HarmonicFunction.Predominant,
-                RegionalMode.Lydian => HarmonicFunction.Predominant,
+                RegionalMode.Dorian => HarmonicFunction.Subdominant,
+                RegionalMode.Lydian => HarmonicFunction.Subdominant,
                 RegionalMode.MixoLydian => HarmonicFunction.Dominant,
                 RegionalMode.Locrian => HarmonicFunction.Dominant,
                 _ => HarmonicFunction.Tonic,
@@ -30,15 +30,15 @@ namespace MusicTheory
                 TallyFunctionsUsed(f1);
                 TallyFunctionsUsed(f2);
 
-                if (ton == 2) { return UnityEngine.Random.value < (1f / 2f) ? HarmonicFunction.Predominant : HarmonicFunction.Dominant; }
+                if (ton == 2) { return UnityEngine.Random.value < (1f / 2f) ? HarmonicFunction.Subdominant : HarmonicFunction.Dominant; }
                 if (ant == 2) { return UnityEngine.Random.value < (1f / 2f) ? HarmonicFunction.Tonic : HarmonicFunction.Dominant; }
-                if (dom == 2) { return UnityEngine.Random.value < (1f / 2f) ? HarmonicFunction.Tonic : HarmonicFunction.Predominant; }
+                if (dom == 2) { return UnityEngine.Random.value < (1f / 2f) ? HarmonicFunction.Tonic : HarmonicFunction.Subdominant; }
                 return (HarmonicFunction)(UnityEngine.Random.value * FunctionCount());
 
                 int TallyFunctionsUsed(HarmonicFunction f) => f switch
                 {
                     HarmonicFunction.Tonic => ton++,
-                    HarmonicFunction.Predominant => ant++,
+                    HarmonicFunction.Subdominant => ant++,
                     HarmonicFunction.Dominant => dom++,
                     _ => 0
                 };
@@ -53,15 +53,15 @@ namespace MusicTheory
                 TallyFunctionsUsed(f2);
                 TallyFunctionsUsed(f3);
 
-                if (ton == 2) { return UnityEngine.Random.value < (1f / 2f) ? HarmonicFunction.Predominant : HarmonicFunction.Dominant; }
+                if (ton == 2) { return UnityEngine.Random.value < (1f / 2f) ? HarmonicFunction.Subdominant : HarmonicFunction.Dominant; }
                 if (ant == 2) { return UnityEngine.Random.value < (1f / 2f) ? HarmonicFunction.Tonic : HarmonicFunction.Dominant; }
-                if (dom == 2) { return UnityEngine.Random.value < (1f / 2f) ? HarmonicFunction.Tonic : HarmonicFunction.Predominant; }
+                if (dom == 2) { return UnityEngine.Random.value < (1f / 2f) ? HarmonicFunction.Tonic : HarmonicFunction.Subdominant; }
                 return (HarmonicFunction)(UnityEngine.Random.value * FunctionCount());
 
                 int TallyFunctionsUsed(HarmonicFunction f) => f switch
                 {
                     HarmonicFunction.Tonic => ton++,
-                    HarmonicFunction.Predominant => ant++,
+                    HarmonicFunction.Subdominant => ant++,
                     HarmonicFunction.Dominant => dom++,
                     _ => 0
                 };
@@ -117,7 +117,7 @@ namespace MusicTheory
                     // _ => DiatonicRomanNumeral.I,
                     // },
 
-                    HarmonicFunction.Predominant => difficulty switch
+                    HarmonicFunction.Subdominant => difficulty switch
                     {
                         CadenceDifficulty.I_II_V or CadenceDifficulty.III_VI_II_V or CadenceDifficulty.I_VI_II_V => DiatonicRomanNumeral.II,
                         CadenceDifficulty.I_IV_V => DiatonicRomanNumeral.IV,

@@ -11,9 +11,9 @@ namespace Muscopa
         {
         }
 
-        public override void Stop()
+        public override void FadeAndStop()
         {
-            base.Stop();
+            base.FadeAndStop();
         }
 
         public void Mute()

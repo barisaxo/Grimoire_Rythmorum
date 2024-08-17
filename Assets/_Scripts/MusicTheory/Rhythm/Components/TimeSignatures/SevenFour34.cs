@@ -8,8 +8,9 @@ namespace MusicTheory.Rhythms
 {
     public class SevenFour34 : Time
     {
-        public SevenFour34() { Signature = TimeSignatureEnum.SevenEight34; }
+        public SevenFour34() { Signature = TimeSignatureEnum.SevenFour34; }
 
+        public override float GetTempo() => 90;
         protected override void GetRhythmCells(MusicSheet ms)
         {
             ms.Measures = new Measure[ms.RhythmSpecs.NumberOfMeasures];

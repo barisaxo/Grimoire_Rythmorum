@@ -29,7 +29,7 @@
 //         MusicSheet = new MusicSheet() { RhythmSpecs = Specs };
 //         MusicSheet.RhythmSpecs.Time.GenerateRhythmCells(MusicSheet);
 //         MusicSheet.GetNotes();
-//         MusicSheet.DrawRhythms();
+//         MusicSheet.DrawRhythms(false);
 //         MusicSheet.BeatMap = MusicSheet.Notes.MapBeats(MusicSheet.RhythmSpecs.Tempo);
 //         Synchro = new(MusicSheet.RhythmSpecs.Time.GetQuantizement(), MusicSheet.RhythmSpecs.Tempo);
 //         CountOffNotes = CountOff.GetNotes(MusicSheet.RhythmSpecs.Time);

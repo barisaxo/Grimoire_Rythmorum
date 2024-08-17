@@ -1,5 +1,5 @@
 using UnityEngine;
-using Data;
+using Datum;
 namespace Audio
 {
     public class Batterie_AudioSystem : AudioSystem
@@ -64,7 +64,7 @@ namespace Audio
             AudioSources[1].volume = VolumeData.GetScaledLevel(new BatterieVolume());
         }
 
-        public override void Stop()
+        public override void FadeAndStop()
         {
             foreach (var a in AudioSources) a.Stop();
         }

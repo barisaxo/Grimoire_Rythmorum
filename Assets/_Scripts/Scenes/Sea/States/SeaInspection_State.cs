@@ -13,6 +13,7 @@ public class SeaInspection_State : State
     public static Quaternion CameraRotQuat = Quaternion.Euler(new Vector3(65, 180, 0));
     public static Vector3 CameraRot = new(65, 180, 0);
     readonly State SubsequentState;
+    Cove.ButtonHUD HUD;
 
     public SeaInspection_State(State subsequentState)
     {
@@ -29,16 +30,26 @@ public class SeaInspection_State : State
         Cam.Io.Camera.transform.SetParent(null);
         Cam.Io.Camera.transform.SetPositionAndRotation(CameraPos, CameraRotQuat);
         DirectionPressed(Dir.Right);
+        HUD = new();
         base.PrepareState(callback);
+
     }
 
     protected override void EngageState()
     {
-        base.EngageState();
+        HUD.SetCardPos1(HUD.South);
+        // HUD.SetCardPos2(HUD.North);
+        HUD.SetCardPos2(HUD.East);
+        HUD.SetCardPos3(HUD.West);
+        HUD.North.SetImageColor(Color.clear).SetTextString("");
+        HUD.West.SetImageColor(Color.white).SetTextString("Back");
+        HUD.South.SetImageColor(Color.white).SetTextString("Scroll <<").SetImageSprite(Assets.LeftButton);
+        HUD.East.SetImageColor(Color.white).SetTextString("Scroll >>").SetImageSprite(Assets.RightButton);
     }
 
     protected override void DisengageState()
     {
+        HUD.SelfDestruct();
         GameObject.Destroy(Overlay);
         Flag.SelfDestruct();
         Info.SelfDestruct();
@@ -128,8 +139,8 @@ public class SeaInspection_State : State
 
     string ThreatLevel(NPCShip npc)
     {
-        float threat = (float)((float)npc.ShipStats.VolleyDamage / (float)DataManager.ActiveShip.GetLevel(new Data.Damage()));
-        threat += (float)((float)npc.ShipStats.HullStrength / (float)DataManager.ActiveShip.GetLevel(new Data.CurrentHitPoints()));
+        float threat = (float)((float)npc.ShipStats.VolleyDamage / (float)DataManager.ActiveShip.GetLevel(new Datum.Damage()));
+        threat += (float)((float)npc.ShipStats.HullStrength / (float)DataManager.ActiveShip.GetLevel(new Datum.CurrentHitPoints()));
         int t = (int)(threat * 50f);
         return threat switch
         {

@@ -5,12 +5,12 @@ using System.Collections;
 
 public class GramoScene
 {
-    public GramoScene(Data.IGramophone gramo)
+    public GramoScene(Datum.IGramophone gramo)
     {
         _ = Light;
 
         MuscopaSettings = NewSettings((CadenceDifficulty)gramo.ID, Genre.Stax);
-        MuscopaAudio = new(Data.Manager.Io.Volume);
+        MuscopaAudio = new(Datum.Manager.Io.Volume);
         GetNewSettings(null).StartCoroutine();
 
         AnswerSheet = MuscopaSettings.Cadence.DiatonicToHarmonicFunctionCadence();
@@ -30,6 +30,7 @@ public class GramoScene
         this.SpinLeft(Gramo.AnswerMesh1).StartCoroutine();
 
         MuscopaAudio.PlayNewMuscopaPuzzleMusic();
+        _ = QuitButton;
     }
 
     public void SelfDestruct()
@@ -37,6 +38,7 @@ public class GramoScene
         Object.Destroy(Gramo.gameObject);
         Object.Destroy(Light.gameObject);
         _confirmButton?.SelfDestruct();
+        _quitButton?.SelfDestruct();
         MuscopaAudio.StopTheCadence();
     }
 
@@ -54,10 +56,18 @@ public class GramoScene
 
     private Card _confirmButton;
     public Card ConfirmButton => _confirmButton ??= new Card(nameof(ConfirmButton), null)
-    .SetTextString("Try Open")
-    .SetTMPPosition(Cam.UIOrthoX - 2, -Cam.UIOrthoY + 1)
-    .SetImageSprite(Assets.EastButton)
-    .SetImagePosition(Cam.UIOrthoX - 2, -Cam.UIOrthoY + 2);
+        .SetTextString("Try Open")
+        .SetTMPPosition(Cam.UIOrthoX - 2, -Cam.UIOrthoY + 2)
+        .SetImageSprite(Assets.EastButton)
+        .SetImagePosition(Cam.UIOrthoX - 2, -Cam.UIOrthoY + 2);
+
+
+    private Card _quitButton;
+    public Card QuitButton => _quitButton ??= new Card(nameof(QuitButton), null)
+        .SetTextString("Quit")
+        .SetTMPPosition(Cam.UIOrthoX - 2, -Cam.UIOrthoY + 1)
+        .SetImageSprite(Assets.SelectButton)
+        .SetImagePosition(Cam.UIOrthoX - 2, -Cam.UIOrthoY + 1);
 
     private Light _light;
     public Light Light => _light ? _light : _light = SetUpLight();
@@ -123,7 +133,6 @@ public class GramoScene
             CountsPerClipDrums = 16,
             DrumClips = drums,
         });
-
 
         callback?.Invoke();
     }

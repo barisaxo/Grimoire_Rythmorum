@@ -7,7 +7,7 @@ public abstract class State
 {
     #region REFERENCES
 
-    protected Data.Manager DataManager => Data.Manager.Io;
+    protected Datum.Manager DataManager => Datum.Manager.Io;
     protected AudioManager Audio => AudioManager.Io;
 
     #endregion REFERENCES
@@ -181,29 +181,46 @@ public abstract class State
     {
         if (action != MouseAction.LUp) return;
 
-        if (Cam.Io.UICamera.orthographic)
+        // if (Cam.Io.UICamera.orthographic)
+        // {
+        // RaycastHit2D hitUIOrtho = Physics2D.Raycast(mousePos, Vector2.zero);
+        // if (hitUIOrtho.collider != null)
+        // {
+        //     Debug.Log("hitUIOrtho");
+        //     ClickedOn(hitUIOrtho.collider.gameObject);
+        //     // return;
+        // }
+
+        var hitOrtho = Physics2D.Raycast(Cam.Io.UICamera.ScreenToWorldPoint(mousePos), Vector2.zero);
+        if (hitOrtho.collider != null)
         {
-            RaycastHit2D hitUI = Physics2D.Raycast(mousePos, Vector2.zero);
-            if (hitUI.collider != null) { ClickedOn(hitUI.collider.gameObject); return; }
-
-            var hit = Physics2D.Raycast(Cam.Io.UICamera.ScreenToWorldPoint(mousePos), Vector2.zero);
-            if (hit.collider != null)
-            {
-                ClickedOn(hit.collider.gameObject);
-                return;
-            }
-
-            return;
+            Debug.Log("hitOrtho");
+            ClickedOn(hitOrtho.collider.gameObject);
+            // return;
         }
 
-        else
-        {
-            var hit = Physics2D.GetRayIntersection(Cam.Io.Camera.ScreenPointToRay(mousePos));
-            var hitUI = Physics2D.Raycast(mousePos, Vector2.zero);
-            if (hit.collider != null) { ClickedOn(hit.collider.gameObject); return; }
-            else if (hitUI.collider != null) { ClickedOn(hitUI.collider.gameObject); return; }
-            return;
-        }
+        // //     return;
+        // // }
+
+        // // else
+        // // {
+        // var hitUI = Physics2D.Raycast(mousePos, Vector2.zero);
+        // if (hitUI.collider != null)
+        // {
+        //     Debug.Log("hitUI");
+        //     ClickedOn(hitUI.collider.gameObject);
+        //     // return;
+        // }
+
+        // var hit = Physics2D.GetRayIntersection(Cam.Io.Camera.ScreenPointToRay(mousePos));
+        // if (hit.collider != null)
+        // {
+        //     Debug.Log("hit");
+        //     ClickedOn(hit.collider.gameObject);
+        //     // return;
+        // }
+
+        // }
     }
 
     protected virtual void GPInput(GamePadButton gpb)

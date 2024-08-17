@@ -1,6 +1,5 @@
-using Data.ERhythm;
-using Data;
-using MusicTheory.Rhythms;
+using Datum.ERhythm;
+using Datum;
 
 namespace Menus
 {
@@ -23,7 +22,7 @@ namespace Menus
             return item.Name;//+ ": " + Data.GetDisplayLevel(item);
         }
 
-        public string GetDescription => BatterieUnlocked ? "Complete Rhythm Cells to unlock" : string.Empty;
+        public string GetDescription => !BatterieUnlocked ? "Complete Rhythm Cells to unlock" : string.Empty;
 
         public IInputHandler Input => new MenuInputHandler()
         {
@@ -42,7 +41,7 @@ namespace Menus
         };
 
         private IMenuScene _scene;
-        public IMenuScene Scene => _scene ??= new PracticeMenuScene();
+        public IMenuScene Scene => _scene ??= new BatteriePracticeMenuScene();
 
         public State ConsequentState { get; set; }
 
@@ -51,25 +50,16 @@ namespace Menus
             About => null,
             RhythmCells => new MenuState(new ERhythmCellMenu(new MenuState(this))),
             BatteriePractice => BatterieUnlocked ?
-                new BatteryTutorial_State(null, GetSpecs(), Manager.Io.BatteriePracticeData, new ERhythmCell(), new MenuState(this))
+                new MenuState(new EBatterieOptionMenu(new MenuState(this)))
+                // new BatteryTutorial_State(null, GetSpecs(), Manager.Io.BatteriePracticeData, new ERhythmCell(), new MenuState(this))
                 : null,
             _ => throw new System.ArgumentException(),
         };
 
-        private RhythmSpecs GetSpecs()
-        {
-            return new RhythmSpecs()
-                .SetNumberOfMeasures(4)
-                .SetTies(true)
-                .SetRests(true)
-                .SetSubDivision(SubDivisionTier.D1Only)
-                ;
-        }
-
         void UpdateButtons()
         {
-            if (BatterieUnlocked) ((PracticeMenuScene)Scene).ShowButtons();
-            else ((PracticeMenuScene)Scene).HideButtons();
+            if (BatterieUnlocked) ((BatteriePracticeMenuScene)Scene).ShowButtons();
+            else ((BatteriePracticeMenuScene)Scene).HideButtons();
         }
 
         bool BatterieUnlocked => Selection.Item is About or RhythmCells || Manager.Io.ERhythmCellData.GetLevel(new EQE()) > 0;

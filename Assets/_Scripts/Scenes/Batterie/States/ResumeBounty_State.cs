@@ -7,12 +7,13 @@ public class ResumeBounty_State : State
 {
     // RhythmBars RhythmBars;
     // RhythmScriber RhythmScriber;
-
+    readonly Quests.BountyQuest Quest;
     readonly BatterieScene Scene;
 
-    public ResumeBounty_State(BatterieScene scene)
+    public ResumeBounty_State(BatterieScene scene, Quests.BountyQuest quest)
     {
         Scene = scene;
+        Quest = quest;
     }
 
     protected override void PrepareState(Action callback)
@@ -170,9 +171,10 @@ public class ResumeBounty_State : State
 
     protected override void EngageState()
     {
-        // SetState(new NewBatterie_State(Pack));
+        SetState(new BountyBatterie_State(Scene, Quest));
 
-        SetState(new BatterieAndCadence_State(Scene));
+        //I don't know why it's going to batterie & cadence state... oops
+        // SetState(new BatterieAndCadence_State(Scene));
     }
 
 }

@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Dialog;
-using Data;
+using Datum;
 
 public class Bounty_Dialogue : Dialogue
 {
@@ -11,6 +11,7 @@ public class Bounty_Dialogue : Dialogue
         ReturnTo = returnTo;
         Speaker = speaker;
         Standing = standing;
+        Debug.Log(Standing);
     }
 
     public override Dialogue Initiate()
@@ -48,14 +49,14 @@ public class Bounty_Dialogue : Dialogue
         }
 
         if (ContractWithRegion)
-            if (Manager.Io.Quests.GetQuest(new Bounty()).Complete)
-            {
-                responses.Add(RewardsResponse);
-            }
-            else
-            {
-                responses.Add(AbandonQuestResponse);
-            }
+            // if (Manager.Io.Quests.GetQuest(new Bounty()).Complete)
+            // {
+            //     responses.Add(RewardsResponse);
+            // }
+            // else
+            // {
+            responses.Add(AbandonQuestResponse);
+        // }
         else
         {
             responses.Add(AbandonQuestResponse);
@@ -107,17 +108,18 @@ public class Bounty_Dialogue : Dialogue
             new Quests.BountyQuest(
                 new Sea.Inventoriable(Rewards()),
                 Standing,
-                Loc,
+                RandLoc,
                 LatLong
                 ));
 
-        Sea.WorldMapScene.Io.Map.AddToMap(Loc, Sea.CellType.Bounty);
+        Sea.WorldMapScene.Io.Map.AddCellToMap(RandLoc, Sea.CellType.Bounty);
 
         Debug.Log(nameof(AcceptQuestPlayerAction) + " " + Manager.Io.Quests.GetQuest(new Bounty()).Description);
     }
 
-    string LatLong => Loc.GlobalCoordsToLatLongs(Sea.WorldMapScene.Io.Map.GlobalSize);
-    Vector2Int Loc = Sea.WorldMapScene.Io.Ship.GlobalCoord + RandomLoc();
+    string LatLong => RandLoc.GlobalCoordsToLatLongs(Sea.WorldMapScene.Io.Map.GlobalSize);
+    Vector2Int RandLoc = Sea.WorldMapScene.Io.Map.GetAvailableLocalCoordFromGlobalLoc(Sea.WorldMapScene.Io.Ship.GlobalCoord + RandomLoc());
+
 
     static private Vector2Int RandomLoc()
     {
@@ -132,17 +134,17 @@ public class Bounty_Dialogue : Dialogue
         return new (IData Data, IItem DataItem, int Amount)[]
         {
             (Manager.Io.Inventory, new Gold(), 1000),
-            (Manager.Io.Standings, Standing, 1),
+            // (Manager.Io.Standings, Standing, 1),
         };
     }
 
-    void RewardsPlayerAction()
-    {
-        Debug.Log("Rewards!!");
-        Manager.Io.Standings.AdjustLevel(Standing, 1);
-        var q = Manager.Io.Quests.GetQuest(new Bounty());
-        q.Reward.AddRewards();
-    }
+    // void RewardsPlayerAction()
+    // {
+    //     Debug.Log("Rewards!!");
+    //     Manager.Io.Standings.AdjustLevel(Standing, 1);
+    //     var q = Manager.Io.Quests.GetQuest(new Bounty());
+    //     q.Reward.AddRewards();
+    // }
 
     Response _backResponse;
     Response BackResponse => _backResponse ??= new Response("Never mind", ReturnTo);
@@ -153,7 +155,7 @@ public class Bounty_Dialogue : Dialogue
 
     string TradeComplete_LineText => "Here is the contract..."
         + "\nHunt the pirate ship at " + LatLong +
-        "\nCome back when the task is complete.";
+        "\nHail any " + Standing.ToRegionalName() + " ship when the task is complete.";
 
     Line _tradeCompleteLine;
     Line TradeComplete_Line => _tradeCompleteLine ??= new Line(TradeComplete_LineText, new NPCSailAway_State(new SeaScene_State()))
@@ -161,19 +163,19 @@ public class Bounty_Dialogue : Dialogue
         ;
 
 
-    Response _rewardsResponse;
-    Response RewardsResponse => _rewardsResponse ??= new Response("Rewards", QuestComplete_Line)
-        .SetPlayerAction(RewardsPlayerAction);
+    // Response _rewardsResponse;
+    // Response RewardsResponse => _rewardsResponse ??= new Response("Rewards", QuestComplete_Line)
+    //     .SetPlayerAction(RewardsPlayerAction);
 
 
-    readonly string QuestComplete_LineText = "Good work!";
-    Line _questCompleteLine;
-    Line QuestComplete_Line => _questCompleteLine ??=
-        new Line(QuestComplete_LineText)
-        .SetSpeaker(Speaker)
-        .SetNextDialogue(
-            new FoundItem_Dialogue(
-                Manager.Io.Quests.GetQuest(new Bounty()).Reward,
-                new NPCSailAway_State(new SeaScene_State())
-                ));
+    // readonly string QuestComplete_LineText = "Good work!";
+    // Line _questCompleteLine;
+    // Line QuestComplete_Line => _questCompleteLine ??=
+    //     new Line(QuestComplete_LineText)
+    //     .SetSpeaker(Speaker)
+    //     .SetNextDialogue(
+    //         new FoundItem_Dialogue(
+    //             Manager.Io.Quests.GetQuest(new Bounty()).Reward,
+    //             new NPCSailAway_State(new SeaScene_State())
+    //             ));
 }

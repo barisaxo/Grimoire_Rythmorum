@@ -1,5 +1,6 @@
 
-using Data;
+using Datum;
+using Datum.BeatFishing;
 using MusicTheory.Rhythms;
 
 namespace Menus
@@ -8,7 +9,6 @@ namespace Menus
     {
         public BeatFishingPracticeMenu(State subsequentState)
         {
-            // Data = coveMenuData;
             SubsequentState = subsequentState;
         }
 
@@ -28,13 +28,12 @@ namespace Menus
         {
             get
             {
-                if (Unlocked(Selection.Item)) return "";
+                if (Unlocked(Selection.Item)) return "Fishing mini-game.";
 
                 return
-                    "Complete " +
+                    "Practice " +
                     Enumeration.FindId<BeatFishingPracticeEnum>(Selection.Item.ID - 1).Name +
-                    " to Unlock";
-
+                    " Beat Fishing to unlock";
             }
         }
 
@@ -56,20 +55,20 @@ namespace Menus
         };
 
         private IMenuScene _scene;
-        public IMenuScene Scene => _scene ??= new PracticeMenuScene();
+        public IMenuScene Scene => _scene ??= new BatteriePracticeMenuScene();
 
         public State ConsequentState { get; set; }
 
         void UpdateButton()
         {
-            if (!Unlocked(Selection.Item)) ((PracticeMenuScene)Scene).HideButtons();
-            else ((PracticeMenuScene)Scene).ShowButtons();
+            if (!Unlocked(Selection.Item)) ((BatteriePracticeMenuScene)Scene).HideButtons();
+            else ((BatteriePracticeMenuScene)Scene).ShowButtons();
         }
 
         void EastPressed()
         {
             if (!Unlocked(Selection.Item)) ConsequentState = null;
-            else ConsequentState = TrainingBattery;
+            else ConsequentState = new BeatFishingPractice_State(new MenuState(this), Selection.Item);
         }
 
         void WestPressed()
@@ -78,21 +77,15 @@ namespace Menus
             // else ConsequentState = GetTutorial;
         }
 
-        bool Unlocked(IItem item) =>
-            (item is LVL1) ||
-            (Data.GetLevel(
-                BeatFishingPracticeEnum.ToItem(
-                    Enumeration.FindId<BeatFishingPracticeEnum>(
-                        Selection.Item.ID - 1)))
-                 > 0);
-
-
-        State TrainingBattery => Selection.Item switch
+        bool Unlocked(IItem item)
         {
-            LVL1 => new AnglingPractice_State(new MenuState(this)),
-            _ => throw new System.Exception(Selection.Item.Name)
-        };
+            if (item is QQQQ) return true;
 
+            return Data.GetLevel(
+                        BeatFishingPracticeEnum.ToItem(
+                            Enumeration.FindId<BeatFishingPracticeEnum>(Selection.Item.ID - 1)))
+                   > 0;
+        }
     }
 
 

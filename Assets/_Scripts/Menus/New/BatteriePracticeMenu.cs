@@ -1,4 +1,4 @@
-using Data;
+using Datum;
 
 namespace Menus
 {
@@ -30,8 +30,9 @@ namespace Menus
 
                 return Selection.Item switch
                 {
-                    ERhythmCell => "Practice " + (10 - Data.GetLevel(new QRhythmCell())) + " more Quarter Note Batterie to unlock",
-                    SRhythmCell => "Practice " + (10 - Data.GetLevel(new ERhythmCell())) + " more Eighth Note Batterie to unlock",
+                    ERhythmCell => "Practice " + (5 - Manager.Io.QBatterieOptionData.GetLevel(new Datum.QRhythm.RestsAndTies())) + " more Quarter Note Batterie to unlock",
+                    TimeSignatures => "Practice " + (5 - Manager.Io.QBatterieOptionData.GetLevel(new Datum.QRhythm.RestsAndTies())) + " more Quarter Note Batterie to unlock",
+                    SRhythmCell => "Practice " + (5 - Manager.Io.EBatterieOptionData.GetLevel(new Datum.ERhythm.RestsAndTies())) + " more Eighth Note Batterie to unlock",
                     _ => Data.GetDescription(Selection.Item)
                 };
             }
@@ -70,6 +71,7 @@ namespace Menus
                     QRhythmCell => new MenuState(new QRhythmCellOptionMenu(new MenuState(this))),
                     ERhythmCell => new MenuState(new ERhythmCellOptionMenu(new MenuState(this))),
                     SRhythmCell => new MenuState(new SRhythmCellOptionMenu(new MenuState(this))),
+                    TimeSignatures => new MenuState(new TimeSignaturesMenu(new MenuState(this))),
                     _ => null
                 };
             }
@@ -84,8 +86,9 @@ namespace Menus
         bool Unlocked(IItem item) => item switch
         {
             QRhythmCell => true,
-            ERhythmCell => Data.GetLevel(new QRhythmCell()) > 9,
-            SRhythmCell => Data.GetLevel(new ERhythmCell()) > 9,
+            ERhythmCell => Datum.Manager.Io.QBatterieOptionData.GetLevel(new Datum.QRhythm.RestsAndTies()) > 4,
+            SRhythmCell => Datum.Manager.Io.EBatterieOptionData.GetLevel(new Datum.ERhythm.RestsAndTies()) > 4,
+            TimeSignatures => Datum.Manager.Io.QBatterieOptionData.GetLevel(new Datum.QRhythm.RestsAndTies()) > 4,
             _ => false,
         };
 

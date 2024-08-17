@@ -26,6 +26,7 @@ public class ModePuzzle : IPuzzle
     public KeyboardNoteName[] Notes => _notes;
 
     public string Desc => "Build the <b><i>mode";
+    public string puzzleType => "mode";
 
     private string _question;
     public string Question => _question;

@@ -1,7 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Data;
+using Datum;
 
 namespace Sea
 {
@@ -43,7 +43,7 @@ namespace Sea
             //      },
             //     1));
 
-            Questable = new Questable(questData, new Navigation());
+            Questable = new Questable(questData, new Bounty());
         }
 
         public SloopPrefab Ship;

@@ -22,6 +22,7 @@ public class TriadPuzzle : IPuzzle
     public KeyboardNoteName[] Notes => _notes;
 
     public string Desc => "Build the <b><i>triad";
+    public string puzzleType => "triad";
 
     private readonly string _question;
     public string Question => _question;

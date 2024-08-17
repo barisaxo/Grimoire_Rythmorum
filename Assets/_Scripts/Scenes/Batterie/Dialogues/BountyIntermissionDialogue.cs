@@ -25,13 +25,13 @@ public class BountyIntermission_Dialogue : Dialogue
 
         else if (Scene.Pack.Crit)
         {
-            damageTaken = (int)(.5f * (float)damageTaken * (float)(1f / Data.Manager.Io.Skill.GetBonusRatio(new Data.CriticalVolley())));
-            Scene.DamageDealt = (int)((float)Scene.DamageDealt + ((float)Scene.DamageDealt * (float)Data.Manager.Io.Skill.GetBonusRatio(new Data.CriticalVolley())));
+            damageTaken = (int)(.5f * (float)damageTaken * (float)(1f / Datum.Manager.Io.Skill.GetBonusRatio(new Datum.CriticalVolley())));
+            Scene.DamageDealt = (int)((float)Scene.DamageDealt + ((float)Scene.DamageDealt * (float)Datum.Manager.Io.Skill.GetBonusRatio(new Datum.CriticalVolley())));
         }
 
         Debug.Log("Spammed: " + Scene.Pack.Spammed + ", Damage taken: " + damageTaken + ", Damage dealt: " + Scene.DamageDealt);
         Scene.BatterieHUD.PlayerCurrent -= damageTaken;
-        Data.Manager.Io.ActiveShip.AdjustLevel(new Data.CurrentHitPoints(), -damageTaken);
+        Datum.Manager.Io.ActiveShip.AdjustLevel(new Datum.CurrentHitPoints(), -damageTaken);
         Scene.BatterieHUD.NMECurrent = Scene.NMEHealth.cur -= Scene.DamageDealt;
     }
 
@@ -48,12 +48,12 @@ public class BountyIntermission_Dialogue : Dialogue
             _startLine = NMEAttemptingFlee;
             Scene.Escaping = true;
         }
-        else if (Data.Manager.Io.ActiveShip.GetLevel(new Data.CurrentHitPoints()) < (float)(Data.Manager.Io.ActiveShip.GetLevel(new Data.MaxHitPoints()) * .3f))
+        else if (Datum.Manager.Io.ActiveShip.GetLevel(new Datum.CurrentHitPoints()) < (float)(Datum.Manager.Io.ActiveShip.GetLevel(new Datum.MaxHitPoints()) * .3f))
         {
             _startLine = LowPlayerHealth;
         }
         else if (Scene.NMEHealth.cur < (float)(Scene.NMEHealth.max * .21f) &&
-                (Data.Manager.Io.ActiveShip.GetLevel(new Data.CurrentHitPoints()) > (float)(Data.Manager.Io.ActiveShip.GetLevel(new Data.MaxHitPoints()) * .5f)))
+                (Datum.Manager.Io.ActiveShip.GetLevel(new Datum.CurrentHitPoints()) > (float)(Datum.Manager.Io.ActiveShip.GetLevel(new Datum.MaxHitPoints()) * .5f)))
         {
             _startLine = NMESurrender;
         }
@@ -81,7 +81,7 @@ public class BountyIntermission_Dialogue : Dialogue
         {
             FirstLine = Spammed;
         }
-        if (Data.Manager.Io.ActiveShip.GetLevel(new Data.CurrentHitPoints()) < 1)
+        if (Datum.Manager.Io.ActiveShip.GetLevel(new Datum.CurrentHitPoints()) < 1)
         {
             Debug.Log("YOU LOSE");
 
@@ -141,7 +141,7 @@ public class BountyIntermission_Dialogue : Dialogue
         ;
 
     Response Attack => new("Fire another volley", AttackAgain);
-    Line AttackAgain => new Line("Load the cannons! Counting off!...", new ResumeBounty_State(Scene))
+    Line AttackAgain => new Line("Load the cannons! Counting off!...", new ResumeBounty_State(Scene, Quest))
         .SetSpeaker(Speaker)
         ;
 
@@ -177,6 +177,6 @@ public class BountyIntermission_Dialogue : Dialogue
 
     // Line GameOver => new("Sorry Cap. Looks like where going down with the ship.",
     //     new MenuState(new Menus.MainMenu(Data.Manager.Io, Audio.AudioManager.Io)));
-    Line GameOver => new("This is it Cap. Looks like where going down with the ship.", new BatteryToGameOverTransition_State(Scene));
+    Line GameOver => new("This is it Cap. Looks like where going down with the ship.", new BatterieToGameOverTransition_State(Scene));
 
 }

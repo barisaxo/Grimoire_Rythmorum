@@ -54,7 +54,7 @@ namespace Sea.Maps
 
         public Vector2Int[] Coves => throw new System.NotImplementedException();
 
-        public IosMap(Data.Manager data)
+        public IosMap(Datum.Manager data)
         {
             GlobalSize = RegionResolution * RegionSize;
             Regions = new Region[RegionResolution * RegionResolution];
@@ -72,12 +72,18 @@ namespace Sea.Maps
 
     public class WorldMap : IMap
     {
+        /// <summary>
+        /// How many regions there are on the map grid, Right now it's always set to 12x12 regions.
+        /// </summary>
         public int RegionResolution { get; private set; } = 12;
+        /// <summary>
+        /// The x/y size of the each region. Right now it's always set to 30.
+        /// </summary>
         public int RegionSize { get; private set; } = 30;
         public int GlobalSize { get; private set; }
         public Region[] Regions { get; private set; }
 
-        public WorldMap(Data.Manager data)
+        public WorldMap(Datum.Manager data)
         {
             GlobalSize = RegionResolution * RegionSize;
             Regions = new Region[RegionResolution * RegionResolution];
@@ -207,7 +213,7 @@ namespace Sea.Maps
         public int GlobalSize { get; private set; }
         public Region[] Regions { get; private set; }
 
-        public SmallMap(Data.Manager data)
+        public SmallMap(Datum.Manager data)
         {
             GlobalSize = RegionResolution * RegionSize;
             Regions = new Region[RegionResolution * RegionResolution];

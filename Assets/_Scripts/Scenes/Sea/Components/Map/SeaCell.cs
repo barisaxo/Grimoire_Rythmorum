@@ -6,7 +6,7 @@ namespace Sea
 {
     public class Cell
     {
-        public Vector2Int Coord { get; }
+        public Vector2Int LocalCoord { get; }
 
         private CellType _type;
         public CellType Type
@@ -35,7 +35,7 @@ namespace Sea
         public GameObject GO => SceneObject?.GO;
         // public float RotY;
 
-        public ISceneObject InstantiateNewSceneObject(State currentState, Data.Manager data, Region region, Cell cell)
+        public ISceneObject InstantiateNewSceneObject(State currentState, Datum.Manager data, Region region, Cell cell)
         {
             // Debug.Log("Instantiating new scene object: " + Type.ToString() + " " + Coord);
             return SceneObject = Type switch
@@ -63,12 +63,12 @@ namespace Sea
 
         public Cell(Vector2Int coord)
         {
-            Coord = coord;
+            LocalCoord = coord;
         }
 
         public Cell(int x, int y)
         {
-            Coord = new(x, y);
+            LocalCoord = new(x, y);
         }
 
 

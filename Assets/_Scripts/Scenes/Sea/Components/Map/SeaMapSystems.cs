@@ -7,22 +7,40 @@ using Sea.Maps;
 
 public static class SeaMapSystems
 {
-    public static void AddToMap(this Sea.Maps.WorldMap map, Vector2Int loc, CellType cellType)
+    public static void AddCellToMap(this Sea.Maps.WorldMap map, Vector2Int globalLoc, CellType cellType)
     {
-        Region region = map.Regions[map.RegionIndexFromGlobalCoord(loc)];
+        Region region = map.Regions[map.RegionIndexFromGlobalCoord(globalLoc)];
+
+        Vector2Int locToAdd = globalLoc.Smod(map.RegionSize);
+        foreach (Cell cell in region.Cells)
+        {
+            if (cell.LocalCoord == locToAdd) throw new System.Exception("This location is already occupied!!!");
+        }
+
+        region.Cells.Add(new Cell(locToAdd) { Type = cellType });
+    }
+
+    public static Vector2Int GetAvailableLocalCoordFromGlobalLoc(this Sea.Maps.WorldMap map, Vector2Int loc)
+    {
+        Region region = map.Regions[map.RegionIndexFromGlobalCoord(loc.Smod(map.GlobalSize))];//TODOTODO this smod needs to be fixed!!!
+
         List<Vector2Int> occupied = new();
         foreach (Cell cell in region.Cells)
         {
-            occupied.Add(cell.Coord);
+            occupied.Add(cell.LocalCoord);
         }
+
         Vector2Int randV2 = loc.Smod(map.RegionSize);
         for (int i = 0; i < 10; i++)
         {
-            if (occupied.Contains(randV2)) randV2 += Vector2Int.one;
+            if (occupied.Contains(randV2)) randV2 = (randV2 + Vector2Int.one).Smod(map.RegionSize);
             else break;
         }
-        Debug.Log(cellType + " CELL ADDED: " + region.Coord + " " + region.R + " " + nameof(AddToMap) + randV2);
-        region.Cells.Add(new Cell(randV2) { Type = cellType });
+        if (occupied.Contains(randV2)) Debug.Log("Could not find open cell!!!!!!");
+
+        Vector2Int newGlobalCoord = (region.Coord * map.RegionSize) + randV2;
+        Debug.Log("new global coord: " + newGlobalCoord + ", latlongs: " + newGlobalCoord.GlobalCoordsToLatLongs(Sea.WorldMapScene.Io.Map.GlobalSize));
+        return newGlobalCoord;
     }
 
     public static bool IsInRange(this Sea.WorldMapScene sea, Vector3Int v) =>

@@ -1,5 +1,5 @@
-using Data.ERhythm;
-using Data;
+using Datum.ERhythm;
+using Datum;
 using MusicTheory.Rhythms;
 
 namespace Menus
@@ -88,14 +88,14 @@ namespace Menus
 
         State TrainingBattery => Selection.Item switch
         {
-            EEEE => new BatteryTutorial_State(GetMeasures(CellShape.SSSS), GetSpecs(), Manager.Io.ERhythmCellData, Selection.Item, new MenuState(this)),
-            QQ => new BatteryTutorial_State(GetMeasures(CellShape.LL), GetSpecs(), Manager.Io.ERhythmCellData, Selection.Item, new MenuState(this)),
-            H => new BatteryTutorial_State(GetMeasures(CellShape.L), GetSpecs(), Manager.Io.ERhythmCellData, Selection.Item, new MenuState(this)),
-            QEE => new BatteryTutorial_State(GetMeasures(CellShape.LSS), GetSpecs(), Manager.Io.ERhythmCellData, Selection.Item, new MenuState(this)),
-            EEQ => new BatteryTutorial_State(GetMeasures(CellShape.SSL), GetSpecs(), Manager.Io.ERhythmCellData, Selection.Item, new MenuState(this)),
-            DQE => new BatteryTutorial_State(GetMeasures(CellShape.LS), GetSpecs(), Manager.Io.ERhythmCellData, Selection.Item, new MenuState(this)),
-            EDQ => new BatteryTutorial_State(GetMeasures(CellShape.SL), GetSpecs(), Manager.Io.ERhythmCellData, Selection.Item, new MenuState(this)),
-            EQE => new BatteryTutorial_State(GetMeasures(CellShape.SLS), GetSpecs(), Manager.Io.ERhythmCellData, Selection.Item, new MenuState(this)),
+            EEEE => new BatteryTutorial_State(GetMeasures(CellShape.SSSS), GetSpecs(), Manager.Io.ERhythmCellData, Selection.Item, new MenuState(this), true),
+            QQ => new BatteryTutorial_State(GetMeasures(CellShape.LL), GetSpecs(), Manager.Io.ERhythmCellData, Selection.Item, new MenuState(this), true),
+            H => new BatteryTutorial_State(GetMeasures(CellShape.L), GetSpecs(), Manager.Io.ERhythmCellData, Selection.Item, new MenuState(this), true),
+            QEE => new BatteryTutorial_State(GetMeasures(CellShape.LSS), GetSpecs(), Manager.Io.ERhythmCellData, Selection.Item, new MenuState(this), true),
+            EEQ => new BatteryTutorial_State(GetMeasures(CellShape.SSL), GetSpecs(), Manager.Io.ERhythmCellData, Selection.Item, new MenuState(this), true),
+            DQE => new BatteryTutorial_State(GetMeasures(CellShape.LS), GetSpecs(), Manager.Io.ERhythmCellData, Selection.Item, new MenuState(this), true),
+            EDQ => new BatteryTutorial_State(GetMeasures(CellShape.SL), GetSpecs(), Manager.Io.ERhythmCellData, Selection.Item, new MenuState(this), true),
+            EQE => new BatteryTutorial_State(GetMeasures(CellShape.SLS), GetSpecs(), Manager.Io.ERhythmCellData, Selection.Item, new MenuState(this), true),
             _ => throw new System.Exception(Selection.Item.Name)
         };
 

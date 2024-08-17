@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Data
+namespace Datum
 {
     [System.Serializable]
     public class StandingData : IData
@@ -230,13 +230,13 @@ namespace Data
     {
         public static string ToRegionalName(this Standing standing) => standing switch
         {
-            IonianStanding => "Ionians",
-            AeolianStanding => "Aeolians",
-            DorianStanding => "Dorians",
-            PhrygianStanding => "Phrygians",
+            IonianStanding => "Ionian",
+            AeolianStanding => "Aeolian",
+            DorianStanding => "Dorian",
+            PhrygianStanding => "Phrygian",
             LydianStanding => "Lydians",
-            MixolydianStanding => "MixoLydians",
-            LocrianStanding => "Locrians",
+            MixolydianStanding => "MixoLydian",
+            LocrianStanding => "Locrian",
             _ => throw new System.ArgumentOutOfRangeException(standing.Name)
         };
     }

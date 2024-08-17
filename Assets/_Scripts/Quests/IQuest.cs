@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sea;
-using Data;
+using Datum;
 
 namespace Quests
 {
@@ -59,7 +59,7 @@ namespace Quests
         public Standing Standing { get; }
         public bool Complete { get; set; }
         public string LatLong;
-        public string Description => "The " + Standing.ToRegionalName() + " are asking you to hunt the bounty at " + LatLong;
+        public string Description => "The " + Standing.ToRegionalName() + "s are asking you to hunt the bounty at " + LatLong;
 
         public IInventoriable Reward { get; }
 

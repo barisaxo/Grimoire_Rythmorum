@@ -4,9 +4,16 @@ using Batterie;
 
 public static class BeatMapper
 {
-    public static MappedBeat[] MapBeats(this Note[] notes, float tempo)
+    public static MappedBeat[] MapBeats(this Note[] notes, Quantizement quant, float tempo)
     {
-        double interval = (double)(60d / (double)(tempo * 12d));
+        int beatSpaces = quant switch
+        {
+            Quantizement.Eighth => 6,
+            Quantizement.EighthTrips => 18,
+            Quantizement.Half => 24,
+            _ => 12,
+        };
+        double interval = (double)(60d / (double)(tempo * beatSpaces));
 
         List<MappedBeat> beatMap = new()
         {
