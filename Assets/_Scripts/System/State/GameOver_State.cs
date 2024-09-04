@@ -20,7 +20,7 @@ public class BatterieToGameOverTransition_State : State
         Audio.BGMusic.FadeAndStop();
         // GameObject.Destroy(Scene.NMEGO);
         GameObject.Destroy(Scene.PlayerShip.GO);
-        Scene.SelfDestruct();
+        (Scene as IScene).SelfDestruct();
         Sea.WorldMapScene.Io.SelfDestruct();
         base.PrepareState(callback);
     }

@@ -123,7 +123,7 @@ namespace Audio
         public virtual void Play(bool isSerial)
         {
             _ = Parent;
-            CurrentVolumeLevel = 1f;
+            // CurrentVolumeLevel = 1f;
             ResetCues();
             Running = true;
             if (isSerial)

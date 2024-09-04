@@ -11,7 +11,7 @@ namespace Datum
     {
         public string Name { get; }
         public string Description { get; }
-        public int ID { get; }
+        public int Id { get; }
     }
 
     public interface IData

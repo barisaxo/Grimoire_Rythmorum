@@ -1,27 +1,26 @@
-﻿namespace MusicTheory.ScaleDegrees.DegreeEnum
+﻿using System;
+
+namespace MusicTheory.ScaleDegrees
 {
-    [System.Serializable]
-    public abstract class Quality : IMusicalElement
+    public interface IQuality : IMusicalElement
     {
-        public Quality(QualityEnum @enum) { Enum = @enum; }
-        public readonly QualityEnum Enum;
-        public int Id => Enum.Id;
-        public string Name => Enum.Name;
-        public string Description => Enum.Description;
-        public static implicit operator QualityEnum(Quality q) => q.Enum;
-        public static explicit operator int(Quality q) => q.Id;
+        QualityEnum Enum { get; }
+        int IMusicalElement.Id => Enum.Id;
+        int IMusicalElement.SN => Enum.SN;
+        string IMusicalElement.Name => Enum.Name;
+        string Description => Enum.Description;
     }
 
-    public class Major : Quality { public Major() : base(QualityEnum.Major) { } }
-    public class Minor : Quality { public Minor() : base(QualityEnum.Minor) { } }
-    public class Augmented : Quality { public Augmented() : base(QualityEnum.Augmented) { } }
-    public class Diminished : Quality { public Diminished() : base(QualityEnum.Diminished) { } }
-    public class Perfect : Quality { public Perfect() : base(QualityEnum.Perfect) { } }
+    [Serializable] public readonly struct Major : IQuality { public readonly QualityEnum Enum => QualityEnum.Major; }
+    [Serializable] public readonly struct Minor : IQuality { public readonly QualityEnum Enum => QualityEnum.Minor; }
+    [Serializable] public readonly struct Augmented : IQuality { public readonly QualityEnum Enum => QualityEnum.Augmented; }
+    [Serializable] public readonly struct Diminished : IQuality { public readonly QualityEnum Enum => QualityEnum.Diminished; }
+    [Serializable] public readonly struct Perfect : IQuality { public readonly QualityEnum Enum => QualityEnum.Perfect; }
 
     public class QualityEnum : Enumeration
     {
         public QualityEnum() : base(0, "") { }
-        public QualityEnum(int id, string name, string desc) : base(id, name) { Description = desc; }
+        public QualityEnum(int snId, string name, string desc) : base(snId, name) { Description = desc; }
         public readonly string Description;
 
         public static readonly QualityEnum Major = new(0, "M", nameof(Major));
@@ -30,24 +29,14 @@
         public static readonly QualityEnum Diminished = new(3, "º", nameof(Diminished));
         public static readonly QualityEnum Perfect = new(4, "P", nameof(Perfect));
 
-        public static implicit operator Quality(QualityEnum e) => e switch
-        {
-            _ when e == Major => new Major(),
-            _ when e == Minor => new Minor(),
-            _ when e == Augmented => new Augmented(),
-            _ when e == Diminished => new Diminished(),
-            _ when e == Perfect => new Perfect(),
-            _ => throw new System.ArgumentOutOfRangeException()
-        };
-
         public static explicit operator QualityEnum(Intervals.QualityEnum e) => e switch
         {
-            _ when e == Intervals.QualityEnum.Major => new Major(),
-            _ when e == Intervals.QualityEnum.Minor => new Minor(),
-            _ when e == Intervals.QualityEnum.Augmented => new Augmented(),
-            _ when e == Intervals.QualityEnum.Diminished => new Diminished(),
-            _ when e == Intervals.QualityEnum.Perfect => new Perfect(),
-            _ => throw new System.ArgumentOutOfRangeException()
+            _ when e == Intervals.QualityEnum.Major => Major,
+            _ when e == Intervals.QualityEnum.Minor => Minor,
+            _ when e == Intervals.QualityEnum.Augmented => Augmented,
+            _ when e == Intervals.QualityEnum.Diminished => Diminished,
+            _ when e == Intervals.QualityEnum.Perfect => Perfect,
+            _ => throw new ArgumentOutOfRangeException()
         };
     }
 }

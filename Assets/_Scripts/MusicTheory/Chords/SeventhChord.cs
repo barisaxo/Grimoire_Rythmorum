@@ -1,18 +1,26 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System;
 
 namespace MusicTheory.SeventhChords
 {
-    [System.Serializable]
-    public abstract class SeventhChord : IMusicalElement
+    public interface ISeventhChord : IMusicalElement
     {
-        public SeventhChord(SeventhChordEnum @enum) { Enum = @enum; }
-        public readonly SeventhChordEnum Enum;
-        public int Id => Enum.Id;
-        public string Name => Enum.Name;
-        public string Description => Enum.Description;
+        SeventhChordEnum Enum { get; }
+        int IMusicalElement.Id => Enum.Id;
+        int IMusicalElement.SN => Enum.SN;
+        string IMusicalElement.Name => Enum.Name;
+        string Description => Enum.Description;
     }
+
+    [Serializable] public readonly struct MajorSeventh : ISeventhChord { public readonly SeventhChordEnum Enum => SeventhChordEnum.MajorSeventh; }
+    [Serializable] public readonly struct MinorSeventh : ISeventhChord { public readonly SeventhChordEnum Enum => SeventhChordEnum.MinorSeventh; }
+    [Serializable] public readonly struct DominantSeventh : ISeventhChord { public readonly SeventhChordEnum Enum => SeventhChordEnum.DominantSeventh; }
+    [Serializable] public readonly struct DominantSeventhSus : ISeventhChord { public readonly SeventhChordEnum Enum => SeventhChordEnum.DominantSeventhSus; }
+    [Serializable] public readonly struct MinorMajorSeventh : ISeventhChord { public readonly SeventhChordEnum Enum => SeventhChordEnum.MinorMajorSeventh; }
+    [Serializable] public readonly struct HalfDiminishedSeventh : ISeventhChord { public readonly SeventhChordEnum Enum => SeventhChordEnum.HalfDiminishedSeventh; }
+    [Serializable] public readonly struct DiminishedSeventh : ISeventhChord { public readonly SeventhChordEnum Enum => SeventhChordEnum.DiminishedSeventh; }
 
     public class SeventhChordEnum : Enumeration
     {
@@ -23,51 +31,21 @@ namespace MusicTheory.SeventhChords
         public static SeventhChordEnum MajorSeventh = new(0, "∆7", nameof(MajorSeventh)) { };
         public static SeventhChordEnum MinorSeventh = new(1, "-7", nameof(MinorSeventh)) { };
         public static SeventhChordEnum DominantSeventh = new(2, "7", nameof(DominantSeventh)) { };
-        public static SeventhChordEnum DominantSeventhSus = new(2, "7(sus)", nameof(DominantSeventhSus)) { };
-        public static SeventhChordEnum MinorMajorSeventh = new(3, "-∆7", nameof(MinorMajorSeventh)) { };
-        public static SeventhChordEnum HalfDiminishedSeventh = new(4, "ø7", nameof(HalfDiminishedSeventh)) { };
-        public static SeventhChordEnum DiminishedSeventh = new(5, "º7", nameof(DiminishedSeventh)) { };
-
-        public static implicit operator SeventhChord(SeventhChordEnum e) =>
-        e switch
-        {
-            _ when e == MajorSeventh => new MajorSeventh(),
-            _ when e == MinorSeventh => new MinorSeventh(),
-            _ when e == MinorMajorSeventh => new MinorMajorSeventh(),
-            _ when e == DominantSeventh => new DominantSeventh(),
-            _ when e == DominantSeventhSus => new DominantSeventhSus(),
-            _ when e == HalfDiminishedSeventh => new HalfDiminishedSeventh(),
-            _ when e == DiminishedSeventh => new DiminishedSeventh(),
-            _ => throw new System.ArgumentOutOfRangeException(e.Id + " : " + e.ToString())
-        };
+        public static SeventhChordEnum DominantSeventhSus = new(3, "7(sus)", nameof(DominantSeventhSus)) { };
+        public static SeventhChordEnum MinorMajorSeventh = new(4, "-∆7", nameof(MinorMajorSeventh)) { };
+        public static SeventhChordEnum HalfDiminishedSeventh = new(5, "ø7", nameof(HalfDiminishedSeventh)) { };
+        public static SeventhChordEnum DiminishedSeventh = new(6, "º7", nameof(DiminishedSeventh)) { };
 
 
-        // public static implicit operator SeventhChord(SeventhChordEnum e) => e switch
-        // {
-        //     _ when e == MajorSeventh => new MajorSeventh(),
-        //     _ when e == MinorSeventh => new MinorSeventh(),
-        //     _ when e == MinorMajorSeventh => new MinorMajorSeventh(),
-        //     _ when e == DominantSeventh => new DominantSeventh(),
-        //     _ when e == DominantSeventhSus => new DominantSeventhSus(),
-        //     _ when e == HalfDiminishedSeventh => new HalfDiminishedSeventh(),
-        //     _ when e == DiminishedSeventh => new DiminishedSeventh(),
-        //     _ => throw new System.ArgumentOutOfRangeException(e.Id + " : " + e.ToString())
-        // };
     }
-
-    public class MajorSeventh : SeventhChord { public MajorSeventh() : base(SeventhChordEnum.MajorSeventh) { } }
-    public class MinorSeventh : SeventhChord { public MinorSeventh() : base(SeventhChordEnum.MinorSeventh) { } }
-    public class DominantSeventh : SeventhChord { public DominantSeventh() : base(SeventhChordEnum.DominantSeventh) { } }
-    public class DominantSeventhSus : SeventhChord { public DominantSeventhSus() : base(SeventhChordEnum.DominantSeventhSus) { } }
-    public class MinorMajorSeventh : SeventhChord { public MinorMajorSeventh() : base(SeventhChordEnum.MinorMajorSeventh) { } }
-    public class HalfDiminishedSeventh : SeventhChord { public HalfDiminishedSeventh() : base(SeventhChordEnum.HalfDiminishedSeventh) { } }
-    public class DiminishedSeventh : SeventhChord { public DiminishedSeventh() : base(SeventhChordEnum.DiminishedSeventh) { } }
-
-    public static class SeventhChordTones
+}
+namespace MusicTheory.SeventhChords.Arithmetic
+{
+    public static class SeventhChordArithmetic
     {
-        public static Intervals.Interval[] ChordTonesAsIntervals(this SeventhChord chord)
+        public static Intervals.IInterval[] ChordTonesAsIntervals(this ISeventhChord chord)
         {
-            Intervals.Interval[] temp = new Intervals.Interval[3];
+            Intervals.IInterval[] temp = new Intervals.IInterval[3];
 
             temp[0] = chord switch
             {
@@ -93,5 +71,18 @@ namespace MusicTheory.SeventhChords
             };
             return temp;
         }
+
+        public static ISeventhChord GetSeventhChord(this SeventhChordEnum e) => e switch
+        {
+            _ when e == SeventhChordEnum.MajorSeventh => new MajorSeventh(),
+            _ when e == SeventhChordEnum.MinorSeventh => new MinorSeventh(),
+            _ when e == SeventhChordEnum.MinorMajorSeventh => new MinorMajorSeventh(),
+            _ when e == SeventhChordEnum.DominantSeventh => new DominantSeventh(),
+            _ when e == SeventhChordEnum.DominantSeventhSus => new DominantSeventhSus(),
+            _ when e == SeventhChordEnum.HalfDiminishedSeventh => new HalfDiminishedSeventh(),
+            _ when e == SeventhChordEnum.DiminishedSeventh => new DiminishedSeventh(),
+            _ => throw new System.ArgumentOutOfRangeException(e.Id + " : " + e.ToString())
+        };
+
     }
 }

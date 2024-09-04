@@ -102,27 +102,27 @@ namespace Menus
         public IItem Item;
         public Card Card;
 
-        public static int operator +(MenuItem a, int b) => a.Item.ID + b;
-        public static int operator -(MenuItem a, int b) => a.Item.ID - b;
-        public static int operator +(MenuItem a, MenuItem b) => a.Item.ID + b.Item.ID;
-        public static int operator -(MenuItem a, MenuItem b) => a.Item.ID - b.Item.ID;
+        public static int operator +(MenuItem a, int b) => a.Item.Id + b;
+        public static int operator -(MenuItem a, int b) => a.Item.Id - b;
+        public static int operator +(MenuItem a, MenuItem b) => a.Item.Id + b.Item.Id;
+        public static int operator -(MenuItem a, MenuItem b) => a.Item.Id - b.Item.Id;
 
-        public static bool operator ==(MenuItem a, int b) => a.Item.ID == b;
-        public static bool operator !=(MenuItem a, int b) => a.Item.ID != b;
-        public static bool operator ==(MenuItem a, MenuItem b) => a.Item.ID == b.Item.ID;
-        public static bool operator !=(MenuItem a, MenuItem b) => a.Item.ID != b.Item.ID;
+        public static bool operator ==(MenuItem a, int b) => a.Item.Id == b;
+        public static bool operator !=(MenuItem a, int b) => a.Item.Id != b;
+        public static bool operator ==(MenuItem a, MenuItem b) => a.Item.Id == b.Item.Id;
+        public static bool operator !=(MenuItem a, MenuItem b) => a.Item.Id != b.Item.Id;
 
-        public static bool operator <=(MenuItem a, int b) => a.Item.ID <= b;
-        public static bool operator >=(MenuItem a, int b) => a.Item.ID >= b;
-        public static bool operator <=(MenuItem a, MenuItem b) => a.Item.ID <= b.Item.ID;
-        public static bool operator >=(MenuItem a, MenuItem b) => a.Item.ID >= b.Item.ID;
+        public static bool operator <=(MenuItem a, int b) => a.Item.Id <= b;
+        public static bool operator >=(MenuItem a, int b) => a.Item.Id >= b;
+        public static bool operator <=(MenuItem a, MenuItem b) => a.Item.Id <= b.Item.Id;
+        public static bool operator >=(MenuItem a, MenuItem b) => a.Item.Id >= b.Item.Id;
 
-        public static implicit operator int(MenuItem a) => a.Item.ID;
+        public static implicit operator int(MenuItem a) => a.Item.Id;
 
         public readonly override bool Equals(object obj) =>
             Item != null && obj is MenuItem e &&
-            e.Item != null && Item.ID == e.Item.ID;
+            e.Item != null && Item.Id == e.Item.Id;
 
-        public readonly override int GetHashCode() => HashCode.Combine(Item.ID);
+        public readonly override int GetHashCode() => HashCode.Combine(Item.Id);
     }
 }

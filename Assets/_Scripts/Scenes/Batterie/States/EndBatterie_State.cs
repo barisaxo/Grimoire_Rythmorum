@@ -18,7 +18,7 @@ public class EndBatterie_State : State
     int patterns = 0;
     // bool map;
 
-    int level => (Scene.NMEShipStats.HullStats.Hull.ID * 4) + 1;
+    int level => (Scene.NMEShipStats.HullStats.Hull.Id * 4) + 1;
     // DataManager.GamePlay.CurrentLevel switch
     // {
     //     RegionalMode.Lydian => 2,
@@ -45,7 +45,7 @@ public class EndBatterie_State : State
 
         UnityEngine.GameObject.Destroy(Scene.NMEFire);
         UnityEngine.GameObject.Destroy(Scene.ShipFire);
-        Scene.SelfDestruct();
+        (Scene as IScene).SelfDestruct();
 
         callback();
         return;

@@ -1,13 +1,10 @@
-using System.Collections;
 using System;
 using UnityEngine;
-using SheetMusic;
 using Batterie;
 using MusicTheory.Rhythms;
-using MusicTheory;
-using Muscopa;
+using Rhythm;
 
-public class BatterieScene
+public class BatterieScene : IScene
 {
     public BatterieScene(ShipStats.ShipStats nmeShipStats, GameObject nmeGO, PlayerShip playerShip, Action tick, RhythmSpecs specs, string nmeName)
     {
@@ -50,12 +47,12 @@ public class BatterieScene
     //     // Tick = tick;
     //     BatterieAudio = Audio.AudioManager.Io.Batterie;
     // }
-    public void Initialize()
+    void IScene.SetUp()
     {
         Debug.Log(Datum.Manager.Io.ActiveShip.GetLevel(new Datum.MaxHitPoints()));
 
         // Sea.WorldMapScene.Io.Ship.ShipStats.HullStrength,
-        BatterieHUD ??= new BatterieHUD(
+        Hud = new BatterieHUD(
             Datum.Manager.Io.ActiveShip.GetLevel(new Datum.MaxHitPoints()),
             Datum.Manager.Io.ActiveShip.GetLevel(new Datum.CurrentHitPoints()),
             (int)NMEShipStats.HullStrength,
@@ -76,17 +73,16 @@ public class BatterieScene
         //     Quaternion.identity);
     }
 
-    public void SelfDestruct()
+    void IScene.Destroy()
     {
         GameObject.Destroy(ShipFire.gameObject);
         GameObject.Destroy(NMEFire.gameObject);
         GameObject.Destroy(NMEGO);
         Background.SelfDestruct();
-        BatterieHUD.SelfDestruct();
     }
 
 
-    public BatterieHUD BatterieHUD;
+    public IHud Hud { get; private set; }
     public Action BatterieSceneTick;
     readonly Audio.Batterie_AudioSystem BatterieAudio;
     public BatteriePack Pack;
@@ -148,7 +144,7 @@ public class BatterieScene
 
 
 
-    private void HandleHit(Batterie.Hit hit)
+    private void HandleHit(Hit hit)
     {
         Cap++;
         switch (hit)

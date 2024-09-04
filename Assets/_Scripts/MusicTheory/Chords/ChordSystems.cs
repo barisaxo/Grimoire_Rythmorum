@@ -2,13 +2,21 @@
 //using MusicTheory.Keys;
 //using MusicTheory.Intervals;
 //using MusicTheory.Chords;
-//using MusicTheory.Triads;
+using MusicTheory.RomanNumerals.Diatonic;
+using MusicTheory.Triads;
 //using MusicTheory.ScaleDegrees;
 
-namespace MusicTheory.Arithmetic
+namespace MusicTheory.Triads.Arithmetic
 {
-    public static class ChordSystems
+    public static class TriadSystems
     {
+        public static ITriad GetTriad(this IRomanNumeral romanNumeral) => romanNumeral switch
+        {
+            I or IV or V => new Major(),
+            II or III or VI => new Minor(),
+            VII => new Diminished(),
+            _ => throw new System.Exception(romanNumeral.Name)
+        };
 
         //public static Triad GetTriad(this (Interval third, Interval fifth) notes)
         //{

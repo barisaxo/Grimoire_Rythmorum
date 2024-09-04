@@ -5,7 +5,7 @@ public interface IPuzzle
     public IMusicalElement Gamut { get; }
     public int NumOfNotes { get; }
     public string Desc { get; }
-    public string puzzleType { get; }
+    public string puzzleGamut { get; }
     public string Question { get; }
     public string Clue { get; }
     public KeyboardNoteName[] Notes { get; }

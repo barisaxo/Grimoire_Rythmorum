@@ -29,17 +29,18 @@ namespace MusicTheory.Rhythms
     //    Thr = 01 + 24, ThrE = 04 + 24, ThrT = 05 + 24, ThrN = 07 + 24, ThrL = 09 + 24, ThrA = 10 + 24,
     //    For = 01 + 36, ForE = 04 + 36, ForT = 05 + 36, ForN = 07 + 36, ForL = 09 + 36, ForA = 10 + 36
     //    
-    //    ||1 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . |WHOLE
-    //    ||1 . . . . . . . . . . . . . . . . . . . . . . . 3 . . . . . . . . . . . . . . . . . . . . . . . |HALF
-    //    ||1 . . . . . . . . . . . . . . . T . . . . . . . . . . . . . . . L . . . . . . . . . . . . . . . |TRIP HALF
-    //    ||1 . . . . . . . . . . . 2 . . . . . . . . . . . 3 . . . . . . . . . . . 4 . . . . . . . . . . . |QUARTER
-    //    ||1 . . . . . . . T . . . . . . . L . . . . . . . 3 . . . . . . . T . . . . . . . L . . . . . . . |TRIP QUARTER
-    //    ||1 . . . . . + . . . . . 2 . . . . . + . . . . . 3 . . . . . + . . . . . 4 . . . . . + . . . . . |EIGHTH
-    //    ||1 . . . T . . . L . . . 2 . . . T . . . L . . . 3 . . . T . . . L . . . 4 . . . T . . . L . . . |TRIP EIGHTH
-    //    ||1 . . e . . + . . a . . 2 . . e . . + . . a . . 3 . . e . . + . . a . . 4 . . e . . + . . a . . |SIXTEENTH
-    //    ||1 . T . L . + . T . L . 2 . T . L . + . T . L . 3 . T . L . + . T . L . 4 . T . L . + . T . L . |TRIP SIXTEENTH
-    //    ||1 . . e T . + . L a . . 2 . . e T . + . L a . . 3 . . e T . + . L a . . 4 . . e T . + . L a . . |ALL
-    //    ||1 . . . 5 . . . . 10. . . . 5 . . . . 20. . . . 5 . . . . 30. . . . 5 . . . . 40. . . . 5 . . 48|spaces
+    //              WHOLE ||1 . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .|| WHOLE
+    //               HALF ||1 . . . . . . . . . . . . . . . . . . . . . . . 3 . . . . . . . . . . . . . . . . . . . . . . .|| HALF
+    //          TRIP HALF ||1 . . . . . . . . . . . . . . . T . . . . . . . . . . . . . . . L . . . . . . . . . . . . . . .|| TRIP HALF
+    //            QUARTER ||1 . . . . . . . . . . . 2 . . . . . . . . . . . 3 . . . . . . . . . . . 4 . . . . . . . . . . .|| QUARTER
+    //       TRIP QUARTER ||1 . . . . . . . T . . . . . . . L . . . . . . . 3 . . . . . . . T . . . . . . . L . . . . . . .|| TRIP QUARTER
+    //             EIGHTH ||1 . . . . . + . . . . . 2 . . . . . + . . . . . 3 . . . . . + . . . . . 4 . . . . . + . . . . .|| EIGHTH
+    //        TRIP EIGHTH ||1 . . . T . . . L . . . 2 . . . T . . . L . . . 3 . . . T . . . L . . . 4 . . . T . . . L . . .|| TRIP EIGHTH
+    //          SIXTEENTH ||1 . . e . . + . . a . . 2 . . e . . + . . a . . 3 . . e . . + . . a . . 4 . . e . . + . . a . .|| SIXTEENTH
+    //                ALL ||1 . . e T . + . L a . . 2 . . e T . + . L a . . 3 . . e T . + . L a . . 4 . . e T . + . L a . .|| ALL
+    // //  TRIP SIXTEENTH ||1 . T . L . + . T . L . 2 . T . L . + . T . L . 3 . T . L . + . T . L . 4 . T . L . + . T . L .|| TRIP SIXTEENTh
+    //      quantum space ||1 . . . 5 . . . . 10. . . . 5 . . . . 20. . . . 5 . . . . 30. . . . 5 . . . . 40. . . . 5 . . .|| quantum space
+
 
 
     public enum Quantizement { Half, Quarter, QuarterTrips, Eighth, EighthTrips, Sixteenth }
@@ -59,6 +60,7 @@ namespace MusicTheory.Rhythms
         DotWhole = 72, DotHalf = 36, DotQuarter = 18, DotEighth = 9,
         TripHalf = 16, TripQuarter = 8, TripEighth = 4,
     }
+
     public enum RhythmOption { Ties, Rests, SomeTrips, TripsOnly }
     public enum SubDivisionTier { BeatOnly, BeatAndD1, D1Only, D1AndD2, D2Only, }
     public enum NoteFunction { Attack, Hold, Rest, Ignore }
@@ -106,11 +108,12 @@ namespace MusicTheory.Rhythms
                 SixEight or
                 NineEight or
                 TwelveEight => Quantizement.EighthTrips,
-                ThreeEight or
-                FiveEight23 or
-                FiveEight32 or
-                SevenEight34 or
-                SevenEight43 => Quantizement.Eighth,
+                // ThreeEight or
+                // FiveEight23 or
+                // FiveEight32 or
+                // SevenEight34 or
+                // SevenEight43 
+                // => Quantizement.Eighth,
                 _ => Quantizement.Quarter,
             };
         }

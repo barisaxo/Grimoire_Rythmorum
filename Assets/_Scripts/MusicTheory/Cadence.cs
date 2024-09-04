@@ -1,51 +1,51 @@
 using System;
 using UnityEngine;
 // using OLD;
+using MusicTheory.Functions.Harmonic;
+using MusicTheory.RomanNumerals.Diatonic;
+using Musica;
 
 namespace MusicTheory
 {
     public static class Cadence
     {
-        public static DiatonicRomanNumeral[] RandomCadence(this RegionalMode shipRegion, CadenceDifficulty difficulty)
+        public static IRomanNumeral[] RandomCadence(this RegionalMode shipRegion, CadenceDifficulty difficulty)
         {
-            // HarmonicFunction f1 = (HarmonicFunction)(UnityEngine.Random.value * FunctionCount());
-            HarmonicFunction f1 = shipRegion switch
+            IFunction f1 = shipRegion switch
             {
-                RegionalMode.Dorian => HarmonicFunction.Subdominant,
-                RegionalMode.Lydian => HarmonicFunction.Subdominant,
-                RegionalMode.MixoLydian => HarmonicFunction.Dominant,
-                RegionalMode.Locrian => HarmonicFunction.Dominant,
-                _ => HarmonicFunction.Tonic,
+                RegionalMode.Dorian or RegionalMode.Lydian => new Subdominant(),
+                RegionalMode.MixoLydian or RegionalMode.Locrian => new Dominant(),
+                _ => new Tonic(),
             };
-            HarmonicFunction f2 = (HarmonicFunction)(UnityEngine.Random.value * FunctionCount());
-            HarmonicFunction f3 = ThirdChord();
-            HarmonicFunction f4 = FourthChord();
+            IFunction f2 = FunctionEnum.GetRandomFunction;
+            IFunction f3 = ThirdChord();
+            IFunction f4 = FourthChord();
 
-            return NewChordalCadence(new HarmonicFunction[4] { f1, f2, f3, f4 }, shipRegion);
+            return NewChordalCadence(new IFunction[4] { f1, f2, f3, f4 }, shipRegion);
 
-            HarmonicFunction ThirdChord()
+            IFunction ThirdChord()
             {
                 int ton = 0, ant = 0, dom = 0;
 
                 TallyFunctionsUsed(f1);
                 TallyFunctionsUsed(f2);
 
-                if (ton == 2) { return UnityEngine.Random.value < (1f / 2f) ? HarmonicFunction.Subdominant : HarmonicFunction.Dominant; }
-                if (ant == 2) { return UnityEngine.Random.value < (1f / 2f) ? HarmonicFunction.Tonic : HarmonicFunction.Dominant; }
-                if (dom == 2) { return UnityEngine.Random.value < (1f / 2f) ? HarmonicFunction.Tonic : HarmonicFunction.Subdominant; }
-                return (HarmonicFunction)(UnityEngine.Random.value * FunctionCount());
+                if (ton == 2) { return UnityEngine.Random.value < (1f / 2f) ? new Subdominant() : new Dominant(); }
+                if (ant == 2) { return UnityEngine.Random.value < (1f / 2f) ? new Tonic() : new Dominant(); }
+                if (dom == 2) { return UnityEngine.Random.value < (1f / 2f) ? new Tonic() : new Subdominant(); }
+                return FunctionEnum.GetRandomFunction;
 
-                int TallyFunctionsUsed(HarmonicFunction f) => f switch
+                int TallyFunctionsUsed(IFunction f) => f switch
                 {
-                    HarmonicFunction.Tonic => ton++,
-                    HarmonicFunction.Subdominant => ant++,
-                    HarmonicFunction.Dominant => dom++,
+                    Tonic => ton++,
+                    Subdominant => ant++,
+                    Dominant => dom++,
                     _ => 0
                 };
 
             }
 
-            HarmonicFunction FourthChord()
+            IFunction FourthChord()
             {
                 int ton = 0, ant = 0, dom = 0;
 
@@ -53,123 +53,71 @@ namespace MusicTheory
                 TallyFunctionsUsed(f2);
                 TallyFunctionsUsed(f3);
 
-                if (ton == 2) { return UnityEngine.Random.value < (1f / 2f) ? HarmonicFunction.Subdominant : HarmonicFunction.Dominant; }
-                if (ant == 2) { return UnityEngine.Random.value < (1f / 2f) ? HarmonicFunction.Tonic : HarmonicFunction.Dominant; }
-                if (dom == 2) { return UnityEngine.Random.value < (1f / 2f) ? HarmonicFunction.Tonic : HarmonicFunction.Subdominant; }
-                return (HarmonicFunction)(UnityEngine.Random.value * FunctionCount());
+                if (ton == 2) { return UnityEngine.Random.value < (1f / 2f) ? new Subdominant() : new Dominant(); }
+                if (ant == 2) { return UnityEngine.Random.value < (1f / 2f) ? new Tonic() : new Dominant(); }
+                if (dom == 2) { return UnityEngine.Random.value < (1f / 2f) ? new Tonic() : new Subdominant(); }
+                return FunctionEnum.GetRandomFunction;
 
-                int TallyFunctionsUsed(HarmonicFunction f) => f switch
+                int TallyFunctionsUsed(IFunction f) => f switch
                 {
-                    HarmonicFunction.Tonic => ton++,
-                    HarmonicFunction.Subdominant => ant++,
-                    HarmonicFunction.Dominant => dom++,
+                    Tonic => ton++,
+                    Subdominant => ant++,
+                    Dominant => dom++,
                     _ => 0
                 };
             }
 
-            DiatonicRomanNumeral[] NewChordalCadence(HarmonicFunction[] functionalCadence, RegionalMode level)
+            IRomanNumeral[] NewChordalCadence(IFunction[] functionalCadence, RegionalMode level)
             {
-                DiatonicRomanNumeral[] ChordalCadence = new DiatonicRomanNumeral[4];
+                IRomanNumeral[] ChordalCadence = new IRomanNumeral[4];
 
-                // ChordalCadence[0] = level switch
-                // {
-                //     RegionalMode.Dorian => DiatonicRomanNumeral.II,
-                //     RegionalMode.Phrygian => DiatonicRomanNumeral.III,
-                //     RegionalMode.Lydian => DiatonicRomanNumeral.IV,
-                //     RegionalMode.MixoLydian => DiatonicRomanNumeral.V,
-                //     RegionalMode.Aeolian => DiatonicRomanNumeral.VI,
-                //     RegionalMode.Locrian => DiatonicRomanNumeral.VII,
-                //     _ => DiatonicRomanNumeral.I,
-                // };
+                ChordalCadence[0] = level switch
+                {
+                    RegionalMode.Ionian => new I(),
+                    RegionalMode.Dorian => new II(),
+                    RegionalMode.Phrygian => new III(),
+                    RegionalMode.Lydian => new IV(),
+                    RegionalMode.MixoLydian => new V(),
+                    RegionalMode.Aeolian => new VI(),
+                    RegionalMode.Locrian => new VII(),
+                    _ => throw new Exception(level.ToString())
+                };
 
-                for (int f = 0; f < functionalCadence.Length; f++)
+                for (int f = 1; f < functionalCadence.Length; f++)
                 {
                     ChordalCadence[f] = NewChord(functionalCadence[f]);
                 }
 
                 return ChordalCadence;
 
-                DiatonicRomanNumeral NewChord(HarmonicFunction f) => f switch
+                IRomanNumeral NewChord(IFunction f) => f switch
                 {
-                    HarmonicFunction.Tonic =>
+                    Tonic =>
                     difficulty switch
                     {
-                        CadenceDifficulty.I_II_V or CadenceDifficulty.I_IV_V => DiatonicRomanNumeral.I,
-                        CadenceDifficulty.I_VI_II_V => UnityEngine.Random.value < (1f / 2f) ? DiatonicRomanNumeral.I : DiatonicRomanNumeral.VI,
-                        CadenceDifficulty.III_VI_II_V => UnityEngine.Random.value < (1f / 2f) ? DiatonicRomanNumeral.III : DiatonicRomanNumeral.VI,
-                        _ => UnityEngine.Random.Range(0, 3) switch { 0 => DiatonicRomanNumeral.I, 1 => DiatonicRomanNumeral.VI, _ => DiatonicRomanNumeral.III }
+                        CadenceDifficulty.I_II_V or CadenceDifficulty.I_IV_V => new I(),
+                        CadenceDifficulty.I_VI_II_V => UnityEngine.Random.value < (1f / 2f) ? new I() : new VI(),
+                        CadenceDifficulty.III_VI_II_V => UnityEngine.Random.value < (1f / 2f) ? new III() : new VI(),
+                        _ => UnityEngine.Random.Range(0, 3) switch { 0 => new I(), 1 => new VI(), _ => new III() }
                     },
-                    // level switch
-                    // {
 
-                    // RegionalMode.Ionic => UnityEngine.Random.value < (1f / 2f) ? DiatonicRomanNumeral.I : DiatonicRomanNumeral.III,
-                    // RegionalMode.Doric => DiatonicRomanNumeral.I,
-                    // RegionalMode.Phrygic => UnityEngine.Random.value < (1f / 2f) ? DiatonicRomanNumeral.III : DiatonicRomanNumeral.VI,
-                    // RegionalMode.Lydic => UnityEngine.Random.value < (1f / 2f) ? DiatonicRomanNumeral.III : DiatonicRomanNumeral.VI,
-                    // RegionalMode.MixoLydic => DiatonicRomanNumeral.I,
-                    // RegionalMode.Aeolic => UnityEngine.Random.value < (1f / 2f) ? DiatonicRomanNumeral.I : DiatonicRomanNumeral.VI,
-                    // RegionalMode.Locric => UnityEngine.Random.value < (1f / 2f) ? DiatonicRomanNumeral.III : DiatonicRomanNumeral.VI,
 
-                    // RegionalMode.Aeolic => UnityEngine.Random.value < (1f / 2f) ? DiatonicRomanNumeral.III : DiatonicRomanNumeral.VI,
-                    // RegionalMode.Ionic => UnityEngine.Random.value < (1f / 2f) ? DiatonicRomanNumeral.I : DiatonicRomanNumeral.VI,
-                    // RegionalMode.All => UnityEngine.Random.value < (1f / 3f) ? DiatonicRomanNumeral.I :
-                    //               UnityEngine.Random.value < (1f / 2f) ? DiatonicRomanNumeral.III : DiatonicRomanNumeral.VI,
-                    // _ => DiatonicRomanNumeral.I,
-                    // },
-
-                    HarmonicFunction.Subdominant => difficulty switch
+                    Subdominant => difficulty switch
                     {
-                        CadenceDifficulty.I_II_V or CadenceDifficulty.III_VI_II_V or CadenceDifficulty.I_VI_II_V => DiatonicRomanNumeral.II,
-                        CadenceDifficulty.I_IV_V => DiatonicRomanNumeral.IV,
-                        _ => UnityEngine.Random.value < (1f / 2f) ? DiatonicRomanNumeral.II : DiatonicRomanNumeral.IV,
+                        CadenceDifficulty.I_II_V or CadenceDifficulty.III_VI_II_V or CadenceDifficulty.I_VI_II_V => new II(),
+                        CadenceDifficulty.I_IV_V => new IV(),
+                        _ => UnityEngine.Random.value < (1f / 2f) ? new II() : new IV(),
                     },
 
-
-                    // level switch
-                    // {
-                    //     RegionalMode.Ionic => DiatonicRomanNumeral.IV,
-                    //     RegionalMode.Doric => UnityEngine.Random.value < (1f / 2f) ? DiatonicRomanNumeral.II : DiatonicRomanNumeral.IV,
-                    //     RegionalMode.Phrygic => DiatonicRomanNumeral.II,
-                    //     RegionalMode.Lydic => DiatonicRomanNumeral.IV,
-                    //     RegionalMode.MixoLydic => DiatonicRomanNumeral.IV,
-                    //     RegionalMode.Aeolic => DiatonicRomanNumeral.II,
-                    //     RegionalMode.Locric => DiatonicRomanNumeral.II,
-
-                    //     // RegionalMode.MixoLydic => DiatonicRomanNumeral.IV,
-                    //     // RegionalMode.Ionic => DiatonicRomanNumeral.IV,
-                    //     // RegionalMode.All => UnityEngine.Random.value < (1f / 2f) ? DiatonicRomanNumeral.II : DiatonicRomanNumeral.IV,
-                    //     _ => DiatonicRomanNumeral.II,
-                    // },
 
                     _ => difficulty switch
                     {
-                        CadenceDifficulty.ALL => UnityEngine.Random.value < (1f / 2f) ? DiatonicRomanNumeral.V : DiatonicRomanNumeral.VII,
-                        _ => DiatonicRomanNumeral.V
+                        CadenceDifficulty.ALL => UnityEngine.Random.value < (1f / 2f) ? new V() : new VII(),
+                        _ => new V()
                     },
 
-                    // I_II_V,
-                    // I_IV_V,
-                    // I_VI_II_V,
-                    // III_VI_II_V,
-                    // ALL
-                    // level switch
-
-                    // {
-                    //     RegionalMode.Ionic => DiatonicRomanNumeral.VII,
-                    //     RegionalMode.Doric => DiatonicRomanNumeral.V,
-                    //     RegionalMode.Phrygic => DiatonicRomanNumeral.V,
-                    //     RegionalMode.Lydic => DiatonicRomanNumeral.VII,
-                    //     RegionalMode.MixoLydic => UnityEngine.Random.value < (1f / 2f) ? DiatonicRomanNumeral.V : DiatonicRomanNumeral.VII,
-                    //     RegionalMode.Aeolic => DiatonicRomanNumeral.V,
-                    //     RegionalMode.Locric => DiatonicRomanNumeral.VII,
-
-                    //     // RegionalMode.All => UnityEngine.Random.value < (1f / 2f) ? DiatonicRomanNumeral.V : DiatonicRomanNumeral.VII,
-                    //     _ => DiatonicRomanNumeral.V,
-                    // },
-                }; ;
+                };
             }
-
-            static int FunctionCount() => (Enum.GetNames(typeof(HarmonicFunction)).Length - 1);//-1 because we aren't using 'secondary'
         }
 
 

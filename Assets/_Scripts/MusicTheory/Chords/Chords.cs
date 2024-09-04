@@ -1,68 +1,67 @@
 using MusicTheory.Scales;
 using MusicTheory.ScaleDegrees;
 using MusicTheory.Intervals;
-using MusicTheory.Keys;
+using MusicTheory.Notes;
+using System;
 
 namespace MusicTheory.Chords
 {
-    [System.Serializable]
-    public abstract class Chord : IMusicalElement
+    public interface IChord : IMusicalElement
     {
-        public Chord(ChordEnum @enum) { Enum = @enum; }
-        public ChordEnum Enum;
-        ChordTone[] ChordTones;
-        Extension[] Extensions;
-        public int Id => Enum.Id;
-        public string Name => Enum.Name;
+        ChordEnum Enum { get; }
+        int IMusicalElement.Id => Enum.Id;
+        int IMusicalElement.SN => Enum.SN;
+        string IMusicalElement.Name => Enum.Name;
     }
 
-    public class Major : Chord { public Major() : base(ChordEnum.Major) { } }
+    [Serializable] public struct Major : IChord { public readonly ChordEnum Enum => ChordEnum.Major; }
+    //todo
 
     public class ChordEnum : Enumeration
     {
         public ChordEnum() : base(0, "") { }
-        public ChordEnum(int id, string name) : base(id, name) { }
+        public ChordEnum(int snId, string name) : base(snId, name) { }
 
         public static ChordEnum Major = new(0, nameof(Major));
-        public static ChordEnum Major6 = new(0, nameof(Major6));
-        public static ChordEnum Major69 = new(0, nameof(Major69));
-        public static ChordEnum Major7 = new(0, nameof(Major7));
-        public static ChordEnum Major7S11 = new(0, nameof(Major7S11));
+        public static ChordEnum Major6 = new(1, nameof(Major6));
+        public static ChordEnum Major69 = new(2, nameof(Major69));
+        public static ChordEnum Major7 = new(3, nameof(Major7));
+        public static ChordEnum Major7S11 = new(4, nameof(Major7S11));
 
-        public static ChordEnum Minor = new(0, nameof(Minor));
-        public static ChordEnum Minor7 = new(0, nameof(Minor7));
-        public static ChordEnum Minor9 = new(0, nameof(Minor9));
-        public static ChordEnum Minor11 = new(0, nameof(Minor11));
-        public static ChordEnum Minor13 = new(0, nameof(Minor13));
+        public static ChordEnum Minor = new(5, nameof(Minor));
+        public static ChordEnum Minor7 = new(6, nameof(Minor7));
+        public static ChordEnum Minor9 = new(7, nameof(Minor9));
+        public static ChordEnum Minor11 = new(8, nameof(Minor11));
+        public static ChordEnum Minor13 = new(9, nameof(Minor13));
 
-        public static ChordEnum _7 = new(0, nameof(_7));
-        public static ChordEnum _9 = new(0, nameof(_9));
-        public static ChordEnum _13 = new(0, nameof(_13));
-        public static ChordEnum _7Sus = new(0, nameof(_7Sus));
-        public static ChordEnum _9Sus = new(0, nameof(_9Sus));
-        public static ChordEnum _13Sus = new(0, nameof(_13Sus));
+        public static ChordEnum _7 = new(10, nameof(_7));
+        public static ChordEnum _9 = new(11, nameof(_9));
+        public static ChordEnum _13 = new(12, nameof(_13));
+        public static ChordEnum _7Sus = new(13, nameof(_7Sus));
+        public static ChordEnum _9Sus = new(14, nameof(_9Sus));
+        public static ChordEnum _13Sus = new(15, nameof(_13Sus));
 
-        public static ChordEnum Minor6 = new(0, nameof(Minor6));
-        public static ChordEnum Minor69 = new(0, nameof(Minor69));
-        public static ChordEnum MinorMajor7 = new(0, nameof(MinorMajor7));
+        public static ChordEnum Minor6 = new(16, nameof(Minor6));
+        public static ChordEnum Minor69 = new(17, nameof(Minor69));
+        public static ChordEnum MinorMajor7 = new(18, nameof(MinorMajor7));
 
-        public static ChordEnum Minor7b5 = new(0, nameof(Minor7b5));
-        public static ChordEnum Minor9b5 = new(0, nameof(Minor9b5));
+        public static ChordEnum Minor7b5 = new(19, nameof(Minor7b5));
+        public static ChordEnum Minor9b5 = new(20, nameof(Minor9b5));
 
-        public static ChordEnum _7S11 = new(0, nameof(_7S11));
-        public static ChordEnum _7Alt = new(0, nameof(_7Alt));
-        public static ChordEnum _7b9Sus = new(0, nameof(_7b9Sus));
-        public static ChordEnum _7b9 = new(0, nameof(_7b9));
-        public static ChordEnum _7S9 = new(0, nameof(_7S9));
-        public static ChordEnum _7b13 = new(0, nameof(_7b13));
-        public static ChordEnum _9b5 = new(0, nameof(_9b5));
-        public static ChordEnum _9S5 = new(0, nameof(_9S5));
-        public static ChordEnum _13b9 = new(0, nameof(_13b9));
+        public static ChordEnum _7S11 = new(21, nameof(_7S11));
+        public static ChordEnum _7Alt = new(22, nameof(_7Alt));
+        public static ChordEnum _7b9Sus = new(23, nameof(_7b9Sus));
+        public static ChordEnum _7b9 = new(24, nameof(_7b9));
+        public static ChordEnum _7S9 = new(25, nameof(_7S9));
+        public static ChordEnum _7b13 = new(26, nameof(_7b13));
+        public static ChordEnum _9b5 = new(27, nameof(_9b5));
+        public static ChordEnum _9S5 = new(28, nameof(_9S5));
+        public static ChordEnum _13b9 = new(29, nameof(_13b9));
 
-        public static ChordEnum Aug = new(0, nameof(Aug));
-        public static ChordEnum Dim = new(0, nameof(Dim));
-        public static ChordEnum Dim7 = new(0, nameof(Dim7));
-        public static ChordEnum Dim7Maj7 = new(0, nameof(Dim7Maj7));
+        public static ChordEnum Aug = new(30, nameof(Aug));
+        public static ChordEnum Dim = new(31, nameof(Dim));
+        public static ChordEnum Dim7 = new(32, nameof(Dim7));
+        public static ChordEnum Dim7Maj7 = new(33, nameof(Dim7Maj7));
     }
 
 

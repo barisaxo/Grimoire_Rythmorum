@@ -45,10 +45,10 @@ public class EndGramo_Dialogue : Dialogue
         FirstLine = _won ? RecapLineWon : RecapLineLost;
     }
 
-    public EndGramo_Dialogue(State subsequentState)
+    public EndGramo_Dialogue(State subsequentState, bool success)
     {
         SubsequentState = subsequentState;
-        FirstLine = PracticeLine;
+        FirstLine = success ? PracticeLine : RecapLineLost;
     }
 
     readonly State SubsequentState;
@@ -92,4 +92,41 @@ public class EndPractice_Dialogue : Dialogue
     string Lost_String => "No worries! Keep practicing, you'll get better in no time!";
 
 
+}
+
+public class EndMuscopa_Dialogue : Dialogue
+{
+    readonly int PatternsFound;
+    readonly bool _won;
+
+    public EndMuscopa_Dialogue(bool won, State subsequentState, int patternsFound)
+    {
+        SubsequentState = subsequentState;
+        _won = won;
+        PatternsFound = patternsFound;
+        FirstLine = _won ? RecapLineWon : RecapLineLost;
+    }
+
+    public EndMuscopa_Dialogue(State subsequentState, bool success)
+    {
+        SubsequentState = subsequentState;
+        FirstLine = success ? PracticeLine : RecapLineLost;
+    }
+
+    readonly State SubsequentState;
+
+    Line RecapLineWon => new(Won_String, ResultsWithPatterns);
+
+    Line RecapLineLost => new(Lost_String, SubsequentState);
+
+    string Won_String => "Well done!\nThis is for you.";
+
+    string Lost_String => "You can't win them all.\nRemember to take your time and answer only when you're ready.";
+
+    Line ResultsWithPatterns => new(PatternsFoundString, SubsequentState);
+    string PatternsFoundString => "You found " + PatternsFound + " patterns!";
+
+
+    Line PracticeLine => new(Practice_String, SubsequentState);
+    string Practice_String => "That's great work!\nThe more you practice here the better you'll be at sea!";
 }

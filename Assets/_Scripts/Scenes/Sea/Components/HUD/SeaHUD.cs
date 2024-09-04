@@ -17,7 +17,7 @@ namespace Sea
             _ = HealthBar;
             // _ = North;
             // _ = East;
-            _ = South;
+            _ = North;
             _ = Start;
             _ = Select;
             _ = West;
@@ -42,7 +42,7 @@ namespace Sea
 
         private Card[] _hidableHud;
         public Card[] HidableHud => _hidableHud ??= new Card[]{
-            Icon, HealthBar, Select, Start, West, South,
+            Icon, HealthBar, Select, Start, West, North,
         };
 
         private Card _hud;
@@ -129,13 +129,13 @@ namespace Sea
             // .OffsetImagePosition(Vector2.right)
             ;
 
-        private Card _southButton;
-        public Card South => _southButton ??= Hud.CreateChild(nameof(South), Hud.Canvas)
+        private Card _northButton;
+        public Card North => _northButton ??= Hud.CreateChild(nameof(North), Hud.Canvas)
             .SetPositionAll(Cam.UIOrthoX - 1.5f, Cam.UIOrthoY - 5.15f)
             .SetFontScale(.5f, .5f)
             .AutoSizeTextContainer(true)
             .SetImageSize(.5f, .5f)
-            .SetImageSprite(Assets.SouthButton)
+            .SetImageSprite(Assets.NorthButton)
             .SetTextString("Talk to Pino")
             .SetTextAlignment(TextAlignmentOptions.Right)
             .SetTMPRectPivot(new Vector2(1, .5f))

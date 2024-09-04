@@ -68,7 +68,7 @@ namespace Datum.Rhythm
     public interface ITimeSignatureData : IItem
     {
         TimeSignatureEnum Enum { get; }
-        int IItem.ID => Enum.Id;
+        int IItem.Id => Enum.Id;
         string IItem.Name => Enum.Name;
         string IItem.Description => Enum.Meter.Name.StartCase() + " Time";
     }
@@ -83,12 +83,12 @@ namespace Datum.Rhythm
     [Serializable] public struct SixFour : ITimeSignatureData { public readonly TimeSignatureEnum Enum => TimeSignatureEnum.SixFour; }
     [Serializable] public struct SevenFour43 : ITimeSignatureData { public readonly TimeSignatureEnum Enum => TimeSignatureEnum.SevenFour43; }
     [Serializable] public struct SevenFour34 : ITimeSignatureData { public readonly TimeSignatureEnum Enum => TimeSignatureEnum.SevenFour34; }
-    [Serializable] public struct ThreeEight : ITimeSignatureData { public readonly TimeSignatureEnum Enum => TimeSignatureEnum.ThreeEight; }
-    [Serializable] public struct FiveEight23 : ITimeSignatureData { public readonly TimeSignatureEnum Enum => TimeSignatureEnum.FiveEight23; }
-    [Serializable] public struct FiveEight32 : ITimeSignatureData { public readonly TimeSignatureEnum Enum => TimeSignatureEnum.FiveEight32; }
+    // [Serializable] public struct ThreeEight : ITimeSignatureData { public readonly TimeSignatureEnum Enum => TimeSignatureEnum.ThreeEight; }
+    // [Serializable] public struct FiveEight23 : ITimeSignatureData { public readonly TimeSignatureEnum Enum => TimeSignatureEnum.FiveEight23; }
+    // [Serializable] public struct FiveEight32 : ITimeSignatureData { public readonly TimeSignatureEnum Enum => TimeSignatureEnum.FiveEight32; }
     [Serializable] public struct SixEight : ITimeSignatureData { public readonly TimeSignatureEnum Enum => TimeSignatureEnum.SixEight; }
-    [Serializable] public struct SevenEight43 : ITimeSignatureData { public readonly TimeSignatureEnum Enum => TimeSignatureEnum.SevenEight43; }
-    [Serializable] public struct SevenEight34 : ITimeSignatureData { public readonly TimeSignatureEnum Enum => TimeSignatureEnum.SevenEight34; }
+    // [Serializable] public struct SevenEight43 : ITimeSignatureData { public readonly TimeSignatureEnum Enum => TimeSignatureEnum.SevenEight43; }
+    // [Serializable] public struct SevenEight34 : ITimeSignatureData { public readonly TimeSignatureEnum Enum => TimeSignatureEnum.SevenEight34; }
     [Serializable] public struct NineEight : ITimeSignatureData { public readonly TimeSignatureEnum Enum => TimeSignatureEnum.NineEight; }
     [Serializable] public struct TwelveEight : ITimeSignatureData { public readonly TimeSignatureEnum Enum => TimeSignatureEnum.TwelveEight; }
 
@@ -153,11 +153,11 @@ namespace Menus
         private RhythmSpecs GetSpecs()
         {
             return new RhythmSpecs()
-                .SetTime((MusicTheory.Rhythms.Time)Enumeration.All<TimeSignatureEnum>()[Selection.Item.ID])
+                .SetTime((MusicTheory.Rhythms.Time)Enumeration.All<TimeSignatureEnum>()[Selection.Item.Id])
                 .SetNumberOfMeasures(4)
                 .SetTies(true)
                 .SetRests(true)
-                .SetTempo(((MusicTheory.Rhythms.Time)Enumeration.All<TimeSignatureEnum>()[Selection.Item.ID]).GetTempo())
+                .SetTempo(((MusicTheory.Rhythms.Time)Enumeration.All<TimeSignatureEnum>()[Selection.Item.Id]).GetTempo())
                 ;
         }
     }

@@ -80,9 +80,27 @@ public class PlayerShip
         return go;
     }
 
+
+    private Card _muscopaPopup;
+    public Card MuscopaPopup => _muscopaPopup ??= new Card(nameof(MuscopaPopup), GO.transform)
+        .SetPositionAll(1, 1)
+        .SetFontScale(.5f, .5f)
+        .AutoSizeTextContainer(true)
+        .SetOutlineColor(Color.black)
+        .SetTextAlignment(TMPro.TextAlignmentOptions.Right)
+        .SetTMPRectPivot(new Vector2(1, .5f))
+        .SetOutlineWidth(.15f)
+        .AutoSizeFont(true)
+        .AllowWordWrap(false)
+        .SetImageSprite(Assets.NorthButton)
+        .SetImageSize(.5f, .5f)
+        .SetTextString("Muscopa")
+        .OffsetImageFromTMP(Vector2.right * .5f)
+        ;
+
     private Card _confirmPopup;
     public Card ConfirmPopup => _confirmPopup ??= new Card(nameof(ConfirmPopup), GO.transform)
-        .SetPositionAll(1, -1)
+        .SetPositionAll(1, 0)
         .SetFontScale(.5f, .5f)
         .AutoSizeTextContainer(true)
         .SetOutlineColor(Color.black)
@@ -98,7 +116,7 @@ public class PlayerShip
 
     private Card _attackPopup;
     public Card AttackPopup => _attackPopup ??= new Card(nameof(AttackPopup), GO.transform)
-        .SetPositionAll(1, 0)
+        .SetPositionAll(1, -1)
         .SetFontScale(.5f, .5f)
         .AutoSizeTextContainer(true)
         .SetOutlineColor(Color.black)

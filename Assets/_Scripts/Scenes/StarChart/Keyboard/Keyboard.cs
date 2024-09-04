@@ -93,8 +93,10 @@ public class Keyboard
 
         KeyColor GetKeyColor(KeyboardNoteName key) => key switch
         {
-            KeyboardNoteName.Db3 or KeyboardNoteName.Eb3 or KeyboardNoteName.Gb3 or KeyboardNoteName.Ab3 or KeyboardNoteName.Bb3 or
-            KeyboardNoteName.Db4 or KeyboardNoteName.Eb4 or KeyboardNoteName.Gb4 or KeyboardNoteName.Ab4 or KeyboardNoteName.Bb4 =>
+            KeyboardNoteName.Db3 or KeyboardNoteName.Eb3 or
+            KeyboardNoteName.Gb3 or KeyboardNoteName.Ab3 or KeyboardNoteName.Bb3 or
+            KeyboardNoteName.Db4 or KeyboardNoteName.Eb4 or
+            KeyboardNoteName.Gb4 or KeyboardNoteName.Ab4 or KeyboardNoteName.Bb4 =>
                 KeyColor.Black,
             _ => KeyColor.White,
         };

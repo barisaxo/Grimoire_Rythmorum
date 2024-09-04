@@ -1,9 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MusicTheory.Arithmetic;
+using MusicTheory.Notes.Arithmetic;
+using MusicTheory.Intervals.Arithmetic;
 using MusicTheory.Scales;
-using MusicTheory.Keys;
+using MusicTheory.Notes;
 using MusicTheory.Modes;
 
 [System.Serializable]
@@ -20,21 +21,21 @@ public class ModePuzzle : IPuzzle
     public bool AllowPlayQuestion => true;
 
     public IMusicalElement Gamut { get; private set; }
-    public Scale Scale => Gamut is Scale scale ? scale : throw new System.ArgumentNullException();
+    public IScale Scale => Gamut is IScale scale ? scale : throw new System.ArgumentNullException();
 
     private KeyboardNoteName[] _notes;
     public KeyboardNoteName[] Notes => _notes;
 
     public string Desc => "Build the <b><i>mode";
-    public string puzzleType => "mode";
+    public string puzzleGamut => "Mode";
 
     private string _question;
     public string Question => _question;
 
     public string Clue => GetSteps(Mode);
-    readonly Mode Mode;
+    readonly IMode Mode;
 
-    public ModePuzzle(Scale gamut, Mode mode)
+    public ModePuzzle(IScale gamut, IMode mode)
     {
         Gamut = gamut;
         Mode = mode;
@@ -53,21 +54,21 @@ public class ModePuzzle : IPuzzle
         _numOfNotes = Scale.ScaleDegrees.Length + 1;
         _notes = new KeyboardNoteName[NumOfNotes];
 
-        KeyboardNoteName Root = ((Key)Enumeration.All<KeyEnum>()[Random.Range(0, Enumeration.Length<KeyEnum>())]).GetKeyboardNoteName();
+        KeyboardNoteName Root = Enumeration.All<NoteEnum>()[Random.Range(0, Enumeration.Length<NoteEnum>())].GetNote().GetKeyboardNoteName();
 
         Notes[0] = Root;
         Notes[^1] = Root + 12;
 
         for (int i = 1; i < Notes.Length - 1; i++)
         {
-            Notes[i] = Root.NoteNameToKey().GetKeyAbove(Scale.ScaleDegrees[i].AsInterval()).GetKeyboardNoteName();
+            Notes[i] = Root.KeyboardKeyToNote().GetNoteAbove(Scale.ScaleDegrees[i].AsInterval()).GetKeyboardNoteName();
             Notes[i] += Notes[i] < Root ? 12 : 0;
         }
 
         for (int i = 0; i < Notes.Length - 1; i++)
         {
             int modalIndex = (Mode.Enum.Id + i) % Scale.ScaleDegrees.Length;
-            Notes[i] = Root.NoteNameToKey().GetKeyAbove(Scale.ScaleDegrees[modalIndex].AsInterval()).GetKeyboardNoteName();
+            Notes[i] = Root.KeyboardKeyToNote().GetNoteAbove(Scale.ScaleDegrees[modalIndex].AsInterval()).GetKeyboardNoteName();
         }
 
         for (int i = 0; i < Notes.Length - 1; i++)
@@ -78,22 +79,22 @@ public class ModePuzzle : IPuzzle
         Notes[^1] = Notes[0] + 12;
 
         _question = GetMajorModeName(Mode) + Mode.Enum.Name + ' ' + nameof(Mode) + " of the " +
-            Scale.Description.StartCase() + ' ' + nameof(MusicTheory.Scales.Scale);
+            Scale.Description.StartCase() + ' ' + nameof(Scale);
     }
 
-    private string GetMajorModeName(Mode mode)
+    private string GetMajorModeName(IMode mode)
     {
         return Scale is Major ? mode.Name + ": " : string.Empty;
     }
 
-    private string GetSteps(Mode mode)
+    private string GetSteps(IMode mode)
     {
         string temp = string.Empty;
         for (int i = 0; i < Scale.Steps.Length; i++) temp += Scale.Steps[(mode.Enum.Id + i) % Scale.ScaleDegrees.Length].Name + ' ';
         return temp;
     }
 
-    private Scale WeightedRandomScale()
+    private IScale WeightedRandomScale()
     {
         return Random.Range(0, 47) switch
         {

@@ -24,11 +24,11 @@ namespace Sea
                 new Vector3(0, Random.Range(0f, 360f), 0));
             Description = new SceneObjectDescription("Sailfish");
 
-            int patterns = (int)(10 * (Difficulty.DifficultyLevel.ID + 1) * data.Skill.GetBonusRatio(new Apophenia()));
+            int patterns = (int)(10 * (Difficulty.DifficultyLevel.Id + 1) * data.Skill.GetBonusRatio(new Apophenia()));
 
             Inventoriable = new Inventoriable(new (IData IData, IItem DataItem, int Amount)[]{
                 // (data.Fish, Difficulty.DifficultyLevel, 1),
-                (data.Inventory, new Ration(), Difficulty.DifficultyLevel.ID + 1),
+                (data.Inventory, new Ration(), Difficulty.DifficultyLevel.Id + 1),
                 // (data.FishData,region switch
                 //  {
                 //      MusicTheory.RegionalMode.Ionian or MusicTheory.RegionalMode.Dorian => FishData.DataItem.SailFish,

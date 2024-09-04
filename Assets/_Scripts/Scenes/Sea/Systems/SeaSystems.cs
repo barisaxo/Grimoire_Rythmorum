@@ -75,6 +75,7 @@ public static class SeaSystems
     {
         scene.NearestNPC = null;
         scene.NearestInteractableCell = null;
+        scene.Ship.MuscopaPopup.GO.SetActive(false);
         scene.Ship.ConfirmPopup.GO.SetActive(false);
         scene.Ship.AttackPopup.GO.SetActive(false);
 
@@ -85,6 +86,7 @@ public static class SeaSystems
             {
                 scene.NearestNPC = npc;
 
+                scene.Ship.MuscopaPopup.GO.SetActive(true);
                 scene.Ship.ConfirmPopup.GO.SetActive(true);
                 scene.Ship.ConfirmPopup.TextString = npc.SceneObject.Interactable.PopupText;
 

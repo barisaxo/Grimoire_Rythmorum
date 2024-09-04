@@ -21,7 +21,7 @@ public class EndBounty_State : State
     int patterns = 0;
     // bool map;
 
-    int level => (Scene.NMEShipStats.HullStats.Hull.ID * Scene.NMEShipStats.HullStats.Hull.ID) + 1;
+    int level => (Scene.NMEShipStats.HullStats.Hull.Id * Scene.NMEShipStats.HullStats.Hull.Id) + 1;
     // DataManager.GamePlay.CurrentLevel switch
     // {
     //     RegionalMode.Lydian => 2,
@@ -33,7 +33,7 @@ public class EndBounty_State : State
 
     protected override void PrepareState(Action callback)
     {
-        Scene.SelfDestruct();
+        (Scene as IScene).SelfDestruct();
         // Pack.BHUD.SelfDestruct();
 
         coins = (int)((level + 50f) * 5.55f * UnityEngine.Random.Range(.15f, 1) * (float)((100 - Result()) * .01f));

@@ -31,7 +31,7 @@ namespace Menus
 
                 return
                     "Complete " +
-                    Enumeration.FindId<SRhythmCellEnum>(Selection.Item.ID - 1).Name +
+                    Enumeration.FindId<SRhythmCellEnum>(Selection.Item.Id - 1).Name +
                     " to Unlock";
 
             }
@@ -81,7 +81,7 @@ namespace Menus
             item is SSSS ||
             Data.GetLevel(
                 SRhythmCellEnum.ToItem(
-                    Enumeration.FindId<SRhythmCellEnum>(Selection.Item.ID - 1)))
+                    Enumeration.FindId<SRhythmCellEnum>(Selection.Item.Id - 1)))
             > 0;
 
 

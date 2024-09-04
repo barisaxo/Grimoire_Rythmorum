@@ -25,10 +25,12 @@ namespace Menus
             {
                 if ((_selection = value).Item is Tuning)
                 {
+                    Audio.AudioManager.Io.BGMusic.VolumeLevelSetting = 0;
                     TuningNote ??= new((MusicTheory.KeyOf)Data.GetLevel(new Transpose()));
                 }
                 else
                 {
+                    Audio.AudioManager.Io.BGMusic.VolumeLevelSetting = Manager.Io.Volume.GetScaledLevel(new BGMusic());
                     TuningNote?.SelfDestruct();
                     TuningNote = null;
                 }

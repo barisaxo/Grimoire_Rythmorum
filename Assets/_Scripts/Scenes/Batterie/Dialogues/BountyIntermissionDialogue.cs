@@ -29,10 +29,10 @@ public class BountyIntermission_Dialogue : Dialogue
             Scene.DamageDealt = (int)((float)Scene.DamageDealt + ((float)Scene.DamageDealt * (float)Datum.Manager.Io.Skill.GetBonusRatio(new Datum.CriticalVolley())));
         }
 
-        Debug.Log("Spammed: " + Scene.Pack.Spammed + ", Damage taken: " + damageTaken + ", Damage dealt: " + Scene.DamageDealt);
-        Scene.BatterieHUD.PlayerCurrent -= damageTaken;
+        // Debug.Log("Spammed: " + Scene.Pack.Spammed + ", Damage taken: " + damageTaken + ", Damage dealt: " + Scene.DamageDealt);
+        ((BatterieHUD)Scene.Hud).PlayerCurrent -= damageTaken;
         Datum.Manager.Io.ActiveShip.AdjustLevel(new Datum.CurrentHitPoints(), -damageTaken);
-        Scene.BatterieHUD.NMECurrent = Scene.NMEHealth.cur -= Scene.DamageDealt;
+        ((BatterieHUD)Scene.Hud).NMECurrent = Scene.NMEHealth.cur -= Scene.DamageDealt;
     }
 
     readonly Quests.BountyQuest Quest;

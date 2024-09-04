@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 public static class KeyboardSystems
 {
-    public static KeyboardNoteName GetKeyboardNoteName(this MusicTheory.Keys.Key key) => key.Id switch
+    public static KeyboardNoteName GetKeyboardNoteName(this MusicTheory.Notes.INote key) => key.Id switch
     {
         0 => KeyboardNoteName.C3,
         1 => KeyboardNoteName.Db3,
@@ -23,35 +23,35 @@ public static class KeyboardSystems
         _ => throw new System.ArgumentOutOfRangeException()
     };
 
-    public static MusicTheory.Keys.Key NoteNameToKey(this KeyboardNoteName key) => key switch
+    public static MusicTheory.Notes.INote KeyboardKeyToNote(this KeyboardNoteName key) => key switch
     {
-        KeyboardNoteName.C3 => new MusicTheory.Keys.C(),
-        KeyboardNoteName.Db3 => new MusicTheory.Keys.Db(),
-        KeyboardNoteName.D3 => new MusicTheory.Keys.D(),
-        KeyboardNoteName.Eb3 => new MusicTheory.Keys.Eb(),
-        KeyboardNoteName.E3 => new MusicTheory.Keys.E(),
-        KeyboardNoteName.F3 => new MusicTheory.Keys.F(),
-        KeyboardNoteName.Gb3 => new MusicTheory.Keys.Gb(),
-        KeyboardNoteName.G3 => new MusicTheory.Keys.G(),
-        KeyboardNoteName.Ab3 => new MusicTheory.Keys.Ab(),
-        KeyboardNoteName.A3 => new MusicTheory.Keys.A(),
-        KeyboardNoteName.Bb3 => new MusicTheory.Keys.Bb(),
-        KeyboardNoteName.B3 => new MusicTheory.Keys.B(),
+        KeyboardNoteName.C3 => new MusicTheory.Notes.C(),
+        KeyboardNoteName.Db3 => new MusicTheory.Notes.Db(),
+        KeyboardNoteName.D3 => new MusicTheory.Notes.D(),
+        KeyboardNoteName.Eb3 => new MusicTheory.Notes.Eb(),
+        KeyboardNoteName.E3 => new MusicTheory.Notes.E(),
+        KeyboardNoteName.F3 => new MusicTheory.Notes.F(),
+        KeyboardNoteName.Gb3 => new MusicTheory.Notes.Gb(),
+        KeyboardNoteName.G3 => new MusicTheory.Notes.G(),
+        KeyboardNoteName.Ab3 => new MusicTheory.Notes.Ab(),
+        KeyboardNoteName.A3 => new MusicTheory.Notes.A(),
+        KeyboardNoteName.Bb3 => new MusicTheory.Notes.Bb(),
+        KeyboardNoteName.B3 => new MusicTheory.Notes.B(),
 
-        KeyboardNoteName.C4 => new MusicTheory.Keys.C(),
-        KeyboardNoteName.Db4 => new MusicTheory.Keys.Db(),
-        KeyboardNoteName.D4 => new MusicTheory.Keys.D(),
-        KeyboardNoteName.Eb4 => new MusicTheory.Keys.Eb(),
-        KeyboardNoteName.E4 => new MusicTheory.Keys.E(),
-        KeyboardNoteName.F4 => new MusicTheory.Keys.F(),
-        KeyboardNoteName.Gb4 => new MusicTheory.Keys.Gb(),
-        KeyboardNoteName.G4 => new MusicTheory.Keys.G(),
-        KeyboardNoteName.Ab4 => new MusicTheory.Keys.Ab(),
-        KeyboardNoteName.A4 => new MusicTheory.Keys.A(),
-        KeyboardNoteName.Bb4 => new MusicTheory.Keys.Bb(),
-        KeyboardNoteName.B4 => new MusicTheory.Keys.B(),
+        KeyboardNoteName.C4 => new MusicTheory.Notes.C(),
+        KeyboardNoteName.Db4 => new MusicTheory.Notes.Db(),
+        KeyboardNoteName.D4 => new MusicTheory.Notes.D(),
+        KeyboardNoteName.Eb4 => new MusicTheory.Notes.Eb(),
+        KeyboardNoteName.E4 => new MusicTheory.Notes.E(),
+        KeyboardNoteName.F4 => new MusicTheory.Notes.F(),
+        KeyboardNoteName.Gb4 => new MusicTheory.Notes.Gb(),
+        KeyboardNoteName.G4 => new MusicTheory.Notes.G(),
+        KeyboardNoteName.Ab4 => new MusicTheory.Notes.Ab(),
+        KeyboardNoteName.A4 => new MusicTheory.Notes.A(),
+        KeyboardNoteName.Bb4 => new MusicTheory.Notes.Bb(),
+        KeyboardNoteName.B4 => new MusicTheory.Notes.B(),
 
-        KeyboardNoteName.C5 => new MusicTheory.Keys.C(),
+        KeyboardNoteName.C5 => new MusicTheory.Notes.C(),
         _ => throw new System.ArgumentOutOfRangeException()
     };
 

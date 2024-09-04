@@ -27,6 +27,7 @@ public class CoveScene
         _ = HUD;
         _ = Cannon;
         _ = AL;
+        _ = Card;
         PatternViewer.Init();
     }
 
@@ -123,7 +124,7 @@ public class CoveScene
     {
         var go = Assets.CannonPrefab;
         go.transform.SetParent(Parent);
-        go.transform.SetLocalPositionAndRotation(new Vector3(26.5f, .8f, 22), Quaternion.Euler(0, 0, 0));
+        go.transform.SetLocalPositionAndRotation(new Vector3(26.5f, .8f, 23), Quaternion.Euler(0, 0, 0));
         go.transform.localScale = Vector3.one * 7;
         return go;
     }
@@ -135,7 +136,7 @@ public class CoveScene
     {
         var go = Assets.SailFishPrefab.gameObject;
         go.transform.SetParent(Parent);
-        go.transform.SetLocalPositionAndRotation(new Vector3(26.5f, 1.2f, 18.666f), Quaternion.Euler(0, 270, 0));
+        go.transform.SetLocalPositionAndRotation(new Vector3(26.5f, 1.2f, 20f), Quaternion.Euler(0, 270, 0));
         go.transform.localScale = Vector3.one;
         return go;
     }
@@ -147,7 +148,7 @@ public class CoveScene
     {
         var go = Assets.Bottle.gameObject;
         go.transform.SetParent(Parent);
-        go.transform.SetLocalPositionAndRotation(new Vector3(26.5f, 1.6f, 15.333f), Quaternion.Euler(0, 90, 0));
+        go.transform.SetLocalPositionAndRotation(new Vector3(26.5f, 1.6f, 17f), Quaternion.Euler(0, 90, 0));
         go.transform.localScale = Vector3.one;
         return go;
     }
@@ -159,11 +160,22 @@ public class CoveScene
     {
         var go = Assets.Gramo.gameObject;
         go.transform.SetParent(Parent);
-        go.transform.SetLocalPositionAndRotation(new Vector3(26.5f, 1.6f, 12), Quaternion.Euler(0, 90, 0));
+        go.transform.SetLocalPositionAndRotation(new Vector3(26.5f, 1.6f, 14f), Quaternion.Euler(0, 90, 0));
         go.transform.localScale = Vector3.one;
         return go;
     }
 
+    private GameObject _card;
+    public GameObject Card => _card ? _card : _card = SetUpCard();
+
+    private GameObject SetUpCard()
+    {
+        var go = Assets.DomCard;
+        go.transform.SetParent(Parent);
+        go.transform.SetLocalPositionAndRotation(new Vector3(26.5f, 1.6f, 11), Quaternion.Euler(0, 90, 0));
+        go.transform.localScale = Vector3.one;
+        return go;
+    }
     // private GameObject _skillOrb;
     // public GameObject SkillOrb => _skillOrb ? _skillOrb : _skillOrb = SetUpSkillOrb();
 

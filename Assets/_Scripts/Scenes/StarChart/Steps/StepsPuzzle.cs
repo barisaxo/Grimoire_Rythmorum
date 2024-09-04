@@ -1,7 +1,8 @@
 
-using MusicTheory.Arithmetic;
-using MusicTheory.Keys;
+using MusicTheory.Notes.Arithmetic;
+using MusicTheory.Notes;
 using MusicTheory.Steps;
+using MusicTheory.Intervals.Arithmetic;
 using UnityEngine;
 using System.Collections.Generic;
 
@@ -18,13 +19,13 @@ public class StepsPuzzle : IPuzzle
     public bool AllowPlayQuestion => true;
 
     public IMusicalElement Gamut { get; private set; }
-    public Step Step => Gamut is Step step ? step : throw new System.ArgumentNullException();
+    public IStep Step => Gamut is IStep step ? step : throw new System.ArgumentNullException();
 
     private readonly KeyboardNoteName[] _notes;
     public KeyboardNoteName[] Notes => _notes;
 
     public string Desc => "Build the <b><i>step";
-    public string puzzleType => "step";
+    public string puzzleGamut => "step";
 
     private readonly string _question;
     public string Question => _question;
@@ -35,18 +36,18 @@ public class StepsPuzzle : IPuzzle
 
         _notes = new KeyboardNoteName[NumOfNotes];
 
-        Key Root = Enumeration.All<KeyEnum>()[Random.Range(0, Enumeration.Length<KeyEnum>())];
+        INote Root = Enumeration.All<NoteEnum>()[Random.Range(0, Enumeration.Length<NoteEnum>())].GetNote();
 
         Notes[0] = Root.GetKeyboardNoteName();
 
-        Notes[1] = Root.GetKeyAbove(Step.AsInterval()).GetKeyboardNoteName();
+        Notes[1] = Root.GetNoteAbove(Step.AsInterval()).GetKeyboardNoteName();
 
         Notes[1] += Notes[1] < Notes[0] ? 12 : 0;
 
-        _question = Gamut.Name + (Gamut.Name == nameof(Skip) ? "" : " " + nameof(MusicTheory.Steps.Step));
+        _question = Gamut.Name + (Gamut.Name == nameof(Skip) ? "" : " " + nameof(Step));
     }
 
-    private Step WeightedRandomStep()
+    private IStep WeightedRandomStep()
     {
         int solved = Datum.Manager.Io.Puzzles.GetLevel(this);
 

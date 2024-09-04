@@ -6,7 +6,7 @@ using Sea.Maps;
 
 namespace Sea
 {
-    public sealed class WorldMapScene
+    public sealed class WorldMapScene //: IScene
     {
         #region  INSTANCE
 

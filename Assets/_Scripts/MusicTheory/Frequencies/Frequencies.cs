@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class Frequencies
 {
-    public static float GetHertz(this MusicTheory.Keys.Key note) => note.Id switch
+    public static float GetHertz(this MusicTheory.Notes.INote note) => note.Id switch
     {
         0 => 261.63f,
         1 => 277.18f,

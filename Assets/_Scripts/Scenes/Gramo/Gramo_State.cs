@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Gramophones;
 
 //TODO HUD & Info (like in proto-bard)
 public class Gramo_State : State
@@ -43,7 +44,7 @@ public class Gramo_State : State
     {
         SetState(new CameraPan_State(
                     new DialogStart_State(
-                        new EndGramo_Dialogue(SubsequentState)),
+                        new EndGramo_Dialogue(SubsequentState, false)),
                     pan: Cam.StoredCamRot,
                     strafe: Cam.StoredCamPos,
                     speed: 5));
@@ -55,9 +56,11 @@ public class Gramo_State : State
         if (Scene.AllAnswered())
             if (Scene.CorrectAnswers())
             {
+                DataManager.Player.AdjustLevel(new Datum.GramoSolved(), 1);
+
                 DataManager.Player.AdjustLevel(new Datum.PatternsFound(), (int)(1000f *
                                 DataManager.Skill.GetBonusRatio(new Datum.Apophenia()) *
-                                (Gramo.ID + 1) *
+                                (Gramo.Id + 1) *
                                 (UnityEngine.Random.value + 1f)
                                 ));
                 SetState(new CameraPan_State(
@@ -67,14 +70,18 @@ public class Gramo_State : State
                             subsequentState: SubsequentState,
                             patternsFound: (int)(1000f *
                                 DataManager.Skill.GetBonusRatio(new Datum.Apophenia()) *
-                                (Gramo.ID + 1) *
+                                (Gramo.Id + 1) *
                                 (UnityEngine.Random.value + 1f)
                                 ))),
                     pan: Cam.StoredCamRot,
                     strafe: Cam.StoredCamPos,
                     speed: 5));
             }
-            else SetState(new CameraPan_State(
+            else
+            {
+                DataManager.Player.AdjustLevel(new Datum.GramoFailed(), 1);
+
+                SetState(new CameraPan_State(
                     new DialogStart_State(
                         new EndGramo_Dialogue(
                             won: false,
@@ -84,6 +91,7 @@ public class Gramo_State : State
                     pan: Cam.StoredCamRot,
                     strafe: Cam.StoredCamPos,
                     speed: 5));
+            }
         else Audio.SFX.PlayOneShot(BatterieAssets.MissStick);
     }
 
@@ -92,29 +100,29 @@ public class Gramo_State : State
         switch (dir)
         {
             case Dir.Up:
-                Scene.CurSelection = Scene.Gramo.ScrollDials(Scene.CurSelection, Dir.Up);
+                Scene.CurSelection = Scene.Gramo.ScrollDials(Scene.CurSelection, dir);
                 Scene.HighlightDial();
                 break;
 
             case Dir.Down:
-                Scene.CurSelection = Scene.Gramo.ScrollDials(Scene.CurSelection, Dir.Down);
+                Scene.CurSelection = Scene.Gramo.ScrollDials(Scene.CurSelection, dir);
                 Scene.HighlightDial();
                 break;
 
             case Dir.Left:
                 if (Scene.GetSpinningBool(Scene.CurSelection)) return;
-                Scene.SetAnswer(Scene.ChangeAnswer(Dir.Left));
+                Scene.SetAnswer(Scene.ChangeAnswer(dir, Scene.GetCurrentAnswer()));
                 Scene.SpinLeft(Scene.CurSelection).StartCoroutine();
                 break;
 
             case Dir.Right:
                 if (Scene.GetSpinningBool(Scene.CurSelection)) return;
-                Scene.SetAnswer(Scene.ChangeAnswer(Dir.Right));
+                Scene.SetAnswer(Scene.ChangeAnswer(dir, Scene.GetCurrentAnswer()));
                 Scene.SpinRight(Scene.CurSelection).StartCoroutine();
                 break;
         }
 
-        if (Scene.AllAnswered()) _ = Scene.ConfirmButton;
+        if (Scene.AllAnswered()) _ = Scene.GramoHUD.ConfirmButton;
     }
 
 
@@ -153,7 +161,7 @@ public class GramoPractice_State : State
     {
         SetState(new CameraPan_State(
                     new DialogStart_State(
-                        new EndGramo_Dialogue(SubsequentState)),
+                        new EndPractice_Dialogue(false, SubsequentState)),
                     pan: Cam.StoredCamRot,
                     strafe: Cam.StoredCamPos,
                     speed: 5));
@@ -165,7 +173,7 @@ public class GramoPractice_State : State
             if (Scene.CorrectAnswers())
                 SetState(new CameraPan_State(
                     new DialogStart_State(
-                        new EndGramo_Dialogue(SubsequentState)),
+                        new EndPractice_Dialogue(true, SubsequentState)),
                     pan: Cam.StoredCamRot,
                     strafe: Cam.StoredCamPos,
                     speed: 5));
@@ -189,18 +197,18 @@ public class GramoPractice_State : State
 
             case Dir.Left:
                 if (Scene.GetSpinningBool(Scene.CurSelection)) return;
-                Scene.SetAnswer(Scene.ChangeAnswer(Dir.Left));
+                Scene.SetAnswer(Scene.ChangeAnswer(Dir.Left, Scene.GetCurrentAnswer()));
                 Scene.SpinLeft(Scene.CurSelection).StartCoroutine();
                 break;
 
             case Dir.Right:
                 if (Scene.GetSpinningBool(Scene.CurSelection)) return;
-                Scene.SetAnswer(Scene.ChangeAnswer(Dir.Right));
+                Scene.SetAnswer(Scene.ChangeAnswer(Dir.Right, Scene.GetCurrentAnswer()));
                 Scene.SpinRight(Scene.CurSelection).StartCoroutine();
                 break;
         }
 
-        if (Scene.AllAnswered()) _ = Scene.ConfirmButton;
+        if (Scene.AllAnswered()) _ = Scene.GramoHUD.ConfirmButton;
     }
 
 

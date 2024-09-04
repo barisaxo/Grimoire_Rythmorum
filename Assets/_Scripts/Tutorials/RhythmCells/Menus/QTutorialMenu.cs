@@ -29,7 +29,7 @@ namespace Menus
             {
                 if (Selection.Item is NotesT or NotesA) return "";
 
-                IItem sc = StarChartEnum.ToItem(Enumeration.FindId<StarChartEnum>(Selection.Item.ID - 2));
+                IItem sc = StarChartEnum.ToItem(Enumeration.FindId<StarChartEnum>(Selection.Item.Id - 2));
 
                 int solved = Manager.Io.Puzzles.GetLevel(GetPuzzle(sc));
 
@@ -136,7 +136,7 @@ namespace Menus
                  Manager.Io.Puzzles.GetLevel(
                     GetPuzzle(
                         StarChartEnum.ToItem(
-                            Enumeration.FindId<StarChartEnum>(Selection.Item.ID - 2))))
+                            Enumeration.FindId<StarChartEnum>(Selection.Item.Id - 2))))
                                 >= 10;
     }
 }

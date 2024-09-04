@@ -123,6 +123,11 @@ public class Puzzle_State : State
 
     private void SubmitClicked()
     {
+        Debug.Log("Keyboard.SelectedKeys[0].Note: " + Keyboard.SelectedKeys[0].Note +
+            ", Puzzle.Notes[0].KeyboardKeyToNote(): " + Puzzle.Notes[0].KeyboardKeyToNote() +
+            (Keyboard.SelectedKeys[0].Note == Puzzle.Notes[0].KeyboardKeyToNote())
+            );
+
         if (AllNotesSelected() && AllNotesCorrect())
         {
             DisableInput();
@@ -192,7 +197,7 @@ public class Puzzle_State : State
     private bool AllNotesCorrect()
     {
         if (Puzzle.NumOfNotes == 1 && PuzzleType == PuzzleType.Theory)
-            return Keyboard.SelectedKeys[0].Key == Puzzle.Notes[0].NoteNameToKey();
+            return Keyboard.SelectedKeys[0].Note == Puzzle.Notes[0].KeyboardKeyToNote();
 
         bool[] answered = new bool[Puzzle.Notes.Length];
 
@@ -258,6 +263,7 @@ public class Puzzle_State : State
     {
         if (SubmitAnswer.GO.activeInHierarchy) ClickedOn(SubmitAnswer.GO);
     }
+
     protected override void SelectPressed()
     {
         SkipClicked();
@@ -360,7 +366,7 @@ public class Puzzle_State : State
 
     private Card _question;
     public Card Question => _question ??= new Card(nameof(Question), null)
-        .SetTextString(PuzzleType == PuzzleType.Aural ? "Listen to the " + Puzzle.puzzleType : Puzzle.Question)
+        .SetTextString(PuzzleType == PuzzleType.Aural ? "Listen to the " + Puzzle.puzzleGamut : Puzzle.Question)
         // .SetTMPPosition(new Vector2(0, Cam.UIOrthoY - 1.75f))
         .SetPositionAll(new Vector2(0, Cam.UIOrthoY - 1.75f))
         .SetFontScale(.65f, .65f)

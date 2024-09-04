@@ -45,6 +45,13 @@ public static class CardSystems
         return Card;
     }
 
+    public static Card SetFontScale(this Card Card, float minMax)
+    {
+        Card.TMP.fontSizeMin = Card.CanvasScaler.referenceResolution.x * .043125f * minMax;
+        Card.TMP.fontSizeMax = Card.CanvasScaler.referenceResolution.x * .043125f * minMax;
+        return Card;
+    }
+
     public static Card AutoSizeFont(this Card Card, bool tf)
     {
         Card.TMP.enableAutoSizing = tf;

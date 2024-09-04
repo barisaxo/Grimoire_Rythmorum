@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BatterieHUD
+public class BatterieHUD : IHud
 {
     readonly public int PlayerMax;
     private int _playerCurrent;
@@ -46,12 +46,13 @@ public class BatterieHUD
         Parent.SelfDestruct();
     }
 
-    public void Initialize()
+    public IHud Initialize()
     {
         _ = Parent.Canvas;
         _ = NMEHealthBar;
         _ = NMEDesc;
         _ = PlayerHealthBar;
+        return this;
     }
 
     private Card _parent;

@@ -7,7 +7,7 @@ public class Fretboard : MonoBehaviour
 {
     private static Fretboard io; public static Fretboard Io => io != null ? io :
         io = new GameObject(nameof(Fretboard)).AddComponent<Fretboard>();
-    bool initialized;
+    // bool initialized;
 
     void Start()
     {
@@ -15,7 +15,7 @@ public class Fretboard : MonoBehaviour
         DrawDots();
         DrawStrings();
         DrawFrets();
-        initialized = true;
+        // initialized = true;
     }
 
     private void OnEnable()
@@ -126,13 +126,13 @@ public class Ukulele : MonoBehaviour
 
     public List<UkeNote> UkeNotes = new List<UkeNote>();
 
-    bool initialized;
+    // bool initialized;
     void Start()
     {
         // GM.Io.Cam.orthographicSize = 6f;
         DrawDots();
         DrawFretboard();
-        initialized = true;
+        // initialized = true;
         transform.position = Vector3.down * 2;
     }
     private void OnEnable()

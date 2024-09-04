@@ -49,15 +49,6 @@ namespace Datum
             return Datum[(IVolume)item].ToString();
         }
 
-        // public void DecreaseLevel(IItem item)
-        // {
-        //     if (item is not Volume) throw new System.Exception(item.GetType().ToString());
-        //     Datum[(Volume)item] -= Datum[(Volume)item] - 5 < 0 ? 0 : 5;
-        //     PersistentData.Save(this);
-        // }
-
-        // public void DecreaseLevel(IItem item, int i) => DecreaseLevel(item);
-
         /// <summary>
         /// Give this to the audio source.
         /// </summary>
@@ -81,16 +72,6 @@ namespace Datum
                 Datum[(IVolume)item] + i;
             PersistentData.Save(this);
         }
-
-        // public void IncreaseLevel(IItem item)
-        // {
-        //     if (item is not Volume) throw new System.Exception(item.GetType().ToString());
-        //     Datum[(Volume)item] += Datum[(Volume)item] + 5 > 100 ? 0 : 5;
-        //     PersistentData.Save(this);
-        // }
-
-        // public void IncreaseLevel(IItem item, int i) => IncreaseLevel(item);
-
 
         public void SetLevel(IItem item, int level)
         {

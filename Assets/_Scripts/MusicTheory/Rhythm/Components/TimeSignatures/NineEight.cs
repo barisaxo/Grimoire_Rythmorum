@@ -9,7 +9,7 @@ namespace MusicTheory.Rhythms
     {
         public NineEight() { Signature = TimeSignatureEnum.NineEight; }
 
-        public override float GetTempo() => 75;
+        public override float GetTempo() => 60;
         protected override void GetRhythmCells(MusicSheet ms)
         {
             ms.Measures = new Measure[ms.RhythmSpecs.NumberOfMeasures];

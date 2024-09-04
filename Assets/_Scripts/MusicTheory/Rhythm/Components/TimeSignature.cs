@@ -40,14 +40,14 @@ namespace MusicTheory.Rhythms
         public readonly static TimeSignatureEnum SixFour = new(5, nameof(SixFour)) { Quantity = Count.Six, Quality = SubCount.For, Meter = Meter.CompoundDuple, BeatLevelValue = RhythmicValue.DotHalf };
         public readonly static TimeSignatureEnum SevenFour43 = new(6, nameof(SevenFour43)) { Quantity = Count.Sev, Quality = SubCount.For, Meter = Meter.IrregularQuadrupleTriple, BeatLevelValue = RhythmicValue.Quarter };
         public readonly static TimeSignatureEnum SevenFour34 = new(7, nameof(SevenFour34)) { Quantity = Count.Sev, Quality = SubCount.For, Meter = Meter.IrregularTripleQuadruple, BeatLevelValue = RhythmicValue.Quarter };
-        public readonly static TimeSignatureEnum ThreeEight = new(8, nameof(ThreeEight)) { Quantity = Count.Thr, Quality = SubCount.Eht, Meter = Meter.SimpleTriple, BeatLevelValue = RhythmicValue.Eighth };
-        public readonly static TimeSignatureEnum FiveEight23 = new(9, nameof(FiveEight23)) { Quantity = Count.Fiv, Quality = SubCount.Eht, Meter = Meter.IrregularDupleTriple, BeatLevelValue = RhythmicValue.Eighth };
-        public readonly static TimeSignatureEnum FiveEight32 = new(10, nameof(FiveEight32)) { Quantity = Count.Fiv, Quality = SubCount.Eht, Meter = Meter.IrregularTripleDuple, BeatLevelValue = RhythmicValue.Eighth };
-        public readonly static TimeSignatureEnum SixEight = new(11, nameof(SixEight)) { Quantity = Count.Six, Quality = SubCount.Eht, Meter = Meter.CompoundDuple, BeatLevelValue = RhythmicValue.DotQuarter };
-        public readonly static TimeSignatureEnum SevenEight43 = new(12, nameof(SevenEight43)) { Quantity = Count.Sev, Quality = SubCount.Eht, Meter = Meter.IrregularQuadrupleTriple, BeatLevelValue = RhythmicValue.Eighth };
-        public readonly static TimeSignatureEnum SevenEight34 = new(13, nameof(SevenEight34)) { Quantity = Count.Sev, Quality = SubCount.Eht, Meter = Meter.IrregularTripleQuadruple, BeatLevelValue = RhythmicValue.Eighth };
-        public readonly static TimeSignatureEnum NineEight = new(14, nameof(NineEight)) { Quantity = Count.Nin, Quality = SubCount.Eht, Meter = Meter.CompoundTriple, BeatLevelValue = RhythmicValue.DotHalf };
-        public readonly static TimeSignatureEnum TwelveEight = new(15, nameof(TwelveEight)) { Quantity = Count.Tlv, Quality = SubCount.Eht, Meter = Meter.CompoundQuadruple, BeatLevelValue = RhythmicValue.DotHalf };
+        // public readonly static TimeSignatureEnum ThreeEight = new(8, nameof(ThreeEight)) { Quantity = Count.Thr, Quality = SubCount.Eht, Meter = Meter.SimpleTriple, BeatLevelValue = RhythmicValue.Eighth };
+        // public readonly static TimeSignatureEnum FiveEight23 = new(9, nameof(FiveEight23)) { Quantity = Count.Fiv, Quality = SubCount.Eht, Meter = Meter.IrregularDupleTriple, BeatLevelValue = RhythmicValue.Eighth };
+        // public readonly static TimeSignatureEnum FiveEight32 = new(10, nameof(FiveEight32)) { Quantity = Count.Fiv, Quality = SubCount.Eht, Meter = Meter.IrregularTripleDuple, BeatLevelValue = RhythmicValue.Eighth };
+        public readonly static TimeSignatureEnum SixEight = new(8, nameof(SixEight)) { Quantity = Count.Six, Quality = SubCount.Eht, Meter = Meter.CompoundDuple, BeatLevelValue = RhythmicValue.DotQuarter };
+        // public readonly static TimeSignatureEnum SevenEight43 = new(12, nameof(SevenEight43)) { Quantity = Count.Sev, Quality = SubCount.Eht, Meter = Meter.IrregularQuadrupleTriple, BeatLevelValue = RhythmicValue.Eighth };
+        // public readonly static TimeSignatureEnum SevenEight34 = new(13, nameof(SevenEight34)) { Quantity = Count.Sev, Quality = SubCount.Eht, Meter = Meter.IrregularTripleQuadruple, BeatLevelValue = RhythmicValue.Eighth };
+        public readonly static TimeSignatureEnum NineEight = new(9, nameof(NineEight)) { Quantity = Count.Nin, Quality = SubCount.Eht, Meter = Meter.CompoundTriple, BeatLevelValue = RhythmicValue.DotQuarter };
+        public readonly static TimeSignatureEnum TwelveEight = new(10, nameof(TwelveEight)) { Quantity = Count.Tlv, Quality = SubCount.Eht, Meter = Meter.CompoundQuadruple, BeatLevelValue = RhythmicValue.DotQuarter };
 
 
         public static bool operator ==(TimeSignatureEnum a, TimeSignatureEnum b) => a.BeatLevelValue == b.BeatLevelValue && a.Meter == b.Meter && a.Quality == b.Quality && a.Quantity == b.Quantity;
@@ -67,12 +67,12 @@ namespace MusicTheory.Rhythms
             _ when t == SixFour => new SixFour(),
             _ when t == SevenFour43 => new SevenFour43(),
             _ when t == SevenFour34 => new SevenFour34(),
-            _ when t == ThreeEight => new ThreeEight(),
-            _ when t == FiveEight23 => new FiveEight23(),
-            _ when t == FiveEight32 => new FiveEight32(),
+            // _ when t == ThreeEight => new ThreeEight(),
+            // _ when t == FiveEight23 => new FiveEight23(),
+            // _ when t == FiveEight32 => new FiveEight32(),
             _ when t == SixEight => new SixEight(),
-            _ when t == SevenEight43 => new SevenEight43(),
-            _ when t == SevenEight34 => new SevenEight34(),
+            // _ when t == SevenEight43 => new SevenEight43(),
+            // _ when t == SevenEight34 => new SevenEight34(),
             _ when t == NineEight => new NineEight(),
             _ when t == TwelveEight => new TwelveEight(),
             _ => throw new System.ArgumentOutOfRangeException(t.ToString()),
@@ -92,12 +92,12 @@ namespace MusicTheory.Rhythms
                 _ when @enum == SixFour => new Datum.Rhythm.SixFour(),
                 _ when @enum == SevenFour43 => new Datum.Rhythm.SevenFour43(),
                 _ when @enum == SevenFour34 => new Datum.Rhythm.SevenFour34(),
-                _ when @enum == ThreeEight => new Datum.Rhythm.ThreeEight(),
-                _ when @enum == FiveEight23 => new Datum.Rhythm.FiveEight23(),
-                _ when @enum == FiveEight32 => new Datum.Rhythm.FiveEight32(),
+                // _ when @enum == ThreeEight => new Datum.Rhythm.ThreeEight(),
+                // _ when @enum == FiveEight23 => new Datum.Rhythm.FiveEight23(),
+                // _ when @enum == FiveEight32 => new Datum.Rhythm.FiveEight32(),
                 _ when @enum == SixEight => new Datum.Rhythm.SixEight(),
-                _ when @enum == SevenEight43 => new Datum.Rhythm.SevenEight43(),
-                _ when @enum == SevenEight34 => new Datum.Rhythm.SevenEight34(),
+                // _ when @enum == SevenEight43 => new Datum.Rhythm.SevenEight43(),
+                // _ when @enum == SevenEight34 => new Datum.Rhythm.SevenEight34(),
                 _ when @enum == NineEight => new Datum.Rhythm.NineEight(),
                 _ when @enum == TwelveEight => new Datum.Rhythm.TwelveEight(),
                 _ => throw new System.ArgumentOutOfRangeException(@enum.Name)

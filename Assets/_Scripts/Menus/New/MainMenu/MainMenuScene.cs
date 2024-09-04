@@ -13,9 +13,20 @@ public class MainMenuScene : IMenuScene
         ((IMenuScene)this).SetCardPos1(East);
         _ = LightHouse;
         _ = CatBoat;
+        _ = Title;
         RockTheBoat.AddBoat(CatBoat.transform, (.08f, 1, 0));
         RockTheBoat.Rocking = true;
         MonoHelper.OnUpdate += RotateLightHouse;
+
+
+        if (Audio.AudioManager.Io.BGMusic.GetClip != Assets.BGMus1)
+            Audio.AudioManager.Io.BGMusic.SetClip(Assets.BGMus1);
+
+        if (!Audio.AudioManager.Io.BGMusic.AudioSources[0].isPlaying)
+        {
+            Audio.AudioManager.Io.BGMusic.Play(false);
+            Audio.AudioManager.Io.BGMusic.Loop = true;
+        }
     }
 
     public void SelfDestruct()
@@ -30,6 +41,8 @@ public class MainMenuScene : IMenuScene
         R1 = null;
         RockTheBoat.Rocking = false;
         MonoHelper.OnUpdate -= RotateLightHouse;
+        _title?.SelfDestruct();
+        Audio.AudioManager.Io.BGMusic.Pause();
         Object.Destroy(_parent.gameObject);
     }
 
@@ -101,6 +114,12 @@ public class MainMenuScene : IMenuScene
         LightRotY += Time.deltaTime * 25;
         LightHouse.transform.rotation = Quaternion.Euler(0, LightRotY, 0);
     }
+
+    private Card _title;
+    public Card Title => _title ??= new Card(nameof(Title), null)
+        .SetSprite(Assets.Title)
+        .SetSpriteSize(new Vector2(Cam.UIOrthoY, Cam.UIOrthoY) * 10)
+        .SetSpritePosition(new Vector3(0, 0, 20));
 
     public Card Hud { get; set; }
     public Card North { get; set; }

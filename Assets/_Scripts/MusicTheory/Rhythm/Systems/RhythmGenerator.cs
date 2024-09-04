@@ -57,8 +57,8 @@ namespace MusicTheory.Rhythms
             if (m == ms.Measures.Length - 1 && c == ms.Measures[^1].Cells.Length - 1) return false;//don't tie last cell to nothing
             if (c == 0 &&
                 ms.Measures[m].Cells?.Length == 2 &&
-                ms.Measures[m].Cells?[0].Shape == CellShape.L &&
-                ms.Measures[m].Cells?[1].Shape == CellShape.L) return false;//don't tie long to long in same measure.
+                ms.Measures[m].Cells?[0].Shape is CellShape.L or CellShape.TL &&
+                ms.Measures[m].Cells?[1].Shape is CellShape.L or CellShape.TL) return false;//don't tie long to long in same measure.
             return Random.value > .666f;
         }
 
@@ -82,14 +82,10 @@ namespace MusicTheory.Rhythms
             if (ms.Measures[m].Cells[c].TiedFrom) return false;//prevents ties to rests
 
             if (ms.Measures[m].Cells[c].TiedTo &&
-               (ms.Measures[m].Cells[c].Shape == CellShape.L ||
-                ms.Measures[m].Cells[c].Shape == CellShape.TL ||
-                ms.Measures[m].Cells[c].Shape == CellShape.DL)) return false;//prevents ties from rests
+                (ms.Measures[m].Cells[c].Shape is CellShape.L or CellShape.TL or CellShape.DL)) return false;//prevents ties from rests
 
-            if (ms.Measures[m].Cells[c].MetricLevel == MetricLevel.Beat &&
-                (ms.Measures[m].Cells[c].Shape == CellShape.L ||
-                ms.Measures[m].Cells[c].Shape == CellShape.TL ||
-                ms.Measures[m].Cells[c].Shape == CellShape.DL)) return false;//no full measure rests
+            if (ms.Measures[m].Cells[c].MetricLevel is MetricLevel.Beat &&
+                (ms.Measures[m].Cells[c].Shape is CellShape.L or CellShape.TL or CellShape.DL)) return false;//no full measure rests
 
             return Random.value > .5f;
         }
@@ -630,6 +626,7 @@ namespace MusicTheory.Rhythms
         public static Count GetQuantizedCount(this RhythmCell cell, SubBeatAssignment s)
         {
             // Debug.Log(s + " " + cell.MetricLevel + " " + cell.Count);
+
             return s switch
             {
                 E => cell.MetricLevel switch

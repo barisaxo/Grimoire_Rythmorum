@@ -19,7 +19,7 @@ namespace Sea
         public IInstantiable Instantiator { get; }
         public IInventoriable Inventoriable { get; }
         public IQuestable Questable { get; }
-        public IDifficulty Difficulty { get; }
+        // public IDifficulty Difficulty { get; }
     }
 
     public interface IDifficulty
@@ -109,19 +109,19 @@ namespace Sea
     public interface IQuestable
     {
         public QuestData QuestData { get; }
-        public IQuest Quest { get; }
+        public Datum.IQuest Quest { get; }
         public void CompleteQuest();
     }
 
     public class Questable : IQuestable
     {
         public QuestData QuestData { get; }
-        public IQuest Quest { get; }
+        public Datum.IQuest Quest { get; }
         public void CompleteQuest()
         {
             QuestData.SetQuest(Quest, null);
         }
-        public Questable(QuestData data, IQuest questItem)
+        public Questable(QuestData data, Datum.IQuest questItem)
         {
             QuestData = data;
             Quest = questItem;
@@ -131,7 +131,7 @@ namespace Sea
     public class NotQuestable : IQuestable
     {
         public QuestData QuestData => null;
-        public IQuest Quest => null;
+        public Datum.IQuest Quest => null;
         public void CompleteQuest() { }
     }
 

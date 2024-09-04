@@ -104,4 +104,56 @@ namespace Menus
         public Card L1 { get; set; }
         public Card R1 { get; set; }
     }
+
+    public class MuscopaMenu : IMenu
+    {
+        public MuscopaMenu(State subsequentState)
+        {
+            Data = new RegionData();
+            SubsequentState = subsequentState;
+        }
+
+        readonly State SubsequentState;
+        public IData Data { get; }
+        public MenuItem Selection { get; set; }
+        public MenuItem[] MenuItems { get; set; }
+        public Card Description { get; set; }
+        public IMenuLayout Layout { get; } = new LeftScroll();
+
+        public string GetDescription { get => "(Tutorial not yet implemented)"; }// Selection.Item.Description; }
+        public string DisplayData(IItem item)
+        {
+            return item.Name + ": " + Data.GetDisplayLevel(item);
+        }
+
+        public IInputHandler Input => new MenuInputHandler()
+        {
+            // North = new ButtonInput(IncreaseItem),
+            // West = new ButtonInput(DecreaseItem),
+
+            East = new ButtonInput(Confirm),
+            South = new ButtonInput(Back),
+            Up = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Up, this)),
+            Down = new ButtonInput(() => Selection = Layout.ScrollMenuItems(Dir.Down, this)),
+        };
+
+        // private void IncreaseItem()
+        // {
+        //     // Data.AdjustLevel(Selection.Item, 1);
+        //     Selection.Card.SetTextString(DisplayData(Selection.Item));
+        // }
+
+        // private void DecreaseItem()
+        // {
+        //     // Data.AdjustLevel(Selection.Item, -1);
+        //     Selection.Card.SetTextString(DisplayData(Selection.Item));
+        // }
+
+        private void Back() { ConsequentState = SubsequentState; }
+        private void Confirm() { ConsequentState = new NewMuscopaState(new MenuState(this), (IRegion)Selection.Item, true) { Fade = true }; }
+
+        public State ConsequentState { get; set; }
+        private IMenuScene _scene;
+        public IMenuScene Scene => _scene ??= new PracticeMenuScene();
+    }
 }

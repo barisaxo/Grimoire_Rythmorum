@@ -1,5 +1,7 @@
 using System;
 
+using BeatFishing;
+
 public class SeaToAnglingTransition_State : State
 {
     public SeaToAnglingTransition_State(State subsequentState) => SubsequentState = subsequentState;
@@ -8,6 +10,7 @@ public class SeaToAnglingTransition_State : State
     protected override void EngageState()
     {
         Sea.WorldMapScene.Io.HUD.Disable();
+        Sea.WorldMapScene.Io.Ship.MuscopaPopup.GO.SetActive(false);
         Sea.WorldMapScene.Io.Ship.ConfirmPopup.GO.SetActive(false);
         Sea.WorldMapScene.Io.Ship.AttackPopup.GO.SetActive(false);
         Sea.WorldMapScene.Io.MiniMap.Card.GO.SetActive(false);

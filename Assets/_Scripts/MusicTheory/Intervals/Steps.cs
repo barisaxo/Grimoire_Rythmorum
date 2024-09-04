@@ -1,38 +1,36 @@
 
+using System;
+
 namespace MusicTheory.Steps
 {
-    [System.Serializable]
-    public abstract class Step : IMusicalElement
+    public interface IStep : IMusicalElement
     {
-        public Step(StepEnum @enum) { Enum = @enum; }
-        public readonly StepEnum Enum;
-        public int Id => Enum.Id;
-        public string Name => Enum.Name;
-
-        public static explicit operator StepEnum(Step i) => i.Enum;
-        public static explicit operator int(Step i) => i.Enum.Id;
+        StepEnum Enum { get; }
+        int IMusicalElement.Id => Enum.Id;
+        int IMusicalElement.SN => Enum.SN;
+        string IMusicalElement.Name => Enum.Name;
     }
 
-    public class Half : Step { public Half() : base(StepEnum.Half) { } }
-    public class Whole : Step { public Whole() : base(StepEnum.Whole) { } }
-    public class Skip : Step { public Skip() : base(StepEnum.Skip) { } }
+    [Serializable] public readonly struct Half : IStep { public StepEnum Enum => StepEnum.Half; }
+    [Serializable] public readonly struct Whole : IStep { public StepEnum Enum => StepEnum.Whole; }
+    [Serializable] public readonly struct Skip : IStep { public StepEnum Enum => StepEnum.Skip; }
 
     public class StepEnum : Enumeration
     {
         public StepEnum() : base(0, "") { }
-        public StepEnum(int id, string name) : base(id, name) { }
+        public StepEnum(int snId, string name) : base(snId, name) { }
 
         public static readonly StepEnum Half = new(1, nameof(Half));
         public static readonly StepEnum Whole = new(2, nameof(Whole));
         public static readonly StepEnum Skip = new(3, nameof(Skip));
 
-        public static implicit operator Step(StepEnum e) => e switch
-        {
-            _ when e == Half => new Half(),
-            _ when e == Whole => new Whole(),
-            _ when e == Skip => new Skip(),
-            _ => throw new System.ArgumentOutOfRangeException()
-        };
+        // public static implicit operator IStep(StepEnum e) => e switch
+        // {
+        //     _ when e == Half => new Half(),
+        //     _ when e == Whole => new Whole(),
+        //     _ when e == Skip => new Skip(),
+        //     _ => throw new System.ArgumentOutOfRangeException()
+        // };
 
         public static explicit operator StepEnum(int i) => FindId<StepEnum>(i);
     }

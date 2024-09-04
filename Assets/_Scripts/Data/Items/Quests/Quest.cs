@@ -4,7 +4,7 @@ namespace Datum
     public interface IQuest : IItem
     {
         QuestEnum Enum { get; }
-        int IItem.ID => Enum.Id;
+        int IItem.Id => Enum.Id;
         string IItem.Name => Enum.Name;
         string IItem.Description => Enum.Description;
     }

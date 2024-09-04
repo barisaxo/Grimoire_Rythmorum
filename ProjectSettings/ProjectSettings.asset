@@ -19,10 +19,10 @@ PlayerSettings:
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
   m_ShowUnitySplashScreen: 1
   m_ShowUnitySplashLogo: 1
-  m_SplashScreenOverlayOpacity: 1
+  m_SplashScreenOverlayOpacity: 0.5
   m_SplashScreenAnimation: 1
   m_SplashScreenLogoStyle: 1
-  m_SplashScreenDrawMode: 0
+  m_SplashScreenDrawMode: 1
   m_SplashScreenBackgroundAnimationZoom: 1
   m_SplashScreenLogoAnimationZoom: 1
   m_SplashScreenBackgroundLandscapeAspect: 1
@@ -40,7 +40,7 @@ PlayerSettings:
     width: 1
     height: 1
   m_SplashScreenLogos:
-  - logo: {fileID: 21300000, guid: 34ce7571de15e4988830720198647984, type: 3}
+  - logo: {fileID: 10404, guid: 0000000000000000f000000000000000, type: 0}
     duration: 2
   m_VirtualRealitySplashScreen: {fileID: 2800000, guid: be6891c1746c74ebba9aa544fa9aa545, type: 3}
   m_HolographicTrackingLossScreen: {fileID: 0}
@@ -291,7 +291,7 @@ PlayerSettings:
   - m_BuildTarget: 
     m_Icons:
     - serializedVersion: 2
-      m_Icon: {fileID: 2800000, guid: e1a0c2b24a10a4814b0d4cba3daadfbe, type: 3}
+      m_Icon: {fileID: 2800000, guid: a3bdb563f75fc446fa9330616f37c2ef, type: 3}
       m_Width: 128
       m_Height: 128
       m_Kind: 0
@@ -726,9 +726,9 @@ PlayerSettings:
   ps4IncludedModules: []
   ps4attribVROutputEnabled: 0
   monoEnv: 
-  splashScreenBackgroundSourceLandscape: {fileID: 21300000, guid: 604a7b7e1cc0349e3812da7f6e589e31, type: 3}
+  splashScreenBackgroundSourceLandscape: {fileID: 21300000, guid: f71e68e80f1fe446aaf5abc2e5e5b3a6, type: 3}
   splashScreenBackgroundSourcePortrait: {fileID: 21300000, guid: f18733a3af484463082edddaed16c1f7, type: 3}
-  blurSplashScreenBackground: 1
+  blurSplashScreenBackground: 0
   spritePackerPolicy: 
   webGLMemorySize: 16
   webGLExceptionSupport: 0
@@ -753,7 +753,8 @@ PlayerSettings:
   webGLMemoryGeometricGrowthStep: 0.2
   webGLMemoryGeometricGrowthCap: 96
   webGLPowerPreference: 2
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    Standalone: 
   additionalCompilerArguments: {}
   platformArchitecture: {}
   scriptingBackend: {}

@@ -32,7 +32,7 @@ namespace Menus
 
                 return
                     "Complete " +
-                    Enumeration.FindId<QRhythmCellEnum>(Selection.Item.ID - 1).Name +
+                    Enumeration.FindId<QRhythmCellEnum>(Selection.Item.Id - 1).Name +
                     " to Unlock";
 
             }
@@ -94,7 +94,7 @@ namespace Menus
             item is QQQQ ||
             Data.GetLevel(
                 QRhythmCellEnum.ToItem(
-                    Enumeration.FindId<QRhythmCellEnum>(Selection.Item.ID - 1)))
+                    Enumeration.FindId<QRhythmCellEnum>(Selection.Item.Id - 1)))
             > 0;
 
 

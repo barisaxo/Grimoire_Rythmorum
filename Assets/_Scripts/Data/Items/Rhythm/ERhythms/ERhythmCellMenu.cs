@@ -32,7 +32,7 @@ namespace Menus
 
                 return
                     "Complete " +
-                    Enumeration.FindId<ERhythmCellEnum>(Selection.Item.ID - 1).Name +
+                    Enumeration.FindId<ERhythmCellEnum>(Selection.Item.Id - 1).Name +
                     " to Unlock";
 
             }
@@ -82,7 +82,7 @@ namespace Menus
             item is EEEE ||
             Data.GetLevel(
                 ERhythmCellEnum.ToItem(
-                    Enumeration.FindId<ERhythmCellEnum>(Selection.Item.ID - 1)))
+                    Enumeration.FindId<ERhythmCellEnum>(Selection.Item.Id - 1)))
             > 0;
 
 

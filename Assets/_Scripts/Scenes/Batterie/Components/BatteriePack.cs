@@ -4,8 +4,9 @@ using System.Collections;
 using SheetMusic;
 using Batterie;
 using MusicTheory.Rhythms;
-using Muscopa;
+using Musica;
 using MusicTheory;
+using Rhythm;
 
 public class BatteriePack
 {
@@ -23,7 +24,7 @@ public class BatteriePack
     readonly bool SetUpCounts;
     public readonly RhythmSpecs _rhythmSpecs;
 
-    public void Initialize(Action<Batterie.Hit> HandleHit, BatterieFeedback BatterieFeedback, Action tick, Measure[] measures)
+    public void Initialize(Action<Rhythm.Hit> HandleHit, BatterieFeedback BatterieFeedback, Action tick, Measure[] measures)
     {
         MusicSheet = new()
         {
@@ -48,12 +49,12 @@ public class BatteriePack
 
         Synchro.TickEvent += tick;
 
-        MuscopaSettings = NewSettings(CadenceDifficulty.ALL, MusicTheory.Musica.RandomMode(), Genre.Stax);
+        MuscopaSettings = NewSettings(CadenceDifficulty.ALL, MusicTheory.MusicaSystems.RandomMode(), Genre.Stax);
         GoodHits = GoodRests = GoodHolds = ErroneousAttacks = MissedHits = MissedHolds = MissedRests = 0;
 
     }
 
-    public void Initialize(Action<Batterie.Hit> HandleHit, BatterieFeedback BatterieFeedback, Action Tick)
+    public void Initialize(Action<Hit> HandleHit, BatterieFeedback BatterieFeedback, Action Tick)
     {
         Initialize(HandleHit, BatterieFeedback, Tick, null);
     }
@@ -83,17 +84,17 @@ public class BatteriePack
     public Synchronizer Synchro;
     public Note[] CountOffNotes;
     public MappedBeat[] CountOffBeatmap;
-    public BatterieInputAnalyzer Analyzer;
-    public MuscopaSettings MuscopaSettings;
-    public MuscopaAudio MuscopaAudio;
+    public RhythmInputAnalyzer Analyzer;
+    public MusicaSettings MuscopaSettings;
+    public MusicaAudio MuscopaAudio;
 
     public BatterieResultType ResultType;
     public BatteriePack SetResultType(BatterieResultType type) { ResultType = type; return this; }
 
-    public MuscopaSettings NewSettings(CadenceDifficulty difficulty, RegionalMode shipsRegion, Genre genre)
+    public MusicaSettings NewSettings(CadenceDifficulty difficulty, RegionalMode shipsRegion, Genre genre)
     {
-        return new MuscopaSettings(
-            key: MusicTheory.Musica.RandomKey(),
+        return new MusicaSettings(
+            keyCenter: MusicTheory.Notes.NoteEnum.RandomKeyCenter(),
             genre: genre,
             scale: MusicalScale.Major,
             cadence: RegionalMode.Aeolian.RandomMode().RandomCadence(difficulty),

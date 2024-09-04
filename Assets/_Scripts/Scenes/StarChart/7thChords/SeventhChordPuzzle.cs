@@ -1,8 +1,9 @@
 
 using UnityEngine;
-using MusicTheory.Arithmetic;
-using MusicTheory.Keys;
+using MusicTheory.Notes.Arithmetic;
+using MusicTheory.Notes;
 using MusicTheory.SeventhChords;
+using MusicTheory.SeventhChords.Arithmetic;
 
 [System.Serializable]
 public class SeventhChordPuzzle : IPuzzle
@@ -15,15 +16,15 @@ public class SeventhChordPuzzle : IPuzzle
 
     public bool AllowPlayQuestion => true;
 
-    public System.Type GamutType => typeof(SeventhChord);
+    // public System.Type GamutType => typeof(ISeventhChord);
     public IMusicalElement Gamut { get; private set; }
-    public SeventhChord SeventhChord => Gamut is SeventhChord chord ? chord : throw new System.ArgumentNullException();
+    public ISeventhChord SeventhChord => Gamut is ISeventhChord chord ? chord : throw new System.ArgumentNullException();
 
     private readonly KeyboardNoteName[] _notes;
     public KeyboardNoteName[] Notes => _notes;
 
     public string Desc => "Build the <b><i>seventh chord";
-    public string puzzleType => "seventh chord";
+    public string puzzleGamut => "Seventh Chord";
 
     private readonly string _question;
     public string Question => _question;
@@ -31,26 +32,26 @@ public class SeventhChordPuzzle : IPuzzle
 
     public SeventhChordPuzzle()
     {
-        Gamut = (SeventhChord)Enumeration.All<SeventhChordEnum>()[Random.Range(0, Enumeration.Length<SeventhChordEnum>())];
+        Gamut = Enumeration.All<SeventhChordEnum>()[Random.Range(0, Enumeration.Length<SeventhChordEnum>())].GetSeventhChord();
 
         _notes = new KeyboardNoteName[NumOfNotes];
 
-        Key Root = Enumeration.All<KeyEnum>()[Random.Range(0, Enumeration.Length<KeyEnum>())];
+        INote Root = Enumeration.All<NoteEnum>()[Random.Range(0, Enumeration.Length<NoteEnum>())].GetNote();
 
         Notes[0] = Root.GetKeyboardNoteName();
-        Notes[1] = Root.GetKeyAbove(SeventhChord.ChordTonesAsIntervals()[0]).GetKeyboardNoteName();
-        Notes[2] = Root.GetKeyAbove(SeventhChord.ChordTonesAsIntervals()[1]).GetKeyboardNoteName();
-        Notes[3] = Root.GetKeyAbove(SeventhChord.ChordTonesAsIntervals()[2]).GetKeyboardNoteName();
+        Notes[1] = Root.GetNoteAbove(SeventhChord.ChordTonesAsIntervals()[0]).GetKeyboardNoteName();
+        Notes[2] = Root.GetNoteAbove(SeventhChord.ChordTonesAsIntervals()[1]).GetKeyboardNoteName();
+        Notes[3] = Root.GetNoteAbove(SeventhChord.ChordTonesAsIntervals()[2]).GetKeyboardNoteName();
 
         for (int i = 1; i < Notes.Length; i++) Notes[i] += Notes[i] < Notes[0] ? 12 : 0;
 
         _question = SeventhChord.Description.StartCase() + " " + Gamut.Name;
     }
 
-    private string GetChordTones(SeventhChord seventhChord)
+    private string GetChordTones(ISeventhChord seventhChord)
     {
         string temp = "Root ";
-        foreach (MusicTheory.Intervals.Interval i in seventhChord.ChordTonesAsIntervals())
+        foreach (MusicTheory.Intervals.IInterval i in seventhChord.ChordTonesAsIntervals())
             temp += i.Name + " ";
         return temp;
     }

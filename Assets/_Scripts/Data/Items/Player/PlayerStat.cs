@@ -4,7 +4,7 @@ namespace Datum
     public interface PlayerStat : IItem
     {
         PlayerStatEnum Enum { get; }
-        int IItem.ID => Enum.Id;
+        int IItem.Id => Enum.Id;
         string IItem.Name => Enum.Name;
         string IItem.Description => Enum.Description;
     }
@@ -25,16 +25,18 @@ namespace Datum
         public readonly static PlayerStatEnum TheoryRate = new(5, "Theory Solve Rate");
         public readonly static PlayerStatEnum GramoSolved = new(6, "Gramophone Solved");
         public readonly static PlayerStatEnum GramoFailed = new(7, "Gramophone Failed");
-        public readonly static PlayerStatEnum GramoRate = new(8, "Gramophone Solve Rate");
-        public readonly static PlayerStatEnum FishCaught = new(9, "Fish Caught");
-        public readonly static PlayerStatEnum FishLost = new(10, "Fish Lost");
-        public readonly static PlayerStatEnum FishRate = new(11, "Fish Catch Rate");
-        public readonly static PlayerStatEnum Hit = new(12, "Batterie Hit");
-        public readonly static PlayerStatEnum Miss = new(13, "Batterie Miss");
-        public readonly static PlayerStatEnum HitRate = new(14, "Batterie Hit Rate");
-        public readonly static PlayerStatEnum PatternsFound = new(15, "Patterns Found");
-        public readonly static PlayerStatEnum PatternsSpent = new(16, "Patterns Spent");
-        public readonly static PlayerStatEnum PatternsAvailable = new(17, "Patterns Available");
+        public readonly static PlayerStatEnum MuscopaSolved = new(8, "Muscopa Solved");
+        public readonly static PlayerStatEnum MuscopaFailed = new(9, "Muscopa Failed");
+        public readonly static PlayerStatEnum GramoRate = new(10, "Gramophone Solve Rate");
+        public readonly static PlayerStatEnum FishCaught = new(11, "Fish Caught");
+        public readonly static PlayerStatEnum FishLost = new(12, "Fish Lost");
+        public readonly static PlayerStatEnum FishRate = new(13, "Fish Catch Rate");
+        public readonly static PlayerStatEnum Hit = new(14, "Batterie Hit");
+        public readonly static PlayerStatEnum Miss = new(15, "Batterie Miss");
+        public readonly static PlayerStatEnum HitRate = new(16, "Batterie Hit Rate");
+        public readonly static PlayerStatEnum PatternsFound = new(17, "Patterns Found");
+        public readonly static PlayerStatEnum PatternsSpent = new(18, "Patterns Spent");
+        public readonly static PlayerStatEnum PatternsAvailable = new(19, "Patterns Available");
 
         public static IItem ToItem(PlayerStatEnum @enum) => @enum switch
         {
@@ -46,6 +48,8 @@ namespace Datum
             _ when @enum == TheoryRate => new TheoryRate(),
             _ when @enum == GramoSolved => new GramoSolved(),
             _ when @enum == GramoFailed => new GramoFailed(),
+            _ when @enum == MuscopaSolved => new MuscopaSolved(),
+            _ when @enum == MuscopaFailed => new MuscopaFailed(),
             _ when @enum == GramoRate => new GramoRate(),
             _ when @enum == FishCaught => new FishCaught(),
             _ when @enum == FishLost => new FishLost(),
@@ -68,6 +72,8 @@ namespace Datum
     [Serializable] public readonly struct TheoryRate : PlayerStat { public readonly PlayerStatEnum Enum => PlayerStatEnum.TheoryRate; }
     [Serializable] public readonly struct GramoSolved : PlayerStat { public readonly PlayerStatEnum Enum => PlayerStatEnum.GramoSolved; }
     [Serializable] public readonly struct GramoFailed : PlayerStat { public readonly PlayerStatEnum Enum => PlayerStatEnum.GramoFailed; }
+    [Serializable] public readonly struct MuscopaSolved : PlayerStat { public readonly PlayerStatEnum Enum => PlayerStatEnum.MuscopaSolved; }
+    [Serializable] public readonly struct MuscopaFailed : PlayerStat { public readonly PlayerStatEnum Enum => PlayerStatEnum.MuscopaFailed; }
     [Serializable] public readonly struct GramoRate : PlayerStat { public readonly PlayerStatEnum Enum => PlayerStatEnum.GramoRate; }
     [Serializable] public readonly struct FishCaught : PlayerStat { public readonly PlayerStatEnum Enum => PlayerStatEnum.FishCaught; }
     [Serializable] public readonly struct FishLost : PlayerStat { public readonly PlayerStatEnum Enum => PlayerStatEnum.FishLost; }
@@ -83,7 +89,7 @@ namespace Datum
     public interface PlayerRecentStat : IItem
     {
         PlayerRecentStatEnum Enum { get; }
-        int IItem.ID => Enum.Id;
+        int IItem.Id => Enum.Id;
         string IItem.Name => Enum.Name;
         string IItem.Description => Enum.Description;
     }
@@ -101,7 +107,7 @@ namespace Datum
         public readonly static PlayerRecentStatEnum TheoryRecentSolved = new(2, "Theory Recent Solve");
         public readonly static PlayerRecentStatEnum TheoryRecentFailed = new(3, "Theory Recent Fail");
         public readonly static PlayerRecentStatEnum GramoRecentSolved = new(4, "Gramophone Recent Solve");
-        public readonly static PlayerRecentStatEnum GramoRecentFailed = new(5, "GramophoneRecent Fail");
+        public readonly static PlayerRecentStatEnum GramoRecentFailed = new(5, "Gramophone Recent Fail");
         public readonly static PlayerRecentStatEnum FishRecentCaught = new(6, "Fish Recent Caught");
         public readonly static PlayerRecentStatEnum FishRecentLost = new(7, "Fish Recent Lost");
 

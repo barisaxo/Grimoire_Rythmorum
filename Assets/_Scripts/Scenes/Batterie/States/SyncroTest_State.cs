@@ -1,29 +1,30 @@
 using System;
 using UnityEngine;
 using Batterie;
+using Rhythm;
 
-public class SyncroTest_State : State
+public class SynchroTest_State : State
 {
-    Synchronizer syncro;
+    Synchronizer synchro;
 
     protected override void PrepareState(Action callback)
     {
-        syncro = new(MusicTheory.Rhythms.Quantizement.Quarter, 60);
-        syncro.BeatEvent += BeatEvent;
-        syncro.TickEvent += TimeEvent;
+        synchro = new(MusicTheory.Rhythms.Quantizement.Quarter, 60);
+        synchro.BeatEvent += BeatEvent;
+        synchro.TickEvent += TimeEvent;
 
         base.PrepareState(callback);
     }
 
     protected override void EngageState()
     {
-        syncro.KeepTime();
+        synchro.KeepTime();
     }
 
     protected override void DisengageState()
     {
-        syncro.BeatEvent -= BeatEvent;
-        syncro.TickEvent -= TimeEvent;
+        synchro.BeatEvent -= BeatEvent;
+        synchro.TickEvent -= TimeEvent;
     }
 
     void BeatEvent()
@@ -36,4 +37,17 @@ public class SyncroTest_State : State
     }
 
 
+}
+
+public interface IAttackVFX
+{
+    void AttackVFX();
+    AttackTypes AttackType { get; }
+    enum AttackTypes { type1, type2 };
+
+}
+public class SwipeVFX : IAttackVFX
+{
+    public void AttackVFX() { }
+    public IAttackVFX.AttackTypes AttackType { get; } = IAttackVFX.AttackTypes.type1;
 }

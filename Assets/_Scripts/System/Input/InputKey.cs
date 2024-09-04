@@ -6,8 +6,40 @@ public static class InputKey
     private static InputActions _inputActions;
     public static InputActions InputActions => _inputActions ??= new InputActions();
 
-    public static event Action<GamePadButton> ButtonEvent;
-    public static event Action<GamePadButton, Vector2> StickEvent;
+    private static event Action<GamePadButton> _buttonEvent;
+    public static event Action<GamePadButton> ButtonEvent
+    {
+        add
+        {
+            _buttonEvent += value;
+            // Debug.Log("Adding " + value + " " + _buttonEvent?.GetInvocationList().Length);
+            // foreach (var action in _buttonEvent?.GetInvocationList())
+            // {
+            //     Debug.Log("button event: " + action.GetType().FullName);
+            // }
+        }
+        remove
+        {
+            _buttonEvent = null;
+            // Debug.Log("Removing " + value + " " + _buttonEvent?.GetInvocationList().Length);
+        }
+    }
+
+    private static event Action<GamePadButton, Vector2> _stickEvent;
+    public static event Action<GamePadButton, Vector2> StickEvent
+    {
+        add
+        {
+            _stickEvent = value;
+            // Debug.Log("Adding " + value + " " + _buttonEvent?.GetInvocationList().Length);
+        }
+        remove
+        {
+            _stickEvent = null;
+            // Debug.Log("Removing " + value + " " + _buttonEvent?.GetInvocationList().Length);
+        }
+    }
+
     //public static event Action<GamePadButton, Vector2> RStickAltEvent;
     public static event Action<MouseAction, Vector3> MouseClickEvent;
 
@@ -19,52 +51,52 @@ public static class InputKey
     private static void AutoInit()
     {
         //button press
-        InputActions.Map.DUp.performed += _ => ButtonEvent?.Invoke(GamePadButton.Up_Press);
-        InputActions.Map.DDown.performed += _ => ButtonEvent?.Invoke(GamePadButton.Down_Press);
-        InputActions.Map.DLeft.performed += _ => ButtonEvent?.Invoke(GamePadButton.Left_Press);
-        InputActions.Map.DRight.performed += _ => ButtonEvent?.Invoke(GamePadButton.Right_Press);
+        InputActions.Map.DUp.performed += _ => _buttonEvent?.Invoke(GamePadButton.Up_Press);
+        InputActions.Map.DDown.performed += _ => _buttonEvent?.Invoke(GamePadButton.Down_Press);
+        InputActions.Map.DLeft.performed += _ => _buttonEvent?.Invoke(GamePadButton.Left_Press);
+        InputActions.Map.DRight.performed += _ => _buttonEvent?.Invoke(GamePadButton.Right_Press);
 
-        InputActions.Map.East.performed += _ => ButtonEvent?.Invoke(GamePadButton.East_Press);
-        InputActions.Map.South.performed += _ => ButtonEvent?.Invoke(GamePadButton.South_Press);
-        InputActions.Map.North.performed += _ => ButtonEvent?.Invoke(GamePadButton.North_Press);
-        InputActions.Map.West.performed += _ => ButtonEvent?.Invoke(GamePadButton.West_Press);
+        InputActions.Map.East.performed += _ => _buttonEvent?.Invoke(GamePadButton.East_Press);
+        InputActions.Map.South.performed += _ => _buttonEvent?.Invoke(GamePadButton.South_Press);
+        InputActions.Map.North.performed += _ => _buttonEvent?.Invoke(GamePadButton.North_Press);
+        InputActions.Map.West.performed += _ => _buttonEvent?.Invoke(GamePadButton.West_Press);
 
-        InputActions.Map.R1.performed += _ => ButtonEvent?.Invoke(GamePadButton.R1_Press);
-        InputActions.Map.R2.performed += _ => ButtonEvent?.Invoke(GamePadButton.R2_Press);
-        InputActions.Map.R3.performed += _ => ButtonEvent?.Invoke(GamePadButton.R3_Press);
-        InputActions.Map.L1.performed += _ => ButtonEvent?.Invoke(GamePadButton.L1_Press);
-        InputActions.Map.L2.performed += _ => ButtonEvent?.Invoke(GamePadButton.L2_Press);
-        InputActions.Map.L3.performed += _ => ButtonEvent?.Invoke(GamePadButton.L3_Press);
+        InputActions.Map.R1.performed += _ => _buttonEvent?.Invoke(GamePadButton.R1_Press);
+        InputActions.Map.R2.performed += _ => _buttonEvent?.Invoke(GamePadButton.R2_Press);
+        InputActions.Map.R3.performed += _ => _buttonEvent?.Invoke(GamePadButton.R3_Press);
+        InputActions.Map.L1.performed += _ => _buttonEvent?.Invoke(GamePadButton.L1_Press);
+        InputActions.Map.L2.performed += _ => _buttonEvent?.Invoke(GamePadButton.L2_Press);
+        InputActions.Map.L3.performed += _ => _buttonEvent?.Invoke(GamePadButton.L3_Press);
 
-        InputActions.Map.Start.performed += _ => ButtonEvent?.Invoke(GamePadButton.Start_Press);
-        InputActions.Map.Select.performed += _ => ButtonEvent?.Invoke(GamePadButton.Select_Press);
+        InputActions.Map.Start.performed += _ => _buttonEvent?.Invoke(GamePadButton.Start_Press);
+        InputActions.Map.Select.performed += _ => _buttonEvent?.Invoke(GamePadButton.Select_Press);
 
         //button release
-        InputActions.Map.DUp.canceled += _ => ButtonEvent?.Invoke(GamePadButton.Up_Release);
-        InputActions.Map.DDown.canceled += _ => ButtonEvent?.Invoke(GamePadButton.Down_Release);
-        InputActions.Map.DLeft.canceled += _ => ButtonEvent?.Invoke(GamePadButton.Left_Release);
-        InputActions.Map.DRight.canceled += _ => ButtonEvent?.Invoke(GamePadButton.Right_Release);
+        InputActions.Map.DUp.canceled += _ => _buttonEvent?.Invoke(GamePadButton.Up_Release);
+        InputActions.Map.DDown.canceled += _ => _buttonEvent?.Invoke(GamePadButton.Down_Release);
+        InputActions.Map.DLeft.canceled += _ => _buttonEvent?.Invoke(GamePadButton.Left_Release);
+        InputActions.Map.DRight.canceled += _ => _buttonEvent?.Invoke(GamePadButton.Right_Release);
 
-        InputActions.Map.East.canceled += _ => ButtonEvent?.Invoke(GamePadButton.East_Release);
-        InputActions.Map.South.canceled += _ => ButtonEvent?.Invoke(GamePadButton.South_Release);
-        InputActions.Map.North.canceled += _ => ButtonEvent?.Invoke(GamePadButton.North_Release);
-        InputActions.Map.West.canceled += _ => ButtonEvent?.Invoke(GamePadButton.West_Release);
+        InputActions.Map.East.canceled += _ => _buttonEvent?.Invoke(GamePadButton.East_Release);
+        InputActions.Map.South.canceled += _ => _buttonEvent?.Invoke(GamePadButton.South_Release);
+        InputActions.Map.North.canceled += _ => _buttonEvent?.Invoke(GamePadButton.North_Release);
+        InputActions.Map.West.canceled += _ => _buttonEvent?.Invoke(GamePadButton.West_Release);
 
-        InputActions.Map.R1.canceled += _ => ButtonEvent?.Invoke(GamePadButton.R1_Release);
-        InputActions.Map.R2.canceled += _ => ButtonEvent?.Invoke(GamePadButton.R2_Release);
-        InputActions.Map.R3.canceled += _ => ButtonEvent?.Invoke(GamePadButton.R3_Release);
-        InputActions.Map.L1.canceled += _ => ButtonEvent?.Invoke(GamePadButton.L1_Release);
-        InputActions.Map.L2.canceled += _ => ButtonEvent?.Invoke(GamePadButton.L2_Release);
-        InputActions.Map.L3.canceled += _ => ButtonEvent?.Invoke(GamePadButton.L3_Release);
+        InputActions.Map.R1.canceled += _ => _buttonEvent?.Invoke(GamePadButton.R1_Release);
+        InputActions.Map.R2.canceled += _ => _buttonEvent?.Invoke(GamePadButton.R2_Release);
+        InputActions.Map.R3.canceled += _ => _buttonEvent?.Invoke(GamePadButton.R3_Release);
+        InputActions.Map.L1.canceled += _ => _buttonEvent?.Invoke(GamePadButton.L1_Release);
+        InputActions.Map.L2.canceled += _ => _buttonEvent?.Invoke(GamePadButton.L2_Release);
+        InputActions.Map.L3.canceled += _ => _buttonEvent?.Invoke(GamePadButton.L3_Release);
 
-        InputActions.Map.Start.canceled += _ => ButtonEvent?.Invoke(GamePadButton.Start_Release);
-        InputActions.Map.Select.canceled += _ => ButtonEvent?.Invoke(GamePadButton.Select_Release);
+        InputActions.Map.Start.canceled += _ => _buttonEvent?.Invoke(GamePadButton.Start_Release);
+        InputActions.Map.Select.canceled += _ => _buttonEvent?.Invoke(GamePadButton.Select_Release);
 
         //stick input
-        InputActions.Map.LStick.performed += _ => StickEvent?.Invoke(GamePadButton.LStick, _.ReadValue<Vector2>());
-        InputActions.Map.LStick.canceled += _ => StickEvent?.Invoke(GamePadButton.LStick, Vector2.zero);
-        InputActions.Map.RStick.performed += _ => StickEvent?.Invoke(GamePadButton.RStick, _.ReadValue<Vector2>());
-        InputActions.Map.RStick.canceled += _ => StickEvent?.Invoke(GamePadButton.RStick, Vector2.zero);
+        InputActions.Map.LStick.performed += _ => _stickEvent?.Invoke(GamePadButton.LStick, _.ReadValue<Vector2>());
+        InputActions.Map.LStick.canceled += _ => _stickEvent?.Invoke(GamePadButton.LStick, Vector2.zero);
+        InputActions.Map.RStick.performed += _ => _stickEvent?.Invoke(GamePadButton.RStick, _.ReadValue<Vector2>());
+        InputActions.Map.RStick.canceled += _ => _stickEvent?.Invoke(GamePadButton.RStick, Vector2.zero);
 
         //Nintendo Switch RSticks are weird, and the Y is inverted (up is negative, so inverting the sign with minus read value).
         InputActions.Map.RStickAltX.performed += _ => RAltXInput(_.ReadValue<float>());
@@ -86,19 +118,19 @@ public static class InputKey
         else if (Input.GetMouseButtonUp(0)) { MouseClickEvent?.Invoke(MouseAction.LUp, Input.mousePosition); }
         else if (Input.GetMouseButton(0)) { MouseClickEvent?.Invoke(MouseAction.LHold, Input.mousePosition); }
 
-        if (UnityEngine.InputSystem.Keyboard.current.spaceKey.wasPressedThisFrame) ButtonEvent?.Invoke(GamePadButton.R3_Press);
-        if (UnityEngine.InputSystem.Keyboard.current.aKey.wasPressedThisFrame) ButtonEvent?.Invoke(GamePadButton.Left_Press);
-        if (UnityEngine.InputSystem.Keyboard.current.sKey.wasPressedThisFrame) ButtonEvent?.Invoke(GamePadButton.Down_Press);
-        if (UnityEngine.InputSystem.Keyboard.current.dKey.wasPressedThisFrame) ButtonEvent?.Invoke(GamePadButton.Right_Press);
-        if (UnityEngine.InputSystem.Keyboard.current.wKey.wasPressedThisFrame) ButtonEvent?.Invoke(GamePadButton.Up_Press);
-        if (UnityEngine.InputSystem.Keyboard.current.iKey.wasPressedThisFrame) ButtonEvent?.Invoke(GamePadButton.North_Press);
-        if (UnityEngine.InputSystem.Keyboard.current.kKey.wasPressedThisFrame) ButtonEvent?.Invoke(GamePadButton.South_Press);
-        if (UnityEngine.InputSystem.Keyboard.current.lKey.wasPressedThisFrame) ButtonEvent?.Invoke(GamePadButton.East_Press);
-        if (UnityEngine.InputSystem.Keyboard.current.jKey.wasPressedThisFrame) ButtonEvent?.Invoke(GamePadButton.West_Press);
-        if (UnityEngine.InputSystem.Keyboard.current.gKey.wasPressedThisFrame) ButtonEvent?.Invoke(GamePadButton.Select_Press);
-        if (UnityEngine.InputSystem.Keyboard.current.hKey.wasPressedThisFrame) ButtonEvent?.Invoke(GamePadButton.Start_Press);
-        if (UnityEngine.InputSystem.Keyboard.current.rKey.wasPressedThisFrame) ButtonEvent?.Invoke(GamePadButton.L1_Press);
-        if (UnityEngine.InputSystem.Keyboard.current.uKey.wasPressedThisFrame) ButtonEvent?.Invoke(GamePadButton.R1_Press);
+        if (UnityEngine.InputSystem.Keyboard.current.spaceKey.wasPressedThisFrame) _buttonEvent?.Invoke(GamePadButton.R3_Press);
+        if (UnityEngine.InputSystem.Keyboard.current.aKey.wasPressedThisFrame) _buttonEvent?.Invoke(GamePadButton.Left_Press);
+        if (UnityEngine.InputSystem.Keyboard.current.sKey.wasPressedThisFrame) _buttonEvent?.Invoke(GamePadButton.Down_Press);
+        if (UnityEngine.InputSystem.Keyboard.current.dKey.wasPressedThisFrame) _buttonEvent?.Invoke(GamePadButton.Right_Press);
+        if (UnityEngine.InputSystem.Keyboard.current.wKey.wasPressedThisFrame) _buttonEvent?.Invoke(GamePadButton.Up_Press);
+        if (UnityEngine.InputSystem.Keyboard.current.iKey.wasPressedThisFrame) _buttonEvent?.Invoke(GamePadButton.North_Press);
+        if (UnityEngine.InputSystem.Keyboard.current.kKey.wasPressedThisFrame) _buttonEvent?.Invoke(GamePadButton.South_Press);
+        if (UnityEngine.InputSystem.Keyboard.current.lKey.wasPressedThisFrame) _buttonEvent?.Invoke(GamePadButton.East_Press);
+        if (UnityEngine.InputSystem.Keyboard.current.jKey.wasPressedThisFrame) _buttonEvent?.Invoke(GamePadButton.West_Press);
+        if (UnityEngine.InputSystem.Keyboard.current.gKey.wasPressedThisFrame) _buttonEvent?.Invoke(GamePadButton.Select_Press);
+        if (UnityEngine.InputSystem.Keyboard.current.hKey.wasPressedThisFrame) _buttonEvent?.Invoke(GamePadButton.Start_Press);
+        if (UnityEngine.InputSystem.Keyboard.current.rKey.wasPressedThisFrame) _buttonEvent?.Invoke(GamePadButton.L1_Press);
+        if (UnityEngine.InputSystem.Keyboard.current.uKey.wasPressedThisFrame) _buttonEvent?.Invoke(GamePadButton.R1_Press);
     }
 
     ///nintendo switch R sticks are weird
@@ -142,7 +174,7 @@ public static class InputKey
     private static void RStickAltReadLoop()
     {
         if (!NewRStickAltThisFrame) return;
-        StickEvent?.Invoke(GamePadButton.RStick, RStickAlt);
+        _stickEvent?.Invoke(GamePadButton.RStick, RStickAlt);
         NewRStickAltThisFrame = false;
     }
 

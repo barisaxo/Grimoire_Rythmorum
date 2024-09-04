@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine;
 using MusicTheory.Rhythms;
 
-namespace Batterie
+namespace Rhythm
 {
     public class Synchronizer
     {

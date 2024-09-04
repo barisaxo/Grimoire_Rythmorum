@@ -1,14 +1,20 @@
-﻿namespace MusicTheory.Triads
+﻿using System;
+
+namespace MusicTheory.Triads
 {
-    [System.Serializable]
-    public abstract class Triad : IMusicalElement
+    public interface ITriad : IMusicalElement
     {
-        public Triad(TriadEnum @enum) { Enum = @enum; }
-        public readonly TriadEnum Enum;
-        public int Id => Enum.Id;
-        public string Name => Enum.Name;
-        public string Description => Enum.Description;
+        TriadEnum Enum { get; }
+        int IMusicalElement.Id => Enum.Id;
+        int IMusicalElement.SN => Enum.SN;
+        string IMusicalElement.Name => Enum.Name;
+        string Description => Enum.Description;
     }
+
+    [Serializable] public readonly struct Major : ITriad { public readonly TriadEnum Enum => TriadEnum.Major; }
+    [Serializable] public readonly struct Minor : ITriad { public readonly TriadEnum Enum => TriadEnum.Minor; }
+    [Serializable] public readonly struct Augmented : ITriad { public readonly TriadEnum Enum => TriadEnum.Augmented; }
+    [Serializable] public readonly struct Diminished : ITriad { public readonly TriadEnum Enum => TriadEnum.Diminished; }
 
     public class TriadEnum : Enumeration
     {
@@ -24,28 +30,19 @@
         //public static TriadEnum Secundal = new(3, "<size=60%><font-weight=\"100\"><voffset=0.5em>2</voffset></font-weight><size=100%>", nameof(Secundal)) { };
         //public static TriadEnum Quartal = new(3, "<size=60%><font-weight=\"100\"><voffset=0.5em>4</voffset></font-weight><size=100%>", nameof(Quartal)) { };
 
-        public static implicit operator Triad(TriadEnum e) => e switch
-        {
-            _ when e == TriadEnum.Major => new Major(),
-            _ when e == TriadEnum.Minor => new Minor(),
-            _ when e == TriadEnum.Augmented => new Augmented(),
-            _ when e == TriadEnum.Diminished => new Diminished(),
-            _ => throw new System.ArgumentOutOfRangeException(e.ToString())
-        };
-    }
 
-    public class Major : Triad { public Major() : base(TriadEnum.Major) { } }
-    public class Minor : Triad { public Minor() : base(TriadEnum.Minor) { } }
-    public class Augmented : Triad { public Augmented() : base(TriadEnum.Augmented) { } }
-    public class Diminished : Triad { public Diminished() : base(TriadEnum.Diminished) { } }
+    }
     //public class Secundal : Triad { public Secundal() : base(TriadEnum.Secundal) { } }
     //public class Quartal : Triad { public Quartal() : base(TriadEnum.Quartal) { } }
+}
 
+namespace MusicTheory.Triads.Arithmetic
+{
     public static class TriadChordTones
     {
-        public static Intervals.Interval[] ChordTonesAsIntervals(this Triad triad)
+        public static Intervals.IInterval[] ChordTonesAsIntervals(this ITriad triad)
         {
-            Intervals.Interval[] temp = new Intervals.Interval[2];
+            Intervals.IInterval[] temp = new Intervals.IInterval[2];
 
             temp[0] = triad switch
             {
@@ -63,5 +60,31 @@
             };
             return temp;
         }
+
+        public static ITriad GetTriad(this TriadEnum e) => e switch
+        {
+            _ when e == TriadEnum.Major => new Major(),
+            _ when e == TriadEnum.Minor => new Minor(),
+            _ when e == TriadEnum.Augmented => new Augmented(),
+            _ when e == TriadEnum.Diminished => new Diminished(),
+            _ => throw new System.ArgumentOutOfRangeException(e.ToString())
+        };
+
+        // public static ITriad GetTriad(this MusicTheory.RomanNumerals.Diatonic.IRomanNumeral rn)
+        // {
+        //     return rn switch
+        //     {
+        //         MusicTheory.RomanNumerals.Diatonic.I or
+        //         MusicTheory.RomanNumerals.Diatonic.IV or
+        //         MusicTheory.RomanNumerals.Diatonic.V => new Major(),
+
+        //         MusicTheory.RomanNumerals.Diatonic.II or
+        //         MusicTheory.RomanNumerals.Diatonic.III or
+        //         MusicTheory.RomanNumerals.Diatonic.VI => new Minor(),
+
+        //         MusicTheory.RomanNumerals.Diatonic.VII => new Diminished(),
+        //         _ => throw new System.Exception(rn.Name),
+        //     };
+        // }
     }
 }

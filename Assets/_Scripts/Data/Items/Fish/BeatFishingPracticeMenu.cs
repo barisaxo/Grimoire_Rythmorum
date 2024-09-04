@@ -32,7 +32,7 @@ namespace Menus
 
                 return
                     "Practice " +
-                    Enumeration.FindId<BeatFishingPracticeEnum>(Selection.Item.ID - 1).Name +
+                    Enumeration.FindId<BeatFishingPracticeEnum>(Selection.Item.Id - 1).Name +
                     " Beat Fishing to unlock";
             }
         }
@@ -83,7 +83,7 @@ namespace Menus
 
             return Data.GetLevel(
                         BeatFishingPracticeEnum.ToItem(
-                            Enumeration.FindId<BeatFishingPracticeEnum>(Selection.Item.ID - 1)))
+                            Enumeration.FindId<BeatFishingPracticeEnum>(Selection.Item.Id - 1)))
                    > 0;
         }
     }

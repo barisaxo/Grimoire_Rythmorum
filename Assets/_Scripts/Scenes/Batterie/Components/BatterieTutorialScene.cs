@@ -2,8 +2,9 @@ using System;
 using UnityEngine;
 using Batterie;
 using MusicTheory.Rhythms;
+using Rhythm;
 
-public class BatterieTutorialScene
+public class BatterieTutorialScene : IScene
 {
     public BatterieTutorialScene(Action tick, RhythmSpecs specs, Measure[] measures)
     {
@@ -13,7 +14,7 @@ public class BatterieTutorialScene
         Measures = measures;
     }
 
-    public void Initialize()
+    void IScene.SetUp()
     {
         BatterieFeedback = new();
         Pack.Initialize(HandleHit, BatterieFeedback, BatterieTutorialSceneTick, Measures);
@@ -22,10 +23,12 @@ public class BatterieTutorialScene
         CountOffFeedBack.UpdateLoop();
     }
 
-    public void SelfDestruct()
+    void IScene.Destroy()
     {
         Background.SelfDestruct();
     }
+
+    public IHud Hud { get; } = new NoHud();
 
     Measure[] Measures;
     public Action BatterieTutorialSceneTick;
@@ -42,7 +45,7 @@ public class BatterieTutorialScene
         .SetCanvasSortingOrder(0)
         .SetImageColor(new Color(0, 0, 0, .25f));
 
-    private void HandleHit(Batterie.Hit hit)
+    private void HandleHit(Rhythm.Hit hit)
     {
         switch (hit)
         {

@@ -1,7 +1,7 @@
 
 using System.Collections.Generic;
 using UnityEngine;
-using MusicTheory.Keys;
+using MusicTheory.Notes;
 
 [System.Serializable]
 public class NotePuzzle : IPuzzle
@@ -16,13 +16,13 @@ public class NotePuzzle : IPuzzle
     public bool AllowPlayQuestion => true;
 
     public IMusicalElement Gamut { get; private set; }
-    public Key Key => Gamut is Key note ? note : throw new System.ArgumentNullException();
+    public INote Note => Gamut is INote note ? note : throw new System.ArgumentNullException();
 
     private readonly KeyboardNoteName[] _notes;
     public KeyboardNoteName[] Notes => _notes;
 
     public string Desc => "Find the <b><i>note";
-    public string puzzleType => "note";
+    public string puzzleGamut => "Note";
 
     private readonly string _question;
     public string Question => _question;
@@ -34,14 +34,14 @@ public class NotePuzzle : IPuzzle
     public NotePuzzle()
     {
         // Gamut = (Key)Enumeration.All<KeyEnum>()[Random.Range(0, Enumeration.Length<KeyEnum>())];
-        Gamut = WeightedRandomKey();
+        Gamut = WeightedRandomNote();
         _notes = new KeyboardNoteName[NumOfNotes];
-        Notes[0] = Key.GetKeyboardNoteName();
+        Notes[0] = Note.GetKeyboardNoteName();
 
-        _question = Key.Name;
+        _question = Note.Name;
     }
 
-    private Key WeightedRandomKey()
+    private INote WeightedRandomNote()
     {
         int solved = Datum.Manager.Io.Puzzles.GetLevel(this);
 
@@ -49,7 +49,7 @@ public class NotePuzzle : IPuzzle
         if (solved > 4) ints.Add(2);
         if (solved > 8) ints.Add(3);
 
-        List<Key> KeyList;
+        List<INote> KeyList;
 
         switch (ints[Random.Range(0, ints.Count)])
         {

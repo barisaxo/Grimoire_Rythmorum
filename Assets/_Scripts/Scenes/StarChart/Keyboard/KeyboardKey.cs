@@ -1,5 +1,5 @@
 using UnityEngine;
-using MusicTheory.Keys;
+using MusicTheory.Notes;
 
 public enum KeyColor { White, Black }
 public class KeyboardKey
@@ -7,22 +7,22 @@ public class KeyboardKey
     public Card Card;
     public GameObject Go;
     public readonly KeyboardNoteName KeyboardNoteName;
-    public readonly Key Key;
+    public readonly INote Note;
     public readonly SpriteRenderer SR;
     public readonly KeyColor KeyColor;
 
     public static Color KeyboardBlack = new(0, 0, 0, 1.6f);
     public static Color KeyboardWhite = new(1, 1, 1, 1.6f);
 
-    public KeyboardKey(KeyboardNoteName key, KeyColor c, Vector3 loc, Transform parent)
+    public KeyboardKey(KeyboardNoteName note, KeyColor c, Vector3 loc, Transform parent)
     {
-        Go = new GameObject(key.ToString() + " " + nameof(Key));
+        Go = new GameObject(note.ToString() + " " + nameof(Note));
         Go.transform.SetParent(parent);
         Go.transform.position = loc;
         Go.layer = 5;
         KeyColor = c;
-        KeyboardNoteName = key;
-        Key = key.NoteNameToKey();
+        KeyboardNoteName = note;
+        Note = note.KeyboardKeyToNote();
         SR = Go.AddComponent<SpriteRenderer>();
         SR.sprite = Assets.White;
         SR.color = KeyColor == KeyColor.White ? KeyboardWhite : KeyboardBlack;

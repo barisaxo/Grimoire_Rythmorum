@@ -36,7 +36,7 @@ public class LatencyCalibration_State : State
 
     float timer;
     // float the1;
-    int count = -1;
+    // int count = -1;
     readonly float interval = .7f;
     readonly List<float> lags = new();
 

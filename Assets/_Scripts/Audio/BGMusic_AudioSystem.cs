@@ -34,6 +34,14 @@ public sealed class BGMusic_AudioSystem : AudioSystem
             };
     }
 
+    public AudioClip GetClip => AudioSources[0].clip;
+
+    public void SetClip(AudioClip clip)
+    {
+        foreach (var a in AudioSources)
+            a.clip = clip;
+    }
+
     public void Pause()
     {
         foreach (var a in AudioSources) a.Pause();

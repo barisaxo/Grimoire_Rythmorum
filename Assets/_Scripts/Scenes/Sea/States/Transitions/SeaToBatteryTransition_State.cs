@@ -1,5 +1,6 @@
 using System;
 using MusicTheory.Rhythms;
+
 public class SeaToBatteryTransition_State : State
 {
     public SeaToBatteryTransition_State() { Fade = false; }
@@ -10,6 +11,7 @@ public class SeaToBatteryTransition_State : State
         Audio.BGMusic.Pause();
         Audio.SFX.PlayOneShot(Assets.AlertHalfDim);
         Sea.WorldMapScene.Io.HUD.Disable();
+        Sea.WorldMapScene.Io.Ship.MuscopaPopup.GO.SetActive(false);
         Sea.WorldMapScene.Io.Ship.ConfirmPopup.GO.SetActive(false);
         Sea.WorldMapScene.Io.Ship.AttackPopup.GO.SetActive(false);
         Sea.WorldMapScene.Io.MiniMap.Card.GO.SetActive(false);
@@ -23,7 +25,7 @@ public class SeaToBatteryTransition_State : State
 
     protected override void EngageState()
     {
-        Sea.WorldMapScene.Io.Board.Swells.DisableSwells();
+        // Sea.WorldMapScene.Io.Board.Swells.DisableSwells();
         DataManager.Standings.AdjustLevel(Sea.WorldMapScene.Io.NearestNPC.RegionalMode, -1);
 
         var _RhythmSpecs = new RhythmSpecs()
@@ -48,6 +50,43 @@ public class SeaToBatteryTransition_State : State
         };
 
         SetState(new BatterieAndCadence_State(_RhythmSpecs) { Fade = true });
+    }
+}
+
+public class SeaToMuscopaTransition_State : State
+{
+    public SeaToMuscopaTransition_State(State subsequentState)
+    {
+        Fade = false;
+        SubsequentState = subsequentState;
+    }
+
+    readonly State SubsequentState;
+
+    protected override void PrepareState(Action callback)
+    {
+        Audio.Ambience.Pause();
+        Audio.BGMusic.Pause();
+        Audio.SFX.PlayOneShot(Assets.AlertHalfDim);
+        Sea.WorldMapScene.Io.HUD.Disable();
+        Sea.WorldMapScene.Io.Ship.MuscopaPopup.GO.SetActive(false);
+        Sea.WorldMapScene.Io.Ship.ConfirmPopup.GO.SetActive(false);
+        Sea.WorldMapScene.Io.Ship.AttackPopup.GO.SetActive(false);
+        Sea.WorldMapScene.Io.MiniMap.Card.GO.SetActive(false);
+
+        // Sea.WorldMapScene.Io.Ship.SeaPos = Sea.WorldMapScene.Io.Ship.GO.transform.position;
+        // Sea.WorldMapScene.Io.Ship.SeaRot = Sea.WorldMapScene.Io.Ship.GO.transform.rotation;
+        // Sea.WorldMapScene.Io.NPCShips.Remove(Sea.WorldMapScene.Io.NearestNPC);
+
+        base.PrepareState(callback);
+    }
+
+    protected override void EngageState()
+    {
+        // Sea.WorldMapScene.Io.Board.Swells.DisableSwells();
+        // DataManager.Standings.AdjustLevel(Sea.WorldMapScene.Io.NearestNPC.RegionalMode, -1);
+
+        SetState(new NewMuscopaState(SubsequentState, Sea.WorldMapScene.Io.NearestNPC.RegionalMode, false) { Fade = true });
     }
 }
 // public class SeaToPirateTransition_State : State

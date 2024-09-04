@@ -6,7 +6,7 @@ namespace MusicTheory
     /// <summary>
     /// Music terms and conversions thereof.
     /// </summary>
-    public static class Musica
+    public static class MusicaSystems
     {
         public static int GetTempo(this Genre genre) => genre switch
         {
@@ -240,6 +240,7 @@ namespace MusicTheory
 
         public static KeyOf RootNote(this DiatonicRomanNumeral diatonicChord, KeyOf key) =>
             RootNote(DiatonicToChromaticRoman(diatonicChord), key);
+
         public static KeyOf RootNote(this ChromaticRomanNumeral romanNumeral, KeyOf key)
         {
             return romanNumeral switch
@@ -301,6 +302,7 @@ namespace MusicTheory
 
         public static DiatonicFunction ToDiatonicFunction(this DiatonicRomanNumeral drn) =>
             DiatonicRomanToDiatonicFunction(drn);
+
         public static DiatonicFunction DiatonicRomanToDiatonicFunction(DiatonicRomanNumeral drn) => drn switch
         {
             DiatonicRomanNumeral.II => DiatonicFunction.LateralPredominant,
@@ -445,6 +447,53 @@ namespace MusicTheory
         public static int Count(this RegionalMode _) => Enum.GetNames(typeof(RegionalMode)).Length;
         public static RegionalMode RandomMode(this RegionalMode _) => (RegionalMode)UnityEngine.Random.Range(0, RegionalMode.Locrian.Count());
         public static RegionalMode RandomMode() => (RegionalMode)UnityEngine.Random.Range(0, RegionalMode.Locrian.Count());
+
+        public static RegionalMode RandomModeByDifficulty(this Musica.CadenceDifficulty dif)
+        {
+            return dif switch
+            {
+                Musica.CadenceDifficulty.I_II_V => UnityEngine.Random.Range(0, 3) switch
+                {
+                    1 => RegionalMode.Dorian,
+                    2 => RegionalMode.MixoLydian,
+                    _ => RegionalMode.Ionian,
+                },
+                Musica.CadenceDifficulty.I_IV_V => UnityEngine.Random.Range(0, 3) switch
+                {
+                    1 => RegionalMode.Lydian,
+                    2 => RegionalMode.MixoLydian,
+                    _ => RegionalMode.Ionian,
+                },
+
+                Musica.CadenceDifficulty.I_VI_II_V => UnityEngine.Random.Range(0, 3) switch
+                {
+                    1 => RegionalMode.Dorian,
+                    2 => RegionalMode.MixoLydian,
+                    _ => UnityEngine.Random.value < .5f ? RegionalMode.Ionian : RegionalMode.Aeolian,
+                },
+
+                Musica.CadenceDifficulty.III_VI_II_V => UnityEngine.Random.Range(0, 3) switch
+                {
+                    1 => RegionalMode.Dorian,
+                    2 => RegionalMode.MixoLydian,
+                    _ => UnityEngine.Random.value < .5f ? RegionalMode.Phrygian : RegionalMode.Aeolian,
+                },
+
+                Musica.CadenceDifficulty.ALL => UnityEngine.Random.Range(0, 3) switch
+                {
+                    1 => UnityEngine.Random.value < .5f ? RegionalMode.Dorian : RegionalMode.Lydian,
+                    2 => UnityEngine.Random.value < .5f ? RegionalMode.MixoLydian : RegionalMode.Locrian,
+                    _ => UnityEngine.Random.Range(0, 3) switch
+                    {
+                        1 => RegionalMode.Phrygian,
+                        2 => RegionalMode.Aeolian,
+                        _ => RegionalMode.Ionian,
+                    }
+                },
+                _ => throw new System.Exception(dif.ToString())
+            };
+        }
+
 
         public static int Count(this Genre genre) => Enum.GetNames(typeof(Genre)).Length;
 

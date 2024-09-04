@@ -1,57 +1,55 @@
 using System;
 using UnityEngine;
-using System.Collections;
 using System.Collections.Generic;
-using Audio;
 
 public class BootStrap_State : State
 {
     private BootStrap_State() { }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.AfterSceneLoad)]
-    private static void AutoInitialize() =>
-        new BootStrap_State().SetState(new BootStrap_State() { Fade = true });
-
-
-    // [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSplashScreen)]
-    // private static void SplashSound()
-    // {
-
-    // }
-
+    private static void AutoInitialize()
+    {
+        var bs = new BootStrap_State();
+        bs.SetState(bs);
+    }
 
     protected override void PrepareState(Action callback)
     {
-        // Application.targetFrameRate = 30;
-        // QualitySettings.vSyncCount = 1;
-        // _ = new FPSDisplay();
+
+#if UNITY_EDITOR
+        Application.targetFrameRate = 30;
+#endif
+
         _ = Cam.Io;
-        AudioSettings.Reset(AudioSettings.GetConfiguration());
-        AudioManager.Io.SFX.VolumeLevelSetting = .5f;
-        AudioManager.Io.SFX.PlayOneShot(Assets.TuneUp);
+        // AudioSettings.Reset(AudioSettings.GetConfiguration());
         callback();
     }
 
     protected override void EngageState()
     {
+
+        int x = 10;
+
+        for (int i = 0; i < 200; i++)
+        {
+            x *= 2;
+            Debug.Log(x);
+        }
         // _ = Fretboard.Io;
         // _ = Ukulele.Io;
         // SetState(new UkuleleState());
+        // SetState(new MusicTheoryTest_State());
+        // SetState(new Muscopa.NewMuscopaState(new MenuState(new Menus.MainMenu(Datum.Manager.Io, Audio)) { Fade = true }, true));
 
-        FadeOutSFX().StartCoroutine();
-        SetState(new MenuState(new Menus.MainMenu(Datum.Manager.Io, Audio)));
+#if UNITY_EDITOR
+        SetState(new MenuState(new Menus.MainMenu(Datum.Manager.Io, Audio)) { Fade = true });
+#else
+                        SetState(new BlueToothWarningState());
+#endif
+
     }
 
-    IEnumerator FadeOutSFX()
-    {
-        while (AudioManager.Io.SFX.VolumeLevelSetting > .01f)
-        {
-            yield return new WaitForEndOfFrame();
-            AudioManager.Io.SFX.VolumeLevelSetting -= Time.deltaTime * .1f;
-        }
-        AudioManager.Io.SFX.ImmediateStop();
-        AudioManager.Io.SFX.VolumeLevelSetting = DataManager.Volume.GetLevel(new Datum.SoundFX());
-    }
+
 }
 
 public class ThrowState : State

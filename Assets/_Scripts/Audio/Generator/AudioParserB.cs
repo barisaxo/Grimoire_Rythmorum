@@ -1,7 +1,7 @@
 using MusicTheory;
 using UnityEngine;
 using System.Collections;
-using MusicTheory.Keys;
+using MusicTheory.Notes;
 using Audio;
 
 public class AudioParserB

@@ -1,68 +1,117 @@
 ﻿using MusicTheory.Scales;
+using System;
 
 namespace MusicTheory.Modes
 {
     public enum ModeDegree { Prime, Second, Third, Fourth, Fifth, Sixth, Seventh }
 
-    [System.Serializable]
-    public abstract class Mode : IMusicalElement
+    public interface IMode : IMusicalElement
     {
-        public Mode(ScaleEnum parentScale, ModeDegreeEnum mode, string name) { ParentScale = parentScale; Enum = mode; Name = name; }
-        public string Name { get; }
-        public readonly ScaleEnum ParentScale;
-        public readonly ModeDegreeEnum Enum;
-        public int Id => Enum.Id;
+        ModeEnum Enum { get; }
+        int IMusicalElement.Id => Enum.Id;
+        int IMusicalElement.SN => Enum.SN;
+        string IMusicalElement.Name => Enum.Name;
     }
 
-    public class Ionian : Mode { public Ionian() : base(ScaleEnum.Major, ModeDegreeEnum.Prime, nameof(Ionian)) { } }
-    public class Dorian : Mode { public Dorian() : base(ScaleEnum.Major, ModeDegreeEnum.Second, nameof(Dorian)) { } }
-    public class Phrygian : Mode { public Phrygian() : base(ScaleEnum.Major, ModeDegreeEnum.Third, nameof(Phrygian)) { } }
-    public class Lydian : Mode { public Lydian() : base(ScaleEnum.Major, ModeDegreeEnum.Fourth, nameof(Lydian)) { } }
-    public class MixoLydian : Mode { public MixoLydian() : base(ScaleEnum.Major, ModeDegreeEnum.Fifth, nameof(MixoLydian)) { } }
-    public class Aeolian : Mode { public Aeolian() : base(ScaleEnum.Major, ModeDegreeEnum.Sixth, nameof(Aeolian)) { } }
-    public class Locrian : Mode { public Locrian() : base(ScaleEnum.Major, ModeDegreeEnum.Seventh, nameof(Locrian)) { } }
+    [Serializable] public readonly struct Ionian : IMode { public readonly ModeEnum Enum => ModeEnum.Ionian; }
+    [Serializable] public readonly struct Dorian : IMode { public readonly ModeEnum Enum => ModeEnum.Dorian; }
+    [Serializable] public readonly struct Phrygian : IMode { public readonly ModeEnum Enum => ModeEnum.Phrygian; }
+    [Serializable] public readonly struct Lydian : IMode { public readonly ModeEnum Enum => ModeEnum.Lydian; }
+    [Serializable] public readonly struct MixoLydian : IMode { public readonly ModeEnum Enum => ModeEnum.MixoLydian; }
+    [Serializable] public readonly struct Aeolian : IMode { public readonly ModeEnum Enum => ModeEnum.Aeolian; }
+    [Serializable] public readonly struct Locrian : IMode { public readonly ModeEnum Enum => ModeEnum.Locrian; }
 
-    public class HarmonicI : Mode { public HarmonicI() : base(ScaleEnum.HarmonicMinor, ModeDegreeEnum.Prime, nameof(HarmonicI)) { } }
-    public class HarmonicII : Mode { public HarmonicII() : base(ScaleEnum.HarmonicMinor, ModeDegreeEnum.Second, nameof(HarmonicII)) { } }
-    public class HarmonicIII : Mode { public HarmonicIII() : base(ScaleEnum.HarmonicMinor, ModeDegreeEnum.Third, nameof(HarmonicIII)) { } }
-    public class HarmonicIV : Mode { public HarmonicIV() : base(ScaleEnum.HarmonicMinor, ModeDegreeEnum.Fourth, nameof(HarmonicIV)) { } }
-    public class HarmonicV : Mode { public HarmonicV() : base(ScaleEnum.HarmonicMinor, ModeDegreeEnum.Fifth, nameof(HarmonicV)) { } }
-    public class HarmonicVI : Mode { public HarmonicVI() : base(ScaleEnum.HarmonicMinor, ModeDegreeEnum.Sixth, nameof(HarmonicVI)) { } }
-    public class HarmonicVII : Mode { public HarmonicVII() : base(ScaleEnum.HarmonicMinor, ModeDegreeEnum.Seventh, nameof(HarmonicVII)) { } }
+    [Serializable] public readonly struct HarmonicI : IMode { public readonly ModeEnum Enum => ModeEnum.HarmonicI; }
+    [Serializable] public readonly struct HarmonicII : IMode { public readonly ModeEnum Enum => ModeEnum.HarmonicII; }
+    [Serializable] public readonly struct HarmonicIII : IMode { public readonly ModeEnum Enum => ModeEnum.HarmonicIII; }
+    [Serializable] public readonly struct HarmonicIV : IMode { public readonly ModeEnum Enum => ModeEnum.HarmonicIV; }
+    [Serializable] public readonly struct HarmonicV : IMode { public readonly ModeEnum Enum => ModeEnum.HarmonicV; }
+    [Serializable] public readonly struct HarmonicVI : IMode { public readonly ModeEnum Enum => ModeEnum.HarmonicVI; }
+    [Serializable] public readonly struct HarmonicVII : IMode { public readonly ModeEnum Enum => ModeEnum.HarmonicVII; }
 
-    public class JazzI : Mode { public JazzI() : base(ScaleEnum.JazzMinor, ModeDegreeEnum.Prime, nameof(JazzI)) { } }
-    public class JazzII : Mode { public JazzII() : base(ScaleEnum.JazzMinor, ModeDegreeEnum.Second, nameof(JazzII)) { } }
-    public class JazzIII : Mode { public JazzIII() : base(ScaleEnum.JazzMinor, ModeDegreeEnum.Third, nameof(JazzIII)) { } }
-    public class JazzIV : Mode { public JazzIV() : base(ScaleEnum.JazzMinor, ModeDegreeEnum.Fourth, nameof(JazzIV)) { } }
-    public class JazzV : Mode { public JazzV() : base(ScaleEnum.JazzMinor, ModeDegreeEnum.Fifth, nameof(JazzV)) { } }
-    public class JazzVI : Mode { public JazzVI() : base(ScaleEnum.JazzMinor, ModeDegreeEnum.Sixth, nameof(JazzVI)) { } }
-    public class JazzVII : Mode { public JazzVII() : base(ScaleEnum.JazzMinor, ModeDegreeEnum.Seventh, nameof(JazzVII)) { } }
+    [Serializable] public readonly struct JazzI : IMode { public readonly ModeEnum Enum => ModeEnum.JazzI; }
+    [Serializable] public readonly struct JazzII : IMode { public readonly ModeEnum Enum => ModeEnum.JazzII; }
+    [Serializable] public readonly struct JazzIII : IMode { public readonly ModeEnum Enum => ModeEnum.JazzIII; }
+    [Serializable] public readonly struct JazzIV : IMode { public readonly ModeEnum Enum => ModeEnum.JazzIV; }
+    [Serializable] public readonly struct JazzV : IMode { public readonly ModeEnum Enum => ModeEnum.JazzV; }
+    [Serializable] public readonly struct JazzVI : IMode { public readonly ModeEnum Enum => ModeEnum.JazzVI; }
+    [Serializable] public readonly struct JazzVII : IMode { public readonly ModeEnum Enum => ModeEnum.JazzVII; }
 
-    public class Diminished : Mode { public Diminished() : base(ScaleEnum.Diminished, ModeDegreeEnum.Prime, nameof(Diminished)) { } }
-    public class Octatonic : Mode { public Octatonic() : base(ScaleEnum.Diminished, ModeDegreeEnum.Second, nameof(Octatonic)) { } }
+    [Serializable] public readonly struct Diminished : IMode { public readonly ModeEnum Enum => ModeEnum.Diminished; }
+    [Serializable] public readonly struct Octatonic : IMode { public readonly ModeEnum Enum => ModeEnum.Octatonic; }
 
-    public class PentatonicMajor : Mode { public PentatonicMajor() : base(ScaleEnum.Pentatonic, ModeDegreeEnum.Prime, nameof(PentatonicMajor)) { } }
-    public class PentatonicII : Mode { public PentatonicII() : base(ScaleEnum.Pentatonic, ModeDegreeEnum.Second, nameof(PentatonicII)) { } }
-    public class PentatonicIII : Mode { public PentatonicIII() : base(ScaleEnum.Pentatonic, ModeDegreeEnum.Third, nameof(PentatonicIII)) { } }
-    public class PentatonicIV : Mode { public PentatonicIV() : base(ScaleEnum.Pentatonic, ModeDegreeEnum.Fourth, nameof(PentatonicIV)) { } }
-    public class PentatonicMinor : Mode { public PentatonicMinor() : base(ScaleEnum.Pentatonic, ModeDegreeEnum.Fifth, nameof(PentatonicMinor)) { } }
+    [Serializable] public readonly struct PentatonicMajor : IMode { public readonly ModeEnum Enum => ModeEnum.PentatonicMajor; }
+    [Serializable] public readonly struct PentatonicII : IMode { public readonly ModeEnum Enum => ModeEnum.PentatonicII; }
+    [Serializable] public readonly struct PentatonicIII : IMode { public readonly ModeEnum Enum => ModeEnum.PentatonicIII; }
+    [Serializable] public readonly struct PentatonicIV : IMode { public readonly ModeEnum Enum => ModeEnum.PentatonicIV; }
+    [Serializable] public readonly struct PentatonicMinor : IMode { public readonly ModeEnum Enum => ModeEnum.PentatonicMinor; }
 
-    public class Diminished6thI : Mode { public Diminished6thI() : base(ScaleEnum.Diminished6th, ModeDegreeEnum.Prime, nameof(Diminished6thI)) { } }
-    public class Diminished6thII : Mode { public Diminished6thII() : base(ScaleEnum.Diminished6th, ModeDegreeEnum.Second, nameof(Diminished6thII)) { } }
+    [Serializable] public readonly struct Diminished6thI : IMode { public readonly ModeEnum Enum => ModeEnum.Diminished6thI; }
+    [Serializable] public readonly struct Diminished6thII : IMode { public readonly ModeEnum Enum => ModeEnum.Diminished6thII; }
 
-    public class Blues : Mode { public Blues() : base(ScaleEnum.Blues, ModeDegreeEnum.Prime, nameof(Blues)) { } }
-    public class MajorBlues : Mode { public MajorBlues() : base(ScaleEnum.Blues, ModeDegreeEnum.Second, nameof(MajorBlues)) { } }
+    [Serializable] public readonly struct Blues : IMode { public readonly ModeEnum Enum => ModeEnum.Blues; }
+    [Serializable] public readonly struct MajorBlues : IMode { public readonly ModeEnum Enum => ModeEnum.MajorBlues; }
 
+    [Serializable] public readonly struct WholeTone : IMode { public readonly ModeEnum Enum => ModeEnum.WholeTone; }
 
-    public class WholeTone : Mode { public WholeTone() : base(ScaleEnum.WholeTone, ModeDegreeEnum.Prime, nameof(WholeTone)) { } }
+    [Serializable] public readonly struct Chromatic : IMode { public readonly ModeEnum Enum => ModeEnum.Chromatic; }
 
-    public class Chromatic : Mode { public Chromatic() : base(ScaleEnum.Chromatic, ModeDegreeEnum.Prime, nameof(Chromatic)) { } }
+    public class ModeEnum : Enumeration
+    {
+        public ModeEnum() : base(0, "") { }
+        public ModeEnum(
+            int sn,
+            int id,
+            string name,
+            ScaleEnum parent,
+            ModeDegreeEnum modeDegree) : base(sn: sn, id: id, name)
+        {
+            ParentScale = parent;
+            ModeDegreeEnum = modeDegree;
+        }
+
+        public readonly ScaleEnum ParentScale;
+        public readonly ModeDegreeEnum ModeDegreeEnum;
+        public static ModeEnum Ionian = new(0, 0, nameof(Ionian), ScaleEnum.Major, ModeDegreeEnum.Prime);
+        public static ModeEnum Dorian = new(1, 1, nameof(Dorian), ScaleEnum.Major, ModeDegreeEnum.Second);
+        public static ModeEnum Phrygian = new(2, 2, nameof(Phrygian), ScaleEnum.Major, ModeDegreeEnum.Third);
+        public static ModeEnum Lydian = new(3, 3, nameof(Lydian), ScaleEnum.Major, ModeDegreeEnum.Fourth);
+        public static ModeEnum MixoLydian = new(4, 4, nameof(MixoLydian), ScaleEnum.Major, ModeDegreeEnum.Fifth);
+        public static ModeEnum Aeolian = new(5, 5, nameof(Aeolian), ScaleEnum.Major, ModeDegreeEnum.Sixth);
+        public static ModeEnum Locrian = new(6, 6, nameof(Locrian), ScaleEnum.Major, ModeDegreeEnum.Seventh);
+        public static ModeEnum HarmonicI = new(7, 0, nameof(HarmonicI), ScaleEnum.HarmonicMinor, ModeDegreeEnum.Prime);
+        public static ModeEnum HarmonicII = new(8, 1, nameof(HarmonicII), ScaleEnum.HarmonicMinor, ModeDegreeEnum.Second);
+        public static ModeEnum HarmonicIII = new(9, 2, nameof(HarmonicIII), ScaleEnum.HarmonicMinor, ModeDegreeEnum.Third);
+        public static ModeEnum HarmonicIV = new(10, 3, nameof(HarmonicIV), ScaleEnum.HarmonicMinor, ModeDegreeEnum.Fourth);
+        public static ModeEnum HarmonicV = new(11, 4, nameof(HarmonicV), ScaleEnum.HarmonicMinor, ModeDegreeEnum.Fifth);
+        public static ModeEnum HarmonicVI = new(12, 5, nameof(HarmonicVI), ScaleEnum.HarmonicMinor, ModeDegreeEnum.Sixth);
+        public static ModeEnum HarmonicVII = new(13, 6, nameof(HarmonicVII), ScaleEnum.HarmonicMinor, ModeDegreeEnum.Seventh);
+        public static ModeEnum JazzI = new(14, 0, nameof(JazzI), ScaleEnum.JazzMinor, ModeDegreeEnum.Prime);
+        public static ModeEnum JazzII = new(15, 1, nameof(JazzII), ScaleEnum.JazzMinor, ModeDegreeEnum.Second);
+        public static ModeEnum JazzIII = new(16, 2, nameof(JazzIII), ScaleEnum.JazzMinor, ModeDegreeEnum.Third);
+        public static ModeEnum JazzIV = new(17, 3, nameof(JazzIV), ScaleEnum.JazzMinor, ModeDegreeEnum.Fourth);
+        public static ModeEnum JazzV = new(18, 4, nameof(JazzV), ScaleEnum.JazzMinor, ModeDegreeEnum.Fifth);
+        public static ModeEnum JazzVI = new(19, 5, nameof(JazzVI), ScaleEnum.JazzMinor, ModeDegreeEnum.Sixth);
+        public static ModeEnum JazzVII = new(20, 6, nameof(JazzVII), ScaleEnum.JazzMinor, ModeDegreeEnum.Seventh);
+        public static ModeEnum Diminished = new(21, 0, nameof(Diminished), ScaleEnum.Diminished, ModeDegreeEnum.Prime);
+        public static ModeEnum Octatonic = new(22, 1, nameof(Octatonic), ScaleEnum.Diminished, ModeDegreeEnum.Second);
+        public static ModeEnum PentatonicMajor = new(23, 0, nameof(PentatonicMajor), ScaleEnum.Pentatonic, ModeDegreeEnum.Prime);
+        public static ModeEnum PentatonicII = new(24, 1, nameof(PentatonicII), ScaleEnum.Pentatonic, ModeDegreeEnum.Second);
+        public static ModeEnum PentatonicIII = new(25, 2, nameof(PentatonicIII), ScaleEnum.Pentatonic, ModeDegreeEnum.Third);
+        public static ModeEnum PentatonicIV = new(26, 3, nameof(PentatonicIV), ScaleEnum.Pentatonic, ModeDegreeEnum.Fourth);
+        public static ModeEnum PentatonicMinor = new(27, 4, nameof(PentatonicMinor), ScaleEnum.Pentatonic, ModeDegreeEnum.Fifth);
+        public static ModeEnum Diminished6thI = new(28, 0, nameof(Diminished6thI), ScaleEnum.Diminished6th, ModeDegreeEnum.Prime);
+        public static ModeEnum Diminished6thII = new(29, 1, nameof(Diminished6thII), ScaleEnum.Diminished6th, ModeDegreeEnum.Second);
+        public static ModeEnum Blues = new(30, 0, nameof(Blues), ScaleEnum.Blues, ModeDegreeEnum.Prime);
+        public static ModeEnum MajorBlues = new(31, 1, nameof(MajorBlues), ScaleEnum.Blues, ModeDegreeEnum.Second);
+        public static ModeEnum WholeTone = new(32, 0, nameof(WholeTone), ScaleEnum.WholeTone, ModeDegreeEnum.Prime);
+        public static ModeEnum Chromatic = new(33, 0, nameof(Chromatic), ScaleEnum.Chromatic, ModeDegreeEnum.Prime);
+    }
 
     public class ModeDegreeEnum : Enumeration
     {
         public ModeDegreeEnum() : base(0, "") { }
-        public ModeDegreeEnum(int id, string name) : base(id, name) { }
-        //public static int Count => ListAll<ModeDegreeEnum>().Count;
+        public ModeDegreeEnum(int snId, string name) : base(snId, name) { }
 
         public static ModeDegreeEnum Prime = new(0, nameof(Prime));
         public static ModeDegreeEnum Second = new(1, nameof(Second));
@@ -71,5 +120,7 @@ namespace MusicTheory.Modes
         public static ModeDegreeEnum Fifth = new(4, nameof(Fifth));
         public static ModeDegreeEnum Sixth = new(5, nameof(Sixth));
         public static ModeDegreeEnum Seventh = new(6, nameof(Seventh));
+
+        public static int Count => Length<ModeDegreeEnum>();
     }
 }

@@ -6,4 +6,5 @@ public interface IMusicalElement
 {
     public string Name { get; }
     public int Id { get; }
+    public int SN { get; }
 }

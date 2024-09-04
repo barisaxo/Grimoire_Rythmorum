@@ -8,16 +8,16 @@ public class Buy_Dialogue : Dialogue
     readonly Dialogue ReturnTo;
     readonly Datum.Standing Standing;
 
-    int StandingMod => Datum.Manager.Io.Standings.GetLevel(Standing);
-    int Gold => Datum.Manager.Io.Inventory.GetLevel(new Datum.Gold());
-    int Mats => Datum.Manager.Io.Inventory.GetLevel(new Datum.Material());
-    int CurHP => Datum.Manager.Io.ActiveShip.GetLevel(new Datum.CurrentHitPoints());
-    int MaxHP => Datum.Manager.Io.ActiveShip.GetLevel(new Datum.MaxHitPoints());
-    float StandingsModifier => 1f + (float)(1f - (float)((float)StandingMod) / 9f);
+    // int StandingMod => Datum.Manager.Io.Standings.GetLevel(Standing);
+    // int Gold => Datum.Manager.Io.Inventory.GetLevel(new Datum.Gold());
+    // int Mats => Datum.Manager.Io.Inventory.GetLevel(new Datum.Material());
+    // int CurHP => Datum.Manager.Io.ActiveShip.GetLevel(new Datum.CurrentHitPoints());
+    // int MaxHP => Datum.Manager.Io.ActiveShip.GetLevel(new Datum.MaxHitPoints());
+    // float StandingsModifier => 1f + (float)(1f - (float)((float)StandingMod) / 9f);
 
-    int smallAmount => (int)(MaxHP * .15f);
-    readonly int matsPer = 3;
-    readonly int goldPer = 25;
+    // int smallAmount => (int)(MaxHP * .15f);
+    // readonly int matsPer = 3;
+    // readonly int goldPer = 25;
 
     public Buy_Dialogue(Dialogue returnTo, Speaker speaker, Datum.Standing standing)
     {

@@ -26,7 +26,7 @@ namespace Menus
             set
             {
                 _selection = value;
-                CurrentSub = SubMenus[_selection.Item.ID];
+                CurrentSub = SubMenus[_selection.Item.Id];
             }
         }
 

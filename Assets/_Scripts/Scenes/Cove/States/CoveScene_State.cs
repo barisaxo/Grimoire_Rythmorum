@@ -219,6 +219,11 @@ public class CoveScene_State : State
             Cove.HUD.North.SetImageColor(Color.white).SetTextString("Rhythm Cells &\nBatterie Practice");
             Cove.HUD.East.SetImageColor(Color.white).SetTextString("About Batterie");
         }
+        else if (NearObject(Cove.Card.transform))
+        {
+            Cove.HUD.North.SetImageColor(Color.white).SetTextString("Muscopa Practice");
+            Cove.HUD.East.SetImageColor(Color.white).SetTextString("About Muscopa");
+        }
     }
 
     protected override void EastPressed()
@@ -370,6 +375,31 @@ public class CoveScene_State : State
 
             case GamePadButton.East_Press:
                 SetState(new DialogStart_State(new Dialog.Cove.AboutBatterie_Dialogue(this)));
+                return;
+        }
+    }
+    void CardInteraction(GamePadButton gpb)
+    {
+        switch (gpb)
+        {
+            case GamePadButton.North_Press:
+
+                // SetState(new Muscopa.NewMuscopaState(new CameraPan_State(
+                //         subsequentState: this,
+                //         pan: Cam.StoredCamRot = Cam.Io.Camera.transform.rotation.eulerAngles,
+                //         strafe: Cam.StoredCamPos = Cam.Io.Camera.transform.position,
+                //         speed: 5), true));
+                SetState(new CoveToMenuTransition_State(
+                    new Menus.MuscopaMenu(
+                        new CameraPan_State(
+                        subsequentState: this,
+                        pan: Cam.StoredCamRot = Cam.Io.Camera.transform.rotation.eulerAngles,
+                        strafe: Cam.StoredCamPos = Cam.Io.Camera.transform.position,
+                        speed: 5))));
+                return;
+
+            case GamePadButton.East_Press:
+                SetState(new DialogStart_State(new MuscopaTutorial_Dialogue(this)));
                 return;
         }
     }
@@ -582,6 +612,7 @@ public class CoveScene_State : State
         else if (NearObject(Cove.Gramo.transform)) GramoInteraction(gpb);
         else if (NearObject(Cove.Bottle.transform)) BottleInteraction(gpb);
         else if (NearObject(Cove.Cannon.transform)) CannonInteraction(gpb);
+        else if (NearObject(Cove.Card.transform)) CardInteraction(gpb);
         else if (NearObject(Cove.Catboat.transform)) CatboatInteraction(gpb);
         else if (NearObject(Cove.Sloop.transform)) SloopInteraction(gpb);
         else if (NearObject(Cove.Cutter.transform)) CutterInteraction(gpb);

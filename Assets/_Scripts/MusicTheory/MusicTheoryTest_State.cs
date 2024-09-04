@@ -1,9 +1,11 @@
 using System;
 using UnityEngine;
-using MusicTheory.Keys;
+using MusicTheory.Notes;
+using MusicTheory.Notes.Arithmetic;
 using MusicTheory.Intervals;
 using MusicTheory.ScaleDegrees;
-using MusicTheory.Arithmetic;
+using MusicTheory.ScaleDegrees.Arithmetic;
+using MusicTheory.Intervals.Arithmetic;
 
 public class MusicTheoryTest_State : State
 {
@@ -15,20 +17,18 @@ public class MusicTheoryTest_State : State
 
     protected override void EngageState()
     {
-        //_ = new MusicTheory.Scales.Major();
-        //TestAllIntervals();
-        //TestScaleDegreeToInterval();
+        _ = new MusicTheory.Scales.Major();
+        TestAllIntervals();
+        TestScaleDegreeToInterval();
     }
 
     private void TestScaleDegreeToInterval()
     {
-        Debug.Log(IntervalEnum.Find((new Perfect(), new Unison())));
+        Debug.Log(IntervalEnum.Find((new MusicTheory.Intervals.Perfect(), new Unison())));
 
-        int numOfScaleDegrees = Enumeration.Length<ScaleDegreeEnum>();
-
-        for (int i = 0; i < numOfScaleDegrees; i++)
+        for (int i = 0; i < ScaleDegreeEnum.Count; i++)
         {
-            ScaleDegree degree = Enumeration.All<ScaleDegreeEnum>()[i];
+            IScaleDegree degree = Enumeration.All<ScaleDegreeEnum>()[i].GetScaleDegree();
             Debug.Log(degree.Enum.Quality.Name + " " + degree.Enum.Degree.Name);
             Debug.Log(degree.AsInterval());
         }
@@ -36,18 +36,18 @@ public class MusicTheoryTest_State : State
 
     private void TestAllIntervals()
     {
-        int numOfKeys = Enumeration.Length<KeyEnum>();
+        int numOfKeys = Enumeration.Length<NoteEnum>();
         int numOfIntervals = Enumeration.Length<IntervalEnum>();
 
         for (int i = 0; i < numOfKeys; i++)
         {
-            Key key = Enumeration.All<KeyEnum>()[i];
+            INote key = Enumeration.All<NoteEnum>()[i].GetNote();
 
             for (int ii = 0; ii < numOfIntervals; ii++)
             {
-                Interval interval = Enumeration.All<IntervalEnum>()[ii];
+                IInterval interval = Enumeration.All<IntervalEnum>()[ii].GetInterval();
 
-                Key newKey = key.GetKeyAbove(interval);
+                INote newKey = key.GetNoteAbove(interval);
 
                 Debug.Log("RESULT: " + key.Name + " +  " + interval.Name + " = " + newKey.Name);
             }

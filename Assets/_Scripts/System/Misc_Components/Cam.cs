@@ -31,6 +31,7 @@ public class Cam
     public static float MainOrthoX => Io.Camera.orthographicSize * Io.Camera.aspect;
     public static float MainOrthoY => Io.Camera.orthographicSize;
 
+
     public static float UIOrthoX => Io.UICamera.orthographicSize * Io.Camera.aspect;
     public static float UIOrthoY => Io.UICamera.orthographicSize;
 

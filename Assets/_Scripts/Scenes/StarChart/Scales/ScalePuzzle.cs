@@ -1,11 +1,10 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using MusicTheory.Arithmetic;
+using MusicTheory.Intervals.Arithmetic;
 using MusicTheory.Scales;
-using MusicTheory.Keys;
+using MusicTheory.Notes.Arithmetic;
+using MusicTheory.Notes;
 using MusicTheory.Steps;
-using MusicTheory.ScaleDegrees;
 
 [System.Serializable]
 public class ScalePuzzle : IPuzzle
@@ -21,13 +20,13 @@ public class ScalePuzzle : IPuzzle
     public bool AllowPlayQuestion => true;
 
     public IMusicalElement Gamut { get; private set; }
-    public Scale Scale => Gamut is Scale scale ? scale : throw new System.ArgumentNullException();
+    public IScale Scale => Gamut is IScale scale ? scale : throw new System.ArgumentNullException();
 
     private readonly KeyboardNoteName[] _notes;
     public KeyboardNoteName[] Notes => _notes;
 
     public string Desc => "Build the <b><i>scale";
-    public string puzzleType => "scale";
+    public string puzzleGamut => "Scale";
 
     private readonly string _question;
     public string Question => _question;
@@ -40,40 +39,40 @@ public class ScalePuzzle : IPuzzle
         _numOfNotes = Scale.ScaleDegrees.Length + 1;
         _notes = new KeyboardNoteName[NumOfNotes];
 
-        KeyboardNoteName Root = ((Key)Enumeration.All<KeyEnum>()[Random.Range(0, Enumeration.Length<KeyEnum>())]).GetKeyboardNoteName();
+        KeyboardNoteName Root = Enumeration.All<NoteEnum>()[Random.Range(0, Enumeration.Length<NoteEnum>())].GetNote().GetKeyboardNoteName();
 
         Notes[0] = Root;
         Notes[^1] = Root + 12;
 
         for (int i = 1; i < Notes.Length - 1; i++)
         {
-            Notes[i] = Root.NoteNameToKey().GetKeyAbove(Scale.ScaleDegrees[i].AsInterval()).GetKeyboardNoteName();
+            Notes[i] = Root.KeyboardKeyToNote().GetNoteAbove(Scale.ScaleDegrees[i].AsInterval()).GetKeyboardNoteName();
             Notes[i] += Notes[i] < Root ? 12 : 0;
             //Debug.Log(Notes[i].ToString());
         }
 
-        _question = Scale.Description.StartCase() + " " + nameof(MusicTheory.Scales.Scale);
+        _question = Scale.Description.StartCase() + " " + puzzleGamut;
     }
 
     private string GetSteps()
     {
         string temp = string.Empty;
-        foreach (Step s in Scale.Steps) temp += s.Name + ' ';
+        foreach (IStep s in Scale.Steps) temp += s.Name + ' ';
         return temp;
     }
 
     private string GetScaleDegrees()
     {
         string temp = string.Empty;
-        foreach (ScaleDegree s in Scale.ScaleDegrees) temp += s.Name + ' ';
+        foreach (MusicTheory.ScaleDegrees.IScaleDegree s in Scale.ScaleDegrees) temp += s.Name + ' ';
         return temp;
     }
 
-    private Scale WeightedRandomScale()
+    private IScale WeightedRandomScale()
     {
         int solved = Datum.Manager.Io.Puzzles.GetLevel(this);
 
-        List<Scale> scaleList = new() { new Major() };
+        List<IScale> scaleList = new() { new Major() };
         if (solved > 10) scaleList.Add(new Chromatic());
         if (solved > 15) scaleList.Add(new Pentatonic());
         if (solved > 25) scaleList.Add(new Blues());

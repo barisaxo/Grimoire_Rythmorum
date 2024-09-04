@@ -229,9 +229,9 @@ namespace Menus
         {
             int i = Selection.Item switch
             {
-                TimberType => (int)(WoodEnum.ToItem(ShipStats.HullStats.Timber.ID + 1).Modifier * ShipStats.HullStats.Hull.Modifier),
-                RiggingType => (int)(ClothEnum.ToItem(ShipStats.RiggingStats.ClothType.ID + 1).Modifier * ShipStats.HullStats.Hull.Modifier),
-                CannonType => (int)(CannonEnum.ToItem(ShipStats.CannonStats.Cannon.ID + 1).Modifier * ShipStats.HullStats.Hull.Modifier),
+                TimberType => (int)(WoodEnum.ToItem(ShipStats.HullStats.Timber.Id + 1).Modifier * ShipStats.HullStats.Hull.Modifier),
+                RiggingType => (int)(ClothEnum.ToItem(ShipStats.RiggingStats.ClothType.Id + 1).Modifier * ShipStats.HullStats.Hull.Modifier),
+                CannonType => (int)(CannonEnum.ToItem(ShipStats.CannonStats.Cannon.Id + 1).Modifier * ShipStats.HullStats.Hull.Modifier),
                 _ => throw new System.Exception(Selection.Item.Name)
             };
 

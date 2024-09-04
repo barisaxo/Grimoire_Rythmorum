@@ -1,6 +1,6 @@
 using System;
 using MusicTheory.Rhythms;
-using Batterie;
+using Rhythm;
 using Datum.BeatFishing;
 using UnityEngine;
 using SheetMusic;
@@ -18,7 +18,7 @@ public class BeatFishingPractice_State : State
     readonly State SubsequentState;
     RhythmSpecs Specs;
     Synchronizer Synchro;
-    BatterieInputAnalyzer Analyzer;
+    RhythmInputAnalyzer Analyzer;
     BatterieFeedback BatterieFeedback;
     MappedBeat[] BeatMap;
     SheetMusic.MusicSheet MusicSheet;
@@ -116,7 +116,7 @@ public class BeatFishingPractice_State : State
     protected override void EngageState()
     {
         Audio.BeatFishing.PlayClip(Resources.Load<AudioClip>("Audio/Drums/Stax_Drums_90_1"));
-        MonoHelper.OnUpdate += Analyzer.BatterieInputAnalyzerTick;
+        MonoHelper.OnUpdate += Analyzer.RhythmInputAnalyzerTick;
         MonoHelper.OnUpdate += ReelingAnimations;
         Synchro.TickEvent += BeatFishingPracticeTick;
         Synchro.KeepTime();
@@ -134,7 +134,7 @@ public class BeatFishingPractice_State : State
         Audio.BeatFishing.FadeAndStop();
 
         Synchro.Stop();
-        MonoHelper.OnUpdate -= Analyzer.BatterieInputAnalyzerTick;
+        MonoHelper.OnUpdate -= Analyzer.RhythmInputAnalyzerTick;
         MonoHelper.OnUpdate -= ReelingAnimations;
         Synchro.TickEvent -= BeatFishingPracticeTick;
         MonoHelper.OnUpdate -= SpaceBar;

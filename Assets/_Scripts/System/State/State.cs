@@ -16,14 +16,15 @@ public abstract class State
     #region STATE SYSTEMS
     // These state systems are organized in order of execution
 
-    public bool Fade;
+    public bool Fade = false;
+    public Int64 frame = 0;
 
     /// <summary>
     /// Called by SetStateDirectly() and InitiateFade().
     /// </summary>
     protected void DisableInput()
     {
-        // Debug.Log(nameof(DisableInput));
+        // Debug.Log(nameof(DisableInput) + " " + GetType().FullName + " @ " + Time.frameCount);
         MonoHelper.OnUpdate -= UpdateStickInput;
         InputKey.ButtonEvent -= GPInput;
         InputKey.StickEvent -= GPStickInput;
@@ -50,14 +51,15 @@ public abstract class State
     /// <summary>
     /// Called by SetStateDirectly() and FadeInToScene(), after PrepareState(). OK to set new states here.
     /// </summary>
-    protected virtual void EngageState() { }
+    protected virtual void EngageState()
+    {
+    }
 
     /// <summary>
     /// Called by SetSceneDirectly() and FadeInToScene().
     /// </summary>
     protected void EnableInput()
     {
-        // Debug.Log(nameof(EnableInput));
         MonoHelper.OnUpdate += UpdateStickInput;
         InputKey.ButtonEvent += GPInput;
         InputKey.StickEvent += GPStickInput;
@@ -66,16 +68,18 @@ public abstract class State
 
     protected void SetState(State newState)
     {
-        if (newState is null) return;
+        if (newState is null) { return; }
 
         if (newState.Fade) FadeToState(newState);
-        else SetStateDirectly(newState);
+        else
+            SetStateDirectly(newState);
     }
 
     private void SetStateDirectly(State newState)
     {
-        if (newState is null) return;
+        if (newState is null) { Debug.Log("STATE IS NULL!!!"); return; }
 
+        // Debug.Log(GetType().FullName + " Disabling & Disengaging, for " + newState.GetType().FullName + " @ " + Time.frameCount);
         DisableInput();
         DisengageState();
 
@@ -90,8 +94,8 @@ public abstract class State
         IEnumerator Wait()
         {
             yield return null;
-            newState.EngageState();
-            newState.EnableInput();
+            newState.EnableInput();//TODO I switched enable & engage because of some bug happening with card drawing.
+            newState.EngageState();//TODO hopefully this switch doesn't break other things =/
         }
     }
 
@@ -225,6 +229,13 @@ public abstract class State
 
     protected virtual void GPInput(GamePadButton gpb)
     {
+        if (Time.frameCount == frame)
+        {
+            // Debug.Log(gpb + " Preventing double press! Time.frameCount: " + Time.frameCount + ", saved frame: " + frame);
+            return;
+        }
+        frame = Time.frameCount;
+
         switch (gpb)
         {
             #region BUTTON PRESSED

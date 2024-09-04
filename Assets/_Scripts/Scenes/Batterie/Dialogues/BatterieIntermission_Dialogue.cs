@@ -17,13 +17,13 @@ public class BatterieIntermission_Dialogue : Dialogue
             Scene.DamageDealt = (int)((float)Scene.DamageDealt + ((float)Scene.DamageDealt * (float)Datum.Manager.Io.Skill.GetBonusRatio(new Datum.CriticalVolley())));
         }
 
-        Scene.BatterieHUD.PlayerCurrent -= damageTaken;
+        ((BatterieHUD)Scene.Hud).PlayerCurrent -= damageTaken;
         Datum.Manager.Io.ActiveShip.AdjustLevel(new Datum.CurrentHitPoints(), -damageTaken);
-        Scene.BatterieHUD.NMECurrent = Scene.NMEHealth.cur -= Scene.DamageDealt;
-        Debug.Log("Spammed: " + Scene.Pack.Spammed +
-            ", Damage taken: " + damageTaken +
-            ", Damage dealt: " + Scene.DamageDealt +
-            ", current Health: " + Datum.Manager.Io.ActiveShip.GetLevel(new Datum.CurrentHitPoints()));
+        ((BatterieHUD)Scene.Hud).NMECurrent = Scene.NMEHealth.cur -= Scene.DamageDealt;
+        // Debug.Log("Spammed: " + Scene.Pack.Spammed +
+        //     ", Damage taken: " + damageTaken +
+        //     ", Damage dealt: " + Scene.DamageDealt +
+        //     ", current Health: " + Datum.Manager.Io.ActiveShip.GetLevel(new Datum.CurrentHitPoints()));
 
     }
     readonly int damageTaken;

@@ -227,7 +227,7 @@ public class StarChartPractice_State : State
         get
         {
             if (Puzzle.NumOfNotes == 1 && PuzzleType == PuzzleType.Theory)
-                return Keyboard.SelectedKeys[0].Key == Puzzle.Notes[0].NoteNameToKey();
+                return Keyboard.SelectedKeys[0].Note.Equals(Puzzle.Notes[0].KeyboardKeyToNote());
 
             bool[] answered = new bool[Puzzle.Notes.Length];
 
@@ -397,7 +397,7 @@ public class StarChartPractice_State : State
 
     private Card _question;
     public Card Question => _question ??= new Card(nameof(Question), null)
-       .SetTextString(PuzzleType == PuzzleType.Aural ? "Listen to the " + Puzzle.puzzleType : Puzzle.Question)
+       .SetTextString(PuzzleType == PuzzleType.Aural ? "Listen to the " + Puzzle.puzzleGamut : Puzzle.Question)
         // .SetTMPPosition(new Vector2(0, Cam.UIOrthoY - 1.75f))
         .SetPositionAll(new Vector2(0, Cam.UIOrthoY - 1.75f))
         .SetFontScale(.65f, .65f)

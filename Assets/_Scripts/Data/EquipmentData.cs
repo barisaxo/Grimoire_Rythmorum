@@ -7,7 +7,7 @@ namespace Datum
     public interface ICannon : IItem
     {
         CannonEnum Enum { get; }
-        int IItem.ID => Enum.Id;
+        int IItem.Id => Enum.Id;
         string IItem.Name => Enum.Name;
         string IItem.Description => Enum.Description;
         float Modifier => Enum.Modifier;
@@ -63,7 +63,7 @@ namespace Datum
     public interface IHull : IItem
     {
         HullEnum Enum { get; }
-        int IItem.ID => Enum.Id;
+        int IItem.Id => Enum.Id;
         string IItem.Name => Enum.Name;
         string IItem.Description => Enum.Description;
         float Modifier => Enum.Modifier;

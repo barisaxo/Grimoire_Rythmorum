@@ -4,6 +4,8 @@ using UnityEngine.Video;
 
 public partial class Assets
 {
+
+
     #region AUDIO
 
     #region SFX
@@ -12,14 +14,26 @@ public partial class Assets
     #endregion SFX
 
 
+
+
+
+
+
+
     #region BGMusic
-    public static AudioClip BGMus1 => Resources.Load<AudioClip>("Audio/BGMusic/Boss a loop");
+    public static AudioClip BGMus1 => Resources.Load<AudioClip>("Audio/BGMusic/BossA");
     public static AudioClip BGMus2 => Resources.Load<AudioClip>("Audio/BGMusic/machete");
     public static AudioClip BGMus3 => Resources.Load<AudioClip>("Audio/BGMusic/Roulette loop");
     public static AudioClip BGMus4 => Resources.Load<AudioClip>("Audio/BGMusic/Finger Stretch");
     #endregion BGMusic
 
     #endregion AUDIO
+
+
+
+
+
+
 
 
     #region MISC
@@ -33,6 +47,38 @@ public partial class Assets
     public static Sprite CircleKeyboard => Resources.Load<Sprite>("Sprites/Misc/Circle_Keyboard");
 
     #endregion MISC
+
+
+
+
+
+
+
+
+
+    #region MUSCOPA
+
+    public static GameObject _domCard => Resources.Load<GameObject>("Prefabs/Muscopa/DomCard");
+    public static GameObject DomCard => Object.Instantiate(_domCard);
+
+    public static GameObject _subDomCard => Resources.Load<GameObject>("Prefabs/Muscopa/SubDomCard");
+    public static GameObject SubDomCard => Object.Instantiate(_subDomCard);
+
+    public static GameObject _tonCard => Resources.Load<GameObject>("Prefabs/Muscopa/TonCard");
+    public static GameObject TonCard => Object.Instantiate(_tonCard);
+
+    public static GameObject _backgroundCard => Resources.Load<GameObject>("Prefabs/Muscopa/BackgroundCard");
+    public static GameObject BackgroundCard => Object.Instantiate(_backgroundCard);
+
+    public static Sprite SeaTile => Resources.Load<Sprite>("Sprites/Muscopa/SeaTile");
+
+    #endregion MUSCOPA
+
+
+
+
+
+
 
 
     #region GAMEPAD 
@@ -51,6 +97,12 @@ public partial class Assets
     public static Sprite GamePad => Resources.Load<Sprite>("Sprites/GamePad_Button/White_Gamepad");
 
     #endregion GAMEPAD 
+
+
+
+
+
+
 
 
     #region  CHARACTERS
@@ -76,6 +128,12 @@ public partial class Assets
     #endregion AL
 
 
+
+
+
+
+
+
     #region PINO
 
     public static Sprite Pino => Resources.Load<Sprite>("Sprites/Characters/Pino/Pino");
@@ -83,7 +141,68 @@ public partial class Assets
 
     #endregion PINO
 
+
     #endregion  CHARACTERS
+
+
+
+
+
+
+
+
+
+
+
+
+    #region SPLASH
+
+    public static Sprite AuralTech => Resources.Load<Sprite>("Sprites/Misc/at/ATLogo");
+    public static Sprite AT1 => Resources.Load<Sprite>("Sprites/Misc/at/AT1");
+    public static Sprite AT2 => Resources.Load<Sprite>("Sprites/Misc/at/AT2");
+    public static Sprite AT3 => Resources.Load<Sprite>("Sprites/Misc/at/AT3");
+    public static Sprite AT4 => Resources.Load<Sprite>("Sprites/Misc/at/AT4");
+    public static Sprite AT5 => Resources.Load<Sprite>("Sprites/Misc/at/AT5");
+    public static Sprite AT6 => Resources.Load<Sprite>("Sprites/Misc/at/AT6");
+    public static Sprite AT7 => Resources.Load<Sprite>("Sprites/Misc/at/AT7");
+    public static Sprite AT8 => Resources.Load<Sprite>("Sprites/Misc/at/AT8");
+    public static Sprite AT9 => Resources.Load<Sprite>("Sprites/Misc/at/AT9");
+    public static Sprite AT10 => Resources.Load<Sprite>("Sprites/Misc/at/AT10");
+    public static Sprite AT11 => Resources.Load<Sprite>("Sprites/Misc/at/AT11");
+    public static Sprite AT12 => Resources.Load<Sprite>("Sprites/Misc/at/AT12");
+    public static Sprite AT13 => Resources.Load<Sprite>("Sprites/Misc/at/AT13");
+    public static Sprite Title => Resources.Load<Sprite>("Sprites/Misc/Title");
+
+
+    public static Sprite BTSym => Resources.Load<Sprite>("Sprites/Misc/bt/BTSym");
+
+
+    public static Sprite BT1 => Resources.Load<Sprite>("Sprites/Misc/bt/Bluetooth1");
+    public static Sprite BT2 => Resources.Load<Sprite>("Sprites/Misc/bt/Bluetooth2");
+    public static Sprite BT3 => Resources.Load<Sprite>("Sprites/Misc/bt/Bluetooth3");
+    public static Sprite BT4 => Resources.Load<Sprite>("Sprites/Misc/bt/Bluetooth4");
+
+    public static Sprite Audio1 => Resources.Load<Sprite>("Sprites/Misc/bt/Audio1");
+    public static Sprite Audio2 => Resources.Load<Sprite>("Sprites/Misc/bt/Audio2");
+    public static Sprite Audio3 => Resources.Load<Sprite>("Sprites/Misc/bt/Audio3");
+    public static Sprite Audio4 => Resources.Load<Sprite>("Sprites/Misc/bt/Audio4");
+
+    public static Sprite Not1 => Resources.Load<Sprite>("Sprites/Misc/bt/Not1");
+    public static Sprite Not2 => Resources.Load<Sprite>("Sprites/Misc/bt/Not2");
+    public static Sprite Not3 => Resources.Load<Sprite>("Sprites/Misc/bt/Not3");
+    public static Sprite Not4 => Resources.Load<Sprite>("Sprites/Misc/bt/Not4");
+
+    public static Sprite Recommended1 => Resources.Load<Sprite>("Sprites/Misc/bt/Recommended1");
+    public static Sprite Recommended2 => Resources.Load<Sprite>("Sprites/Misc/bt/Recommended2");
+    public static Sprite Recommended3 => Resources.Load<Sprite>("Sprites/Misc/bt/Recommended3");
+    public static Sprite Recommended4 => Resources.Load<Sprite>("Sprites/Misc/bt/Recommended4");
+
+    #endregion SPLASH
+
+
+
+
+
 
 
     #region MATERIALS
@@ -93,6 +212,15 @@ public partial class Assets
      _overlay_Mat = Resources.Load<Material>("Materials/Overlay_Mat");
 
     #endregion MATERIALS
+
+
+
+
+
+
+
+
+
 
     public static AudioClip GetScaleChordClip(Sea.RegionEnum mode) => mode switch
     {
@@ -105,6 +233,15 @@ public partial class Assets
         Sea.RegionEnum.Ionian => Resources.Load<AudioClip>("Audio/ScaleChords/Ionian_Scale_Chord_2"),
         _ => throw new System.NotImplementedException()
     };
+
+
+
+
+
+
+
+
+
 
     public static Color RandomColor => Random.Range(0, 12) switch
     {

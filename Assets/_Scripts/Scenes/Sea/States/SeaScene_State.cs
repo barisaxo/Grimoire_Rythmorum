@@ -92,6 +92,7 @@ public class SeaScene_State : State
         Scene.HUD.Hud.GO.SetActive(true);
         // Scene.HUD.Show();
         Scene.HUD.Hide(-1);
+        Scene.Ship.MuscopaPopup.GO.SetActive(false);
         Scene.Ship.ConfirmPopup.GO.SetActive(false);
         Scene.Ship.AttackPopup.GO.SetActive(false);
         Scene.MiniMap.Card.GO.SetActive(true);
@@ -185,6 +186,25 @@ public class SeaScene_State : State
         {
             Scene.NearestNPC.HideTimer = Scene.NearestNPC.HideTime;
             // SetState(Scene.NearestNPC.SceneObject.Interactable.SubsequentState);
+            SetState(new SeaToMuscopaTransition_State(this) { });
+            return;
+        }
+        else
+        {
+            SetState(
+                new SeaToDialogueTransition_State(
+                new Dialog.Pino.PinoFalseStart_Dialogue(this)));
+        }
+    }
+
+    protected override void SouthPressed()
+    {
+        if (Scene.NearestNPC is not null &&
+            Scene.NearestNPC.SceneObject.Interactable is not NoInteraction &&
+            Scene.Ship.ShipStats.HullStats.Hull is not CatBoat)
+        {
+            Scene.NearestNPC.HideTimer = Scene.NearestNPC.HideTime;
+            // SetState(Scene.NearestNPC.SceneObject.Interactable.SubsequentState);
             SetState(new SeaToBatteryTransition_State());
             return;
         }
@@ -253,13 +273,6 @@ public class SeaScene_State : State
 
     }
 
-    protected override void SouthPressed()
-    {
-
-        SetState(
-            new SeaToDialogueTransition_State(
-               new Dialog.Pino.PinoFalseStart_Dialogue(this)));
-    }
 
     void FixedTick()
     {
@@ -267,10 +280,10 @@ public class SeaScene_State : State
             (Scene.NearestNPC = Scene.CheckNMETriggers()) is not null)
         {
             Scene.NearestNPC.HideTimer = Scene.NearestNPC.HideTime;
+
             SetState(Scene.NearestNPC.SceneObject.Triggerable.SubsequentState);
             return;
         }
-
 
         Movement();
 

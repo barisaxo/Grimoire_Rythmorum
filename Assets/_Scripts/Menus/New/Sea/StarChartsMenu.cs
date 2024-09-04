@@ -32,7 +32,7 @@ namespace Menus
                         ((solveReq - Manager.Io.Puzzles.GetLevel(GetPuzzle(Selection.Item))) == 1 ? "" : "s") +
                         " to unlock next puzzle";
 
-                IItem sc = StarChartEnum.ToItem(Enumeration.FindId<StarChartEnum>(Selection.Item.ID - 2));
+                IItem sc = StarChartEnum.ToItem(Enumeration.FindId<StarChartEnum>(Selection.Item.Id - 2));
 
                 int solved = Manager.Io.Puzzles.GetLevel(GetPuzzle(sc));
 
@@ -143,7 +143,7 @@ namespace Menus
                  Manager.Io.Puzzles.GetLevel(
                     GetPuzzle(
                         StarChartEnum.ToItem(
-                            Enumeration.FindId<StarChartEnum>(Selection.Item.ID - 2))))
+                            Enumeration.FindId<StarChartEnum>(Selection.Item.Id - 2))))
                                 >= solveReq;
     }
 }

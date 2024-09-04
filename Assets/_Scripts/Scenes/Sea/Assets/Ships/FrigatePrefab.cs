@@ -25,7 +25,7 @@ public class FrigatePrefab : MonoBehaviour, Sea.IShipPrefab
     public Mast[] _masts { get => FrigateRig.Masts; }
     public CapsuleCollider Collider { get => Hull.Col; }
     public string PopupText => "Hail";
-    public event Action Interaction;
+    // public event Action Interaction;
     public Transform Transform => _hull.transform;
     public GameObject GO => gameObject;
 

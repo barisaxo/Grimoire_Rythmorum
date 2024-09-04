@@ -32,7 +32,12 @@ namespace Datum
                 }
             }
         }
-        public float GetBonusRatio(IItem item) => 1 + (.01f * Datum[(ISkill)item] * ((ISkill)item).Per);
+        public float GetBonusRatio(IItem item)
+        {
+            float ratio = 1f + (float)(.01f * (float)Datum[(ISkill)item] * (float)((ISkill)item).Per);
+            UnityEngine.Debug.Log(item.Name + " bonus ratio: " + ratio);
+            return ratio;
+        }
 
         public int GetSkillCost(IItem item)
         {

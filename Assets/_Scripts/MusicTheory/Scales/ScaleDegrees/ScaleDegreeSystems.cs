@@ -1,60 +1,42 @@
 
+using System;
+using MusicTheory.Intervals.Arithmetic;
 
-namespace MusicTheory.Arithmetic
+namespace MusicTheory.ScaleDegrees.Arithmetic
 {
     public static class ScaleDegreeSystems
     {
-        public static Intervals.Interval AsInterval(this ScaleDegrees.ScaleDegree scaleDegree) =>
-            Intervals.IntervalEnum.Find(
-                ((Intervals.QualityEnum)scaleDegree.Enum.Quality,
-                (Intervals.QuantityEnum)scaleDegree.Enum.Degree)
-                );
 
-        public static Intervals.Interval AsInterval(this Steps.Step step) =>
-         step switch
-         {
-             Steps.Half => new Intervals.mi2(),
-             Steps.Whole => new Intervals.M2(),
-             Steps.Skip => new Intervals.A2(),
-
-             _ => throw new System.ArgumentOutOfRangeException()
-         };
-
-        public static Intervals.Quantity GetQuantity(this ScaleDegrees.ScaleDegree left, ScaleDegrees.ScaleDegree right)
+        public static IQuality GetQuality(this Intervals.IQuality e) => e switch
         {
-            return ((right.Enum.Degree.Id + 7 - left.Enum.Degree.Id) % 7) switch
-            {
-                0 => Intervals.QuantityEnum.Unison,
-                1 => Intervals.QuantityEnum.Second,
-                2 => Intervals.QuantityEnum.Third,
-                3 => Intervals.QuantityEnum.Fourth,
-                4 => Intervals.QuantityEnum.Fifth,
-                5 => Intervals.QuantityEnum.Sixth,
-                6 => Intervals.QuantityEnum.Seventh,
-                _ => throw new System.ArgumentOutOfRangeException()
-            };
-        }
+            Intervals.Major => new Major(),
+            Intervals.Minor => new Minor(),
+            Intervals.Augmented => new Augmented(),
+            Intervals.Diminished => new Diminished(),
+            Intervals.Perfect => new Perfect(),
+            _ => throw new ArgumentOutOfRangeException(e.Name)
+        };
 
-        public static Intervals.Quantity GetQuantity(this Keys.Key left, Keys.Key right)
+        public static Intervals.IQuantity GetQuantity(this Notes.INote left, Notes.INote right)
         {
             //UnityEngine.Debug.Log(left.Name + " " + right.Name);
             return ((right.Enum.Letter.Id + 7 - left.Enum.Letter.Id) % 7) switch
             {
-                0 => Intervals.QuantityEnum.Unison,
-                1 => Intervals.QuantityEnum.Second,
-                2 => Intervals.QuantityEnum.Third,
-                3 => Intervals.QuantityEnum.Fourth,
-                4 => Intervals.QuantityEnum.Fifth,
-                5 => Intervals.QuantityEnum.Sixth,
-                6 => Intervals.QuantityEnum.Seventh,
+                0 => new Intervals.Unison(),
+                1 => new Intervals.Second(),
+                2 => new Intervals.Third(),
+                3 => new Intervals.Fourth(),
+                4 => new Intervals.Fifth(),
+                5 => new Intervals.Sixth(),
+                6 => new Intervals.Seventh(),
                 _ => throw new System.ArgumentOutOfRangeException(left.Id.ToString() + " " + right.Id.ToString())
             };
         }
 
-        public static Intervals.Interval GetInterval(this ScaleDegrees.ScaleDegree left, ScaleDegrees.ScaleDegree right)
+        public static Intervals.IInterval GetInterval(this IScaleDegree left, IScaleDegree right)
         {
-            Intervals.Interval newInterval = new Intervals.P1();
-            Intervals.Quantity quantity = left.GetQuantity(right);
+            Intervals.IInterval newInterval = new Intervals.P1();
+            Intervals.IQuantity quantity = left.GetQuantity(right);
             int id = (right.Id + 12 - left.Id) % 12;
 
             foreach (var interval in Enumeration.All<Intervals.IntervalEnum>())
@@ -62,43 +44,45 @@ namespace MusicTheory.Arithmetic
                 if (interval.Id.Equals(id) &&
                     System.MathF.Abs(interval.Quantity.Id - quantity.Id) <
                     System.MathF.Abs(newInterval.Quantity.Id - quantity.Id))
-                    newInterval = interval;
+                    newInterval = interval.GetInterval();
             }
 
             return newInterval;
         }
 
 
-        public static ScaleDegrees.ScaleDegreeEnum FindExactMatch(this (ScaleDegrees.DegreeEnum.QualityEnum quality, ScaleDegrees.DegreeEnum.DegreeEnum degree) i)
+        public static ScaleDegreeEnum FindExactMatch(this (QualityEnum quality, DegreeEnums.DegreeEnum degree) i)
         {
-            foreach (var e in Enumeration.All<ScaleDegrees.ScaleDegreeEnum>()) if (e.Degree.DegreeEnum == i.degree && e.Quality == i.quality) return e;
-            throw new System.ArgumentOutOfRangeException(i.ToString());
+            foreach (var e in Enumeration.All<ScaleDegreeEnum>())
+                if (e.Degree.Enum == i.degree && e.Quality.Enum == i.quality)
+                    return e;
+            throw new Exception(i.quality.Name + " " + i.degree.Name);
         }
 
-        public static RomanNumerals.RomanNumeral ToRoman(this ScaleDegrees.ScaleDegree scaleDegree) =>
+        public static RomanNumerals.Chromatic.IRomanNumeral ToRoman(this ScaleDegrees.IScaleDegree scaleDegree) =>
             scaleDegree switch
             {
-                ScaleDegrees._1 => new RomanNumerals.I(),
-                ScaleDegrees._2 => new RomanNumerals.II(),
-                ScaleDegrees._3 => new RomanNumerals.III(),
-                ScaleDegrees.P4 => new RomanNumerals.IV(),
-                ScaleDegrees.P5 => new RomanNumerals.V(),
-                ScaleDegrees._6 => new RomanNumerals.VI(),
-                ScaleDegrees._7 => new RomanNumerals.VII(),
-                ScaleDegrees.b2 => new RomanNumerals.bII(),
-                ScaleDegrees.b3 => new RomanNumerals.bIII(),
-                ScaleDegrees.b4 => new RomanNumerals.III(),
-                ScaleDegrees.b5 => new RomanNumerals.bV(),
-                ScaleDegrees.b6 => new RomanNumerals.bVI(),
-                ScaleDegrees.d7 => new RomanNumerals.dVII(),
-                ScaleDegrees.b7 => new RomanNumerals.bVII(),
-                ScaleDegrees.s2 => new RomanNumerals.sII(),
-                ScaleDegrees.s4 => new RomanNumerals.sIV(),
-                ScaleDegrees.s5 => new RomanNumerals.sV(),
+                _1 => new RomanNumerals.Chromatic.I(),
+                _2 => new RomanNumerals.Chromatic.II(),
+                _3 => new RomanNumerals.Chromatic.III(),
+                P4 => new RomanNumerals.Chromatic.IV(),
+                P5 => new RomanNumerals.Chromatic.V(),
+                _6 => new RomanNumerals.Chromatic.VI(),
+                _7 => new RomanNumerals.Chromatic.VII(),
+                b2 => new RomanNumerals.Chromatic.bII(),
+                b3 => new RomanNumerals.Chromatic.bIII(),
+                b4 => new RomanNumerals.Chromatic.III(),
+                b5 => new RomanNumerals.Chromatic.bV(),
+                b6 => new RomanNumerals.Chromatic.bVI(),
+                d7 => new RomanNumerals.Chromatic.VI(),
+                b7 => new RomanNumerals.Chromatic.bVII(),
+                s2 => new RomanNumerals.Chromatic.bIII(),
+                s4 => new RomanNumerals.Chromatic.bV(),
+                s5 => new RomanNumerals.Chromatic.bVI(),
                 _ => throw new System.ArgumentOutOfRangeException(scaleDegree.Name)
             };
 
-        public static Triads.Triad GetTriadQuality(this ScaleDegrees.ScaleDegree root, ScaleDegrees.ScaleDegree third, ScaleDegrees.ScaleDegree fifth)
+        public static Triads.ITriad GetTriadQuality(this ScaleDegrees.IScaleDegree root, ScaleDegrees.IScaleDegree third, ScaleDegrees.IScaleDegree fifth)
         {
             return (root.GetInterval(third), root.GetInterval(fifth)) switch
             {
@@ -126,6 +110,60 @@ namespace MusicTheory.Arithmetic
                 _ => throw new System.ArgumentOutOfRangeException(root.Name + ", " + root.GetInterval(third) + ", " + third.Name + ", " + root.GetInterval(fifth) + ", " + fifth.Name)
             };
         }
+
+        public static IScaleDegree GetScaleDegree(this ScaleDegreeEnum s) => s switch
+        {
+            _ when s == ScaleDegreeEnum._1 => new _1(),
+            _ when s == ScaleDegreeEnum.b2 => new b2(),
+            _ when s == ScaleDegreeEnum._2 => new _2(),
+            _ when s == ScaleDegreeEnum.s2 => new s2(),
+            _ when s == ScaleDegreeEnum.b3 => new b3(),
+            _ when s == ScaleDegreeEnum._3 => new _3(),
+            _ when s == ScaleDegreeEnum.b4 => new b4(),
+            _ when s == ScaleDegreeEnum.P4 => new P4(),
+            _ when s == ScaleDegreeEnum.s4 => new s4(),
+            _ when s == ScaleDegreeEnum.b5 => new b5(),
+            _ when s == ScaleDegreeEnum.P5 => new P5(),
+            _ when s == ScaleDegreeEnum.s5 => new s5(),
+            _ when s == ScaleDegreeEnum.b6 => new b6(),
+            _ when s == ScaleDegreeEnum._6 => new _6(),
+            _ when s == ScaleDegreeEnum.d7 => new d7(),
+            _ when s == ScaleDegreeEnum.b7 => new b7(),
+            _ when s == ScaleDegreeEnum._7 => new _7(),
+            _ => throw new System.ArgumentOutOfRangeException()
+        };
+
+        public static IScaleDegree GetScaleDegree(this Intervals.IInterval s) => s switch
+        {
+            Intervals.P1 or Intervals.P8 => new _1(),
+            Intervals.mi2 => new b2(),
+            Intervals.M2 => new _2(),
+            Intervals.A2 => new s2(),
+            Intervals.mi3 => new b3(),
+            Intervals.M3 => new _3(),
+            Intervals.d4 => new b4(),
+            Intervals.P4 => new P4(),
+            Intervals.A4 => new s4(),
+            Intervals.d5 => new b5(),
+            Intervals.P5 => new P5(),
+            Intervals.A5 => new s5(),
+            Intervals.mi6 => new b6(),
+            Intervals.M6 => new _6(),
+            Intervals.d7 => new d7(),
+            Intervals.mi7 => new b7(),
+            Intervals.M7 => new _7(),
+            _ => throw new System.ArgumentOutOfRangeException()
+        };
+
+        public static IQuality GetQuality(this QualityEnum e) => e switch
+        {
+            _ when e == QualityEnum.Major => new Major(),
+            _ when e == QualityEnum.Minor => new Minor(),
+            _ when e == QualityEnum.Augmented => new Augmented(),
+            _ when e == QualityEnum.Diminished => new Diminished(),
+            _ when e == QualityEnum.Perfect => new Perfect(),
+            _ => throw new System.ArgumentOutOfRangeException()
+        };
 
     }
 }

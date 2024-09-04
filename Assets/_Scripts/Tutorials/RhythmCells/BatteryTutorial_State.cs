@@ -66,7 +66,7 @@ public class BatteryTutorial_State : State
            Quaternion.Euler(new Vector3(-20f, 180, Cam.Io.Camera.transform.rotation.eulerAngles.z))
         );
         Scene = new(BatteryTutorialTick, RhythmSpecs, Measures);
-        Scene.Initialize();
+        (Scene as IScene).Initialize();
 
         Scene.Pack.GetNewSettings(callback).StartCoroutine();
     }
@@ -97,7 +97,7 @@ public class BatteryTutorial_State : State
             CountOffTimeEvent();
             if (++Counter == Scene.Pack.CountOffBeatmap.Length - 1)
             {
-                MonoHelper.OnUpdate += Scene.Pack.Analyzer.BatterieInputAnalyzerTick;
+                MonoHelper.OnUpdate += Scene.Pack.Analyzer.RhythmInputAnalyzerTick;
                 Scene.Pack.Analyzer.Start();
                 // Scene.Pack.Synchro.BeatEvent += Click;
                 CountingOff = false; Playing = true; Counter = 0;
@@ -124,7 +124,7 @@ public class BatteryTutorial_State : State
         {
             Audio.Batterie.FadeAndStop();
             Scene.Pack.Synchro.Stop();
-            MonoHelper.OnUpdate -= Scene.Pack.Analyzer.BatterieInputAnalyzerTick;
+            MonoHelper.OnUpdate -= Scene.Pack.Analyzer.RhythmInputAnalyzerTick;
             Scene.Pack.MuscopaAudio.StopTheCadence();
 
             // FadeToState(PuzzleSelector.WeightedRandomPuzzleState(Data.TheoryPuzzleData));
