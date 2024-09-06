@@ -10,6 +10,8 @@ namespace Muscopa
         {
             _ = KeyOf;
             _ = AllChords;
+            _ = SelectButton;
+            _ = DiscardButton;
             // _ = CurrentLevel;
             _ = Answer1ChordName;
             _ = Answer2ChordName;
@@ -76,7 +78,35 @@ namespace Muscopa
         public Card ContinueButton => _continueButton ??= Parent.CreateChild(nameof(ContinueButton), Parent.Canvas)
             .SetTextString("Continue")
             .SetImageSprite(Assets.SouthButton)
-            .SetPositionAll(Cam.UIOrthoX - 2, -Cam.UIOrthoY + 2)
+            .SetPositionAll(Cam.UIOrthoX - 2, Cam.UIOrthoY - 3)
+            .SetFontScale(.5f, .5f)
+            .AllowWordWrap(false)
+            .SetImageSize(.5f, .5f)
+            .SetTextAlignment(TextAlignmentOptions.Right)
+            .SetTMPRectPivot(new Vector2(1, .5f))
+            .SetOutlineWidth(.15f)
+            .OffsetImagePosition(Vector2.right)
+            ;
+
+        private Card _discardButton;
+        public Card DiscardButton => _discardButton ??= Parent.CreateChild(nameof(DiscardButton), Parent.Canvas)
+            .SetTextString("Discard")
+            .SetImageSprite(Assets.NorthButton)
+            .SetPositionAll(Cam.UIOrthoX - 2, Cam.UIOrthoY - 2)
+            .SetFontScale(.5f, .5f)
+            .AllowWordWrap(false)
+            .SetImageSize(.5f, .5f)
+            .SetTextAlignment(TextAlignmentOptions.Right)
+            .SetTMPRectPivot(new Vector2(1, .5f))
+            .SetOutlineWidth(.15f)
+            .OffsetImagePosition(Vector2.right)
+            ;
+
+        private Card _selectButton;
+        public Card SelectButton => _selectButton ??= Parent.CreateChild(nameof(SelectButton), Parent.Canvas)
+            .SetTextString("Select")
+            .SetImageSprite(Assets.EastButton)
+            .SetPositionAll(Cam.UIOrthoX - 2, Cam.UIOrthoY - 3)
             .SetFontScale(.5f, .5f)
             .AllowWordWrap(false)
             .SetImageSize(.5f, .5f)

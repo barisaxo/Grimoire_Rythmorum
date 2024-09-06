@@ -30,6 +30,8 @@ namespace Muscopa
             //     case Area.Sea: StateMachine.FadeToState(new Sea.SeaState()); break;
             //     case Area.Practice: StateMachine.FadeToState(new Aether.AetherExploreState()); break;
             // }
+            Scene.MuscopaHud.SelectButton.SetImageColor(Color.clear).SetTextString("");
+            Scene.MuscopaHud.DiscardButton.SetImageColor(Color.clear).SetTextString("");
             _ = Scene.MuscopaHud.ContinueButton;
 
         }

@@ -10,6 +10,7 @@ using MusicTheory.Notes.Arithmetic;
 using MusicTheory.RomanNumerals.Diatonic.Arithmetic;
 using MusicTheory.Triads.Arithmetic;
 using MusicTheory.RomanNumerals.Diatonic;
+
 namespace Muscopa
 {
     public class MuscopaScene : IScene
@@ -97,6 +98,7 @@ namespace Muscopa
         void IScene.SetUp()
         {
             Tableau = new();
+            MonoHelper.OnUpdate += Pulsate;
             CardManager = new(Tableau);
             MuscopaSettings = NewSettings(CadenceDifficulty.ALL, Genre.Stax);
 
@@ -139,6 +141,26 @@ namespace Muscopa
         void IScene.Destroy()
         {
             Tableau.SelfDestruct();
+            MonoHelper.OnUpdate -= Pulsate;
+        }
+
+        bool sign;
+        float alpha = 1f;
+
+        void Pulsate()
+        {
+            float min = 0.35f;
+            float max = 1.0f;
+            float frequency = 1f;
+            alpha += Time.deltaTime * frequency * (sign ? 1 : -1);
+            sign = alpha <= max && (alpha < min || sign);
+            Debug.Log(alpha);
+
+            Color c = Tableau.AnswerHL.color;
+            c.a = alpha;
+
+            Tableau.AnswerHL.color = c;
+            Tableau.HandHL.color = c;
         }
     }
 }

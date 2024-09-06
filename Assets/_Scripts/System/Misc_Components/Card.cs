@@ -37,6 +37,7 @@ public class Card
         // UnityEngine.Debug.Log("Destroying: " + Name);
         if (Children != null) { foreach (Card child in Children) child.SelfDestruct(); }
         if (GO != null) UnityEngine.Object.Destroy(GO);
+        // else Debug.Log("GO is null: " + Name);
         if (_uigo != null) UnityEngine.Object.Destroy(_uigo);
         // if (_uigoCanvas != null) UnityEngine.Object.Destroy(_uigoCanvas);
     }

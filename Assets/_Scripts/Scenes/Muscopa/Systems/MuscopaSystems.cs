@@ -374,7 +374,7 @@ namespace Muscopa
                 HandSpot.Four => MuscopaTableau.HandSpot4.rot,
                 _ => scene.Tableau.HandHL.transform.rotation,
             });
-            scene.Tableau.HandHL.SetActive(scene.CardManager.CurrentHandSpot != HandSpot.Off);
+            scene.Tableau.HandHL.gameObject.SetActive(scene.CardManager.CurrentHandSpot != HandSpot.Off);
         }
 
         public static void HighlightAnswerSpot(this MuscopaScene scene)
@@ -382,13 +382,13 @@ namespace Muscopa
             scene.Tableau.AnswerHL.transform.position = scene.CardManager.CurrentAnswerSpot switch
             {
                 AnswerSpot.One => throw new System.Exception("This shouldn't be a thing right?"),
-                AnswerSpot.Two => scene.Tableau.AnswerSpot2.transform.position,
-                AnswerSpot.Three => scene.Tableau.AnswerSpot3.transform.position,
-                AnswerSpot.Four => scene.Tableau.AnswerSpot4.transform.position,
+                AnswerSpot.Two => scene.Tableau.AnswerSpot2.transform.position + (Vector3.back * .1f),
+                AnswerSpot.Three => scene.Tableau.AnswerSpot3.transform.position + (Vector3.back * .1f),
+                AnswerSpot.Four => scene.Tableau.AnswerSpot4.transform.position + (Vector3.back * .1f),
                 _ => scene.Tableau.AnswerHL.transform.position,
             };
 
-            scene.Tableau.AnswerHL.SetActive(scene.CardManager.CurrentAnswerSpot != AnswerSpot.Off);
+            scene.Tableau.AnswerHL.gameObject.SetActive(scene.CardManager.CurrentAnswerSpot != AnswerSpot.Off);
         }
 
         public static void Discard(this MuscopaScene scene)

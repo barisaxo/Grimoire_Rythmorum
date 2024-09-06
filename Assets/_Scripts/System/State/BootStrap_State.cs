@@ -28,13 +28,6 @@ public class BootStrap_State : State
     protected override void EngageState()
     {
 
-        int x = 10;
-
-        for (int i = 0; i < 200; i++)
-        {
-            x *= 2;
-            Debug.Log(x);
-        }
         // _ = Fretboard.Io;
         // _ = Ukulele.Io;
         // SetState(new UkuleleState());

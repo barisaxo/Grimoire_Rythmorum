@@ -40,8 +40,8 @@ public class MenuState : State
 
     protected override void DisengageState()
     {
-        Header?.SelfDestruct();
         Sub?.SelfDestruct();
+        Header?.SelfDestruct();
     }
 
     protected override void DirectionPressed(Dir dir)

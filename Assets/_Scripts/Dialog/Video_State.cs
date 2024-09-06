@@ -86,7 +86,8 @@ public class Video_State : State
         switch (gpb)
         {
             case GamePadButton.South_Press:
-                SetState(SubsequentState);
+                // SetState(SubsequentState);
+                VideoPlayer.Stop();
                 return;
 
             case GamePadButton.North_Press:

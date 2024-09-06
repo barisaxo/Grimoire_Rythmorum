@@ -8,12 +8,28 @@ public class CoveScene_State : State
     CoveScene Cove => CoveScene.Io;
     Vector2 lStick, rStick;
 
+    bool readying = true;
+
+    void Readied()
+    {
+        readying = false;
+    }
+
     protected override void PrepareState(Action callback)
     {
         MonoHelper.ToFixedUpdate += HandleInput;
 
         Audio.Ambience.Pause();
 
+        PanCamera().StartCoroutine();
+        IEnumerator PanCamera()
+        {
+            while (readying)
+            {
+                CoveScene.Io.Player.MoveCamera(-.333f);
+                yield return null;
+            }
+        }
         base.PrepareState(callback);
     }
 
@@ -48,16 +64,29 @@ public class CoveScene_State : State
         MonoHelper.OnUpdate -= CheckDirectionalInput;
     }
 
+    protected override void GPInput(GamePadButton gpb)
+    {
+        Readied();
+        base.GPInput(gpb);
+    }
+
     protected override void LStickInput(Vector2 v2)
     {
         if (v2.y > .5f) v2.y = 1;
         else if (v2.y > 0) v2.y = .5f;
         lStick = v2;
+
+        if (v2 == Vector2.zero) return;
+        Readied();
     }
 
     protected override void RStickInput(Vector2 v2)
     {
         rStick = v2;
+
+
+        if (v2 == Vector2.zero) return;
+        Readied();
     }
 
     void HandleInput()

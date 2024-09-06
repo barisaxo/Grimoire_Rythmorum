@@ -23,7 +23,7 @@ namespace Menus
                 MenuItems[i].Card?.SelfDestruct();
             Description?.SelfDestruct();
             Scene?.SelfDestruct();
-            Resources.UnloadUnusedAssets();
+            // Resources.UnloadUnusedAssets();
         }
 
         public void SetUpMenuCards()

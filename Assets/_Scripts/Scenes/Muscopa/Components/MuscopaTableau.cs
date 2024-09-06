@@ -57,36 +57,36 @@ namespace Muscopa
             }
         }
 
-        private GameObject _handHL;
-        public GameObject HandHL
+        private SpriteRenderer _handHL;
+        public SpriteRenderer HandHL
         {
             get
             {
                 return _handHL ? _handHL : _handHL = SetUp();
-                GameObject SetUp()
+                SpriteRenderer SetUp()
                 {
                     GameObject go = Assets.BackgroundCard;
                     go.name = nameof(HandHL);
                     go.transform.SetParent(Tableau);
                     go.transform.rotation = Quaternion.Euler(15, 0, 0);
-                    return go;
+                    return go.GetComponent<SpriteRenderer>();
                 }
             }
         }
 
-        private GameObject _answerPileHL;
-        public GameObject AnswerHL
+        private SpriteRenderer _answerPileHL;
+        public SpriteRenderer AnswerHL
         {
             get
             {
                 return _answerPileHL ? _answerPileHL : _answerPileHL = SetUp();
-                GameObject SetUp()
+                SpriteRenderer SetUp()
                 {
                     GameObject go = Assets.BackgroundCard;
                     go.name = nameof(AnswerHL);
                     go.transform.SetParent(Tableau);
                     go.transform.rotation = Quaternion.Euler(15, 0, 0);
-                    return go;
+                    return go.GetComponent<SpriteRenderer>();
                 }
             }
         }

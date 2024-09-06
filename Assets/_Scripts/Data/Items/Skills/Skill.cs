@@ -34,7 +34,7 @@ namespace Datum
         public static SkillEnum Preparation = new(1, "Preparation", "Instantiate with more materials, rations, and gold.", .25f, 3, 200);
         public static SkillEnum CriticalVolley = new(2, "Critical Volley", "Increase damage after firing a perfectly timed volley.", .5f, 10, 200);
         public static SkillEnum PerfectTiming = new(3, "Perfect Timing", "Increase the margin of error for a successful Critical Volley.", .1f, 12, 150);
-        public static SkillEnum PulsePerception = new(4, "Pulse Perception", "Fishing for beats is quicker.", 2, 2, 50);
+        public static SkillEnum PulsePerception = new(4, "Pulse Perception", "Fishing for beats is quicker.", .25f, 2, 50);
         public static SkillEnum CelestialNavigation = new(5, "Celestial Navigation", "Get an extra chance to triangulate Star Charts.", 100, 5000, 2);
         public static SkillEnum LightTouch = new(6, "Light Touch", "Get an extra chance to solve Gramophones.", 100, 7500, 2);
 
